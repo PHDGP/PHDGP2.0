@@ -1,0 +1,13 @@
+# Preface {#preface}
+
+While the following materials will teach you about analyzing health data, we
+must underscore that a health equity lens will be emphasized throughout these
+materials. This book is written with as much emphasis on monitoring health for
+accountability as they are for etiological studies.
+
+Source of funding: American Cancer Society
+
+Creative copyright; Licensing - Credit for use is required. 
+(Licensing needs to be addressed in everything we hand out).
+
+Please cite this work as ... 

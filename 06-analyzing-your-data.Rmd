@@ -1,0 +1,7 @@
+# Analyzing your data {#analyzing-your-data}
+
+## Inference for The Aggregation Approach and Aggregation Bias 
+## Overdispersion
+## Age Standardization 
+## Small Area Estimation
+## Multilevel and Spatial Modeling

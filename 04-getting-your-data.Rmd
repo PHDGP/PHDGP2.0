@@ -1,0 +1,14 @@
+# Getting your data {#getting-your-data}
+
+  - Downloading data 
+    - Health data
+    - Population data
+        - Numerator and Denominator Issues
+    - Social Metric Data 
+    - Data governance (whose lives are affected by the data, who owns the data) 
+    - tidycensus, shape files
+        - simple example (percent poverty)
+        - constructing the ICE measures
+      - Health data, social metric data
+          - Issues of representativeness (Full enumerationn data vs. Survey estimates)
+  - Geocoding  (different ways to geocode, Google, openstreetmaps, ArcGIS)

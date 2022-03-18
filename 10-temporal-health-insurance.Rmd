@@ -1,0 +1,1 @@
+# Case Example 4: Health Insurance (ACS, temporal) {#temporal-health-insurance}

@@ -1,0 +1,9 @@
+# Visualizing your data {#visualizing-your-data}
+
+  - ggplot2, color palettes & accessibility 
+  - mapping point estimates vs uncertainty 
+  - references: "how maps lie";  tom koch disease maps, "ethics in everyday places: mapping moral stress, distress, and injury"
+  - point layers vs. choropleth layers 
+  - visualizing raw data may be unstable 
+  - visualizing health measures (actually getting to look at maps)
+  

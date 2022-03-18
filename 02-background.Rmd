@@ -1,0 +1,5 @@
+# Background and History of Analytic Methods {#background}
+
+  - Tuberculosis and cancer registries driving interest in looking at social
+  metrics
+  - Link to previous training

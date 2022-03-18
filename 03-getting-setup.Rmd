@@ -1,0 +1,6 @@
+# Getting Setup with R and RStudio {#getting-setup}
+
+  - Downloading R & RStudio 
+  - Reference R4DS & other R tutorials 
+  - Installing packages 
+  - Extracting/loading data we prepare
