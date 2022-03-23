@@ -1,1 +1,10 @@
 # Case Example 1: Premature Mortality in Massachusetts {#premature-mortality}
+
+```{r}
+#| echo = FALSE,
+#| fig.cap =  
+#|   "Random Map of some mass something"
+knitr::include_graphics(
+  "images/07-premature-mortality/Rplot.png"
+)
+```
