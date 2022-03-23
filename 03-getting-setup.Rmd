@@ -11,3 +11,7 @@ You can download R from https://www.r-project.org/.
 
 You can download RStudio from https://www.rstudio.com/. 
 
+You may want to familiarize yourself with common R and RStudio references 
+like the *R for Data Science* book, available free and online here: 
+https://r4ds.had.co.nz/. 
+
