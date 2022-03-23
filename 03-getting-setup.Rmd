@@ -4,3 +4,10 @@
   - Reference R4DS & other R tutorials 
   - Installing packages 
   - Extracting/loading data we prepare
+
+First, you will need to download R and RStudio. 
+
+You can download R from https://www.r-project.org/. 
+
+You can download RStudio from https://www.rstudio.com/. 
+
