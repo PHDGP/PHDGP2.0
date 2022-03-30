@@ -1,7 +1,7 @@
 # Getting Setup with R and RStudio {#getting-setup}
 
   - Downloading R & RStudio 
-  - Reference R4DS & other R tutorials 
+  - Reference R4DS & other R tutorials, add Geocomputation with R (Robin Lovelace)
   - Installing packages 
   - Extracting/loading data we prepare
 

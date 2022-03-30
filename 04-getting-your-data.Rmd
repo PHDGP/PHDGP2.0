@@ -12,3 +12,265 @@
       - Health data, social metric data
           - Issues of representativeness (Full enumerationn data vs. Survey estimates)
   - Geocoding  (different ways to geocode, Google, openstreetmaps, ArcGIS)
+
+
+## tidycensus
+
+The `tidycensus` package in R allows you to download data from the US Census
+Bureau products, including from the decennial Census and the 1-year, 3-year, and
+5-year American Community Survey (ACS). Find detailed reference materials and 
+an introduction to `tidycensus` here: https://walker-data.com/tidycensus/ 
+
+In this section, we will walk you through example code that downloads the
+percent of residents under the poverty line and computing the Index of
+Concentration at the Extremes (ICE) for racialized economic segregation from the
+2015-2019 ACS. As an example, we will demonstrate how to download these measures
+at the census tract level in Suffolk County, Massachusetts.
+
+You can find more of the variables available in the 5-year ACS at the following
+links:
+
+  - https://api.census.gov/data/2009/acs/acs5/variables.html
+  - https://api.census.gov/data/2010/acs/acs5/variables.html
+  - https://api.census.gov/data/2011/acs/acs5/variables.html
+  - https://api.census.gov/data/2012/acs/acs5/variables.html
+  - https://api.census.gov/data/2012/acs/acs5/variables.html
+  - https://api.census.gov/data/2013/acs/acs5/variables.html
+  - https://api.census.gov/data/2014/acs/acs5/variables.html
+  - https://api.census.gov/data/2015/acs/acs5/variables.html
+  - https://api.census.gov/data/2016/acs/acs5/variables.html
+  - https://api.census.gov/data/2017/acs/acs5/variables.html
+  - https://api.census.gov/data/2018/acs/acs5/variables.html
+  - https://api.census.gov/data/2019/acs/acs5/variables.html 
+  - https://api.census.gov/data/2020/acs/acs5/variables.html 
+
+```{r}
+#| eval = FALSE
+# load the packages we'll use for this section
+library(tidycensus)
+library(tidyverse)
+library(sf)
+
+# download the data from the ACS using the get_acs method from tidycensus
+# 
+# the B05010_002E variable refers to the count of residents who live in
+# households with household income below the poverty line; the B05010_001E
+# variable refers to the count of residents for whom household income was
+# ascertained by the ACS, e.g. the relevant denominator.
+# 
+poverty <- get_acs(
+  state = 'MA',
+  county = '025', # this is the FIPS code for Suffolk County, MA
+  geography = 'tract',
+  year = 2019,
+  geometry = TRUE,
+  variables = c(
+    in_poverty = 'B05010_002E', 
+    total_pop_for_poverty_estimates = 'B05010_001E') 
+)
+
+
+# we're going to recode the variable names to more human-readable names to 
+# make it easier to work with the data in subsequent steps
+poverty <- poverty %>% 
+  mutate(
+    variable = recode(variable,
+                     # you may notice that tidycensus drops the 'E' from the 
+                     # end of the variable code names
+                     B05010_002 = 'in_poverty',
+                     B05010_001 = 'total_pop_for_poverty_estimates'))
+
+# pivot the data wider so that the in_poverty and
+# total_pop_for_poverty_estimates; this follows the "tidy" format and approach
+# where each row corresponds to an observation.
+# 
+# because the pivot_wider method can mess up your data when your data contains
+# geometry/shapefile information, we will remove the geomemtry information
+# and add it back in later
+poverty_geometry <- poverty %>% select(GEOID) %>% unique() # save the geometry data
+poverty <- poverty %>% 
+  sf::st_drop_geometry() %>% # remove geometry data
+  tidyr::pivot_wider(
+    id_cols = GEOID,
+    names_from = variable,
+    values_from = c(estimate, moe))
+
+# calculate the proportion in poverty
+poverty <- poverty %>% 
+  mutate(
+    proportion_in_poverty = estimate_in_poverty / estimate_total_pop_for_poverty_estimates,
+    percent_in_poverty = proportion_in_poverty * 100)
+
+# add the geometry back in -- 
+# make sure to merge the data into the sf object with the sf object on the 
+# left hand side so the output has the sf type including your geometry data
+poverty <- poverty_geometry %>% 
+  left_join(poverty)
+
+# visualize our point estimates 
+ggplot(poverty, aes(fill = proportion_in_poverty)) + 
+  geom_sf() + 
+  scale_fill_viridis_c(label = scales::percent_format(),
+                       limits = c(0,1)) + 
+  labs(fill = "Percent in Poverty") + 
+  ggtitle("Poverty Estimates in Suffolk County, MA")
+
+# visualize the denominator counts -- 
+# of significance, note that there are several census tracts where the
+# denominator is 0 resulting in NaN estimates for the percent in poverty.
+ggplot(poverty, aes(fill = estimate_total_pop_for_poverty_estimates)) + 
+  geom_sf() + 
+  scale_fill_viridis_c(label = scales::comma_format(), direction = -1, 
+                       breaks = c(0, 10, 100, 1000), trans = "log1p") + 
+  labs(fill = "Number of People") + 
+  ggtitle("Number of People in Denominator for Poverty Estimates", 
+          "Suffolk County, MA")
+```
+
+```{r}
+#| echo = FALSE
+knitr::include_graphics("images/04-getting-your-data/poverty_suffolk_county.png")
+knitr::include_graphics("images/04-getting-your-data/poverty_denominators_suffolk_county.png")
+```
+
+We can also use the `mapview` package to render interactive maps of the
+estimates and data we have computed/downloaded.  This is particularly helpful in
+understanding how the geography relate to the estimates — especially to see
+things like where airports, green-space, schools, and other municipal zones may
+be located that may not have residents (hence the NaN or "not a number"
+estimates shown on the maps).
+
+```{r}
+#| echo = FALSE
+# read cached data
+absms <- readRDS('data/04-getting-your-data/poverty_suffolk_county.rds')
+```
+
+```{r}
+library(mapview)
+mapview::mapview(absms, zcol = 'percent_in_poverty')
+```
+
+Now that we've created static and interactive maps of the poverty estimates for
+Suffolk County, we can move on to downloading and computing the Index of
+Concentration at the Extremes for Racialized Economic Segregation (High Income
+White non-Hispanic High Income vs. Low Income People of Color).
+
+```{r}
+#| eval = FALSE
+
+# create a data dictionary detailing the variables we're going to use - 
+# 
+# associating each of the variables a more readable/friendly `shortname` and a
+# description can help make the subsequent code more readable and thus easier
+# to debug in case you run into any errors.
+# 
+variables_dict <-
+  tibble::tribble(
+  ~var,          ~shortname,      ~desc,
+  "B19001_001",  'hhinc_total',   "total population for household income estimates",
+  "B19001A_002", 'hhinc_w_1',     "white n.h. pop with household income <$10k",
+  "B19001A_003", 'hhinc_w_2',     "white n.h. pop with household income $10k-14 999k",
+  "B19001A_004", 'hhinc_w_3',     "white n.h. pop with household income $15k-19 999k",
+  "B19001A_005", 'hhinc_w_4',     "white n.h. pop with household income $20k-24 999k",
+  "B19001A_014", 'hhinc_w_5',     "white n.h. pop with household income $104 000 to $124 999",
+  "B19001A_015", 'hhinc_w_6',     "white n.h. pop with household income $125k-149 999k",
+  "B19001A_016", 'hhinc_w_7',     "white n.h. pop with household income $150k-199 999k",
+  "B19001A_017", 'hhinc_w_8',     "white n.h. pop with household income $196k+",
+  "B19001_002",  'hhinc_total_1', "total pop with household income <$10k",
+  "B19001_003",  'hhinc_total_2', "total pop with household income $10k-14 999k",
+  "B19001_004",  'hhinc_total_3', "total pop with household income $15k-19 999k",
+  "B19001_005",  'hhinc_total_4', "total pop with household income $20k-24 999k"
+ )
+
+
+ICEraceinc <- get_acs(
+  geography = 'tract',
+  state = 'MA',
+  county = '025',
+  geometry = TRUE,
+  year = 2019,
+  variables = variables_dict$var)
+
+# save the geommetry data separately
+ICEraceinc_geometry <- ICEraceinc %>% select(GEOID) %>% unique()
+
+# remove geometry data so we can use pivot_wider
+ICEraceinc <- ICEraceinc %>% sf::st_drop_geometry()
+
+# pivot to a wide format for renaming, dropping the margin of error data
+ICEraceinc <- ICEraceinc %>% select(-moe) %>% 
+  pivot_wider(names_from = variable, values_from = estimate)
+
+# rename the columns using our rename_vars
+# 
+# first we create a named vector, rename_vars, which has elements that are the
+# acs variables we request and convenient, human readable names.
+# 
+# then we use rename_vars with the rename function from dplyr. 
+# typically the rename function takes a syntax as follows: 
+#   data %>% rename(oldname1 = newname1, oldname2 = newname2, ...)
+# but in our case, we already have a named vector (rename_vars) that we 
+# want to use, and so to use the rename_vars named vector inside rename
+# we use the injection-operator `!!`.  you can learn more about the injection
+# operator by running ?`!!` in your R console. 
+rename_vars <- setNames(variables_dict$var, variables_dict$shortname)
+ICEraceinc <- ICEraceinc %>% rename(!!rename_vars)
+
+# calculate the ICE for racialized economic segregation
+ICEraceinc <- ICEraceinc %>% 
+  mutate(
+    # we calculate the people of color low income counts as the overall 
+    # low income counts minus the white non-hispanic low income counts
+    people_of_color_low_income = 
+      (hhinc_total_1 + hhinc_total_2 + hhinc_total_3 + hhinc_total_4) - 
+      (hhinc_w_1 + hhinc_w_2 + hhinc_w_3 + hhinc_w_4),
+    # sum up the white non-hispanic high income counts
+    white_non_hispanic_high_income = 
+      (hhinc_w_5 + hhinc_w_6 + hhinc_w_7 + hhinc_w_8),
+    # calculate the index of concentration at the extremes for racialized 
+    # economic segregation (high income white non-hispanic vs. low income 
+    # people of color)
+    ICEraceinc = 
+      (white_non_hispanic_high_income - people_of_color_low_income) / 
+      hhinc_total
+  )
+
+# now we can merge our spatial geometry data back in
+ICEraceinc <- ICEraceinc_geometry %>% 
+  left_join(ICEraceinc %>% select(GEOID, ICEraceinc))
+
+# visualize our data - 
+# here we use a divergent color palette since the ICEraceinc measure 
+# is divergent in nature
+ggplot(ICEraceinc, aes(fill = ICEraceinc)) + 
+  geom_sf() + 
+  scale_fill_distiller(palette = 'BrBG') + 
+  labs(fill = "ICE for Racialized Economic Segregation:\nWhite non-Hispanic (High Income) vs.\nPeople of Color (Low Income)") + 
+  ggtitle("Index of Concentration at the Extremes, Racialized Economic Segregation",
+          "Suffolk County, MA") 
+```
+
+```{r}
+#| echo = FALSE
+knitr::include_graphics("images/04-getting-your-data/ICEraceinc_suffolk_county.png")
+ICEraceinc <- readRDS('data/04-getting-your-data/ICEraceinc_suffolk_county.rds')
+```
+
+```{r}
+mapview::mapview(ICEraceinc, zcol = 'ICEraceinc', col.regions=rev(brewer.pal(9, "BrBG")))
+```
+
+## Data Cleaning
+
+### FIPS Codes 
+
+One of the most important aspects to pay attention to when cleaning
+geo-referenced data is that area-keys are stored as
+character or factor data types and not numeric types because if they are stored
+as numeric types leading 0s will be dropped and this may cause issues when 
+merging multiple datasets together if the area-keys are not coded in the same 
+way (e.g. in one dataset area-keys might be coded numeric and in another dataset 
+area-keys might be coded as a character or factor. 
+
+### Geocoding 
