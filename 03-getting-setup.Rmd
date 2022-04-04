@@ -1,16 +1,58 @@
 # Getting Setup with R and RStudio {#getting-setup}
 
-  - Downloading R & RStudio 
-  - Reference R4DS & other R tutorials, add Geocomputation with R (Robin Lovelace)
-  - Installing packages 
-  - Extracting/loading data we prepare
+We recommend before moving on, readers should take care of
+downloading and installing R and RStudio as well as getting 
+some dependencies installed.
+    
+## Downloading and Installing R and RStudio
 
-First, you will need to download R and RStudio. 
+In order to follow along with these resources, you will need to have R and
+RStudio installed and setup.  You can download R from
+https://www.r-project.org/. You can download RStudio from
+https://www.rstudio.com/.
 
-You can download R from https://www.r-project.org/. 
+## Basic Features of R
 
-You can download RStudio from https://www.rstudio.com/. 
+Throughout this text, the example code given will depend on various R packages
+which are all available free and open-source, easily installed in R with the 
+`install.packges` function. 
 
-You may want to familiarize yourself with common R and RStudio references 
-like the *R for Data Science* book, available free and online here: 
-https://r4ds.had.co.nz/. 
+To work through the case examples here, you will need to install at least the 
+following packages: 
+
+```{r}
+#| echo = TRUE,
+#| eval = FALSE
+install.packages("tidyverse")
+install.packages("tidycensus")
+install.packages("sf")
+install.packages("mapview")
+```
+
+For the `tidycensus` package, users need to follow the instructions here: https://walker-data.com/tidycensus/articles/basic-usage.html 
+to set up their Census API key. 
+
+For the `sf` package, there are additional instructions here:
+https://r-spatial.github.io/sf/ for getting setup with the `gdal` (or
+Geospatial Data Abstraction Library, a translator library for raster and vector
+geospatial data formats) which is a dependency of `sf`.
+
+
+:::: {.infobox .caution}
+The examples and code in this book will assume some familiarity with the R
+programming language.
+
+If you are not familiar with R, you may want to start by familiarizing yourself
+R. The *R for Data Science* book, available free and online here:
+https://r4ds.had.co.nz/, which provides an accessible online introduction.
+::::
+
+## References for Spatial Programming in R
+
+As additional reference material to supplement the R programming code provided
+here, we would recommend: 
+
+  - Geocomputation with R by Robin Lovelace, Jakub Nowosad, and Jannes Muenchow. 
+  https://geocompr.robinlovelace.net/.
+  - Spatial Data Science with Applications in R by Edzer Pebesma and Roger Bivand. 
+  https://r-spatial.org/book/.

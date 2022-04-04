@@ -3,7 +3,9 @@ title: "The Public Health Disparities Geocoding Project 2.0"
 author: "Jarvis Chen, Enjoli Hall, Dena Javadi, Nancy Krieger, Justin Morgan, Christian Testa (alphabetic order by last name)"
 date: "3/17/2022"
 site: bookdown::bookdown_site
-output: bookdown::gitbook
+output: 
+  bookdown::gitbook:
+    css: style.css
 documentclass: book
 bibliography: [references.bib, packages.bib]
 biblio-style: apalike

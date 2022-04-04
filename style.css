@@ -1,0 +1,30 @@
+/* taken from https://bookdown.org/yihui/rmarkdown-cookbook/custom-blocks.html */
+.infobox {
+	padding: 1em 1em 1em 4em;
+	margin-bottom: 10px;
+	background: lightgray 5px center/3em no-repeat;
+	border: 2px solid orange;
+	border-radius: 10px;
+}
+
+.caution {
+  background-image: url("images/icons/caution.png");
+}
+
+.note {
+  background-image: url("images/icons/note.png");
+}
+
+pre {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+pre[class] {
+  max-height: 500px;
+}
+
+.scroll-500 {
+  max-height: 500px;
+  overflow-y: auto;
+}

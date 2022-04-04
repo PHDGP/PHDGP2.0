@@ -1,9 +1,9 @@
 # Preface {#preface}
 
-While the following materials will teach you about analyzing health data, we
-must underscore that a health equity lens will be emphasized throughout these
-materials. This book is written with as much emphasis on monitoring health for
-accountability as they are for etiological studies.
+While the following materials will teach you about how to analyze health data,
+we must underscore that the motivation is one of promoting health equity lens. 
+Our intention in writing these references are as much to support monitoring
+health for accountability as for etiological studies.
 
 Source of funding: American Cancer Society
 

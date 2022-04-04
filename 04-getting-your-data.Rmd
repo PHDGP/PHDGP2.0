@@ -14,6 +14,68 @@
   - Geocoding  (different ways to geocode, Google, openstreetmaps, ArcGIS)
 
 
+## Data Sources 
+
+Health data can be found in numerous formats, such as for download from a
+webpage as .csv or .xlsx files, accessible through querying an application
+programming interface (API), or available only through direct request to a
+health department or agency.
+
+The sources for the data we've used in our case examples are as follows: 
+
+  - US Census and American Community Survey data is retrieved through their API https://www.census.gov/data/developers/data-sets.html via the `tidycensus`
+  package
+  - CDC Places data were downloaded directly as .csv files from https://www.cdc.gov/places/
+  - Cook County Medical Case Examiner Archive data on COVID-19 deaths were 
+  downloaded directly from https://datacatalog.cookcountyil.gov/Public-Safety/Medical-Examiner-Case-Archive-COVID-19-Related-Dea/3trz-enys 
+  - Massachusetts mortality data were requested directly from the Massachusetts 
+  Department of Public Health
+
+## Loading Spreadsheet Data into R
+
+If you have a .csv file that you have downloaded, you can use the `readr` package
+(which is part of the `tidyverse`) to load it into R.
+
+```{r}
+#| echo = TRUE,
+#| eval = FALSE
+library(readr)
+example_df <- read_csv("filename.csv")
+
+# learn more about the options read_csv has by running:
+?read_csv
+```
+
+Health data often come in other kinds of delimited formats such as 
+tab-delimited or fixed-width spaced, in which case you can use the 
+`read_tsv` or `read_fwf` functions from the `readr` package similarly 
+to how you would use `read_csv`. Learn more about `readr` here: https://readr.tidyverse.org/
+
+To read Excel data, we recommend using the `readxl` package, also part of 
+the `tidyverse`. Learn more here: https://readxl.tidyverse.org/
+
+```{r}
+#| echo = TRUE,
+#| eval = FALSE
+library(readxl)
+example_df <- read_excel("filename.xlsx", sheet = 1)
+# to learn more about the options in the read_excel function, run:
+?read_excel
+
+# one particularly helpful feature to know about is the range argument which
+# allows the user to specify they want to read a dataframe from a specific 
+# range of cells using Excel-style range syntax:
+example_df <- read_excel("filename.xlsx", sheet = 1, range = "A3:C17")
+```
+
+## Connecting to Databases
+
+While not discussed here, sometimes health data are accessible via query to a
+remote database server.  References on how to interact with databases in R are
+available here: https://db.rstudio.com/, and the following reference shows how
+to interact with a remote database in the `tidyverse` style:
+https://dbplyr.tidyverse.org/
+
 ## tidycensus
 
 The `tidycensus` package in R allows you to download data from the US Census
@@ -45,11 +107,16 @@ links:
   - https://api.census.gov/data/2020/acs/acs5/variables.html 
 
 ```{r}
+#| class.output = "scroll-500",
 #| eval = FALSE
+# example code for downloading poverty measures from the American Community
+# Survey through tidycensus and visualizing them through maps
+
 # load the packages we'll use for this section
 library(tidycensus)
 library(tidyverse)
 library(sf)
+library(RColorBrewer)
 
 # download the data from the ACS using the get_acs method from tidycensus
 # 
@@ -157,7 +224,12 @@ Concentration at the Extremes for Racialized Economic Segregation (High Income
 White non-Hispanic High Income vs. Low Income People of Color).
 
 ```{r}
+#| class.output = "scroll-500",
 #| eval = FALSE
+
+# example code for creating the index of concentration at the extremes for the 
+# measure of racialized economic segregation (high income white non-hispanic 
+# vs. low income people of color) using tidycensus
 
 # create a data dictionary detailing the variables we're going to use - 
 # 
@@ -253,6 +325,7 @@ ggplot(ICEraceinc, aes(fill = ICEraceinc)) +
 
 ```{r}
 #| echo = FALSE
+library(RColorBrewer)
 knitr::include_graphics("images/04-getting-your-data/ICEraceinc_suffolk_county.png")
 ICEraceinc <- readRDS('data/04-getting-your-data/ICEraceinc_suffolk_county.rds')
 ```
@@ -261,9 +334,7 @@ ICEraceinc <- readRDS('data/04-getting-your-data/ICEraceinc_suffolk_county.rds')
 mapview::mapview(ICEraceinc, zcol = 'ICEraceinc', col.regions=rev(brewer.pal(9, "BrBG")))
 ```
 
-## Data Cleaning
-
-### FIPS Codes 
+## Cleaning FIPS Codes
 
 One of the most important aspects to pay attention to when cleaning
 geo-referenced data is that area-keys are stored as
@@ -273,4 +344,74 @@ merging multiple datasets together if the area-keys are not coded in the same
 way (e.g. in one dataset area-keys might be coded numeric and in another dataset 
 area-keys might be coded as a character or factor. 
 
-### Geocoding 
+:::: {.infobox .note}
+For county FIPS codes, the `tigris` package has a handy built-in reference. 
+
+Once you've installed `tigris` (e.g. run `install.packages('tigris')`) and
+load the package (`library(tigris)`) you can access the built-in `fips_codes`
+data.frame.
+
+```{r}
+#| echo = FALSE,
+#| eval = TRUE
+library(knitr)
+library(kableExtra)
+knitr::kable(tigris::fips_codes) %>% 
+  kableExtra::kable_styling() %>% 
+  kableExtra::scroll_box(height = '500px')
+```
+::::
+
+Suppose, as can happen, that you download your data and find that due to a 
+coding error the FIPS codes have been stored as numeric, causing leading 
+zeroes to be truncated off.  If you check the FIPS codes and are reasonably 
+confident that the only error is that leading left-hand-side zeroes have been
+omitted, you could do the following to correct the mistake:
+
+```{r}
+#| echo = FALSE,
+#| eval = TRUE
+example_df <- tibble::tribble(
+    ~FIPS,      ~Name, ~State,
+  "01001",  "Autauga",   "AL",
+  "01003",  "Baldwin",   "AL",
+  "01005",  "Barbour",   "AL",
+  "01007",     "Bibb",   "AL",
+  "01009",   "Blount",   "AL",
+  "01011",  "Bullock",   "AL",
+  "01013",   "Butler",   "AL",
+  "01015",  "Calhoun",   "AL",
+  "01017", "Chambers",   "AL",
+  "01019", "Cherokee",   "AL",
+  "01021",  "Chilton",   "AL"
+  )
+example_df$FIPS <- as.integer(example_df$FIPS)
+library(dplyr)
+library(stringr)
+```
+
+```{r}
+#| echo = TRUE,
+#| eval = TRUE
+head(example_df)
+
+library(stringr)
+library(dplyr)
+example_df <- example_df %>% mutate(FIPS = ifelse(
+  nchar(FIPS) == 4,
+  str_pad(
+    FIPS,
+    width = 5,
+    pad = '0',
+    side = 'left'
+  ),
+  FIPS
+))
+
+head(example_df)
+```
+
+The above code uses the `dplyr` and `stringr` packages, both part of the `tidyverse`
+and which have introductions here: https://dplyr.tidyverse.org/ and here: https://stringr.tidyverse.org/. 
+
+## Geocoding 
