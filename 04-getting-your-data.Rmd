@@ -245,7 +245,7 @@ variables_dict <-
   "B19001A_003", 'hhinc_w_2',     "white n.h. pop with household income $10k-14 999k",
   "B19001A_004", 'hhinc_w_3',     "white n.h. pop with household income $15k-19 999k",
   "B19001A_005", 'hhinc_w_4',     "white n.h. pop with household income $20k-24 999k",
-  "B19001A_014", 'hhinc_w_5',     "white n.h. pop with household income $104 000 to $124 999",
+  "B19001A_014", 'hhinc_w_5',     "white n.h. pop with household income $100 000 to $124 999",
   "B19001A_015", 'hhinc_w_6',     "white n.h. pop with household income $125k-149 999k",
   "B19001A_016", 'hhinc_w_7',     "white n.h. pop with household income $150k-199 999k",
   "B19001A_017", 'hhinc_w_8',     "white n.h. pop with household income $196k+",
