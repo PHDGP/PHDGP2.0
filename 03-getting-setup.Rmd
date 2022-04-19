@@ -43,8 +43,8 @@ The examples and code in this book will assume some familiarity with the R
 programming language.
 
 If you are not familiar with R, you may want to start by familiarizing yourself
-R. The *R for Data Science* book, available free and online here:
-https://r4ds.had.co.nz/, which provides an accessible online introduction.
+with R. The *R for Data Science* book, available free and online here:
+https://r4ds.had.co.nz/, which provides a free, online, accessible introduction.
 ::::
 
 ## References for Spatial Programming in R
