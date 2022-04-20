@@ -1,9 +1,14 @@
 # Preface {#preface}
 
 While the following materials will teach you about how to analyze health data,
-we must underscore that the motivation is one of promoting health equity lens. 
-Our intention in writing these references are as much to support monitoring
-health for accountability as for etiological studies.
+we must underscore that the motivation is one of promoting the lens of health
+equity. Our intention in writing this reference material is as much to support
+monitoring health for accountability as it is to support etiological studies.
+
+<!-- TODO: --> 
+<!-- Incorporate this paragraph/idea: --> 
+<!-- Depending on your skill-level, there are different ways to benefit from this book. ...
+--> 
 
 Source of funding: American Cancer Society
 
