@@ -49,7 +49,7 @@ top level directory, run the following:
 # if you haven't already installed bookdown
 install.packages("bookdown") 
 
-bookdown::render_bookdown(".")
+bookdown::render_book('.')
 ```
 
 The result will be a website rendered in the `_book/` directory which you can 
