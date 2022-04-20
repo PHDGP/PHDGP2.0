@@ -1,5 +1,7 @@
 # Getting your data {#getting-your-data}
 
+<!-- Outline for Chapter --> 
+<!-- 
   - Downloading data 
     - Health data
     - Population data
@@ -12,7 +14,33 @@
       - Health data, social metric data
           - Issues of representativeness (Full enumerationn data vs. Survey estimates)
   - Geocoding  (different ways to geocode, Google, openstreetmaps, ArcGIS)
+--> 
 
+## High Level Overview
+
+For the application of mapping area health outcome rates, georeferenced data are
+made up of three components: health outcome counts, population estimates, and
+the geographic boundaries of the areal units of interest. Each of these data may
+each come from different data sources, but they are linked together in practice
+by merging the data together by geographic area identifiers.
+
+```{r}
+#| echo = FALSE,
+#| include = TRUE,
+#| fig.align = 'center',
+#| fig.cap = paste0("The composite parts of georeferenced data for mapping area rates ",
+#|   "(numerators, denominators, and geography shapefiles) are linked together by area identifiers.")
+knitr::include_graphics("images/04-getting-your-data/geodata_diagram.png")
+```
+
+Some examples of area identifiers common in the United States context include
+things like ZIP codes, county FIPS codes, census block or census tract IDs, etc.
+
+If you are studying area level health outcome rates, you may find that you 
+must source these different necessary pieces from different places such as 
+population estimates from the Census or its products, health 
+outcomes from healthcare providers, electronic health records (EHR), 
+government data sources, and 
 
 ## Data Sources 
 
@@ -30,6 +58,8 @@ The sources for the data we've used in our case examples are as follows:
   downloaded directly from https://datacatalog.cookcountyil.gov/Public-Safety/Medical-Examiner-Case-Archive-COVID-19-Related-Dea/3trz-enys 
   - Massachusetts mortality data were requested directly from the Massachusetts 
   Department of Public Health
+  - The Social Vulnerability Index (SVI) is available online to download with csv and 
+  shapefiles available from https://www.atsdr.cdc.gov/placeandhealth/svi/index.html
 
 ## Loading Spreadsheet Data into R
 
@@ -68,15 +98,24 @@ example_df <- read_excel("filename.xlsx", sheet = 1)
 example_df <- read_excel("filename.xlsx", sheet = 1, range = "A3:C17")
 ```
 
+Even if your data isn't a delimited text document or an Excel file, if it is a
+common file format, it is still quite likely you can read your data into R using
+other packages. For example the `haven` package allows users to read SAS, SPSS,
+    and Stata files. Read more here <https://haven.tidyverse.org/>
+
 ## Connecting to Databases
 
-While not discussed here, sometimes health data are accessible via query to a
-remote database server.  References on how to interact with databases in R are
-available here: https://db.rstudio.com/, and the following reference shows how
-to interact with a remote database in the `tidyverse` style:
-https://dbplyr.tidyverse.org/
+Many online health datasets are accessible via query to a remote database
+server.  References on how to interact with databases in R are available here:
+https://db.rstudio.com/, and the following reference shows how to interact with
+a remote database in the `tidyverse` style: https://dbplyr.tidyverse.org/
 
 ## tidycensus
+
+For some databases, R programmers have already written packages to help users
+submit their queries and get back their data of interest.  One such example
+is the U.S. Census, for which the `tidycensus` package exists to automate
+fetching Census data in R.
 
 The `tidycensus` package in R allows you to download data from the US Census
 Bureau products, including from the decennial Census and the 1-year, 3-year, and
@@ -334,15 +373,21 @@ ICEraceinc <- readRDS('data/04-getting-your-data/ICEraceinc_suffolk_county.rds')
 mapview::mapview(ICEraceinc, zcol = 'ICEraceinc', col.regions=rev(brewer.pal(9, "BrBG")))
 ```
 
-## Cleaning FIPS Codes
+## Cleaning Area Identifiers
 
 One of the most important aspects to pay attention to when cleaning
-geo-referenced data is that area-keys are stored as
+georeferenced data is that area identifiers are stored as
 character or factor data types and not numeric types because if they are stored
 as numeric types leading 0s will be dropped and this may cause issues when 
 merging multiple datasets together if the area-keys are not coded in the same 
 way (e.g. in one dataset area-keys might be coded numeric and in another dataset 
 area-keys might be coded as a character or factor. 
+
+This can happen often with FIPS codes, like the 2-character state FIPS
+codes and 3-digit county FIPS code. For states like Alabama and Alaska with FIPS
+codes `01` and `02`, if these are mistakenly stored as numeric values, they will
+be truncated to as `1` and `2` which can introduce errors when trying to merge
+multiple datasets using FIPS codes.
 
 :::: {.infobox .note}
 For county FIPS codes, the `tigris` package has a handy built-in reference. 
@@ -362,11 +407,12 @@ knitr::kable(tigris::fips_codes) %>%
 ```
 ::::
 
-Suppose, as can happen, that you download your data and find that due to a 
-coding error the FIPS codes have been stored as numeric, causing leading 
-zeroes to be truncated off.  If you check the FIPS codes and are reasonably 
-confident that the only error is that leading left-hand-side zeroes have been
-omitted, you could do the following to correct the mistake:
+Suppose, as can happen, that you download your data and find that due to a
+coding error the 5-digit combined state and county FIPS codes have been stored
+as numeric, causing leading zeroes to be truncated off.  If you check the FIPS
+codes and are reasonably confident that the only error is that leading
+left-hand-side zeroes have been omitted, you could do the following to correct
+the mistake:
 
 ```{r}
 #| echo = FALSE,
