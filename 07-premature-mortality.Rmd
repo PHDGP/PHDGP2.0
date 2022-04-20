@@ -1,1 +1,1 @@
-# Case Example 1: Premature Mortality in Massachusetts {#premature-mortality}
+# Case Study 1: Premature Mortality in Massachusetts {#premature-mortality}

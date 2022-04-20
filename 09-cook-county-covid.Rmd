@@ -1,4 +1,4 @@
-# Case Example 3: COVID-19 Mortality in Chicago {#cook-county-covid}
+# Case Study 3: COVID-19 Mortality in Chicago {#cook-county-covid}
 
 ```{r}
 #| echo = FALSE,
