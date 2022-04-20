@@ -29,8 +29,9 @@ install.packages("sf")
 install.packages("mapview")
 ```
 
-For the `tidycensus` package, users need to follow the instructions here: https://walker-data.com/tidycensus/articles/basic-usage.html 
-to set up their Census API key. 
+For the `tidycensus` package, users need to follow the instructions here:
+https://walker-data.com/tidycensus/articles/basic-usage.html to set up their
+Census API key.
 
 For the `sf` package, there are additional instructions here:
 https://r-spatial.github.io/sf/ for getting setup with the `gdal` (or
@@ -39,12 +40,15 @@ geospatial data formats) which is a dependency of `sf`.
 
 
 :::: {.infobox .caution}
-The examples and code in this book will assume some familiarity with the R
-programming language.
+The code examples in this book will assume some familiarity with the R
+programming language. You can still benefit from this book by reading the
+exposition without focusing on the code examples if you are not very familiar
+with R programming.
 
-If you are not familiar with R, you may want to start by familiarizing yourself
-with R. The *R for Data Science* book, available free and online here:
-https://r4ds.had.co.nz/, which provides a free, online, accessible introduction.
+If you want to become more familiar with R programming, you may want to start by
+familiarizing yourself with R. The *R for Data Science* book, available free and
+online here: https://r4ds.had.co.nz/, which provides a free, online, accessible
+introduction.
 ::::
 
 ## References for Spatial Programming in R
