@@ -1,1 +1,190 @@
-# Case Example 4: Health Insurance (ACS, temporal) {#temporal-health-insurance}
+# Case Study 4: Health Insurance over Time {#temporal-health-insurance}
+
+```{r}
+#| echo = TRUE,
+#| eval = FALSE
+
+library(tidycensus)
+library(tidyverse)
+library(tidyr)
+library(magrittr) # magrittr defines the %<>% operator, read more here: https://magrittr.tidyverse.org/
+
+# build a data dictionary - based on ACS 2013
+data_dictionary <- tibble::tribble(
+  ~variable,     ~shortname,                       ~description,
+  "B18135_002",  'under18_denom',                   "Estimate!!Total!!Under 18 years",
+  "B18135_004",  'under18_insured_with_disability', "Estimate!!Total!!Under 18 years!!With a disability!!With health insurance coverage",
+  "B18135_009",  'under18_insured_no_disability',   "Estimate!!Total!!Under 18 years!!No disability!!With health insurance coverage",
+  "B18135_013",  'adult_denom',                     "Estimate!!Total!!18 to 64 years",
+  "B18135_015",  'adult_insured_with_disability',   "Estimate!!Total!!18 to 64 years!!With a disability!!With health insurance coverage",
+  "B18135_020",  'adult_insured_no_disability',     "Estimate!!Total!!18 to 64 years!!No disability!!With health insurance coverage"
+)
+
+# another way to create a data dictionary is to use tidycensus to get the variables tables and filter it:
+acs2012variables <- tidycensus::load_variables(year = 2012, dataset = 'acs5')
+acs2012variables %<>% filter(
+  name %in% c("B18135_002", "B18135_004", "B18135_009", "B18135_013", "B18135_015", "B18135_020")) 
+# then you could append `shortname` data if you'd like
+
+# write a function to help query county insurance rates by state
+get_county_health_insurance <- function(state, year) {
+  get_acs(state = state, year = year, geography = 'county',
+          variables = data_dictionary$variable)
+}
+
+# create a table shell for each year of data for each of texas, massachusetts, florida, and california
+health_insurance <- expand.grid(
+  state = c('TX', 'MA', 'FL', 'CA'),
+  year = 2012:2019)
+
+# query the data from ACS
+health_insurance %<>% 
+  rowwise() %>% 
+  mutate(
+  acs_data = list(get_county_health_insurance(state = state, year = year))) 
+
+# unnest our data
+health_insurance %<>% 
+  tidyr::unnest(cols = acs_data)
+
+# recode variables to use friendlier shortnames
+health_insurance$variable %<>% recode( !!! setNames(data_dictionary$shortname, data_dictionary$variable))
+
+# pivot into wide format
+health_insurance %<>% 
+  select(-moe) %>% # remove the margin of error column
+  tidyr::pivot_wider(
+    id_cols = c('year', 'state', 'GEOID', 'NAME'),
+    names_from = 'variable',
+    values_from = 'estimate')
+
+# calculate adult, child, and 0-64 insurance rates by county and year 
+health_insurance %<>% mutate(
+  adult_insurance_pct = (adult_insured_with_disability + adult_insured_no_disability) / adult_denom,
+  under18_insurance_pct = (under18_insured_with_disability + under18_insured_no_disability) / under18_denom,
+  zero_to_64_insurance_pct = (
+    adult_insured_with_disability + adult_insured_no_disability + under18_insured_with_disability + under18_insured_no_disability
+  ) / (under18_denom + adult_denom))
+
+# use full state names
+health_insurance$state %<>% recode(
+  CA = 'California',
+  FL = 'Florida',
+  MA = 'Massachusetts',
+  TX = 'Texas')
+
+health_insurance$state %<>% factor(levels = sort(c('California', 'Florida', 'Massachusetts', 'Texas')))
+
+# sum components needed to create overall state level insurance rates by year
+health_insurance_state_level <- 
+  health_insurance %>% 
+  group_by(state, year) %>% 
+  summarize(across(
+    c(
+      adult_insured_with_disability,
+      adult_insured_no_disability,
+      adult_denom,
+      under18_insured_with_disability,
+      under18_insured_no_disability,
+      under18_denom
+    ),
+    sum
+  ))
+
+# calculate overall state level insurance rates by year
+health_insurance_state_level %<>% mutate(
+  adult_insurance_pct = (adult_insured_with_disability + adult_insured_no_disability) / adult_denom,
+  under18_insurance_pct = (under18_insured_with_disability + under18_insured_no_disability) / under18_denom,
+  zero_to_64_insurance_pct = (
+    adult_insured_with_disability + adult_insured_no_disability + under18_insured_with_disability + under18_insured_no_disability
+  ) / (under18_denom + adult_denom))
+
+
+# create a plot of overall state level % with health insurance by year
+ggplot(health_insurance_state_level, aes(x = year, y = zero_to_64_insurance_pct, color = state)) + 
+  geom_point() + 
+  geom_line() + 
+  facet_wrap(~state) + 
+  xlab("Year") + 
+  ylab("Percent with Health Insurance (age 0-64)") + 
+  ggtitle("Overall % with Health Insurance by State") +
+  scale_y_continuous(labels = scales::percent_format())
+
+# create plot of county level % with health insurance by year and smooth with geom_smooth method = 'loess' by year 
+ggplot(health_insurance, aes(x = year, y = zero_to_64_insurance_pct, color = state)) + 
+  geom_jitter(alpha = 0.6, height = 0) + 
+  geom_smooth(method = 'loess', color = 'dimgrey') + 
+  facet_wrap(~state) + 
+  xlab("Year") + 
+  ylab("Percent with Health Insurance (age 0-64)") + 
+  ggtitle("% with Health Insurance by County and State", 
+          "Each dot represents a county observation from ACS") +
+  scale_y_continuous(labels = scales::percent_format())
+
+
+# we could also look at child-specific or adult-specific % with health insurance -- 
+
+# under 18 county plot
+ggplot(health_insurance, aes(x = year, y = under18_insurance_pct, color = state)) + 
+  geom_jitter(alpha = 0.6, height = 0) + 
+  geom_smooth(method = 'loess', color = 'dimgrey') + 
+  facet_wrap(~state) + 
+  xlab("Year") + 
+  ylab("Percent with Health Insurance (ages under 18)") + 
+  ggtitle("% with Health Insurance by County and State, Ages under 18", 
+          "Each dot represents a county observation from ACS") +
+  scale_y_continuous(labels = scales::percent_format())
+
+# adult county plot 
+ggplot(health_insurance, aes(x = year, y = adult_insurance_pct, color = state)) + 
+  geom_jitter(alpha = 0.6, height = 0) + 
+  geom_smooth(method = 'loess', color = 'dimgrey') + 
+  facet_wrap(~state) + 
+  xlab("Year") + 
+  ylab("Percent with Health Insurance (ages 19-64)") + 
+  ggtitle("% with Health Insurance by County and State, Ages 19-64", 
+          "Each dot represents a county observation from ACS") +
+  scale_y_continuous(labels = scales::percent_format())
+
+
+# here's a version using ggdist to plot quantile ribbons on top of the jittered points 
+library(ggdist)
+ggplot(health_insurance, aes(x = year, y = adult_insurance_pct, fill = factor(state), color = factor(state))) + 
+  geom_jitter(alpha = 0.3, height = 0) + 
+  stat_lineribbon(aes(fill_ramp = stat(level)), color = 'black', alpha = 0.6) + 
+  facet_wrap(~state) + 
+  scale_fill_manual(
+    values = setNames(palette_OkabeIto[c(1,2,3,6)],
+                      c('Texas', 'Massachusetts', 'Florida', 'California'))
+                      ) + 
+  scale_color_manual(
+    values = setNames(palette_OkabeIto[c(1,2,3,6)],
+                      c('Texas', 'Massachusetts', 'Florida', 'California'))
+                      ) + 
+  xlab("Year") + 
+  ylab("Percent with Health Insurance (ages 19-64)") + 
+  ggtitle("% with Health Insurance by County and State, Ages 19-64", 
+          "Each dot represents a county observation from ACS") +
+  labs(
+    fill_ramp = 'Quantile Range',
+    color = 'State',
+    fill = 'State',
+    ) + 
+  theme_bw() + 
+  guides(fill = guide_legend(reverse = TRUE)) + 
+  guides(color = guide_legend(reverse = TRUE)) + 
+  scale_y_continuous(labels = scales::percent_format())
+```
+
+```{r}
+#| echo = FALSE,
+#| include = FALSE
+ggsave("images/10-temporal-health-insurance/health_insurance_county_temporal.png", width = 8, height = 4)
+```
+
+```{r}
+#| echo = FALSE,
+#| include = TRUE,
+#| fig.cap = 'County observtions of adult (age 19-64) health insurance rates in California, Florida, Massachusetts, and Texas'
+knitr::include_graphics("images/10-temporal-health-insurance/health_insurance_county_temporal.png")
+```
