@@ -1,9 +1,15 @@
 # Preface {#preface}
 
+In June 2004, faculty at the Harvard School of Public Health implemented a training on Geocoding and Public Health Disparities with the aim of boosting efforts to address socioeconomic inequalities in health. This training offered a solution to the problem of lack of socioeconomic data in US public health surveillance systems. This solution is the geocoding of public health surveillance data and using census-derived area-based socioeconomic measures (ABSMs) to characterize both the cases and population in the catchment area, thereby enabling computation of rates stratified by the area-based measure of socioeconomic position.
+
+Since 2004, both the theories around public health disparities and the analytic tools to measure them have evolved.
+
 While the following materials will teach you about analyzing health data, we
 must underscore that a health equity lens will be emphasized throughout these
 materials. This book is written with as much emphasis on monitoring health for
 accountability as they are for etiological studies.
+
+
 
 Source of funding: American Cancer Society
 
