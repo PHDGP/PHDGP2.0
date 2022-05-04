@@ -1,30 +1,165 @@
----
-title: "Glossary"
-author: "PHDGP"
-date: "5/4/2022"
-output: html_document
----
+# Glossary
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+ABSM see “Area-based socioeconomic measure”
 
-## R Markdown
+address cleaning The process of taking an original address and retaining only key elements of that address (building number, street and street type), as well as correcting spelling errors and standardizing abbreviations.
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+age stratum One category of age in a series of age categories.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+American Community Survey A new national survey administered by the US Census Bureau that provides yearly data on states and counties between the decennial censuses and which, by 2008, should provide these data for census tracts as well. For more information see http://www.census.gov/acs/www/ .
 
-```{r cars}
-summary(cars)
-```
+area A geographic region whose boundaries may be defined socially, topographically, or ecologically (singly or in combination).
 
-## Including Plots
+area-based measure see “area-based socioeconomic measure”
 
-You can also embed plots, for example:
+area-based socioeconomic measure A specifically defined measure that is used to characterize the socioeconomic conditions of an area (as opposed to the socioeconomic position of individuals); for example, percent of persons living below poverty.
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+block group “A subdivision of a census tract, generally containing between 600 and 3,000 people, with an optimum size of 1,500 people. Most block groups were delineated by local participants as part of the U.S. Census Bureau’s Participant Statistical Areas Program. It is the lowest level of the geographic hierarchy for which the U.S. Census Bureau tabulates and presents sample data. (from Appendix A. Census 2000 Geographic Terms and Concepts. http://www.census.gov/geo/www/tiger/glossry2.pdf)
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Carstairs Index UK Composite deprivation measure, created by summing standardized Z scores from area-based data on percent crowding, percent male unemployment, percent no car ownership, and percent low social class.
+
+case record see case report
+
+case report Data on an individual that indicates the incidence or prevalence of a morbidity or mortality outcome.
+
+cdf see cumulative distribution function
+
+cell A basic unit of aggregation based on the cross-classification of a number of categorical variables. For example, all cases occurring among women ages 40-44 in a given census tract are aggregated into a single cell defined by gender, age, and area.
+
+census geography A scheme of classification of areas used by the U.S. census. For example, census tract and block group are both types of areas by which data are classified in U.S. census data.
+
+census tract “A small relatively permanent statistical subdivision delineated by local participants as part of the U.S. Census Bureau’s Participant Statistical Areas program. When first delineated they are designed to be relatively homogenous with respect to population characteristics, economic status and living conditions. They average in size between 1,500 and 8,000 people, with an optimum size of 4,000 people. The geographic size varies considerably depending on population density. (from Appendix A. Census 2000 Geographic Terms and Concepts. http://www.census.gov/geo/www/tiger/ glossry2.pdf)
+
+census variable Items of data organized by the U.S. Census bureau. Data for these variables is structured in the form of census tables, that may include one or more census variables.
+
+class see social class
+
+comma-delimited file A text file format where data fields are separated by commas. The Microsoft Excel file extension for this type of data is .csv .
+
+composite index see composite measure
+
+composite measure A measure that combines information on more than one component variable. For example, the Townsend index consists of percent unemployment, percent renters, percent not owning a car, and percent crowding.
+
+compositional factors Attributes of areas that derive from the characteristics of individuals.
+
+construct A theoretical concept or idea.
+
+contextual factors Attributes of areas that derive from structural or social characteristics of the area.
+
+CT see census tract
+
+cumulative distribution function For a given value, the area under the probability function up to that value (i.e. cdf(x) = Pr[X<=x]). When calculated as part of deriving the relative index of inequality, the cumulative distribution function of an area-based socioeconomic measure (ordered from most affluent to most deprived) for a given value can be interpreted as the proportion of the population who are more affluent.
+
+denominator There are two definitions of denominator that depend on the measure being calculated. For calculating rates, the denominator is the amount of person-time observed during which time cases were eligible to occur. For calculating ABSMs, the denominator is the total number of persons in an area for which the ABSM was measured.
+
+deprivation “Deprivation can be conceptualized and measured, at both the individual and area level, in relation to: material deprivation, referring to ‘dietary, clothing, housing, home facilities, environment, location and work (paid and unpaid), and social deprivation, referring to rights in relation to ’employment, family activities, integration into the community, formal participation in social institutions, recreation and education’ “(from Krieger N. A Glossary for Social Epidemiology, J Epidemiol Community Health 2001; 55:693-700.)
+
+direct age standardization A method for adjusting a population rate for age, yielding the hypothetical rate that would have been observed if the population being studied had the same age distribution as an externally defined standard population. In direct standardization, stratum specific rates are multiplied by weights derived from a standard reference population, and summed to yield a summary rate. Rates standardized to the same external standard may be meaningfully compared to examine differences that are not due to age.
+
+ecosocial theory A theory that seeks to “integrate social and biological reasoning and a dynamic, historical and ecological perspective to develop new insights into determinants of population distributions of disease and social inequalities in health.” The core concepts for ecosocial theory include 1. embodiment, 2. pathways to embodiment, 3. cumulative interplay between exposure, susceptibility, and resistance, and 4. accountability and agency. (from Krieger N. A Glossary for Social Epidemiology, J Epidemiol Community Health 2001; 55:693-700.)
+
+etiologic period The duration of time over which a disease develops, referring to the time from an initial exposure to the time at which the outcome caused by this exposure occurs.
+
+exact confidence limits Exact confidence limits that do not rely on a normal approximation. We used exact confidence limits to calculate confidence intervals when the rate was zero.
+
+gamma confidence intervals Confidence intervals for the direct standardized rate based on the gamma distribution. A practical consequence of using gamma confidence intervals is that confidence intervals for rates will not cross zero. For more details see Fay MP, Feuer EJ. Confidence intervals for directly standardized rates: a method based on the gamma distribution. Statistics in Medicine 1997;16:791-801
+
+gender “A social construct regarding culture-bound conventions, roles and behaviors for, as well as relationships between and among, women and men and boys and girls.” (from Krieger N. A Glossary for Social Epidemiology, J Epidemiol Community Health 2001; 55:693-700.)
+
+geocoding The assignment of a numeric code to a geographical location
+
+geographical information systems Technology based systems that combine layers of geographic data to offer a greater understanding of the characteristics of places.
+
+georesult see MatchCode
+
+Gini A measurement of inequality that ranges between 0 and 1, which is the ratio of the area under the Lorenz curve to the area under the diagonal on a graph of the Lorenz curve. A value of one would indicate complete inequality of distribution, while a 0 indicates no inequality.
+
+GIS see geographical information systems
+
+incidence rate The number of events divided by the person-time at risk.
+
+incidence rate difference The absolute difference between two incidence rates. The incidence rate among the exposed proportion of the population, minus by the incidence rate in the unexposed portion of the population, gives an absolute measure of the effect of a given exposure.
+
+incidence rate ratio The ratio of two incidence rates. The incidence rate among the exposed proportion of the population, divided by the incidence rate in the unexposed portion of the population, gives a relative measure of the effect of a given exposure.
+
+index of local economic resources A composite index based on “white collar employment, unemployment rate, and median family income, developed for use at the county level” (see Casper ML, Barnett E, Halverson JA, Elmer GA, Braham VE, Majeed ZA, Bloom AS, Stanley S. Women And Heart Disease: An Atlas Of Racial And Ethnic Disparities In Mortality. Office for Social Environment and Health Research, West Virginia University, Morgantown, WV, 1999.) Data for the three component variables are ranked into deciles, and then summed.
+
+indirect age standardization A method for adjusting a population rate for age, yielding the hypothetical rate that would have been observed if the population being studied had the same age distribution as an externally defined standard population. Indirect standardization is based on deriving an expected number of events using an externally defined standard population, and contrasting this value to the observed number of events in the population being studied. The expected number of events is derived by multiplying the stratum-specific counts in the study population by stratum-specific rates from a standard population. The ratio of total observed events to the number expected is the standardized mortality (or morbidity) ratio (SMR). The indirect standardized rate is calculated by multiplying the SMR by the crude rate from the standard population.
+
+injury due to legal intervention Includes injuries inflicted by the police or other law-enforcing agents, including military on duty, in the course of arresting or attempting to arrest lawbreakers, suppressing disturbances, maintaining order, and other legal action.
+
+lifecourse perspective “Refers to how health status at any given age, for a given birth cohort, reflects not only contemporary conditions but embodiment of prior living circumstances, in utero onwards” (from Krieger N. A Glossary for Social Epidemiology, J Epidemiol Community Health 2001; 55:693-700.)
+
+MatchCode An indicator of which address elements determined the geocode, thus giving an indication of the accuracy of the geocode (also called “georesult” by some companies).
+
+material deprivation see deprivation
+
+multilevel analysis Analyses that conceptualize and analyze associations at multiple levels, e.g., employ individual- and area-based data in relation to a specified outcome. These analyses typically entail the use of variance components models to partition the variance at multiple levels, and to examine the contribution of factors measured at these different levels to the overall variation in the outcome.
+
+non-fatal weapons related injuries A category of injury that includes intentional and unintentional non-fatal gun and stabbing injuries.
+
+numerator There are two definitions of numerator that depend on the measure calculated. For calculating rates, the numerator is the number of events observed. For calculating ABSMs, the numerator is the number of persons or households in an area with the socioeconomic characteristic of interest.
+
+occupational class A measurement of socioeconomic position based upon job characteristics. One example is the British Registrar General’s Social Class scheme, based on skill. This was replaced in 2001 by an occupational measure based on job relations, the National Statistics Socio-Economic Classification system (NS-SEC); related, in this study “working class” occupations were conceptually defined as those as those employing non-supervisory employees (and for the ABSM “working class” measure, were operationally defined as those census occupational categories comprised chiefly of working class occupations).
+
+operational definition A description of a variable in terms of how the variable is actually measured.
+
+person-time The sum of the time at risk for all persons in a population.
+
+Poisson model A regression model used for count data.
+
+population attributable fraction The theoretical reduction of incidence that would be expected if the entire population had the same level of exposure as a specified referent group (which could be a group with low or no exposure).
+
+poverty “To be impoverished is to lack or be denied adequate resources to participate meaningfully in society” (from Krieger N. A Glossary for Social Epidemiology, J Epidemiol Community Health 2001; 55:693-700.)
+
+poverty area In the US, the federal criteria for being a “poverty area” is to be an area with a 20% or more of the population below the poverty line.
+
+poverty line A poverty threshold that takes into account household size and age composition and intended to indicate an income level below which subsistence needs are not met. The poverty line in the US is based on a value of three times the cost of the economy food basket in 1963, adjusted for inflation. See: “How the Census Bureau Measures Poverty (Official Measure)” at: http://www.census.gov/hhes/poverty/ povdef.html
+
+public health surveillance system A structure that facilitates the continuous and systematic collection of descriptive information for monitoring the health of populations (from Buehler, Chapter 22: Surveillance, in Rothman and Greenland, Modern Epidemiology, 2nd edition, 1998, p 435-457).
+
+race/ethnicity “A social, not biological, category, referring to social groups, often sharing cultural heritage and ancestry, that are forged by oppressive systems of race relations, justified by ideology, in which one group benefits from dominating other groups, and defines itself and others through this domination and the possession of selective and arbitrary physical characteristics (for example, skin color)” (from Krieger N. A Glossary for Social Epidemiology, J Epidemiol Community Health 2001; 55:693-700.)
+
+rate difference see incidence rate difference
+
+rate ratio see incidence rate ratio
+
+relative index of inequality A summary measure of “total population impact” that takes into account both the socioeconomic gradient in the outcome, as well as the population distribution of the socioeconomic variable. The RII is interpretable as the ratio of the rate in the theoretically most deprived segment of the population, compared to the rate in the theoretically least deprived segment.
+
+RII see relative index of inequality
+
+SEP see socioeconomic position
+
+sex “A biological construct premised upon biological characteristics enabling sexual reproduction” (from Krieger N. A Glossary for Social Epidemiology, J Epidemiol Community Health 2001; 55:693-700.)
+
+social class “Refers to social groups arising from interdependent economic relationships among people” (from Krieger N. A Glossary for Social Epidemiology, J Epidemiol Community Health 2001; 55:693-700.)
+
+social deprivation see deprivation
+
+socioeconomic position “An aggregate concept that includes both resource-based and prestige-based measures, as linked to both childhood and adult social class position” (from Krieger N. A Glossary for Social Epidemiology, J Epidemiol Community Health 2001; 55:693-700.)
+
+socioeconomic status A term referring to prestige-based measures of socioeconomic position, as determined by rankings in a social hierarchy (from Krieger N. A Glossary for Social Epidemiology, J Epidemiol Community Health 2001; 55:693-700.)
+
+spatiotemporal Of, relating to, or existing in both space and time.
+
+spatiotemporal mismatch A mismatch of data derived from different sources that arises because of (1) inconsistency of boundaries between data sources and/or (2) inconsistency of timeframe between data sources.
+
+S-Plus Commercially available software for data modeling and statistical analysis. A similar version of this software named R is available for free under a GNU General Public License at www.r-project.org.
+
+STF3 table A table of census data from the Summary Tape File 3 of the US census (until 2000, when replaced by Summary File 3) that provides full and sample count data for socioeconomic and other census variables down to the census tract and block group level.
+
+Townsend Index UK Deprivation measure consisting of a standardized Z score combining data on percent crowding, percent unemployment, percent no car ownership, and percent renters.
+
+transpose To reverse the orientation of a matrix, so that the values across the rows become the values down the columns, and the values of the columns become the values across the rows.
+
+wealth Conceptually, wealth refers to accumulated assets. An ABSM to capture wealth is operationalized from census data as percent of owner-occupied homes worth more than 400% of the median value of owned homes.
+
+year 2000 standard million The distribution of the U.S. population into 11 age categories, based on the US population structure in the Year 2000. (see: Anderson RN, Rosenberg HM. Age standardization of death rates: implementation of the year 2000 standard. National Vital Statistics Reports, Vol 37, no. 3. Hyattsville, MD: National Center for Health Statistics, 1998.)
+
+ZCTA see “Zip code tabulation area”
+
+ZIPcode “Administrative units established by the United States Postal Service … for the most efficient delivery of mail, and therefore generally do not respect political or census statistical area boundaries” (from Appendix A. Census 2000 Geographic Terms and Concepts).
+
+ZIPcode tabulation area A statistical geographic area that approximates the delivery area for a U.S. Postal service Zip code. This approximation replaces the Zip code areas used by the Census Bureau in conjunction with the 1990 and earlier censuses.(from Appendix A. Census 2000 Geographic Terms and Concepts.)
+
+Z-score Also referred to as Z-ratio or Z-value, it is equal to a value of X minus the mean of X, divided by the standard deviation.
