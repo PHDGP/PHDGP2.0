@@ -36,11 +36,12 @@ knitr::include_graphics("images/04-getting-your-data/geodata_diagram.png")
 Some examples of area identifiers common in the United States context include
 things like ZIP codes, county FIPS codes, census block or census tract IDs, etc.
 
-If you are studying area level health outcome rates, you may find that you 
-must source these different necessary pieces from different places such as 
-population estimates from the Census or its products, health 
-outcomes from healthcare providers, electronic health records (EHR), 
-government data sources, and 
+If you are studying area level health outcome rates, you may find that you must
+source these different necessary pieces from different places. Population
+estimates can often come from the Census or its related data products, health
+outcomes may come from healthcare providers, public health departments,
+electronic health records (EHR), or other sources, and geography shapefiles are
+similarly available from numerous sources including the Census.
 
 ## Data Sources 
 
@@ -370,7 +371,11 @@ ICEraceinc <- readRDS('data/04-getting-your-data/ICEraceinc_suffolk_county.rds')
 ```
 
 ```{r}
-mapview::mapview(ICEraceinc, zcol = 'ICEraceinc', col.regions=rev(brewer.pal(9, "BrBG")))
+library(mapview)
+mapviewOptions(fgb = FALSE)
+
+mapview(ICEraceinc, zcol = 'ICEraceinc', 
+        col.regions=rev(brewer.pal(11, "BrBG")))
 ```
 
 ## Cleaning Area Identifiers
