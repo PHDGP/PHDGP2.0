@@ -472,6 +472,50 @@ health_insurance %>%
           "County Observations, Texas -- Weighted by Inverse Margin of Error") 
 
 
+health_insurance %>% 
+  filter(state == 'Texas') %>% 
+  ggplot(aes(x = year, y = estimate_zero_to_64_insurance_prop, 
+             # fill = cut(ICEraceinc, quantile(ICEraceinc, seq(0, 1, .2))),
+             color = cut(ICEraceinc, quantile(ICEraceinc, seq(0, 1, .2))),
+             weight = 1/moe_zero_to_64_insurance_prop)) + 
+  geom_jitter(height = 0) + 
+  geom_smooth(method='lm', alpha = 0.5) +
+  # stat_ellipse(geom = "polygon", alpha = .25) + 
+  # facet_wrap(~year, nrow = 2) + 
+  # colorspace::scale_fill_discrete_qualitative() + 
+  # colorspace::scale_color_discrete_qualitative() + 
+  # scale_fill_brewer(palette = 'BrBG') + 
+  scale_color_brewer(palette = 'Greens', ) + 
+  xlab("Year") +
+  ylab("Percent with Health Insurance") + 
+  # scale_x_continuous(labels = scales::percent_format()) + 
+  scale_y_continuous(labels = scales::percent_format()) + 
+  ggtitle("Relationship Between Percent with Health Insurance by ICE for Racialized Economic Segregation over Time",
+          "County Observations, Texas -- Weighted by Inverse Margin of Error") 
+
+health_insurance %>% 
+  filter(state == 'Texas') %>% 
+  ggplot(aes(x = year, y = estimate_zero_to_64_insurance_prop, 
+             # fill = cut(ICEraceinc, quantile(ICEraceinc, seq(0, 1, .2))),
+             color = cut(poverty_prop, quantile(poverty_prop, seq(0, 1, .2),na.rm=T)),
+             weight = 1/moe_zero_to_64_insurance_prop)) + 
+  geom_jitter(height = 0) + 
+  geom_smooth(method='lm', alpha = 0.5) +
+  # stat_ellipse(geom = "polygon", alpha = .25) + 
+  # facet_wrap(~year, nrow = 2) + 
+  # colorspace::scale_fill_discrete_qualitative() + 
+  # colorspace::scale_color_discrete_qualitative() + 
+  # scale_fill_brewer(palette = 'BrBG') + 
+  scale_color_brewer(palette = 'Greens', ) + 
+  xlab("Year") +
+  ylab("Percent with Health Insurance") + 
+  # scale_x_continuous(labels = scales::percent_format()) + 
+  scale_y_continuous(labels = scales::percent_format()) + 
+  ggtitle("Relationship Between Percent with Health Insurance by Percent in Poverty over Time",
+          "County Observations, Texas -- Weighted by Inverse Margin of Error") 
+
+
+
 ```
 
 
