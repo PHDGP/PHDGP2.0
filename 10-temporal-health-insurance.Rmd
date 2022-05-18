@@ -453,15 +453,12 @@ health_insurance %>%
 health_insurance %>% 
   filter(state == 'Texas', year == 2019) %>% 
   ggplot(aes(x = poverty_prop, y = estimate_zero_to_64_insurance_prop, 
-             fill = cut(ICEraceinc, quantile(ICEraceinc, seq(0, 1, .2))),
-             color = cut(ICEraceinc, quantile(ICEraceinc, seq(0, 1, .2))),
+             fill = cut(ICEraceinc, quantile(ICEraceinc, seq(0, 1, .2)), include.lowest = TRUE),
+             color = cut(ICEraceinc,  quantile(ICEraceinc, seq(0, 1, .2)), include.lowest = TRUE),
              weight = 1/moe_zero_to_64_insurance_prop)) + 
   geom_point() + 
-  # geom_smooth(method = 'lm') + 
   stat_ellipse(geom = "polygon", alpha = .25) + 
   facet_wrap(~year, nrow = 2) + 
-  # colorspace::scale_fill_discrete_qualitative() + 
-  # colorspace::scale_color_discrete_qualitative() + 
   scale_fill_brewer(palette = 'BrBG') + 
   scale_color_brewer(palette = 'BrBG') + 
   xlab("Percent in Poverty") + 
@@ -475,46 +472,34 @@ health_insurance %>%
 health_insurance %>% 
   filter(state == 'Texas') %>% 
   ggplot(aes(x = year, y = estimate_zero_to_64_insurance_prop, 
-             # fill = cut(ICEraceinc, quantile(ICEraceinc, seq(0, 1, .2))),
-             color = cut(ICEraceinc, quantile(ICEraceinc, seq(0, 1, .2))),
+             color = cut(ICEraceinc, quantile(ICEraceinc, seq(0, 1, .2)), include.lowest = T),
              weight = 1/moe_zero_to_64_insurance_prop)) + 
   geom_jitter(height = 0) + 
-  geom_smooth(method='lm', alpha = 0.5) +
-  # stat_ellipse(geom = "polygon", alpha = .25) + 
-  # facet_wrap(~year, nrow = 2) + 
-  # colorspace::scale_fill_discrete_qualitative() + 
-  # colorspace::scale_color_discrete_qualitative() + 
-  # scale_fill_brewer(palette = 'BrBG') + 
-  scale_color_brewer(palette = 'Greens', ) + 
+  geom_smooth(alpha = 0.5, alpha = .5) +
+  scale_color_brewer(palette = 'BrBG') + 
   xlab("Year") +
   ylab("Percent with Health Insurance") + 
-  # scale_x_continuous(labels = scales::percent_format()) + 
   scale_y_continuous(labels = scales::percent_format()) + 
   ggtitle("Relationship Between Percent with Health Insurance by ICE for Racialized Economic Segregation over Time",
           "County Observations, Texas -- Weighted by Inverse Margin of Error") 
 
 health_insurance %>% 
-  filter(state == 'Texas') %>% 
+  filter(state == 'Texas', ! is.na(poverty_prop)) %>% 
   ggplot(aes(x = year, y = estimate_zero_to_64_insurance_prop, 
-             # fill = cut(ICEraceinc, quantile(ICEraceinc, seq(0, 1, .2))),
-             color = cut(poverty_prop, quantile(poverty_prop, seq(0, 1, .2),na.rm=T)),
-             weight = 1/moe_zero_to_64_insurance_prop)) + 
+             color = cut(poverty_prop, quantile(poverty_prop, seq(0, 1, .2),na.rm=T),
+                         include.lowest = TRUE),
+             fill = cut(poverty_prop, quantile(poverty_prop, seq(0, 1, .2),na.rm=T),
+                         include.lowest = TRUE)
+             )) + 
   geom_jitter(height = 0) + 
-  geom_smooth(method='lm', alpha = 0.5) +
-  # stat_ellipse(geom = "polygon", alpha = .25) + 
-  # facet_wrap(~year, nrow = 2) + 
-  # colorspace::scale_fill_discrete_qualitative() + 
-  # colorspace::scale_color_discrete_qualitative() + 
-  # scale_fill_brewer(palette = 'BrBG') + 
-  scale_color_brewer(palette = 'Greens', ) + 
+  ggdist::stat_lineribbon(alpha = 1/4, .width = c(.5, .8)) +
+  scale_color_brewer(palette = 'BrBG', direction = -1) + 
+  scale_fill_brewer(palette = 'BrBG', direction = -1) + 
   xlab("Year") +
   ylab("Percent with Health Insurance") + 
-  # scale_x_continuous(labels = scales::percent_format()) + 
   scale_y_continuous(labels = scales::percent_format()) + 
   ggtitle("Relationship Between Percent with Health Insurance by Percent in Poverty over Time",
           "County Observations, Texas -- Weighted by Inverse Margin of Error") 
-
-
 
 ```
 
