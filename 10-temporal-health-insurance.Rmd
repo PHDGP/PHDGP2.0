@@ -203,6 +203,11 @@ health_insurance %<>% select(
 DT::datatable(health_insurance)
 ```
 
+```{r}
+#| echo = FALSE
+health_insurance <- readRDS("data/10-temporal-health-insurance/health_insurance.rds")
+```
+
 Congrats!  You've downloaded your dataset!
 
 Now on to visualizing estimates:
@@ -366,6 +371,7 @@ health_insurance %>%
   ggtitle("Relationship Between Percent in Poverty and Percent with Health Insurance",
           "County Observations, Texas") 
 
+plt1 <- 
 health_insurance %>% 
   filter(state == 'Texas') %>% 
   ggplot(aes(x = poverty_prop, y = estimate_zero_to_64_insurance_prop)) + 
@@ -377,7 +383,95 @@ health_insurance %>%
   scale_x_continuous(labels = scales::percent_format()) + 
   scale_y_continuous(labels = scales::percent_format()) + 
   ggtitle("Relationship Between Percent in Poverty and Percent with Health Insurance",
-          "County Observations, Texas") 
+          "County Observations, Texas -- Unweighted") 
+
+plt2 <- 
+health_insurance %>% 
+  filter(state == 'Texas') %>% 
+  ggplot(aes(x = poverty_prop, y = estimate_zero_to_64_insurance_prop, weight = 1/moe_zero_to_64_insurance_prop)) + 
+  geom_point() + 
+  geom_smooth(method = 'lm') + 
+  facet_wrap(~year, nrow = 2) + 
+  xlab("Percent in Poverty") + 
+  ylab("Percent with Health Insurance") + 
+  scale_x_continuous(labels = scales::percent_format()) + 
+  scale_y_continuous(labels = scales::percent_format()) + 
+  ggtitle("Relationship Between Percent in Poverty and Percent with Health Insurance",
+          "County Observations, Texas -- Weighted by Inverse Margin of Error") 
+
+library(patchwork)
+
+plt1 / plt2 
+
+
+
+
+plt1 <- 
+health_insurance %>% 
+  filter(state == 'Massachusetts') %>% 
+  ggplot(aes(x = poverty_prop, y = estimate_zero_to_64_insurance_prop)) + 
+  geom_point() + 
+  geom_smooth(method = 'lm') + 
+  facet_wrap(~year, nrow = 2) + 
+  xlab("Percent in Poverty") + 
+  ylab("Percent with Health Insurance") + 
+  scale_x_continuous(labels = scales::percent_format()) + 
+  scale_y_continuous(labels = scales::percent_format()) + 
+  ggtitle("Relationship Between Percent in Poverty and Percent with Health Insurance",
+          "County Observations, Massachusetts -- Unweighted") 
+
+plt2 <- 
+health_insurance %>% 
+  filter(state == 'Massachusetts') %>% 
+  ggplot(aes(x = poverty_prop, y = estimate_zero_to_64_insurance_prop, weight = 1/moe_zero_to_64_insurance_prop)) + 
+  geom_point() + 
+  geom_smooth(method = 'lm') + 
+  facet_wrap(~year, nrow = 2) + 
+  xlab("Percent in Poverty") + 
+  ylab("Percent with Health Insurance") + 
+  scale_x_continuous(labels = scales::percent_format()) + 
+  scale_y_continuous(labels = scales::percent_format()) + 
+  ggtitle("Relationship Between Percent in Poverty and Percent with Health Insurance",
+          "County Observations, Massachusetts -- Weighted by Inverse Margin of Error") 
+
+library(patchwork)
+
+plt1 + plt2 
+
+health_insurance %>% 
+  filter(state == 'Texas') %>% 
+  ggplot(aes(x = ICEraceinc, y = estimate_zero_to_64_insurance_prop, weight = 1/moe_zero_to_64_insurance_prop)) + 
+  geom_point() + 
+  geom_smooth(method = 'lm') + 
+  facet_wrap(~year, nrow = 2) + 
+  xlab("ICEraceinc") + 
+  ylab("Percent with Health Insurance") + 
+  scale_y_continuous(labels = scales::percent_format()) + 
+  ggtitle("Relationship Between ICE for Racialized Economic Segregation and Percent with Health Insurance",
+          "County Observations, Texas -- Weighted by Inverse Margin of Error") 
+
+health_insurance %>% 
+  filter(state == 'Texas', year == 2019) %>% 
+  ggplot(aes(x = poverty_prop, y = estimate_zero_to_64_insurance_prop, 
+             fill = cut(ICEraceinc, quantile(ICEraceinc, seq(0, 1, .2))),
+             color = cut(ICEraceinc, quantile(ICEraceinc, seq(0, 1, .2))),
+             weight = 1/moe_zero_to_64_insurance_prop)) + 
+  geom_point() + 
+  # geom_smooth(method = 'lm') + 
+  stat_ellipse(geom = "polygon", alpha = .25) + 
+  facet_wrap(~year, nrow = 2) + 
+  # colorspace::scale_fill_discrete_qualitative() + 
+  # colorspace::scale_color_discrete_qualitative() + 
+  scale_fill_brewer(palette = 'BrBG') + 
+  scale_color_brewer(palette = 'BrBG') + 
+  xlab("Percent in Poverty") + 
+  ylab("Percent with Health Insurance") + 
+  scale_x_continuous(labels = scales::percent_format()) + 
+  scale_y_continuous(labels = scales::percent_format()) + 
+  ggtitle("Relationship Between Percent in Poverty and Percent with Health Insurance Stratified by ICE for Racialized Economic Segregation",
+          "County Observations, Texas -- Weighted by Inverse Margin of Error") 
+
+
 ```
 
 
