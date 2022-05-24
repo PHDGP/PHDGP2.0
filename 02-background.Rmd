@@ -1,5 +1,98 @@
 # Background and History of Analytic Methods {#background}
 
-  - Tuberculosis and cancer registries driving interest in looking at social
-  metrics
-  - Link to previous training
+In 2004, investigators at the Harvard T.H Chan School of Public Health's Department of Social and Behavioral Sciences published a [Project Monograph](https://www.hsph.harvard.edu/thegeocodingproject/public-health-disparities-geocoding-project-monograph-june-2004/) describing the [motivation](https://www.hsph.harvard.edu/thegeocodingproject/introduction/) behind the Public Health Disparities Geocoding project and diving into methods of [geocoding](https://www.hsph.harvard.edu/thegeocodingproject/geocoding/), generating [area-based social metrics (ABSMs)](https://www.hsph.harvard.edu/thegeocodingproject/generating-absms/), [Multi-level Modeling](https://www.hsph.harvard.edu/thegeocodingproject/multi-level-modeling/), [data visualization](https://www.hsph.harvard.edu/thegeocodingproject/visual-display/), and [basic epidemiologic methods for generating descriptive statistics](https://www.hsph.harvard.edu/thegeocodingproject/analytic-methods/).
+
+Key publications on these topics can also be found on the project's [publications page](https://www.hsph.harvard.edu/thegeocodingproject/publications/).
+
+The Public Health Disparities Geocoding Project is informed by the ecosocial theory of disease distribution, developed by Dr. Nancy Krieger in [1994](https://www.sciencedirect.com/science/article/pii/027795369490202X?casa_token=_9JKsxrdf5gAAAAA:5s38ClF44ISx9OGzrDq-8DqY4b3iFHHY5WYQnBChxAO8pd5IVbPTgWOIWwsVGCcCCLDud_zskzk), specifically "its focus on how people literally biologically embody their societal and ecological context at multiple levels, across the life course and historical generations" (Krieger, 2012).
+
+Administrative health data, disease surveillance systems, and routine health surveys are important tools in understanding disease distribution and informing public health programming, advocacy, and policy development. However, the social patterning of disease distribution is often obscured by a lack of robust social metrics, including socioeconomic data, pertinent to understanding health inequities - defined as unfair, avoidable, and preventable health differences across populations (Krieger, 2011). As defined by Krieger (2012), "populations are dynamic beings constituted by intrinsic relationships both among their members and with the other populations that together produce their existence." Addressing health inequities across populations then requires data on the population-defined and defining relationships and characteristics that create and are created by structures and systems that contribute to these health inequities.
+
+Using routine information systems to inform disease prevention is not a 21st or even 20th century concept. In 1829, William Farr, a "Compiler of Abstracts" at the General Register included a letter to the Register's first report which stated that 
+
+> _"Diseases are more easily prevented than cured, and the first step to their prevention is the discovery of their exciting causes. The Registry will show the agency of these causes by numerical facts and measure the intensity of their influence and will collect information on the laws of vitality with the variation in these laws in the two sexes at different ages and the influence of civilisation, occupation, locality, seasons and other physical agencies whether in generating diseases and inducing death or in improving the public health" (Whitehead, 2000)._
+
+In the US, linking of public health data to US census-based socioeconomic data was carried out by the National Tuberculosis Association in the 1920s and 1930s (Green, 1932; Nathan, 1932). Similarly, cancer epidemiologists have used geocoded data to generate and stratify cancer incidence by race/ethnicity, sex, and socioeconomic position for many decades (Krieger, 2001).
+
+Despite these early emphases on social metrics as critical in understanding differential rates of disease distribution, their integration in national surveillance systems has been slow. A recent OECD report on national monitoring systems for health inequalities by socioeconomic status found that only seven of the 26 high-income countries included in the study had national routine monitoring systems with regular reports on socioeconomic inequalities in health over time (Frank and Matsunaga, 2020).
+
+When the first Public Health Disparities Geocoding Project was launched, it presented a solution in the form of area-based socioeconomic measures (ABSMs) where multilevel approaches to understanding area-based measures, classified by socioeconomic characteristics could be used to calculate stratified rates and render the invisible, visible. The project articulated the lack of a standardized approach in the choice of geographic levels and types of ABSMs used for monitoring disease distribution, making comparison across heterogenous methods, difficult. 
+
+The project took on the task of identifying which ABSMs would be most apt for monitoring socioeconomic inequalities in health and at what geographic level. Findings suggested that census tract poverty level - defined as "percent of persons below poverty" - was most apt (Krieger et al, 2003). 
+
+Since then, there has been significant development in both the conceptualization of geocoded health disparities, types of ABSMs, and the technologies available to capture, analyze, and visualize them. 
+
+Many indices of ABSMs have been developed around the world. Globally, the Gini coefficient is one of the standards for measuring income inequality (with caveats around its use beyond larger aggregations and issues around spatial social polarization) (Shaw et al, 2007; Krieger et al, 2016). In Canada, examples include the Socioeconomic Factor Index (SEFI), the General Deprivation INdex (GDI), and the Deprivation Index for Health and Welfare Planning for Quebec (DIHWPQ) (Schuurman et al, 2007). The UK boasts the Registrar General's social class classification systems within the British Census. In the use, studies have generated indices of deprivation based on selected census variables (e.g. Neighborhood deprivation) (O'Campo et al, 2008; Messer et al, 2006), in addition to the widely used dissimilarity index and the Index of Concentration at the Extremes (ICE) developed in 2001 by Douglas Massey (Feldman et al, 2015; Krieger et al, 2016A). In recent years, public health research has begun to use ICE more in etiologic and surveillance work due to its usefulness in providing extremes of privilege and deprivation at the neighborhood level measuring the combination of economic and racial/ethnic segregation (Krieger et al, 2016A; Krieger et al, 2016B; Scally et al, 2018; Krieger et al, 2018; Chen & Krieger, 2021). 
+
+The Covid-19 pandemic - due to the social and geographic patterning in the spread of the virus and associated hospitalizations - has highlighted the critical need for improved surveillance systems and systematic monitoring of health inequities. As a result, the Public health Disparities Geocoding Project has compiled resources to support efforts in carrying out the analyses of health inequities in this context (Krieger, Chen, Waterman, 2020). 
+
+This [update to the project](https://www.hsph.harvard.edu/thegeocodingproject/covid-19-resources/) provides:
+
+- List pf conceptual and empirical publications 
+- List of variables constructed using the US Census American Community Survey (ACS) data 
+- R code for extracting ABSMs from the ACS and replicating analyses in the published empirical papers 
+
+The Public Health Disparities Geocoding Project 2.0 is following the work conducted throughout the pandemic and is offering an updated and revised training on why & how to analyze population health and health inequities in relation to census tract, county, and other georeferenced societal and environmental data.
+
+The training is designed to be available asynchronously following the administration of two synchronous sessions in June 2022 and July 2022. 
+
+This online companion book will walk through each step of the training including:
+
+- Chapter 2 Getting Set Up
+- Chapter 3: Getting your Data
+- Chapter 4: Visualizing your Data
+- Chapter 5: Analyzing your data
+- Chapter 6: Case Study - Premature Mortality
+- Chapter 7: Case Study - Breast Cancer Mortality
+- Chapter 8: Case Study - Cook County Covid-19 
+- Chapter 9: Case Study - Temporal Health Insurance (American Community Survey)
+- Chapter 10: Case Study - Comparing CDC PLACES and American Community Survey
+- Chapter 11: Conclusions 
+
+We hope that this resource is of use to you. This is designed to be a dynamic textbook, so if you have suggested revisions or additions, please reach out to: 
+
+Please cite this work as: 
+
+
+
+REFERENCES 
+
+Chen, J.T. and Krieger, N., 2021. Revealing the unequal burden of COVID-19 by income, race/ethnicity, and household crowding: US county versus zip code analyses. Journal of Public Health Management and Practice, 27(1), pp.S43-S56.
+
+Feldman, J.M., Waterman, P.D., Coull, B.A. and Krieger, N., 2015. Spatial social polarisation: using the Index of Concentration at the Extremes jointly for income and race/ethnicity to analyse risk of hypertension. J Epidemiol Community Health, 69(12), pp.1199-1207.
+
+Frank, J.W. and Matsunaga, E., 2020. National monitoring systems for health inequalities by socioeconomic status–an OECD snapshot. Critical Public Health, pp.1-8.
+
+Green HW. 1932. Tuberculosis and economic strata, Cleveland’s Five-City Area, 1928-1931. Cleveland, OH: Anti-Tuberculosis League.
+
+Krieger, N., 1994. Epidemiology and the web of causation: has anyone seen the spider?. Social science & medicine, 39(7), pp.887-903.
+
+Krieger, N., 2001. Socioeconomic data in cancer registries. American journal of public health, 91(1), p.156.
+
+Krieger, N., Chen, J.T., Waterman, P.D., Rehkopf, D.H. and Subramanian, S.V., 2003. Race/ethnicity, gender, and monitoring socioeconomic gradients in health: a comparison of area-based socioeconomic measures—the public health disparities geocoding project. American journal of public health, 93(10), pp.1655-1671.
+
+Krieger, N., 2011. Epidemiology and the people's health: theory and context. Oxford University Press.
+
+Krieger, N., 2012. Who and what is a “population”? Historical debates, current controversies, and implications for understanding “population health” and rectifying health inequities. The Milbank Quarterly, 90(4), pp.634-681.
+
+Krieger, N., Waterman, P.D., Spasojevic, J., Li, W., Maduro, G. and Van Wye, G., 2016A. Public health monitoring of privilege and deprivation with the index of concentration at the extremes. American journal of public health, 106(2), pp.256-263.
+
+Krieger, N., Singh, N. and Waterman, P.D., 2016B. Metrics for monitoring cancer inequities: residential segregation, the Index of Concentration at the Extremes (ICE), and breast cancer estrogen receptor status (USA, 1992–2012). Cancer Causes & Control, 27(9), pp.1139-1151.
+
+Krieger, N., Feldman, J.M., Kim, R. and Waterman, P.D., 2018. Cancer incidence and multilevel measures of residential economic and racial segregation for cancer registries. JNCI Cancer Spectrum, 2(1), p.pky009.
+
+Krieger N, Chen JT, Waterman PD. Using the methods of the Public Health Disparities Geocoding Project to monitor COVID-19 inequities and guide action for social justice. Available as of May 15, 2020 at: https://www.hsph.harvard.edu/thegeocodingproject/covid-19-resources/
+
+Messer, L.C., Laraia, B.A., Kaufman, J.S., Eyster, J., Holzman, C., Culhane, J., Elo, I., Burke, J.G. and O’campo, P., 2006. The development of a standardized neighborhood deprivation index. Journal of Urban Health, 83(6), pp.1041-1062.
+
+Nathan WB. 1932. Health conditions in North Harlem 1923-1927. New York: National Tuberculosis Association.
+
+O'Campo, P., Burke, J.G., Culhane, J., Elo, I.T., Eyster, J., Holzman, C., Messer, L.C., Kaufman, J.S. and Laraia, B.A., 2008. Neighborhood deprivation and preterm birth among non-Hispanic Black and White women in eight geographic areas in the United States. American journal of epidemiology, 167(2), pp.155-163.
+
+Schuurman, N., Bell, N., Dunn, J.R. and Oliver, L., 2007. Deprivation indices, population health and geography: an evaluation of the spatial effectiveness of indices at multiple scales. Journal of urban health, 84(4), pp.591-603.
+
+Scally, B.J., Krieger, N. and Chen, J.T., 2018. Racialized economic segregation and stage at diagnosis of colorectal cancer in the United States. Cancer Causes & Control, 29(6), pp.527-537.
+
+Shaw M, Galobardes B, Lawlor DA, Lynch J, Wheeler B, Davey Smith G. 2007. The Handbook of Inequality and Socioeconomic Position: Concepts and Measures. Bristol, UK: The Policy Press. 
+
+Whitehead, M., 2000. William Farr's legacy to the study of inequalities in health. Bulletin of the World Health Organization, 78(1), p.86.
