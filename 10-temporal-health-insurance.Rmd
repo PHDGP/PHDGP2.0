@@ -33,6 +33,7 @@ library(tidycensus)
 library(tidyverse)
 library(tidyr)
 library(magrittr) # magrittr defines the %<>% operator, read more here: https://magrittr.tidyverse.org/
+library(patchwork)
 
 # build a data dictionary - based on ACS 2013
 data_dictionary <- tibble::tribble(
@@ -134,6 +135,8 @@ health_insurance %<>% mutate(
       estimate_hhinc_total,
   )
 
+# use the moe_sum and moe_prop functions from tidycensus to create margin of error
+# for aggregated estimates and proportion variables
 health_insurance %<>% rowwise() %>% 
   mutate(
     # calculate moe for numerators
@@ -204,6 +207,12 @@ DT::datatable(health_insurance)
 ```
 
 ```{r}
+#| eval = FALSE
+#| echo = FALSE
+saveRDS(health_insurance, "data/10-temporal-health-insurance/health_insurance.rds")
+```
+
+```{r}
 #| echo = FALSE
 health_insurance <- readRDS("data/10-temporal-health-insurance/health_insurance.rds")
 ```
@@ -260,19 +269,6 @@ ggplot(health_insurance,
   guides(color = guide_legend(reverse = TRUE)) + 
   scale_y_continuous(labels = scales::percent_format())
 
-
-health_insurance %>% 
-  filter(NAME == 'McCulloch County, Texas') %>% 
-  ggplot(aes(x = year, y = estimate_zero_to_64_insurance_prop,
-             ymax = pmin(moe_zero_to_64_insurance_prop/2 + estimate_zero_to_64_insurance_prop, 1),
-             ymin = pmax(estimate_zero_to_64_insurance_prop - moe_zero_to_64_insurance_prop/2), 0)) + 
-  geom_ribbon(fill = '#3182BD', alpha = .8, size = 0) + 
-  geom_line() + 
-  geom_point() + 
-  scale_y_continuous(labels = scales::percent_format()) + 
-  ylab("Percent with Health Insurance") +
-  ggtitle("% with Health Insurance, McCulloch County, Texas",
-          "90% Margin of Error and Estimates Shown") 
 ```
 
 Now we might want to map our quantities of interest
@@ -328,24 +324,58 @@ map_health_insurance_over_time <- function(state_name, outcome_var,
     ggtitle("Percent with Health Insurance by County over Time", state_name) 
 }
 
-library(plotly)
-
+# create choropleth maps over time for each measure
 map_health_insurance_over_time('California', estimate_zero_to_64_insurance_prop)
 map_health_insurance_over_time('Florida', estimate_zero_to_64_insurance_prop)
 map_health_insurance_over_time('Massachusetts', estimate_zero_to_64_insurance_prop)
-map_health_insurance_over_time('Texas', estimate_zero_to_64_insurance_prop) %>% ggplotly()
+map_health_insurance_over_time('Texas', estimate_zero_to_64_insurance_prop)
 
-map_health_insurance_over_time('Texas', outcome_var = moe_zero_to_64_insurance_prop, 
-                               fill_label = 'Margin of Error') + 
-  scale_fill_distiller(palette = 'Greys', direction = 1, trans = 'log10', labels = scales::percent_format())
+# this is an example where the 5-year estimates look very strange
+# 
+# we had identified this county by using plotly::ggplotly() on the last map 
+health_insurance %>% 
+  filter(NAME == 'McCulloch County, Texas') %>% 
+  ggplot(aes(x = year, y = estimate_zero_to_64_insurance_prop,
+             ymax = pmin(moe_zero_to_64_insurance_prop/2 + estimate_zero_to_64_insurance_prop, 1),
+             ymin = pmax(estimate_zero_to_64_insurance_prop - moe_zero_to_64_insurance_prop/2), 0)) + 
+  geom_ribbon(fill = '#3182BD', alpha = .8, size = 0) + 
+  geom_line() + 
+  geom_point() + 
+  scale_y_continuous(labels = scales::percent_format()) + 
+  ylab("Percent with Health Insurance") +
+  ggtitle("% with Health Insurance, McCulloch County, Texas",
+          "90% Margin of Error and Estimates Shown") 
 
-map_health_insurance_over_time('Massachusetts', outcome_var = moe_zero_to_64_insurance_prop, 
-                               fill_label = 'Margin of Error') + 
-  scale_fill_distiller(palette = 'Greys', direction = 1, trans = 'log10', labels = scales::percent_format())
 
-map_health_insurance_over_time('Florida', outcome_var = moe_zero_to_64_insurance_prop, 
-                               fill_label = 'Margin of Error') + 
-  scale_fill_distiller(palette = 'Greys', direction = 1, trans = 'log10', labels = scales::percent_format())
+# visualize the margin of error data
+map_health_insurance_over_time('Texas', outcome_var = moe_zero_to_64_insurance_prop,
+                               fill_label = 'Margin of Error') +
+  scale_fill_distiller(
+    palette = 'Greys',
+    direction = 1,
+    trans = 'log10',
+    labels = scales::percent_format()
+  )
+
+map_health_insurance_over_time('Massachusetts',
+                               outcome_var = moe_zero_to_64_insurance_prop,
+                               fill_label = 'Margin of Error') +
+  scale_fill_distiller(
+    palette = 'Greys',
+    direction = 1,
+    trans = 'log10',
+    labels = scales::percent_format()
+  )
+
+
+map_health_insurance_over_time('Florida', outcome_var = moe_zero_to_64_insurance_prop,
+                               fill_label = 'Margin of Error') +
+  scale_fill_distiller(
+    palette = 'Greys',
+    direction = 1,
+    trans = 'log10',
+    labels = scales::percent_format()
+  )
 
 ```
 
@@ -358,19 +388,8 @@ Now let's look at our social metrics
 
 ```{r}
 
-health_insurance %>% 
-  filter(state == 'Texas') %>% 
-  ggplot(aes(x = poverty_prop, y = estimate_zero_to_64_insurance_prop)) + 
-  geom_point() + 
-  geom_smooth(method = 'lm') + 
-  facet_wrap(~year, nrow = 2) + 
-  xlab("Percent in Poverty") + 
-  ylab("Percent with Health Insurance") + 
-  scale_x_continuous(labels = scales::percent_format()) + 
-  scale_y_continuous(labels = scales::percent_format()) + 
-  ggtitle("Relationship Between Percent in Poverty and Percent with Health Insurance",
-          "County Observations, Texas") 
 
+# look at relationship between poverty and insurance proportion
 plt1 <- 
 health_insurance %>% 
   filter(state == 'Texas') %>% 
@@ -385,6 +404,7 @@ health_insurance %>%
   ggtitle("Relationship Between Percent in Poverty and Percent with Health Insurance",
           "County Observations, Texas -- Unweighted") 
 
+# the same as above, but with inverse margin of error weighting
 plt2 <- 
 health_insurance %>% 
   filter(state == 'Texas') %>% 
@@ -399,13 +419,10 @@ health_insurance %>%
   ggtitle("Relationship Between Percent in Poverty and Percent with Health Insurance",
           "County Observations, Texas -- Weighted by Inverse Margin of Error") 
 
-library(patchwork)
-
+# plot 1 and 2 over each other
 plt1 / plt2 
 
-
-
-
+# massachusetts poverty relationship unweighted
 plt1 <- 
 health_insurance %>% 
   filter(state == 'Massachusetts') %>% 
@@ -420,6 +437,7 @@ health_insurance %>%
   ggtitle("Relationship Between Percent in Poverty and Percent with Health Insurance",
           "County Observations, Massachusetts -- Unweighted") 
 
+# massachusetts poverty relationship weighted by inverse margin of error
 plt2 <- 
 health_insurance %>% 
   filter(state == 'Massachusetts') %>% 
@@ -434,10 +452,10 @@ health_insurance %>%
   ggtitle("Relationship Between Percent in Poverty and Percent with Health Insurance",
           "County Observations, Massachusetts -- Weighted by Inverse Margin of Error") 
 
-library(patchwork)
-
+# put plot 1 and 2 side by side
 plt1 + plt2 
 
+# look at the relationship with ICEraceinc and insurance, weighted by inverse margin of error
 health_insurance %>% 
   filter(state == 'Texas') %>% 
   ggplot(aes(x = ICEraceinc, y = estimate_zero_to_64_insurance_prop, weight = 1/moe_zero_to_64_insurance_prop)) + 
@@ -450,56 +468,73 @@ health_insurance %>%
   ggtitle("Relationship Between ICE for Racialized Economic Segregation and Percent with Health Insurance",
           "County Observations, Texas -- Weighted by Inverse Margin of Error") 
 
-health_insurance %>% 
-  filter(state == 'Texas', year == 2019) %>% 
-  ggplot(aes(x = poverty_prop, y = estimate_zero_to_64_insurance_prop, 
-             fill = cut(ICEraceinc, quantile(ICEraceinc, seq(0, 1, .2)), include.lowest = TRUE),
-             color = cut(ICEraceinc,  quantile(ICEraceinc, seq(0, 1, .2)), include.lowest = TRUE),
-             weight = 1/moe_zero_to_64_insurance_prop)) + 
-  geom_point() + 
-  stat_ellipse(geom = "polygon", alpha = .25) + 
-  facet_wrap(~year, nrow = 2) + 
-  scale_fill_brewer(palette = 'BrBG') + 
-  scale_color_brewer(palette = 'BrBG') + 
-  xlab("Percent in Poverty") + 
-  ylab("Percent with Health Insurance") + 
-  scale_x_continuous(labels = scales::percent_format()) + 
-  scale_y_continuous(labels = scales::percent_format()) + 
-  ggtitle("Relationship Between Percent in Poverty and Percent with Health Insurance Stratified by ICE for Racialized Economic Segregation",
-          "County Observations, Texas -- Weighted by Inverse Margin of Error") 
+# show stat_ellipses for ICEraceinc and poverty 
+# 
+# TODO: I (Christian) think we should remove this;  it looks pretty, but not sure if it's
+# compelling?
+# 
+# health_insurance %>% 
+#   filter(state == 'Texas', year == 2019) %>% 
+#   ggplot(aes(x = poverty_prop, y = estimate_zero_to_64_insurance_prop, 
+#              fill = cut(ICEraceinc, quantile(ICEraceinc, seq(0, 1, .2)), include.lowest = TRUE),
+#              color = cut(ICEraceinc,  quantile(ICEraceinc, seq(0, 1, .2)), include.lowest = TRUE),
+#              weight = 1/moe_zero_to_64_insurance_prop)) + 
+#   geom_point() + 
+#   stat_ellipse(geom = "polygon", alpha = .25) + 
+#   facet_wrap(~year, nrow = 2) + 
+#   scale_fill_brewer(palette = 'BrBG') + 
+#   scale_color_brewer(palette = 'BrBG') + 
+#   xlab("Percent in Poverty") + 
+#   ylab("Percent with Health Insurance") + 
+#   scale_x_continuous(labels = scales::percent_format()) + 
+#   scale_y_continuous(labels = scales::percent_format()) + 
+#   ggtitle("Relationship Between Percent in Poverty and Percent with Health Insurance Stratified by ICE for Racialized Economic Segregation",
+#           "County Observations, Texas -- Weighted by Inverse Margin of Error") 
+# 
 
-
+# smoothed insurance relationship with ICEraceinc quantiles over time 
+# using loess smoothing
 health_insurance %>% 
   filter(state == 'Texas') %>% 
   ggplot(aes(x = year, y = estimate_zero_to_64_insurance_prop, 
              color = cut(ICEraceinc, quantile(ICEraceinc, seq(0, 1, .2)), include.lowest = T),
+             fill = cut(ICEraceinc, quantile(ICEraceinc, seq(0, 1, .2)), include.lowest = T),
              weight = 1/moe_zero_to_64_insurance_prop)) + 
-  geom_jitter(height = 0) + 
+  # geom_jitter(height = 0) + 
   geom_smooth(alpha = 0.5, alpha = .5) +
-  scale_color_brewer(palette = 'BrBG') + 
+  scale_color_brewer(palette = 'Spectral') + 
+  scale_fill_brewer(palette = 'Spectral') + 
   xlab("Year") +
   ylab("Percent with Health Insurance") + 
+  guides(fill = guide_legend(nrow = 2), color = guide_legend(nrow = 2)) + 
+  labs(fill = "ICEraceinc Quantile", color = "ICEraceinc Quantile") + 
+  theme(legend.position = 'bottom') + 
   scale_y_continuous(labels = scales::percent_format()) + 
   ggtitle("Relationship Between Percent with Health Insurance by ICE for Racialized Economic Segregation over Time",
           "County Observations, Texas -- Weighted by Inverse Margin of Error") 
 
+# smoothed relationship between poverty (cut in quantiles) and insurance rates
+# using loess smoothing
 health_insurance %>% 
   filter(state == 'Texas', ! is.na(poverty_prop)) %>% 
   ggplot(aes(x = year, y = estimate_zero_to_64_insurance_prop, 
              color = cut(poverty_prop, quantile(poverty_prop, seq(0, 1, .2),na.rm=T),
                          include.lowest = TRUE),
              fill = cut(poverty_prop, quantile(poverty_prop, seq(0, 1, .2),na.rm=T),
-                         include.lowest = TRUE)
+                         include.lowest = TRUE),
+             weight = 1/moe_zero_to_64_insurance_prop
              )) + 
-  geom_jitter(height = 0) + 
-  ggdist::stat_lineribbon(alpha = 1/4, .width = c(.5, .8)) +
-  scale_color_brewer(palette = 'BrBG', direction = -1) + 
-  scale_fill_brewer(palette = 'BrBG', direction = -1) + 
+  geom_smooth() + 
+  scale_color_brewer(palette = 'Spectral', direction = -1) + 
+  scale_fill_brewer(palette = 'Spectral', direction = -1) + 
   xlab("Year") +
   ylab("Percent with Health Insurance") + 
   scale_y_continuous(labels = scales::percent_format()) + 
+  guides(fill = guide_legend(nrow = 2), color = guide_legend(nrow = 2)) + 
+  labs(fill = "Poverty Quantile", color = "Poverty Quantile") + 
+  theme(legend.position = 'bottom') + 
   ggtitle("Relationship Between Percent with Health Insurance by Percent in Poverty over Time",
-          "County Observations, Texas -- Weighted by Inverse Margin of Error") 
+          "County Observations, Texas -- Weighted by Inverse Margin of Error")
 
 ```
 
