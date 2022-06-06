@@ -207,7 +207,7 @@ DT::datatable(health_insurance)
 ```
 
 ```{r}
-#| eval = FALSE
+#| eval = FALSE,
 #| echo = FALSE
 saveRDS(health_insurance, "data/10-temporal-health-insurance/health_insurance.rds")
 ```
@@ -221,6 +221,15 @@ Congrats!  You've downloaded your dataset!
 
 Now on to visualizing estimates:
 
+```{r}
+#| echo = FALSE,
+#| eval = TRUE
+library(tidyverse)
+library(sf)
+library(mapview)
+library(magrittr)
+library(patchwork)
+```
 
 ```{r}
 # create plot of county level % with health insurance by year and smooth with geom_smooth method = 'loess' by year 
