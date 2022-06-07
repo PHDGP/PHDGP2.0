@@ -28,9 +28,9 @@ by merging the data together by geographic area identifiers.
 #| echo = FALSE,
 #| include = TRUE,
 #| fig.align = 'center',
-#| fig.cap = paste0("The composite parts of georeferenced data for mapping area rates ",
-#|   "(numerators, denominators, and geography shapefiles) are linked together by area identifiers.")
-knitr::include_graphics("images/04-getting-your-data/geodata_diagram.png")
+#| fig.cap = "In this workflow schematic, the components for creating georeferenced data are shown in the first two rows."
+knitr::include_graphics("images/04-getting-your-data/overview_schematic.png")
+
 ```
 
 Some examples of area identifiers common in the United States context include

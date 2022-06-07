@@ -1,9 +1,120 @@
 # Visualizing your data {#visualizing-your-data}
 
+Data visualization is a critical component in communicating and advocating for
+health equity as it makes data accessible and transparent.  However, it is not 
+without its pitfalls, and in this chapter we will discuss some of the important
+points to consider when visualizing data for advancing health equity. 
+
+Firstly, as a matter of accessibility, we strive to use colorblind friendly
+color palettes when using color so that individuals with one of the different
+kinds of colorblindness can still interpret our visualizations. 
+We encourage you to learn more about colorblindness and colorblind friendly
+palettes from a number of resources (Katsnelson, 2021) (Ou, 2021). The color
+vision deficiency simulator from the `colorblindr` package is especially helpful
+in testing if a visual you are creating is colorblind friendly.
+
+:::: {.infobox .info}
+If you are looking for help learning how to create data visualizations in R, we
+recommend checking out the online, free book: 
+[ggplot2: Elegant Graphics for Data Analysis](https://ggplot2-book.org/).
+
+If you are looking for help learning how to work with spatial data in R, we recommend
+the following free, online books: 
+
+  - Spatial Data Science with applications in R by Edzer Pebesma and Roger Bivand <br> https://r-spatial.org/book/
+  - Geocomputation with R by Robin Lovelace, Jakub Nowosad, and Jannes Muenchow <br> https://geocompr.robinlovelace.net/ 
+  - Analyzing US Census Data: Methods, Maps, and Models in R, by Kyle Walker <br> https://walker-data.com/census-r/ 
+::::
+
+
+One of the main points we urge caution around with respect to the visualization
+and mapping of area based health outcome data are the presentation of rates
+which are unstable due to small population sizes.  As a broader principle, we 
+emphasize the need for careful choice of the area level at which results are
+presented. In part, this is because it is well established that changing the
+areal units into which data are aggregated and analyzed can change the
+relationships observed in the data. This is known as the Modifiable Areal Unit
+Problem, which can be read about in (Wong 2004) and (Buzzelli 2020).  
+
+For example at small area levels like the Census tract level, the underlying
+population may be so small that the health outcomes observed are quite noisy
+because a single additional case represents a large shift in the rate. In such a
+situation, it wouldn't necessarily be correct to say that the Census tract where
+the highest rates were observed are where the greatest underlying risk is
+because it could be an artifact of noise. This motivates the need for spatial
+smoothing, and we encourage the use of spatially smoothed estimates for
+choropleth maps showing health outcome rates to avoid such a potential pitfall.
+As an introduction to these pitfalls, we recommend the [Pitfalls to avoid](https://mgimond.github.io/Spatial/pitfalls-to-avoid.html) chapter from (Gimond 2022).
+
+
+It is worthwhile to remark on how different areal units can either center or
+marginalize social groups based on the geographic boundaries drawn -- and
+moreover addressing the question of who are excluded or inaccurately represented
+in our data (often those experiencing homelessness, incarceration, or other
+kinds of marginalization) because of the process by which our data are geocoded
+is critical to ensuring that our efforts towards advancing health equity are
+hitting their mark. As an example, one lesson we have learned from analyzing
+Boston area mortality data is that it can be quite useful to know the locations
+of and areas containing homeless shelters as some individuals experiencing
+homelessness at the time of their death had these as coded as their address of
+residence. Oftentimes georeferenced and geocoded data will have anomalous or
+idiosyncratic features such as areas where the rate appears to be infinite
+because population estimates are zero for that area despite having observed
+health outcomes, especially if the data are for small areas or particular
+sub-populations. There is not a single solution to these problems that does not
+vary regardless of each individual data analysis projects' context, but we
+encourage data analysts and visualizers to carefully consider the impacts the
+choice of boundaries have and the power structures built into whose experiences
+they center or marginalize.
+
+To start to develop a wider perspective on how data visualization and mapping
+can be used, have a few books and articles we would recommend. Because data
+visualization and mapping are simply tools we can use to communicate data
+that we believe are important to share, they are certainly capable of reflecting
+bias and telling lies (Deluca and Nelson, 2017), (Fleckenstein 1991),
+(Monmonier 2021).  Tracing the history of some of those who were first
+interested in understanding the geographic distribution of burden associated
+with human disease and able to make maps, Tom Koch outlines the history of
+disease mapping in his book Disease Maps, Epidemics on the Ground (2011). In his
+followup work, Ethics in Everyday Places: Mapping Moral Stress, Distress, and
+Injury, he takes a broader perspective. 
+
+
+<!-- 
   - ggplot2, color palettes & accessibility 
   - mapping point estimates vs uncertainty 
   - references: "how maps lie";  tom koch disease maps, "ethics in everyday places: mapping moral stress, distress, and injury"
   - point layers vs. choropleth layers 
   - visualizing raw data may be unstable 
+  
+  haven't done this yet:
   - visualizing health measures (actually getting to look at maps)
   
+  - showing how mapview helps to reality-check your understanding of the geography 
+  based on including streetmap features, satellite imagery, etc.
+  --> 
+
+## References
+
+Katsnelson, A. (2021) ‘Colour me better: fixing figures for colour blindness’, Nature, 598(7879), pp. 224–225. doi:10.1038/d41586-021-02696-z.
+
+Ou, J. (2021) Safe colorsets. Available at: https://cran.r-project.org/web/packages/colorBlindness/vignettes/colorBlindness.html (Accessed: 7 June 2022).
+
+Wong, D. (2004) ‘The modifiable areal unit problem (MAUP)’, in WorldMinds: Geographical Perspectives on 100 Problems. Springer Netherlands. Available at: https://link.springer.com/chapter/10.1007/978-1-4020-2352-1_93.
+
+Buzzelli, M. (2020) ‘Modifiable Areal Unit Problem’, International Encyclopedia of Human Geography, pp. 169–173. doi:10.1016/B978-0-08-102295-5.10406-8.
+
+Deluca, E. and Nelson, S. (2017) ‘Lying With Maps’. Available at: https://open.lib.umn.edu/mapping/chapter/7-lying-with-maps/ (Accessed: 7 June 2022).
+
+Fleckenstein, L. (1991) ‘How Maps Lie’, Syracuse University Magazine, December. Available at: https://surface.syr.edu/cgi/viewcontent.cgi?article=1245&context=sumagazine.
+
+Monmonier, M. (2018) How to Lie with Maps, Third Edition. Chicago, IL: University of Chicago Press. Available at: https://press.uchicago.edu/ucp/books/book/chicago/H/bo27400568.html (Accessed: 7 June 2022).
+
+Koch, T. (2011) Disease Maps: Epidemics on the Ground. Chicago, IL: University of Chicago Press. Available at: https://press.uchicago.edu/ucp/books/book/chicago/D/bo8490164.html (Accessed: 7 June 2022).
+
+Ethics in Everyday Places: Mapping Moral Stress, Distress, and Injury | Esri Press (2017). Available at: https://www.esri.com/en-us/esri-press/browse/ethics-in-everyday-places-mapping-moral-stress-distress-and-injury (Accessed: 7 June 2022).
+
+Gimond, M. (2022) Intro to GIS and Spatial Analysis. Available at: https://mgimond.github.io/Spatial/index.html (Accessed: 7 June 2022).
+
+Lovelace, R., Nowosad, J. and Muenchow, J. (2022) Geocomputation with R. Available at: https://geocompr.robinlovelace.net/ (Accessed: 7 June 2022).
+
