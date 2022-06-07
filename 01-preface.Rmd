@@ -6,12 +6,12 @@ Since 2004, both the theories around public health disparities and the analytic 
 
 This online textbook, a companion to the virtual training, also serves as a standalone guide to help users explore the following topics at their own pace:
 
-• the history and context of, and rationale for, conducting this type of work
-• getting data from the Census and other sources 
-• visualizing geocoded data and social metrics 
-• conducting analyses with data aggregated to a specified level of geography vs. multi-level analyses with 2 or more levels of geography
-• interpreting data through a health equity lens
-
+  - the history and context of, and rationale for, conducting this type of work
+  - getting data from the Census and other sources 
+  - visualizing geocoded data and social metrics 
+  - conducting analyses with data aggregated to a specified level of geography vs. multi-level analyses with 2 or more levels of geography
+  - interpreting data through a health equity lens
+  
 The texbook also offers three case examples that go through analysis of mortality data (including aggregation and spatial analysis), and two case examples to illustrate the use of aggregated data from the American Community Survey (ACS) and the CDC's PLACES dataset.
 
 While the following materials will teach you about analyzing health data, we

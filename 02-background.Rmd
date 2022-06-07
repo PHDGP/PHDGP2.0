@@ -16,7 +16,7 @@ In the US, linking of public health data to US census-based socioeconomic data w
 
 Despite these early emphases on social metrics as critical in understanding differential rates of disease distribution, their integration in national surveillance systems has been slow. A recent OECD report on national monitoring systems for health inequalities by socioeconomic status found that only seven of the 26 high-income countries included in the study had national routine monitoring systems with regular reports on socioeconomic inequalities in health over time (Frank and Matsunaga, 2020).
 
-When the first Public Health Disparities Geocoding Project was launched, it presented a solution in the form of area-based socioeconomic measures (ABSMs) where multilevel approaches to understanding area-based measures, classified by socioeconomic characteristics could be used to calculate stratified rates and render the invisible, visible. The project articulated the lack of a standardized approach in the choice of geographic levels and types of ABSMs used for monitoring disease distribution, making comparison across heterogenous methods, difficult. 
+When the first Public Health Disparities Geocoding Project was launched, it presented a solution in the form of area-based socioeconomic measures (ABSMs) where multilevel approaches to understanding area-based measures, classified by socioeconomic characteristics could be used to calculate stratified rates and render the invisible, visible. The project articulated the lack of a standardized approach in the choice of geographic levels and types of ABSMs used for monitoring disease distribution, making comparison across heterogeneous methods, difficult. 
 
 The project took on the task of identifying which ABSMs would be most apt for monitoring socioeconomic inequalities in health and at what geographic level. Findings suggested that census tract poverty level - defined as "percent of persons below poverty" - was most apt (Krieger et al, 2003). 
 
@@ -28,7 +28,7 @@ The Covid-19 pandemic - due to the social and geographic patterning in the sprea
 
 This [update to the project](https://www.hsph.harvard.edu/thegeocodingproject/covid-19-resources/) provides:
 
-- List pf conceptual and empirical publications 
+- List of conceptual and empirical publications 
 - List of variables constructed using the US Census American Community Survey (ACS) data 
 - R code for extracting ABSMs from the ACS and replicating analyses in the published empirical papers 
 

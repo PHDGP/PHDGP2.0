@@ -130,21 +130,24 @@ Concentration at the Extremes (ICE) for racialized economic segregation from the
 at the census tract level in Suffolk County, Massachusetts.
 
 You can find more of the variables available in the 5-year ACS at the following
-links:
+link, changing 2019 to your desired year starting with 2009
+when the ACS began: https://api.census.gov/data/2019/acs/acs5/variables.html 
 
-  - https://api.census.gov/data/2009/acs/acs5/variables.html
-  - https://api.census.gov/data/2010/acs/acs5/variables.html
-  - https://api.census.gov/data/2011/acs/acs5/variables.html
-  - https://api.census.gov/data/2012/acs/acs5/variables.html
-  - https://api.census.gov/data/2012/acs/acs5/variables.html
-  - https://api.census.gov/data/2013/acs/acs5/variables.html
-  - https://api.census.gov/data/2014/acs/acs5/variables.html
-  - https://api.census.gov/data/2015/acs/acs5/variables.html
-  - https://api.census.gov/data/2016/acs/acs5/variables.html
-  - https://api.census.gov/data/2017/acs/acs5/variables.html
-  - https://api.census.gov/data/2018/acs/acs5/variables.html
-  - https://api.census.gov/data/2019/acs/acs5/variables.html 
-  - https://api.census.gov/data/2020/acs/acs5/variables.html 
+```{r}
+#| echo = FALSE,
+#| center = TRUE,
+#| fig.cap = 'The structure of Census tract GEOIDs'
+knitr::include_graphics("images/04-getting-your-data/geoid_structure.png")
+```
+
+
+```{r}
+#| echo = FALSE,
+#| center = TRUE,
+#| fig.cap = "Hierarchy of geographic units as assignged by the US Census Bureau. Reproduced from https://www.census.gov/content/dam/Census/data/developers/geoareaconcepts.pdf"
+knitr::include_graphics("images/04-getting-your-data/geographic_hierarchy.png")
+```
+
 
 ```{r}
 #| class.output = "scroll-500",
