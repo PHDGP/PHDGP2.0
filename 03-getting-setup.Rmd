@@ -39,7 +39,7 @@ Geospatial Data Abstraction Library, a translator library for raster and vector
 geospatial data formats) which is a dependency of `sf`.
 
 
-:::: {.infobox .caution}
+:::: {.infobox .info}
 The code examples in this book will assume some familiarity with the R
 programming language. You can still benefit from this book by reading the
 exposition without focusing on the code examples if you are not very familiar
