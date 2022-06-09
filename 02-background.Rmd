@@ -6,7 +6,7 @@ Key publications on these topics can also be found on the project's [publication
 
 The Public Health Disparities Geocoding Project is informed by the ecosocial theory of disease distribution, developed by Dr. Nancy Krieger in [1994](https://www.sciencedirect.com/science/article/pii/027795369490202X?casa_token=_9JKsxrdf5gAAAAA:5s38ClF44ISx9OGzrDq-8DqY4b3iFHHY5WYQnBChxAO8pd5IVbPTgWOIWwsVGCcCCLDud_zskzk), specifically "its focus on how people literally biologically embody their societal and ecological context at multiple levels, across the life course and historical generations" (Krieger, 2012).
 
-Administrative health data, disease surveillance systems, and routine health surveys are important tools in understanding disease distribution and informing public health programming, advocacy, and policy development. However, the social patterning of disease distribution is often obscured by a lack of robust social metrics, including socioeconomic data, pertinent to understanding health inequities - defined as unfair, avoidable, and preventable health differences across populations (Krieger, 2011). As defined by Krieger (2012), "populations are dynamic beings constituted by intrinsic relationships both among their members and with the other populations that together produce their existence." Addressing health inequities across populations then requires data on the population-defined and defining relationships and characteristics that create and are created by structures and systems that contribute to these health inequities.
+Administrative health data, disease surveillance systems, and routine health surveys are important tools in understanding disease distribution and informing public health programming, advocacy, and policy development. However, the social patterning of disease distribution is often obscured by a lack of robust social metrics, including socioeconomic data, pertinent to understanding health inequities - defined as unfair, avoidable, and preventable health differences across populations (Krieger, 2011). As defined by Krieger (2012), "populations are dynamic beings constituted by intrinsic relationships both among their members and with the other populations that together produce their existence." Addressing health inequities across populations then requires data on the population-defined and defining relationships and characteristics that create and are created by structures and systems.
 
 Using routine information systems to inform disease prevention is not a 21st or even 20th century concept. In 1829, William Farr, a "Compiler of Abstracts" at the General Register included a letter to the Register's first report which stated that 
 
@@ -16,13 +16,13 @@ In the US, linking of public health data to US census-based socioeconomic data w
 
 Despite these early emphases on social metrics as critical in understanding differential rates of disease distribution, their integration in national surveillance systems has been slow. A recent OECD report on national monitoring systems for health inequalities by socioeconomic status found that only seven of the 26 high-income countries included in the study had national routine monitoring systems with regular reports on socioeconomic inequalities in health over time (Frank and Matsunaga, 2020).
 
-When the first Public Health Disparities Geocoding Project was launched, it presented a solution in the form of area-based socioeconomic measures (ABSMs) where multilevel approaches to understanding area-based measures, classified by socioeconomic characteristics could be used to calculate stratified rates and render the invisible, visible. The project articulated the lack of a standardized approach in the choice of geographic levels and types of ABSMs used for monitoring disease distribution, making comparison across heterogeneous methods, difficult. 
+When the first Public Health Disparities Geocoding Project was launched, it presented a solution in the form of area-based socioeconomic measures (ABSMs) where multilevel approaches to understanding area-based measures, classified by socioeconomic characteristics, could be used to calculate stratified rates and render the invisible, visible. The project articulated the lack of a standardized approach in the choice of geographic levels and types of ABSMs used for monitoring disease distribution, making comparison across heterogeneous methods difficult. 
 
 The project took on the task of identifying which ABSMs would be most apt for monitoring socioeconomic inequalities in health and at what geographic level. Findings suggested that census tract poverty level - defined as "percent of persons below poverty" - was most apt (Krieger et al, 2003). 
 
 Since then, there has been significant development in both the conceptualization of geocoded health disparities, types of ABSMs, and the technologies available to capture, analyze, and visualize them. 
 
-Many indices of ABSMs have been developed around the world. Globally, the Gini coefficient is one of the standards for measuring income inequality (with caveats around its use beyond larger aggregations and issues around spatial social polarization) (Shaw et al, 2007; Krieger et al, 2016). In Canada, examples include the Socioeconomic Factor Index (SEFI), the General Deprivation INdex (GDI), and the Deprivation Index for Health and Welfare Planning for Quebec (DIHWPQ) (Schuurman et al, 2007). The UK boasts the Registrar General's social class classification systems within the British Census. In the use, studies have generated indices of deprivation based on selected census variables (e.g. Neighborhood deprivation) (O'Campo et al, 2008; Messer et al, 2006), in addition to the widely used dissimilarity index and the Index of Concentration at the Extremes (ICE) developed in 2001 by Douglas Massey (Feldman et al, 2015; Krieger et al, 2016A). In recent years, public health research has begun to use ICE more in etiologic and surveillance work due to its usefulness in providing extremes of privilege and deprivation at the neighborhood level measuring the combination of economic and racial/ethnic segregation (Krieger et al, 2016A; Krieger et al, 2016B; Scally et al, 2018; Krieger et al, 2018; Chen & Krieger, 2021). 
+Many indices of ABSMs have been developed around the world. Globally, the Gini coefficient is one of the standards for measuring income inequality (with caveats around its use beyond larger aggregations and issues around spatial social polarization) (Shaw et al, 2007; Krieger et al, 2016). In Canada, examples include the Socioeconomic Factor Index (SEFI), the General Deprivation INdex (GDI), and the Deprivation Index for Health and Welfare Planning for Quebec (DIHWPQ) (Schuurman et al, 2007). The UK boasts the Registrar General's social class classification systems within the British Census. In the US, studies have generated indices of deprivation based on selected census variables (e.g. Neighborhood deprivation) (O'Campo et al, 2008; Messer et al, 2006), in addition to the widely used but limited dissimilarity index and the Index of Concentration at the Extremes (ICE) developed in 2001 by Douglas Massey (Feldman et al, 2015; Krieger et al, 2016A). In recent years, public health research has begun to use ICE more in etiologic and surveillance work due to its usefulness in providing extremes of privilege and deprivation at the neighborhood level measuring the combination of economic and racial/ethnic segregation (Krieger et al, 2016A; Krieger et al, 2016B; Scally et al, 2018; Krieger et al, 2018; Chen & Krieger, 2021). 
 
 The Covid-19 pandemic - due to the social and geographic patterning in the spread of the virus and associated hospitalizations - has highlighted the critical need for improved surveillance systems and systematic monitoring of health inequities. As a result, the Public health Disparities Geocoding Project has compiled resources to support efforts in carrying out the analyses of health inequities in this context (Krieger, Chen, Waterman, 2020). 
 
@@ -36,7 +36,7 @@ The Public Health Disparities Geocoding Project 2.0 is following the work conduc
 
 The training is designed to be available asynchronously following the administration of two synchronous sessions in June 2022 and July 2022. 
 
-This online companion book will walk through each step of the training including:
+This online companion site will walk through each step of the training including:
 
 - Chapter 2 Getting Set Up
 - Chapter 3: Getting your Data
@@ -49,10 +49,7 @@ This online companion book will walk through each step of the training including
 - Chapter 10: Case Study - Comparing CDC PLACES and American Community Survey
 - Chapter 11: Conclusions 
 
-We hope that this resource is of use to you. This is designed to be a dynamic textbook, so if you have suggested revisions or additions, please reach out to: 
-
-Please cite this work as: 
-
+We hope that this resource is of use to you. If you have suggested revisions or additions, please reach out to: XX
 
 
 REFERENCES 

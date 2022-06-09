@@ -1,10 +1,10 @@
 # Preface {#preface}
 
-In June 2004, faculty at the Harvard School of Public Health implemented a training on Geocoding and Public Health Disparities with the aim of boosting efforts to address socioeconomic inequalities in health. This training offered a solution to the problem of lack of socioeconomic data in US public health surveillance systems. This solution is the geocoding of public health surveillance data and using census-derived area-based socioeconomic measures (ABSMs) to characterize both the cases and population in the catchment area, thereby enabling computation of rates stratified by the area-based measure of socioeconomic position.
+In June 2004, faculty at the Harvard School of Public Health implemented a training on Geocoding and Public Health Disparities with the aim of boosting efforts to address socioeconomic inequalities in health. This training offered a solution to the problem of lack of socioeconomic data in US public health surveillance systems: the geocoding of public health surveillance data and using census-derived area-based socioeconomic measures (ABSMs) to characterize both the cases and populations in the catchment area, thereby enabling computation of rates stratified by the area-based measure of socioeconomic position.
 
-Since 2004, both the theories around public health disparities and the analytic tools to measure them have evolved. The updated 2022 training, held in June and July, builds on prior work in geocoding health disparities expands on why & how to analyze population health and health inequities in relation to census tract, county, and other georeferenced societal and environmental data.
+Since 2004, both the theories around public health disparities and the analytic tools to measure them have evolved. The updated 2022 training, held in June and July, builds on prior work in geocoding health disparities, expanding on why & how to analyze population health and health inequities in relation to census tract, county, and other georeferenced societal and environmental data.
 
-This online textbook, a companion to the virtual training, also serves as a standalone guide to help users explore the following topics at their own pace:
+This online companion to the virtual training serves as a guide to help users explore the following topics:
 
   - the history and context of, and rationale for, conducting this type of work
   - getting data from the Census and other sources 
@@ -14,15 +14,11 @@ This online textbook, a companion to the virtual training, also serves as a stan
   
 The texbook also offers three case examples that go through analysis of mortality data (including aggregation and spatial analysis), and two case examples to illustrate the use of aggregated data from the American Community Survey (ACS) and the CDC's PLACES dataset.
 
-While the following materials will teach you about analyzing health data, we
-must underscore that a health equity lens will be emphasized throughout these
-materials. This book is written with as much emphasis on monitoring health for
-accountability as they are for etiological studies.
+An [ecosocial lens](https://pubmed.ncbi.nlm.nih.gov/7992123/) informs this text, emphasizing multilevel spatiotemporal processes of embodying (in)justice.^[Krieger, Nancy. Ecosocial Theory, Embodied Truths, and the People's Health. Oxford University Press, 2021]. These course materials are written with as much emphasis on monitoring health for accountability as they are for etiological studies.
 
 
 Source of funding: American Cancer Society
-
 Creative copyright; Licensing - Credit for use is required. 
 (Licensing needs to be addressed in everything we hand out).
+Please cite this work as Chen JT, Testa C, Hall E, Javadi D,  Morgan J, Rushovich T,  Shah S, Waterman PD, Krieger N. The Public Health Disparities Geocoding Project 2.0. Course Material. Available as of June 30, 2022
 
-Please cite this work as ... 
