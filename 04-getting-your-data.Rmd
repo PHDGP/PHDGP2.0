@@ -468,4 +468,32 @@ head(example_df)
 The above code uses the `dplyr` and `stringr` packages, both part of the `tidyverse`
 and which have introductions here: https://dplyr.tidyverse.org/ and here: https://stringr.tidyverse.org/. 
 
+## Numerators and Denominators
+
+When presenting data on disease distribution and measures of health disparities, the following types of measures are most often used:
+
+- Prevalence 
+- Cumulative incidence
+- Incidence rate
+
+These measures serve to answer different types of research questions:
+
+- Descriptive: describes the distribution of the outcome of interest 
+- Predictive: predicts who may experience the outcome of interest
+- Causal: seeks to determine modifiable causes of the outcome of interest
+
+Prevalence is defined as $Pr[Y=1]$= # existing cases/ # individuals in study population at a point in time. Prevalence is dimensionless, ranges from 0 to 1, and requires a time reference (i.e. prevalence at a certain year, age, etc.). Prevalence measures are useful for descriptive and not causal questions. 
+
+Cumulative incidence, also known as incidence proportion, risk, or attack rate (although not a rate), is defined as $Pr[Y=1]$= # incident cases in a time period/ #individuals at risk at a baseline. Cumulative incidence is also dimensionless and ranges from 0 to 1, but it must state a time period and anyone included in the denominator must be eligible to move into the numerator by meeting the case definition. Cumulative incidence is limited by a lack of information on the exact timing of the outcome of interest, time-varying exposures, competing risks, and loss to follow-up. 
+
+Incidence rate, also known as incidence density or hazard rate, is defined as # incdent cases during $t_0$ to $t_1$/ $\sum$ person-time at risk accumulated during $t_0$ to $t_1$. Person-time can be experessed in years, months, weeks, or days. Incidence rate is not a proportion and ranges from 0 to $\infty$ 
+
+
+
+In health databases - where data are not yet aggregated - each record represents one person. To ensure that there is no numerator/denominator mismatch and that all cases in the aggregated numerator are coming from the population pool in the aggregated denominator and that all those in the denominator have the potential to become cases, one should expclude all records that are not geocoded, do not meet the case definition, or are missing data on important covariates (e.g. age, gender, race/ethnicity, etc. depending on the question being asked). This is particularly important where the sources of data for the numerator and denominator are different, resulting in a higher risk of numerator/denominator mismatch.
+
+
+
+
+
 ## Geocoding 
