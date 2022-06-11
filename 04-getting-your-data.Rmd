@@ -470,6 +470,8 @@ and which have introductions here: https://dplyr.tidyverse.org/ and here: https:
 
 ## Numerators and Denominators
 
+### Epi Primer
+
 When presenting data on disease distribution and measures of health disparities, the following types of measures are most often used:
 
 - Prevalence 
@@ -482,18 +484,54 @@ These measures serve to answer different types of research questions:
 - Predictive: predicts who may experience the outcome of interest
 - Causal: seeks to determine modifiable causes of the outcome of interest
 
-Prevalence is defined as $Pr[Y=1]$= # existing cases/ # individuals in study population at a point in time. Prevalence is dimensionless, ranges from 0 to 1, and requires a time reference (i.e. prevalence at a certain year, age, etc.). Prevalence measures are useful for descriptive and not causal questions. 
+\textbf{Prevalence} is defined as $Pr[Y=1]$= # existing cases/ # individuals in study population at a point in time. Prevalence is dimensionless, ranges from 0 to 1, and requires a time reference (i.e. prevalence at a certain year, age, etc.). Prevalence measures are useful for descriptive and not causal questions. 
 
-Cumulative incidence, also known as incidence proportion, risk, or attack rate (although not a rate), is defined as $Pr[Y=1]$= # incident cases in a time period/ #individuals at risk at a baseline. Cumulative incidence is also dimensionless and ranges from 0 to 1, but it must state a time period and anyone included in the denominator must be eligible to move into the numerator by meeting the case definition. Cumulative incidence is limited by a lack of information on the exact timing of the outcome of interest, time-varying exposures, competing risks, and loss to follow-up. 
+\textbf{Cumulative incidence}, also known as incidence proportion, risk, or attack rate (although not a rate), is defined as $Pr[Y=1]$= # incident cases in a time period/ #individuals at risk at a baseline. Cumulative incidence is also dimensionless and ranges from 0 to 1, but it must state a time period and anyone included in the denominator must be eligible to move into the numerator by meeting the case definition. Cumulative incidence is limited by a lack of information on the exact timing of the outcome of interest, time-varying exposures, competing risks, and loss to follow-up. 
 
-Incidence rate, also known as incidence density or hazard rate, is defined as # incdent cases during $t_0$ to $t_1$/ $\sum$ person-time at risk accumulated during $t_0$ to $t_1$. Person-time can be experessed in years, months, weeks, or days. Incidence rate is not a proportion and ranges from 0 to $\infty$ 
+\textbf{Incidence rate}, also known as incidence density or hazard rate, is defined as # incident cases during $t_0$ to $t_1$/ $\sum$ person-time at risk accumulated during $t_0$ to $t_1$. Person-time can be expressed in years, months, weeks, or days. Incidence rate is not a proportion and ranges from 0 to $\infty$.
+
+*Measures of disparity*
+
+- Ratio measures
+- Difference measures
+- Attributable fractions
+
+
+\textbf{Ratio measures} include cumulative incidence ratios (CIR), incidence rate ratios (IRR), and odds ratios (OR). The range for these is 0 to $\infty$ and no association is indicated by a ratio of 1.
+
+Odds ratios are defined by $$\frac{(Pr[Y=1|A=1]/ Pr[Y=0|A=1])}{(Pr[Y=1|A=0]/ Pr[Y=0|A=0])}$$
+
+\textbf{Differences measures} include cumulative incidence difference (CID), also known as attributable risk, and incidence rate difference (IRD), also known as attributable rate. The range for CID is -1 to 1 while the range for IRD is $-\infty$ to $\infty$. No association is indicated by a difference of 0.
 
 
 
-In health databases - where data are not yet aggregated - each record represents one person. To ensure that there is no numerator/denominator mismatch and that all cases in the aggregated numerator are coming from the population pool in the aggregated denominator and that all those in the denominator have the potential to become cases, one should expclude all records that are not geocoded, do not meet the case definition, or are missing data on important covariates (e.g. age, gender, race/ethnicity, etc. depending on the question being asked). This is particularly important where the sources of data for the numerator and denominator are different, resulting in a higher risk of numerator/denominator mismatch.
+\textbf{Attributable Risk Percent} (AR) or excess fraction is the proportion of disease burden among the exposed that is associated with the exposure and is defined by:
+$$AR\%=\frac{CI_{Exposed} – CI_{unexposed}}{CI_{Exposed}}*100 $$
+
+\textbf{Population Attributable Risk Percent} (PAR) is the proportion of disease burden among the total population that is associated with the exposure and is defined by:
+$$AR\%*Pr[A=1|Y=1]=\frac{CI_{Total} – CI_{unexposed}}{CI_{Total}} $$
+
+The [analytic methods section](https://www.hsph.harvard.edu/thegeocodingproject/analytic-methods/) of the Public Health Disparities Geocoding Project monograph demonstrates how the measures described above are identified and aggregated over areas and strata of area-based socioeconomic measures (ABSM). 
+
+### Numerator/Denominator Mismatch
+
+In health databases - where data are not yet aggregated - each record represents one person. To ensure that there is no numerator/denominator mismatch and that all cases in the aggregated numerator are coming from the population pool in the aggregated denominator and that all those in the denominator have the potential to become cases, one should exclude all records that are not geocoded, do not meet the case definition, or are missing data on important covariates (e.g. age, gender, race/ethnicity, etc. depending on the question being asked). This is particularly important where the sources of data for the numerator and denominator are different, resulting in a higher risk of numerator/denominator mismatch. It is therefore critical to explore the data dictionaries for the various sources of data to better understand the eligibility criteria for what gets included in the denominator and what is in the numerators to be used in aggregating data for analysis. Further, incompatible numerator and denominator data tends to result in greater bias for race-stratified models with important implications for studying disparities (Nethery et al, 2021).
+
+Numerator/denominator mismatch is therefore an important consideration in aggregating data over strata of ABSMs. For example, when conducting area-based analyses, there are always a small number of strata/areas where there are observed outcomes of interest but no population person-time at risk. When fitting non-spatial models, we typically delete these observations (where denominator=0). Unfortunately, what appears to happen is that non-white racial/ethnic groups are more likely to have this happen (there is a census tract somewhere where in some age stratum, there is one case but no population at risk). When we delete them, we end up MORE likely to delete non-white deaths, and this has an impact on the total number of non-white deaths we have to analyze.
+
+If instead of deleting those strata where deaths>0 and denominator=0, we replace the denominator with the number of deaths, we end up with very slightly larger population counts overall, but the effect on the rates is to bring them more in line with the aggregated analysis (where, when aggregated, small differences in numerator/denominator mismatch get glossed over).
+
+
 
 
 
 
 
 ## Geocoding 
+
+
+REFERENCES
+
+Nethery, Rachel C., Tamara Rushovich, Emily Peterson, Jarvis T. Chen, Pamela D. Waterman, Nancy Krieger, Lance Waller, and Brent A. Coull. "Comparing denominator sources for real-time disease incidence modeling: American Community Survey and WorldPop." SSM-population health 14 (2021): 100786.
+
+Rothman, Kenneth J., Sander Greenland, and Timothy L. Lash. Modern epidemiology. Vol. 3. Philadelphia: Wolters Kluwer Health/Lippincott Williams & Wilkins, 2008.
