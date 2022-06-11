@@ -504,7 +504,6 @@ Odds ratios are defined by $$\frac{(Pr[Y=1|A=1]/ Pr[Y=0|A=1])}{(Pr[Y=1|A=0]/ Pr[
 \textbf{Differences measures} include cumulative incidence difference (CID), also known as attributable risk, and incidence rate difference (IRD), also known as attributable rate. The range for CID is -1 to 1 while the range for IRD is $-\infty$ to $\infty$. No association is indicated by a difference of 0.
 
 
-
 \textbf{Attributable Risk Percent} (AR) or excess fraction is the proportion of disease burden among the exposed that is associated with the exposure and is defined by:
 $$AR\%=\frac{CI_{Exposed} – CI_{unexposed}}{CI_{Exposed}}*100 $$
 
@@ -522,12 +521,17 @@ Numerator/denominator mismatch is therefore an important consideration in aggreg
 If instead of deleting those strata where deaths>0 and denominator=0, we replace the denominator with the number of deaths, we end up with very slightly larger population counts overall, but the effect on the rates is to bring them more in line with the aggregated analysis (where, when aggregated, small differences in numerator/denominator mismatch get glossed over).
 
 
-
-
-
-
-
 ## Geocoding 
+
+
+## Data Governance
+
+There is only so much we can do to account for poor data or the absence of data. Therefore, improvements in the availability and quality of health data and, in particular, improvements to the use of social metrics in conceptualizing and analyzing this data, are necessary. \textbf{Data governance} is therefore a critical feature of addressing health disparities. Data governance is about "who has input into making the decisions about which data are required, informed by the tandem expertise of health equity researchers and other members of the communities whose data are at stake, affording the expertise of lived experience" (Krieger, 2021). See [*Structural Racism, Health Inequities, and the Two-Edged Sword of Data: Structural Problems Require Structural Solutions*](https://www.frontiersin.org/articles/10.3389/fpubh.2021.655447/full) for a proposed "two-part institutional mandate regarding the reporting and analysis of publicly-funded work involving racialized groups and health data and documentation as to why the proposed mandates are feasible" (Krieger, 2021).
+
+Part of demanding improved data governance is interrogating the sources of data currently available, including their sampling strategies, underlying theories that inform their design, and who is involved in their generation - in line with ecosocial theory's construct of accountability and agency. By exploring the origins of one's data and the processes through which it's been created, investigators can better articulate the potential for bias in the data, identify means of improving data collection to mitigate this bias, and actively call for structural change in data collection and governance. 
+
+Another key component of equity-oriented data governance is to make data openly accessible, ensuring that communities can ask their own data-driven questions, and not just rely on what analyses get published. This also requires more robust infrastructure for community science, transparent review of methods and findings, and strengthened capacity for community-oriented knowledge translation to enhance agency.
+
 
 
 REFERENCES
