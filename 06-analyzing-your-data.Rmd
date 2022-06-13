@@ -1,7 +1,132 @@
 # Analyzing your data {#analyzing-your-data}
 
-## Inference for The Aggregation Approach and Aggregation Bias 
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+library(readr)
+library(tidyverse)
+library(kableExtra)
+```
+
+
+## Overview of Methods
+
+In the years since we initially presented the Public Health Disparities Geocoding Training, both the theories around public health disparities and the analytic tools to measure them have evolved. In particular, the availability of software that facilitates data access, mapping, visualization, and fitting of multilevel and spatial models has greatly enhanced the accessibility of these analytic methods for public health scientists and advocates interested in advancing health equity. Our goal in presenting these updated methods is to illustrate their applicability to monitoring, reporting, and investigating health inequities. In doing so, we highlight many of the assumptions underlying the use of these methods and show how they can be applied to real-life data that arise in public health surveillance and health equity monitoring. We comment on some of the pitfalls that may arise when working with imperfect data in real time and discuss analytic and interpretive strategies keeping in mind the overarching goal of accurately documenting health inequities for accountability. Where appropriate, we also comment on ongoing methodologic work to improve analytic approaches.
+
+### Motivating Questions
+
+As the choice of methods for any data analysis depends fundamentally on the goals of the analysis, we will focus our presentation on the following motivating questions:
+
+1. "What is the **geographic distribution** of area-based social metrics across the study area?" This is of particular interest for exploratory analyses in order to understand who in what areas are most affected by social advantage and disadvantage as captured by area-based social metrics. Mapping and visualization tools can be used to communicate geographic patterns and to elicit local knowledge in order to spur hypothesis generation and prioritization of research questions.
+
+2. "What are the **social inequities** in health associated with area-based social metrics across the study area?" We highlight the importance of **descriptive epidemiology** as a first step in understanding inequities in the health of populations living in areas characterized by area-based social metrics. That is, accurate description of where the burden of social inequities falls is a necessary pre-requisite to more causally-oriented investigations or evaluations of interventions. We discuss **aggregated analyses**, which have the advantages of being straightforward to implement and report using tabulation methods and avoiding the problems of small area estimation, as well as **non-spatial regression models**. We focus on health equity settings in which understanding the joint patterning of inequities by racialized group and area-based social metric are of interest, and comment on how analyses may need to consider heterogeneity across age strata.
+
+3. "How can geographic variation in health outcomes be modeled in order to facilitate mapping of **small-area disease estimates** and **estimation of social inequities**?" We review concepts from the extensive statistical literature on small-area estimation and disease mapping with the goal of visualizing geographic patterns in health outcomes for studies of health equity. While these methods entail more complex modeling frameworks and computational details, we focus on their application to health equity and the interpretation and use of model outputs in the context of monitoring and reporting of health disparities. We consider settings in which **multilevel modeling** approaches and **spatial modeling** approaches may be preferred and discuss considerations contributing to the choice of modeling framework.
+
+
+### Choice of geographic level
+
+<!--
+    TODO:
+  We need to flesh out this text.
+  I think the main point is that we try to analyze at the geographic level that makes sense. The breast cancer mortality example will show that while we can append CT level ABSMs to the data and use the aggregation method or non-spatial regression here, doing spatial analyses doesn't yield much spatial variation at the CT level because the counts are too small. We should bring this point out in this section.
+  
+  Similarly, rationale for the ZIP code level analysis of Chicago COVID data.
+--> 
+
+- A pragmatic approach: at what level are data available?
+- For small area level analyses, do the number of events support small area-level analyses?
+-  CT vs. city/town, e.g. breast cancer mortality analysis
+- ZIP codes and ZCTAs
+- MAUP
+
+- note that the smallest level of Census geography with intercensal population estimates is the county. County PEP estimates rely on demographic modeling. 
+- CT level estimates are in the ACS, but ACS specifically cautions against using these as population denominator estimates in small area estimation. However, we generally do not have any other sources of population denominators on which to rely. Five year average estimates may help, but there is still year to year variability. Margin of error estimates available, but how to incorporate denominator uncertainty into analyses is still an area of active research.
+
+
+
+
+
+### Numerator/denominator mismatch
+
+For epidemiologic analyses of health disparities, we generally rely on routinely collected data from health surveillance systems to define the numerators of rates. Such data are available on an ongoing basis with a lag of two or more years to allow for data compilation and cleaning. In contrast, data on population at risk may be obtained from a variety of sources depending on the need for stratification by demographic variables, time frame, and the desired level of geography. For example, the US Decennial Census provides detailed population estimates by age, sex-gender, and selected racialized groups in decennial years. For intercensal years, the US Census uses demographic modeling that takes into consideration births, deaths, and migrations to provide estimates for these demographic groups at the national, state, and county levels via its Population Estimates Program (PEP) [US Census PEP]. For smaller levels of geography, the US Census Bureau's American Community Survey includes estimates of population for all census geographies larger than census blocks based on five year rolling averages. These are also typically made available after a two year delay.
+
+Formally, the US Census Bureau recommends the use of PEP or decennial census counts as population size estimates in intercensal years, while recommending that ACS data be used for information about changing socioeconomic and demographic features. However, for estimation of small area disease rates or analyses of health disparities by ABSM in intercensal years, decennial counts are usually outdated and PEP estimates are not available at the desired geographic level. Thus, in practice, many epidemiologic studies will continue to rely on ACS small-area estimates for population denominators. While private companies are increasingly producing high-resolution gridded population estimates that are based on machine-learning models combining census, remote sensing, land use, and other information, with the promise of providing population sizes at very small geographies in near real time, to date we have not found these data products to provide substantial improvement over using ACS small area estimates and in some cases they can induce bias [ref: Nethery et al. 2021].
+
+Because numerators (case data) and denominators (population estimates) come from different sources, and moreover, because intercensal population estimates in particular may be subject to uncertainty, it is possible to obtain sociodemographic strata in particular areas and years where the observed cases exceed the reported population at risk. This is particularly problematic when the the number of cases is greater than zero but the reported population at risk is exactly zero. We term this phenomenon "numerator/denominator mismatch." Some of the analytic methods we describe will be able yield valid estimates of social inequities in spite of these data anomalies. For example, the aggregation method avoids this problem by aggregating over small areas, whereby small discrepancies in numerators and population at risk are averaged out over areas within ABSM strata. In other modeling approaches, we may need to take steps to address these issues in the data. When doing so, we need to be mindful about potential distortions to the data and their impact on estimates of social inequities. In particular, we must consider that when such data anomalies are more likely for some demographic groups than others (for example, in many areas of the US non-white racialized groups will be of smaller population size), this may result greater bias for demographically stratified analyses (e.g. models stratified by racialized group) (Nethery et al. 2021).
+
+
+#### Example: Age-specific all-cause mortality by racialized group in Massachusetts, 2013-2017
+
+We compared the use of the aggregation method to a non-spatial Poisson model for analyzing deaths from all causes by age and racialized group. Using the aggregation method, deaths and population person-time at risk are aggregated into strata by age (0-4, 5-9, 10-14, 15-19, 20-24, 25-29, 30-34, 35-44, 45-54, 55-64, 65-74, 75-84, 85+) and racialized group (white non-Hispanic and Black), and mortality rates per 100,000 person-years are computed using the formulas listed in Section xxx. For the non-spatial Poisson model, the inputs are age- and racialized-group specific deaths for each census tract in the study area, the log(population person-time at risk) as an offset, and a set of indicators for each stratum of age category by racialized group. 
+
+When the log(population person-time at risk) variable is zero, however, this presents a problem for the Poisson model-fitting algorithm as the rate is undefined. Census tracts where there are zero deaths and zero person-time at risk in a particular strata can be deleted from the dataset as these observations contribute no information. But situations where the count of deaths in a stratum is greater than zero but the population person-time at risk is zero continue to be an issue (numerator/denominator mismatch). It may be tempting to delete these observations from the dataset as well, reasoning that as these usually involve just one death occurring in a stratum where the population estimate is zero, deleting these observations will not unduly affect the analysis. 
+
+Unfortunately, it turns out that numerator/denominator mismatch occurs more frequently for Black observations in the dataset, due to patterns of racialized residential segregation and that fact that the Black population accounts for a much smaller proportion of the population  compared with the white non-Hispanic population (10.1% vs. 72.9% in Massachusetts according to the ACS population estimates we used for our population denominators). That is, at the census tract level, there are more likely to be age strata where there are deaths reported by zero population person-time at risk for the Black population compared with the white non-Hispanic population.  As a result, when we delete these observations, we end up deleting a larger proportion of the Black deaths across the whole state, which has an impact on our estimates of rates and rate ratios.
+
+To see this, consider the following table where we show the number of deaths and population by age and racialized group aggregated across census tracts. In columns 2-8, we show the deaths, population, and estimated rates per 100,000 person-years for white Non-Hispanics and Blacks in the full dataset, while in columns 9-15 we show the deaths and population after deleting observations where the numerator is greater than zero but the denominator is zero. In columns 16-22 we show the percent bias by strata comparing the dataset with deleted observations to the full dataset. As is evident in column 19, the effect of deleting these observations is to reduce the Black death count in age strata (between 4-30% across strata) to a much greater degree than among the white non-Hispanic age strata (between 0-2%). As a result, the age-specific incidence rate ratios can be depressed by as much as 30% relative to the IRRs calculated using the full aggregated data.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+table_removezeroes <- read_csv("data/06-analyzing-your-data/numden_mismatch_remove_zeroes.csv")
+
+knitr::kable(table_removezeroes, 
+             col.names = c("Age", "NHW deaths", "NHW pop", "NHW Rate", 
+                           "Black deaths", "Black pop", "Black Rate", "IRR",
+                           "NHW deaths", "NHW pop", "NHW Rate", 
+                           "Black deaths", "Black pop", "Black Rate", "IRR",
+                           "% bias NHW deaths", "% bias NHW pop", "% bias NHW Rate", 
+                           "% bias Black deaths", "% bias Black pop", "% bias Black Rate",
+                           "% bias IRR"),
+             digits=c(0,0,0,1,0,0,1,2,0,0,1,0,0,1,2,3,3,3,3,3,3,3),
+             html=TRUE) %>%
+            add_header_above(c(" "=1, "Full dataset" = 7, "Adjusted dataset" = 7, "% Bias" = 7))
+
+```
+
+If instead of deleting those strata where deaths>0 and denominator=0, we replace the denominator with the number of deaths, we end up with very slightly larger population counts overall, but the effect on the rates is to bring them more in line with the aggregated analysis. Here is the comparable table comparing the full aggregated dataset (columns 2-8) with a dataset in which the denominators are adjusted to increase the person time at risk to equal the number of deaths the affected strata. 
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+  table_adjustdenom <- read_csv("data/06-analyzing-your-data/numden_mismatch_adjust_denom.csv")
+
+knitr::kable(table_adjustdenom, 
+             col.names = c("Age", "NHW deaths", "NHW pop", "NHW Rate", 
+                           "Black deaths", "Black pop", "Black Rate", "IRR",
+                           "NHW deaths", "NHW pop", "NHW Rate", 
+                           "Black deaths", "Black pop", "Black Rate", "IRR",
+                           "% bias NHW deaths", "% bias NHW pop", "% bias NHW Rate", 
+                           "% bias Black deaths", "% bias Black pop", "% bias Black Rate",
+                           "% bias IRR"),
+             digits=c(0,0,0,1,0,0,1,2,0,0,1,0,0,1,2,3,3,3,3,3,3,3),
+             html=TRUE) %>%
+            add_header_above(c(" "=1, "Full dataset" = 7, "Adjusted dataset" = 7, "% Bias" = 7))
+
+```
+
+An even better solution, and the one we ultimately recommend, is to add a small number (e.g. 0.001) to all of the population person-time denominators to allow the Poisson model fitting algorithm to incorporate these observations into the analysis. The resulting effect on the overall population denominators is negligible, but this allows for estimation of rates and rate ratios of interest. Note that this is only needed when fitting non-spatial regression models to the data. The aggregation method does not incur this problem as small discrepancies are averaged out over areas, and the spatial models we discuss in Section xx address the problem of zero or infinite rates by smoothing.
+
+To visualize the effect of these adjustments on estimates of the age-specific disparity by racialized group, we plot estimates from aggregated analyses and Poisson models with deletion and denominator adjustment in Figure x. The plot confirms that either (a) adjusting denominators to match the number of observed deaths in problematic strata in census tracts or (b) adding a small number to all population person time estimates (preferred) yields comparable estimates to the aggregation method, whereas removing problematic observations results in bias.
+
+```{r, echo=FALSE, fig.cap="Comparison of estimated age-specific Black/White mortality rate ratios using different methods to address numerator/denominator mismatch"}
+knitr::include_graphics("images/06-analyzing-your-data/age_specific_comparison_plot.pdf")
+```
+
+## Inference for The Aggregation Approach 
+
+(not done yet)
+
 ## Overdispersion
+
+(not done yet)
+
 ## Age Standardization 
+
+(not done yet)
+
 ## Small Area Estimation
+
+(not done yet)
+
 ## Multilevel and Spatial Modeling
+
+(not done yet)

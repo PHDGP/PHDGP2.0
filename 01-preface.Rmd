@@ -20,5 +20,6 @@ An [ecosocial lens](https://pubmed.ncbi.nlm.nih.gov/7992123/) informs this text,
 Source of funding: American Cancer Society
 Creative copyright; Licensing - Credit for use is required. 
 (Licensing needs to be addressed in everything we hand out).
+
 Please cite this work as Chen JT, Testa C, Hall E, Javadi D,  Morgan J, Rushovich T,  Shah S, Waterman PD, Krieger N. The Public Health Disparities Geocoding Project 2.0. Course Material. Available as of June 30, 2022
 
