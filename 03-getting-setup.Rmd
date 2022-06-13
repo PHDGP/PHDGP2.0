@@ -4,19 +4,19 @@ We recommend before moving on, readers should take care of
 downloading and installing R and RStudio as well as getting 
 some dependencies installed.
 
+### Principles for Reproducible Workflow and Programming
+
+To give a brief explanation as to why R and RStudio have been chosen to use
+throughout these course materials, we wanted to emphasize the principles behind
+our decisions: 1) As a matter of equity, the use of free (both free to use and
+freely licensed) software such as R and RStudio help to enable people with less
+financial means to engage with our work, taking it further, and thereby
+promoting the inclusion of people from more diverse backgrounds in science; 2)
+Data analysis and science should be open and transparent wherever and whenever
+possible, so as to promote the external reproduction, verification, and
+validation of findings.
 
 :::: {.infobox .info}
-We want to emphasize that these materials have been designed to facilitate
-learning either by following along with the code (to learn the hands-on skills of
-programming with georeferenced data in R) and/or skipping reading/running the
-code and reading the accompanying exposition and text and figures so as to learn
-the principles behind the methodologies shown. The code included in this work is
-meant to help facilitate learning about how to work with georeferenced data, but
-readers more interested in learning the principles of working with georeferenced
-data who either aren't ready or aren't interested in tackling the project of
-running the code given should feel free to learn from these materials in the way
-that suits them best.
-
 The code examples in this book assume familiarity with the R programming
 language. You can still benefit from this book by reading the exposition without
 focusing on the code examples if you are not very familiar with R programming.
@@ -26,7 +26,6 @@ familiarizing yourself with R. The *R for Data Science* book, available free and
 online here: https://r4ds.had.co.nz/, which provides a free, online, accessible
 introduction.
 ::::
-
     
 ## Downloading and Installing R and RStudio
 

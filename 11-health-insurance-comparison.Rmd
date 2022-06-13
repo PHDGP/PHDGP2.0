@@ -1,1 +1,21 @@
 # Case Study 5: Comparing Health Insurance Rates in ACS and Places {#health-insurance-comparison}
+
+## Introduction 
+
+The [CDC Places](https://www.cdc.gov/places/) dataset and [American Community Survey (ACS)](https://www.census.gov/data/developers/data-sets/acs-5year.html) 
+represent two distinct approaches to collecting and reporting on small area 
+level data:  the CDC Places uses a method called small area estimation (SAE)
+to produce estimates at the Census tract level, while the ACS provides survey 
+based estimates directly at the Census tract level.
+
+The [methodology page from CDC Places](https://www.cdc.gov/places/methodology/index.html) provides
+further explanation as to exactly how they implemented SAE. 
+
+In their article [*Multilevel Regression and Postratification for Small-Area Estimation of Population Health Outcomes: A Case Study of Chronic Obstructive Pulmonary Disease Prevalence Using the Behavioral Risk Factor Surveillance System*](http://aje.oxfordjournals.org/content/179/8/1025.full.pdf?cited-by=yes&legid=amjepid;179/8/1025), Zhang et al. describe how SAE was performed to estimate  
+chronic obstructive pulmonary disease (COPD) in CDC Places.
+
+Given that both CDC Places and the ACS provide estimates of the Census tract 
+prevalence of health insurance, we were interested in assessing what difference 
+there are between the two datasets and how that difference may vary according
+to area based social measures (ABSMs). 
+
