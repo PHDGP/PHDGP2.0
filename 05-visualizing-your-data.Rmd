@@ -79,17 +79,17 @@ disease mapping in his book Disease Maps, Epidemics on the Ground (2011). In his
 followup work, Ethics in Everyday Places: Mapping Moral Stress, Distress, and
 Injury, he takes a broader perspective. 
 
-
 <!-- 
+  # discussed above:
   - ggplot2, color palettes & accessibility 
   - mapping point estimates vs uncertainty 
   - references: "how maps lie";  tom koch disease maps, "ethics in everyday places: mapping moral stress, distress, and injury"
   - point layers vs. choropleth layers 
   - visualizing raw data may be unstable 
   
-  haven't done this yet:
+  # TODO: 
+  do we cover these topics here again, in addition to in "getting your data"?
   - visualizing health measures (actually getting to look at maps)
-  
   - showing how mapview helps to reality-check your understanding of the geography 
   based on including streetmap features, satellite imagery, etc.
   --> 

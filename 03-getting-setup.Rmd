@@ -3,6 +3,30 @@
 We recommend before moving on, readers should take care of
 downloading and installing R and RStudio as well as getting 
 some dependencies installed.
+
+
+:::: {.infobox .info}
+We want to emphasize that these materials have been designed to facilitate
+learning either by following along with the code (to learn the hands-on skills of
+programming with georeferenced data in R) and/or skipping reading/running the
+code and reading the accompanying exposition and text and figures so as to learn
+the principles behind the methodologies shown. The code included in this work is
+meant to help facilitate learning about how to work with georeferenced data, but
+readers more interested in learning the principles of working with georeferenced
+data who either aren't ready or aren't interested in tackling the project of
+running the code given should feel free to learn from these materials in the way
+that suits them best.
+
+The code examples in this book assume familiarity with the R programming
+language. You can still benefit from this book by reading the exposition without
+focusing on the code examples if you are not very familiar with R programming.
+
+If you want to become more familiar with R programming, you may want to start by
+familiarizing yourself with R. The *R for Data Science* book, available free and
+online here: https://r4ds.had.co.nz/, which provides a free, online, accessible
+introduction.
+::::
+
     
 ## Downloading and Installing R and RStudio
 
@@ -23,15 +47,35 @@ following packages:
 ```{r}
 #| echo = TRUE,
 #| eval = FALSE
+# for data manipulation and visualization
 install.packages("tidyverse")
-install.packages("tidycensus")
-install.packages("sf")
+install.packages("Hmisc") # mostly for the weighted quantile function
+install.packages("fastDummies") # for creating "dummy"/ "indicator" variables
+
+
+# for retrieving census data
+install.packages("tidycensus") # note the special instructions below
+
+# for mapping
+install.packages("sf") # note the special instructions below
 install.packages("mapview")
+install.packages("tigris")
+install.packages("leaflet")
+
+
+# for visualization/color palettes
+install.packages("RColorBrewer")
+install.packages("viridis")
+install.packages("cowplot")
+
+# for multilevel modeling
+install.packages("lme4")
+
+# for spatial modeling
+install.packages("INLA",repos=c(getOption("repos"),INLA="https://inla.r-inla-download.org/R/stable"), dep=TRUE)
+
 ```
 
-For the `tidycensus` package, users need to follow the instructions here:
-https://walker-data.com/tidycensus/articles/basic-usage.html to set up their
-Census API key.
 
 For the `sf` package, there are additional instructions here:
 https://r-spatial.github.io/sf/ for getting setup with the `gdal` (or
@@ -39,17 +83,37 @@ Geospatial Data Abstraction Library, a translator library for raster and vector
 geospatial data formats) which is a dependency of `sf`.
 
 
-:::: {.infobox .info}
-The code examples in this book will assume some familiarity with the R
-programming language. You can still benefit from this book by reading the
-exposition without focusing on the code examples if you are not very familiar
-with R programming.
+### Note about "compiling from source"
 
-If you want to become more familiar with R programming, you may want to start by
-familiarizing yourself with R. The *R for Data Science* book, available free and
-online here: https://r4ds.had.co.nz/, which provides a free, online, accessible
-introduction.
-::::
+If, when installing these packages, R prompts you asking whether you'd like to
+install these packages from source, you do not need to.  Sometimes compiling
+from source can be more difficult than installing the pre-built packages from
+CRAN if there are compilation errors. 
+
+### Tidycensus Special Instructions
+
+You need to register for a Census API key as part of the setup 
+procedures to use `tidycensus`. 
+
+See the instructions for installing [on the tidycensus
+website](https://walker-data.com/tidycensus/articles/basic-usage.html).
+
+Note that you only need to run the `census_api_key("YOUR API KEY GOES HERE")` 
+command once. 
+
+### sf Special Instructions
+
+For the `sf` package, there are additional instructions here: https://r-spatial.github.io/sf/
+which are OS (Mac, Windows, Linux) specific, which walk through getting setup
+with the `gdal` (or Geospatial Data Abstraction Library, a translator library
+for raster and vector geospatial data formats) which is a dependency of `sf`.
+
+### INLA Install Instructions
+
+The code above installs the stable version of INLA.  Should you ever need
+to upgrade your installation, instructions are online here: 
+https://www.r-inla.org/download-install 
+
 
 ## References for Spatial Programming in R
 

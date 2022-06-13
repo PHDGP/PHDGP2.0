@@ -87,6 +87,10 @@ health_insurance %<>%
 health_insurance %<>% tidyr::unnest(cols = acs_data)
 
 # recode variables to use friendlier shortnames
+# the !!! operator, sometimes called the splat operator, expands a named vector into named argumes for a function;
+# in this case, the output of setNames() is a named character vector with variable shortnames as the names and 
+# variable codes as the values.  Passing these to !!! and then recode says "rename the variable codes to the 
+# more human-readable, shortnames"
 health_insurance$variable %<>% recode( !!! setNames(data_dictionary$shortname, data_dictionary$variable))
 
 # pivot into wide format
@@ -203,7 +207,8 @@ health_insurance %<>% select(
   ICEraceinc
 )
 
-DT::datatable(health_insurance)
+# table the top few lines of our dataframe so we can check that everything is
+knitr::kable(head(health_insurance))
 ```
 
 ```{r}
@@ -547,6 +552,188 @@ health_insurance %>%
 
 ```
 
+```{r fit models to insurance data}
+#| eval = FALSE,
+#| echo = TRUE
+
+# cleaning before modeling
+health_insurance %<>% rename(county = NAME)
+health_insurance %<>% mutate(year_centered = year - mean(c(2012, 2019)))
+
+# create linear models with inverse margin of error weighting for each county
+# regressing insurance rates on year
+model_df <- 
+  health_insurance %>% 
+  nest_by(GEOID, county, state) %>% 
+  mutate(
+    # for each county, fit a linear model and store it in a list column
+    model = list(
+      lm(
+        estimate_zero_to_64_insurance_prop ~ year_centered,
+        data = data,
+        weights = 1 / data$moe_zero_to_64_insurance_prop
+      )
+    ), 
+    # use broom::tidy to extract coefficients
+    coefs = list(broom::tidy(model, conf.int=T)),
+  ) %>% 
+  rowwise() %>% 
+  # extract coefficients on year for each model
+  mutate(
+    coef_on_year = coefs %>% filter(term == 'year_centered') %>% pull(estimate),
+    coef_on_year_ci_low = coefs %>% filter(term == 'year_centered') %>% pull(conf.low),
+    coef_on_year_ci_high = coefs %>% filter(term == 'year_centered') %>% pull(conf.high)
+  )
+
+# plot coefficients distribution
+model_df %>% 
+  ggplot(aes(x = coef_on_year)) + 
+  geom_vline(xintercept = 0, alpha = .5, linetype = 'dashed') + 
+  geom_histogram() + 
+  scale_x_continuous(labels = scales::percent_format()) + 
+  xlab("Coefficient Estimates for Average Percentage Point Increase Each Year") + 
+  facet_wrap(~state) + 
+  ggtitle("Estimates for County Change in Percent with Health Insurance")
+
+# classify into increasing, decreasing, or uncertain/stable
+model_df %<>% mutate(
+  change_over_time = case_when(
+    coef_on_year_ci_low > 0 ~ 'increasing',
+    coef_on_year_ci_high < 0 ~ 'decreasing',
+    TRUE ~ 'stable/uncertain'
+  )
+)
+
+# make factor levels for change over time
+model_df %<>% mutate(change_over_time = factor(
+  change_over_time,
+  levels = c('decreasing', 'stable/uncertain', 'increasing')
+))
+
+# plot distribution of change over time categories
+model_df %>% 
+  ggplot(aes(x = change_over_time)) + 
+  geom_bar() + 
+  facet_wrap(~state) + 
+  theme(axis.text.x = element_text(angle = 75, hjust = 1))
+
+# merge in spatial data and coefficients
+health_insurance_sf_w_model_coefs <- 
+  health_insurance %>% 
+  # nest by GEOID, county, and state so we can make interactive popup graphs by county 
+  nest_by(GEOID, county, state) %>% 
+  # join in the change over time variables
+  left_join(model_df %>% ungroup() %>% select(GEOID, coef_on_year, change_over_time), by = c('GEOID' = 'GEOID')) %$% 
+  # join in the spatial data; 
+  # we use %$% for this because when joining spatial data and tabular data, it is critical 
+  # that the spatial data be passed as the first argument to the join function
+  left_join(health_insurance_sf %>% filter(year == min(year)) %>% select(GEOID),
+            ., by = c('GEOID'))
+
+# plot texas change over time 
+health_insurance_sf_w_model_coefs %>% 
+  filter(state == 'Texas') %>% 
+  ggplot(aes(fill = change_over_time)) + 
+  geom_sf(color = 'white', size = .05, alpha = .8) + 
+  scale_fill_manual(values = c('increasing' = '#67A9CF', 
+                                'stable/uncertain' = '#FFFFBF', 
+                                'decreasing' = '#EF8A62'
+                               )) + 
+  theme_bw() + 
+  labs(fill = 'Change over Time') + 
+  ggtitle("Change in Health Insurance Rates, 2012-2019, Texas")
+
+health_insurance_sf_w_model_coefs %>% 
+  filter(state == 'Texas') %>% 
+  ggplot(aes(fill = coef_on_year)) + 
+  geom_sf(color = 'white', size = .1) + 
+  scale_fill_gradient2(high = '#0072B2',
+                       mid = '#FFFFBF',
+                       low = '#D55E00') + 
+  theme_bw() + 
+  labs(fill = 'Change over Time') + 
+  ggtitle("Change in Health Insurance Rates, 2012-2019, Texas")
+
+library(leaflet)
+library(leafpop)
+
+pal <- colorFactor(palette = RColorBrewer::brewer.pal(name='RdBu', n = 3), 
+                   domain = health_insurance_sf_w_model_coefs$change_over_time)
+
+tx_health_insurance_sf_w_model_coefs <- 
+  health_insurance_sf_w_model_coefs %>% filter(state == 'Texas')
+
+tx_health_insurance_sf_w_model_coefs %<>% 
+  rowwise() %>% mutate(
+  plot = list(ggplot(
+    data = data,
+    mapping = aes(
+      x = year, 
+      y = estimate_zero_to_64_insurance_prop, 
+      ymin = pmax(estimate_zero_to_64_insurance_prop - (1.96/1.645)*moe_zero_to_64_insurance_prop, 0),
+      ymax = pmin(estimate_zero_to_64_insurance_prop + (1.96/1.645)*moe_zero_to_64_insurance_prop, 1)
+      )) + 
+      geom_pointrange() + 
+      geom_line() + 
+      ylab("Percent with Health Insurance\nAge 0-64") +
+      ggtitle(county) + 
+      scale_y_continuous(labels = scales::percent_format())
+  )
+)
+
+map <- 
+  tx_health_insurance_sf_w_model_coefs %>% 
+  leaflet() %>% 
+  addTiles() %>% 
+  addPolygons(color = ~pal(change_over_time), 
+              label = ~county,
+              popup = popupGraph(tx_health_insurance_sf_w_model_coefs$plot, type = 'png', width = 400, height = 400),
+              weight = 1) %>% 
+  addLegend(
+    position = 'topright',
+    pal = pal,
+    values = c('increasing', 'stable/uncertain', 'decreasing'),
+    labels = c('Increasing', 'Stable/Uncertain', 'Decreasing')
+  )
+
+library(htmlwidgets)
+saveWidget(map, "data/10-temporal-health-insurance/map.html")
+
+health_insurance_sf %>% 
+  filter(year == min(year)) %>% 
+  left_join(model_df %>% ungroup() %>% select(GEOID, change_over_time), by = c('GEOID' = 'GEOID')) %>% 
+  filter(state == 'Massachusetts') %>% 
+  ggplot(aes(fill = change_over_time)) + 
+  geom_sf(color = 'white', size = .05) + 
+  scale_fill_manual(values = c('increasing' = '#91CF60', 
+                                'uncertain/stable' = '#FFFFBF', 
+                                'decreasing' = '#FC8D59'
+                               )) 
+  
+health_insurance_sf %>% 
+  filter(year == min(year)) %>% 
+  left_join(model_df %>% ungroup() %>% select(GEOID, change_over_time), by = c('GEOID' = 'GEOID')) %>% 
+  filter(state == 'Florida') %>% 
+  ggplot(aes(fill = change_over_time)) + 
+  geom_sf(color = 'white', size = .05) + 
+  scale_fill_manual(values = c('increasing' = '#91CF60', 
+                                'uncertain/stable' = '#FFFFBF', 
+                                'decreasing' = '#FC8D59'
+                               )) 
+
+health_insurance_sf %>% 
+  filter(year == min(year)) %>% 
+  left_join(model_df %>% ungroup() %>% select(GEOID, change_over_time), by = c('GEOID' = 'GEOID')) %>% 
+  filter(state == 'California') %>% 
+  ggplot(aes(fill = change_over_time)) + 
+  geom_sf(color = 'white', size = .05) + 
+  scale_fill_manual(values = c('increasing' = '#91CF60', 
+                                'uncertain/stable' = '#FFFFBF', 
+                                'decreasing' = '#FC8D59'
+                               ))
+
+```
+
 
 ```{r}
 #| echo = FALSE,
@@ -563,3 +750,5 @@ knitr::include_graphics("images/10-temporal-health-insurance/health_insurance_co
 
 # TODO: add figure caption explaining the jitter and transparency mapping to quantile ranges
 ```
+
+
