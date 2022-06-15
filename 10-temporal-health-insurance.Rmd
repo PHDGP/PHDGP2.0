@@ -1,28 +1,34 @@
-# Case Study 4: Health Insurance over Time {#temporal-health-insurance}
+# Case Study 4: Case Study on Temporal Trends using American Community Survey (ACS) data [2012-2019] {#temporal-health-insurance}
 
 Outline for Case Study: 
 
 We want participants to learn the following skills from this case study.  Though this
-case study will follow uninsurance rates over time from specified counties, the
+case study will follow insurance rates over time from specified counties, the
 skills learned should be generalizable to pulling other variables from the ACS at
 other geographic levels. 
 
-    - How to pull variables from the ACS over time
-    - How to visualize (plot) and map estimates 
-    - Characterizing trends in the estimates by social variables
-    - How to work with estimate uncertainty (margin of error) data to:
-        * Aggregate it up from stratified estimates (like aggregating 
-          private and public uninsurance rates together into overall 
-          uninsurance rates)
-        * Visualize uncertainty for individual areal units over time 
-    - Model temporal trends
-        * with linear models
-        * with temporal fixed effects 
-        * with smoothing splines 
-        * weighted by margin of error or denominator data 
-        * stratified by social variables 
-    - Model estimates incorporating spatial uncertainty to smooth estimates
-      and reduce noisiness in estimates in areas where little data is observed
+  - How to pull variables from the ACS over time
+  - How to visualize (plot) and map estimates 
+  - Characterizing trends in the estimates by social variables
+  - How to work with estimate uncertainty (margin of error) data to:
+      * Aggregate it up from stratified estimates (like aggregating 
+        private and public insurance rates together into overall 
+        insurance rates)
+      * Visualize uncertainty for individual areal units over time 
+  - Model trends over time
+
+ <!-- TODO: 
+   We have done linear models for each county, but we haven't gotten more
+   complicated than that
+   
+      * with linear models
+      * with temporal fixed effects 
+      * with smoothing splines 
+      * weighted by margin of error or denominator data 
+      * stratified by social variables 
+  - Model estimates incorporating spatial uncertainty to smooth estimates
+    and reduce noisiness in estimates in areas where little data is observed
+    --> 
           
 
 ```{r}

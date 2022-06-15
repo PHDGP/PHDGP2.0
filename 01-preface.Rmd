@@ -1,4 +1,4 @@
-# Preface {#preface}
+# Preface {#preface .unnumbered}
 
 In June 2004, faculty at the Harvard School of Public Health implemented a training on Geocoding and Public Health Disparities with the aim of boosting efforts to address socioeconomic inequalities in health. This training offered a solution to the problem of lack of socioeconomic data in US public health surveillance systems: the geocoding of public health surveillance data and using census-derived area-based socioeconomic measures (ABSMs) to characterize both the cases and populations in the catchment area, thereby enabling computation of rates stratified by the area-based measure of socioeconomic position.
 

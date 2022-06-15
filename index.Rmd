@@ -1,11 +1,7 @@
 ---
-title: "The Public Health Disparities Geocoding Project 2.0"
-author: "Jarvis Chen, Enjoli Hall, Dena Javadi, Nancy Krieger, Justin Morgan, Christian Testa (alphabetic order by last name)"
-date: "3/17/2022"
-site: bookdown::bookdown_site
-output: 
-  bookdown::gitbook:
-    css: style.css
+title: "Public Health Disparities Geocoding Project 2.0 Training Manual"
+author: "Christian Testa, Jarvis T Chen, Enjoli Hall, Dena Javadi, Justin Morgan, Tamara Rushovich,  Sudipta (Shu) Shah, Pamela D Waterman, Nancy Krieger"
+date: ""
 documentclass: book
 bibliography: [references.bib, packages.bib]
 biblio-style: apalike
@@ -15,3 +11,26 @@ link-citations: yes
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+# Public Health Disparities Geocoding Project 2.0 Training Manual {-}
+
+Harvard T.H. Chan School of Public Health, Boston MA <br>
+June 21-25, 2022 and July 25-August 1, 2022
+
+https://www.hsph.harvard.edu/thegeocodingproject/save-the-date-the-public-health-disparities-geocoding-project-2-0/
+
+<center>
+<mark>
+<span style='color:red'>
+DRAFT: FOR WORKSHOP PARTICIPANTS ONLY <br> <br>
+DO NOT COPY, CITE OR CIRCULATE WITHOUT PERMISSION
+</span>
+</mark>
+</center>
+
+Source of funding: American Cancer Society Clinical Research Professor Award to N. Krieger
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>. Credit for use is required. 
+
+Please cite this work as Testa C, Chen JT, Hall E, Javadi D, Morgan J, Rushovich T,  Shah S, Waterman PD, Krieger N. The Public Health Disparities Geocoding Project 2.0. Training Manual. Available as of June 30, 2022
+

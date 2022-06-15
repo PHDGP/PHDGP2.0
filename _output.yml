@@ -1,4 +1,6 @@
-bookdown::gitbook:
+bookdown::bs4_book:
+  theme:
+    primary: "#637238"
   css: style.css
   config:
     toc:

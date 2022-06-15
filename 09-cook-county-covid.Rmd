@@ -1,12 +1,993 @@
 # Case Study 3: COVID-19 Mortality in Chicago {#cook-county-covid}
 
-```{r}
-#| echo = FALSE,
-#| fig.cap =  
-#|   "COVID-19 raw (un-adjusted) mortality rates, death counts from 
-#|   the Cook County Medical Examiner's Office, population counts from the 
-#|   American Community Survey"
-knitr::include_graphics(
-  "images/09-cook-county-covid/overall_zip_mortality_with_boundary_compressed.jpg" 
-)
+## Introduction 
+
+The Cook County Medical Examiner has made a dataset with COVID-19 related
+deaths publicly available with the following intent: 
+
+> Cook County Government has created the Medical Examiner COVID-19 Dashboard to provide direct, transparent access to critical information about COVID-19 deaths in the County for public health agencies, medical professionals, first responders, journalists, policymakers and residents. The Medical Examiner’s Office encourages visitors to use this data to explore trends, identify areas of concern and take appropriate action. The data can be utilized to identify communities that are most severely impacted by the virus and can inform proactive public policy.
+
+Read more: https://datacatalog.cookcountyil.gov/stories/s/ttk4-trbu 
+
+Data Source: https://datacatalog.cookcountyil.gov/Public-Safety/Medical-Examiner-Case-Archive-COVID-19-Related-Dea/3trz-enys
+
+## Motivation, Research Questions, and Learning Objectives
+
+This case study focuses on the following research questions: 
+
+  - What are the gradients in COVID-19 mortality by race/ethnicity in relation
+  to ABSMs measuring: racial/ethnic composition, the ICE for racialized economic
+  segregation, percent of population living below the poverty line, percent of
+  people living in crowded housing, and median income;
+  
+  - What are the differences in COVID-19 mortality rates by race/ethnicity 
+  accounting for age?
+  
+  <!-- 
+  TODO: 
+    We have not yet done: 
+      - Identification of the ABSM effects without regard for race/ethnicity 
+      - We could still add more clear presentation of the racial/ethnic differences
+        that don't incorporate ABSMs -- as it is, this is just shown in a map figure.
+      - How the racial disparity varies across ZCTAs 
+  --> 
+
+In today's case example using these data, we'll show you how you can use the
+`tidycensus` package to download relevant area based population estimates and
+sociodemographic measures from the US Census American Community Survey (ACS) to
+contextualize the deaths observed in this dataset.
+
+We'll show you how we cleaned the data and merged in data from the ACS in the
+**Cleaning the Data** section, but we're providing to you a cleaned dataset that
+should allow you to pick up and follow along from the **Visualizing Your Data**
+section onwards.
+
+## Dependencies 
+
+
+```{r} 
+#| eval = FALSE,
+#| warning = FALSE,
+#| message = FALSE
+
+# mission critical packages
+library(tidycensus) 
+library(tidyverse)
+library(sf)
+library(tigris)
+library(mapview)
+library(INLA)
+
+# nice to have packages
+library(magrittr) # for the %<>% and %$% pipe
+library(janitor)
+library(purrr)
+library(Hmisc)
+library(epitools)
 ```
+
+## Cleaning the Data
+
+```{r cleaning the data}
+#| eval = FALSE,
+#| echo = TRUE
+
+# get population sizes from ACS -------------------------------------------
+acs_vars <- tidycensus::load_variables(2019, dataset = 'acs5')
+
+# the ACS 2015-2019 variables can be viewed online here: 
+# https://api.census.gov/data/2019/acs/acs5/variables.html
+# 
+# the race/ethnicity and age-group stratified population estimates from ACS are
+# in the B01001 table.
+# 
+# B01001_001 through _049 are the sex/gender overall population size estimates,
+# and B01001A through B01001I are the race/ethnicity specific tables.  For the
+# race/ethnicity specific tables the age-groups suffixes range from _001 to _031
+# 
+# in the following three steps, we programmatically construct the population
+# size variables that we want to retrieve from the ACS since otherwise there are
+# a lot of them to type out.
+race_chars <-
+  c(
+    white = 'H',
+    black = 'B',
+    hispanic_or_latino = 'I'
+  )
+
+# for each of A through I, construct B01001*_001 through _031
+sex_race_age_vars <-
+  paste0(rep(paste0('B01001', race_chars, '_0'), each = 31),
+         stringr::str_pad(
+           1:31,
+           width = 2,
+           side = 'left',
+           pad = '0'
+         ))
+
+# this adds on the sex/gender overall population estimates
+sex_race_age_vars %<>% c(.,
+                         paste0(
+                           'B01001_0',
+                           stringr::str_pad(
+                             1:49,
+                             width = 2,
+                             side = 'left',
+                             pad = '0'
+                           )
+                         ))
+
+# split the label
+acs_vars %<>%
+  tidyr::separate(label,
+           into = c('estimate', 'total', 'gender', 'age', 'subgroup'),
+           sep = '!!')
+
+# clean label values (remove unnecessary colon characters and leading/trailing spaces)
+acs_vars %<>% mutate_at(.vars = vars(estimate, total, gender, age, subgroup),
+                        ~ gsub(":", "", .) %>% stringr::str_trim())
+
+# select only what we need
+acs_vars %<>% select(name, total, gender, age, concept)
+
+# get sex, race (incl. hispanic or latino), and age stratified population
+# estimates
+popsizes <-
+  tidycensus::get_acs(
+    geography = 'zip code tabulation area',
+    state = 'IL',
+    year = 2019,
+    geometry = TRUE,
+    variables = sex_race_age_vars,
+    output = 'tidy'
+  )
+
+# join in our variable names
+popsizes %<>% left_join(acs_vars, by = c('variable' = 'name'))
+
+popsizes %<>% janitor::clean_names() # clean column names
+popsizes %<>% select(-total) # remove total column that only contains 'total'
+
+# take out the geometry for use later
+zip_geometry <- popsizes %>% select(geoid) %>% unique()
+# ggplot(zip_geometry) + geom_sf() # zip codes of illinois
+
+# remove geometry before data reshaping
+popsizes %<>% sf::st_drop_geometry()
+
+if ('sf' %in% class(popsizes)) {
+  stop("popsizes data has geometry, this can cause errors in the group_by and summarize steps using dplyr.")
+}
+
+# aggregate by sex/gender
+popsizes %<>%
+  group_by(geoid, name, age, concept) %>%
+  summarize(
+  estimate = sum(estimate),
+  # here we're using the tidycensus::moe_sum function to create margin of error estimates for 
+  # sums of population size estimates
+  moe = tidycensus::moe_sum(moe = moe, estimate = estimate)
+  )
+```
+
+Since the Cook County Medical Examiner Case Archive data includes records on 
+deaths where the decedents' residential ZIP codes are inside as well as outside 
+Cook County, Illinois, we want to restrict our dataset to deaths where their
+county of residence was in Cook County. 
+
+```{r get relevant zip codes}
+#| echo = TRUE,
+#| eval = FALSE
+
+# identify relevant zip codes ---------------------------------------------
+
+# we originally downloaded the county shapefiles using tigris, but 
+# we found that those contained water area we wanted to remove. 
+# 
+# we tried using the tigris::erase_water function but it took a very 
+# long time to run for us, so we found that the alternative was easier
+# to implement:  downloading a county shapefile directly from the census 
+# and using that one which came already with the water areas removed. 
+# 
+# We got our county shapefile for Cook county in what follows from here: 
+# https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html 
+counties <- read_sf('cb_2018_us_county_5m/cb_2018_us_county_5m.shp')
+
+# get the map for cook county
+cook_county <- counties %>% filter(
+  # get the 5-digit FIPS or GEOID for Cook County programmatically by filtering
+  # the tigris::fips_codes dataframe, or if you happen to know it's 17031 
+  # you could code it explicitly instead
+  GEOID == tigris::fips_codes %>% 
+    filter(county == 'Cook County', state == 'IL') %$% 
+    paste0(state_code, county_code))
+
+# calculate the zip codes intersecting cook county
+zips_with_overlap <- zip_geometry[st_intersects(zip_geometry, cook_county) %>% map_lgl( ~ length(.) > 0),]
+
+# calculate each zip code total area
+zips_with_overlap$total_area <- st_area(zips_with_overlap)
+
+# calculate the intersection of cook county and each zip code tabulation area
+zips_with_overlap_intersection <- st_intersection(zips_with_overlap, cook_county)
+zips_with_overlap_intersection %<>% select(geoid)
+
+# calculate the area of each intersection
+zips_with_overlap_intersection$overlapping_area_w_cook_cty <- st_area(zips_with_overlap_intersection)
+
+# drop geometry so we can merge this back in
+zips_with_overlap_intersection %<>% sf::st_drop_geometry()
+
+# add in overlap calculation
+zips_with_overlap %<>% left_join(
+  zips_with_overlap_intersection %>% select(geoid, overlapping_area_w_cook_cty),
+  by = c('geoid')
+)
+
+# calculate the proportion of area for that zip code within cook county
+zips_with_overlap %<>% mutate(
+  prop_area_overlap = as.numeric(overlapping_area_w_cook_cty / total_area))
+
+# filter for zip codes with 90% land area inside cook county
+zips_with_over_90pct_overlap <- zips_with_overlap %>%
+  filter(prop_area_overlap >= .9)
+
+# Visualize Cook County and ZIPs with over 90 percent overlap
+ggplot() + 
+  geom_sf(data = cook_county, aes(color = "Cook County"), fill = 'white') + 
+  geom_sf(
+    data = zips_with_over_90pct_overlap,
+    mapping = aes(color = "Zip Code Tabulation Areas"),
+    size = .5,
+    alpha = .6
+  ) + 
+  scale_color_manual(
+    values = c("Cook County" = "#E69F00", "Zip Code Tabulation Areas" = "#56B4E9") 
+  ) + 
+  # theme_bw() + 
+  guides(color = guide_legend(override.aes = list(fill = c('white', 'grey95')))) +
+  scale_x_continuous(breaks = c(-88.3, -88.1, -87.9, -87.7, -87.5)) +   
+  ggtitle("Cook County and Zip Code Tabulation Areas 90% Contained Within")
+
+# save the plot
+# ggsave("cook_county_and_zip_codes.png", width = 10, height = 6)
+
+# group population sizes together by age groups and race/ethnicity and zip code
+zips_with_population_estimates_by_race_ethnicity_and_age <-
+  popsizes %>%
+  filter(! is.na(age) & concept != 'SEX BY AGE') %>% # filter for overall population
+  filter(
+    geoid %in% zips_with_over_90pct_overlap$geoid) %$%
+  left_join(zips_with_over_90pct_overlap, .)
+
+# code the Census race/ethnicity groups
+zips_with_population_estimates_by_race_ethnicity_and_age %<>% mutate(
+  race_ethnicity = case_when(
+    concept ==  "SEX BY AGE (BLACK OR AFRICAN AMERICAN ALONE)" ~ "Black, Hispanic or non-Hispanic",
+    concept ==  "SEX BY AGE (HISPANIC OR LATINO)" ~ "Hispanic",
+    concept ==  "SEX BY AGE (WHITE ALONE, NOT HISPANIC OR LATINO)" ~ "White, non-Hispanic"
+  ))
+
+
+# remove totals (across age groups) observations
+zips_with_population_estimates_by_race_ethnicity_and_age %<>% filter(! is.na(age))
+zips_with_population_estimates_by_race_ethnicity_and_age %<>% filter(! is.na(race_ethnicity))
+
+# aggregate into larger age groups
+zips_with_population_estimates_by_race_ethnicity_and_age %<>% mutate(
+  age_group = case_when(
+    age %in% c(
+      "Under 5 years",
+      "5 to 9 years",
+      "10 to 14 years",
+      "15 to 17 years",
+      "18 and 19 years",
+      "20 to 24 years"
+    ) ~ "Under 25",
+    age %in% c(
+      "25 to 29 years",
+      "30 to 34 years"
+    ) ~ "25 to 34 years",
+    age == "35 to 44 years" ~ "35 to 44 years",
+    age == "45 to 54 years" ~ "45 to 54 years",
+    age == "55 to 64 years" ~ "55 to 64 years",
+    age == "65 to 74 years" ~ "65 to 74 years",
+    age == "75 to 84 years" ~ "75 to 84 years",
+    age == "85 years and over" ~ "85 years and over"
+  ))
+
+# sum age group population sizes by race_ethnicity
+zips_with_population_estimates_by_race_ethnicity_and_age %<>% group_by(geoid, age_group, race_ethnicity) %>%
+  summarize(
+    estimate = sum(estimate, na.rm=T),
+    moe = moe_sum(moe, estimate)
+  )
+
+
+```
+
+Now we're ready to add the population size estimates for each race/ethnicity and
+age-group by ZIP code.
+
+```{r add population size estimates}
+#| echo = TRUE,
+#| eval = FALSE
+
+# read in your data
+cook_county_deaths <- readr::read_csv(
+  "cook_county_mortality/Medical_Examiner_Case_Archive_-_COVID-19_Related_Deaths.csv")
+
+# merge race/ethnicity and age-group specific denominators ----------------
+
+# use janitor::clean_names to standardize column name syntax into snake_case
+cook_county_deaths %<>% janitor::clean_names()
+
+# code race/ethnicity into the following: 
+#  Black (Hispanic or non-Hispanic)
+#  Hispanic and non-Hispanic
+#  White non-Hispanic
+cook_county_deaths %<>%
+  mutate(
+    black = race == 'Black',
+    white_nh = latino & race == 'White',
+    hispanic = latino
+  )
+
+# we restrict our time-period to during March 2020 to March 2022 -- noting the 
+# information on the dataset stories web page: 
+# 
+#  https://datacatalog.cookcountyil.gov/stories/s/ttk4-trbu
+# 
+#  Effective April 1, 2022, the Cook County Medical Examiner’s Office no longer
+#  takes jurisdiction over hospital, nursing home or hospice COVID-19 deaths
+#  unless there is another factor that falls within the Office’s jurisdiction.
+# 
+cook_county_deaths %<>% filter(
+  lubridate::mdy_hms(date_of_death) >= lubridate::mdy("03/01/2020") & 
+    lubridate::mdy_hms(date_of_death) <= lubridate::mdy("04/01/2022")
+)
+
+
+# Truncate Zip Codes to 5 Characters
+cook_county_deaths %<>% mutate(residence_zip = stringr::str_extract(residence_zip, "^[0-9]{5}"))
+
+# Categorize Age Group
+cook_county_deaths %<>% mutate(
+    age_group = case_when(
+      age <= 24 ~ "Under 25",
+      age >= 25 & age <= 35 ~ "25 to 34 years",
+      age >= 35 & age <= 44 ~ "35 to 44 years",
+      age >= 45 & age <= 54 ~ "45 to 54 years",
+      age >= 55 & age <= 64 ~ "55 to 64 years",
+      age >= 65 & age <= 74 ~ "65 to 74 years",
+      age >= 75 & age <= 84 ~ "75 to 84 years",
+      age >= 85 ~ "85 years and over",
+      TRUE ~ NA_character_
+    )
+  )
+
+cook_county_deaths$age_group %<>% factor(
+  levels = c(
+   "Under 25",
+   "25 to 34 years",
+   "30 to 34 years",
+   "35 to 44 years",
+   "45 to 54 years",
+   "55 to 64 years",
+   "65 to 74 years",
+   "75 to 84 years",
+   "85 years and over")
+  )
+
+# separate out deaths into the racial categories we're interested in 
+# 
+# note that these do have overlap: since the ACS variables do not include 
+# age tables for the Black non-Hispanic group, we are using the Black 
+# Hispanic or non-Hispanic population by age tables, and so there is overlap
+# between them and the Hispanic group counts.
+deaths_by_race_ethnicity_group <- 
+  list(
+    black = cook_county_deaths %>% filter(black),
+    hispanic = cook_county_deaths %>% filter(hispanic),
+    white_nh = cook_county_deaths %>% filter(white_nh)
+  ) 
+
+# Assign labels for the racialized groups 
+race_ethnicity_groups <- c(
+  "Black, Hispanic or non-Hispanic",
+  "Hispanic",
+  "White, non-Hispanic"
+)
+
+# for each racial group, tabulate the number of deaths by age group and 
+# residence zip code. 
+# 
+# here, purrr::map is applying a function which does that tabulation to each of
+# the data frames in the deaths_by_race_ethnicity_group list
+deaths_by_race_ethnicity_group <- 
+  purrr::map(1:3, function(i) {
+    group_by(deaths_by_race_ethnicity_group[[i]], residence_zip, age_group) %>% 
+        count(name = 'deaths') %>% 
+      mutate(race_ethnicity = race_ethnicity_groups[[i]])
+  })
+
+# bind the tables for each of the race_ethnicity groups together
+deaths_by_race_ethnicity_group %<>% bind_rows()
+
+# check how many of the deaths proportionally were NA
+ggplot(deaths_by_race_ethnicity_group, aes(x = age_group, y = deaths)) + 
+  geom_col() + 
+  facet_wrap(~race_ethnicity) + 
+  ylab("Count of Deaths") + 
+  theme(axis.text.x = element_text(angle = 75, hjust = 1))
+
+# remove missing age, missing race/ethnicity deaths
+deaths_by_race_ethnicity_group %<>% filter(! is.na(age_group))
+deaths_by_race_ethnicity_group %<>% filter(! is.na(race_ethnicity))
+
+# check distribution of deaths by age group
+deaths_by_race_ethnicity_group %>% 
+  group_by(age_group) %>% 
+  count() 
+
+# check distribution of deaths by racial/ethnic group
+deaths_by_race_ethnicity_group %>% 
+  group_by(race_ethnicity) %>% 
+  count() 
+
+# merge the denominators and deaths together
+df <-
+  zips_with_population_estimates_by_race_ethnicity_and_age %>% left_join(
+  deaths_by_race_ethnicity_group,
+  by = c('geoid' = 'residence_zip', 'age_group' = 'age_group', 'race_ethnicity' = 'race_ethnicity'))
+
+# make age_group a factor variable
+df$age_group %<>% factor(
+  levels = c(
+    'Under 25',
+    '25 to 34 years',
+    '35 to 44 years',
+    '45 to 54 years',
+    '55 to 64 years',
+    '65 to 74 years',
+    '75 to 84 years',
+    '85 years and over'
+  )
+)
+
+# add person-time
+observation_time_in_years <- as.integer(lubridate::mdy("04-01-2022") - lubridate::mdy("03-01-2020")) / 365
+df %<>% mutate(person_time = estimate * observation_time_in_years)
+df %<>% mutate(deaths = ifelse(is.na(deaths), 0, deaths))
+df %<>% mutate(mortality_per100k_py = deaths / person_time * 1e5)
+
+df %>% 
+  group_by(age_group, race_ethnicity) %>% 
+  summarize(deaths = sum(deaths)) %>%
+  ggplot(aes(x = age_group, y = deaths)) + 
+  geom_col() + 
+  facet_wrap(~race_ethnicity) + 
+  xlab("Age Group") + 
+  ylab("Count of Deaths") + 
+  theme(axis.text.x = element_text(angle = 75, hjust = 1)) + 
+  ggtitle("Age Distribution of COVID-19 Deaths in Cook County IL")
+
+df %>% 
+  group_by(age_group, race_ethnicity) %>% 
+  summarize(deaths = sum(deaths), 
+            person_time = sum(person_time), 
+            mortality_per100k_py = deaths / person_time * 1e5,
+            mortality_ci_high = (1e5/person_time) * (deaths + sqrt(deaths)*1.96),
+            mortality_ci_low = (1e5/person_time) * (deaths - sqrt(deaths)*1.96)
+            ) %>%
+  ggplot(
+    aes(
+      x = age_group,
+      y = mortality_per100k_py,
+      ymax = mortality_ci_high,
+      ymin = mortality_ci_low,
+      color = race_ethnicity,
+      shape = race_ethnicity
+    )
+  ) + 
+  geom_pointrange(position = position_dodge(width=.4), width = .2) + 
+  theme(axis.text.x = element_text(angle = 75, hjust = 1)) + 
+  scale_y_log10() + 
+  xlab("Age Group") + 
+  ylab("Mortality Rate per 100,000 Person Years") + 
+  labs(color = 'Race/Ethnicity', shape = 'Race/Ethnicity') + 
+  ggtitle("COVID-19 Mortality Rate by Age and Race/Ethnicity in Cook County IL")
+```
+
+We're in shape to add our area based socioeconomic metrics. We'll add the
+Index of Concentration at the Extremes for Racialized Economic Segregation, the
+proportion of the population under the poverty line, and the median income in
+each ZIP code.
+
+```{r add absms}
+#| echo = TRUE,
+#| eval = FALSE
+
+
+# add area based socioeconomic measures  ----------------------------------
+
+# get zip code rates for
+#   - poverty
+#   - ICEraceinc
+#   - median income
+
+absms_dictionary <- tibble::tribble(
+  ~var, ~varname, ~description,
+  # total population
+  "B01001_001",  "total_popsize", "total population estimate", 
+  
+  # racial composition 
+  'B01003_001',  "race_ethnicity_total", "race_ethnicity_total",
+  
+  # ICEraceinc
+  "B19001_001",  'hhinc_total',   "total population for household income estimates",
+  "B19001A_002", 'hhinc_w_1',     "white n.h. pop with household income <$10k",
+  "B19001A_003", 'hhinc_w_2',     "white n.h. pop with household income $10k-14 999k",
+  "B19001A_004", 'hhinc_w_3',     "white n.h. pop with household income $15k-19 999k",
+  "B19001A_005", 'hhinc_w_4',     "white n.h. pop with household income $20k-24 999k",
+  "B19001A_014", 'hhinc_w_5',     "white n.h. pop with household income $100 000 to $124 999",
+  "B19001A_015", 'hhinc_w_6',     "white n.h. pop with household income $125k-149 999k",
+  "B19001A_016", 'hhinc_w_7',     "white n.h. pop with household income $150k-199 999k",
+  "B19001A_017", 'hhinc_w_8',     "white n.h. pop with household income $196k+",
+  "B19001_002",  'hhinc_total_1', "total pop with household income <$10k",
+  "B19001_003",  'hhinc_total_2', "total pop with household income $10k-14 999k",
+  "B19001_004",  'hhinc_total_3', "total pop with household income $15k-19 999k",
+  "B19001_005",  'hhinc_total_4', "total pop with household income $20k-24 999k",
+
+  # poverty
+  "B05010_002",  'in_poverty',    "population with household income < poverty line",
+  "B05010_001",  'total_pop_for_poverty_estimates',  "total population for poverty estimates",
+
+  # median income
+  "B06011_001",  'median_income',  "median income estimate for total population",
+  
+  # crowded housing
+  "B25014_005",  'owner_occupied_crowding1', 'owner occupied, 1 to 1.5 per room',
+  "B25014_006",  'owner_occupied_crowding2', 'owner occupied, 1.51 to 2 per room',
+  "B25014_007",  'owner_occupied_crowding3', 'owner occupied, 2.01 or more per room',
+  "B25014_011",  'renter_occupied_crowding1', 'owner occupied, 1 to 1.5 per room',
+  "B25014_012",  'renter_occupied_crowding2', 'owner occupied, 1.51 to 2 per room',
+  "B25014_013",  'renter_occupied_crowding3', 'owner occupied, 2.01 or more per room',
+  "B25014_001",  'crowding_total',            'total for crowding (occupants per room)',
+  
+  "B01001I_001",  'total_hispanic',           'total hispanic population estimate',
+  "B01001B_001",  'total_black',              'total black, hispanic or non-hispanic estimate',
+  "B01001H_001",  'total_white_nh',           'total white, non-hispanic population estimate'
+)
+
+get_absms <- function(zip_codes) {
+  absms <- tidycensus::get_acs(
+    year = 2019,
+    geography = 'zcta',
+    state = 'IL',
+    zcta = zip_codes,
+    variables = absms_dictionary$var,
+    geometry = FALSE
+  )
+
+  # pivot wider
+  absms %<>% select(-moe) %>%
+    tidyr::pivot_wider(names_from = variable, values_from = estimate)
+
+  rename_vars <- setNames(absms_dictionary$var, absms_dictionary$varname)
+  absms <- absms %>% rename(!!rename_vars)
+
+  absms %<>%
+    mutate(
+      # we calculate the people of color low income counts as the overall
+      # low income counts minus the white non-hispanic low income counts
+      people_of_color_low_income =
+        (hhinc_total_1 + hhinc_total_2 + hhinc_total_3 + hhinc_total_4) -
+        (hhinc_w_1 + hhinc_w_2 + hhinc_w_3 + hhinc_w_4),
+      # sum up the white non-hispanic high income counts
+      white_non_hispanic_high_income =
+        (hhinc_w_5 + hhinc_w_6 + hhinc_w_7 + hhinc_w_8),
+      # calculate the index of concentration at the extremes for racialized
+      # economic segregation (high income white non-hispanic vs. low income
+      # people of color)
+      ICEraceinc =
+        (white_non_hispanic_high_income - people_of_color_low_income) /
+        hhinc_total,
+
+      prop_in_poverty = in_poverty / total_pop_for_poverty_estimates,
+      
+      crowding = (owner_occupied_crowding1 + owner_occupied_crowding2 + owner_occupied_crowding3 +
+        renter_occupied_crowding1 + renter_occupied_crowding2 + renter_occupied_crowding3) / crowding_total,
+      
+      prop_black = total_black / total_popsize,
+      prop_hispanic = total_hispanic / total_popsize,
+      prop_white_nh = total_white_nh / total_popsize
+    ) %>%
+    select(GEOID, ICEraceinc, prop_in_poverty, median_income, crowding, prop_black, prop_hispanic, prop_white_nh)
+
+  return(absms)
+}
+
+absms <- get_absms(unique(df$geoid))
+
+# merge in data
+df %<>% left_join(absms, by = c('geoid' = 'GEOID'))
+
+# get cutpoints for ICEraceinc in illinois --------------------------------
+
+# we're doing this because we want our cutpoints to be in reference to the 
+# state distribution for the ICEraceinc variable;  other cutpoints can be used, 
+# but it's important to be transparent about what cutpoints are used and consider
+# how the choice of cutpoints may affect the analysis.
+# 
+illinois_absms <-
+  tidycensus::get_acs(
+    year = 2019,
+    geography = 'zcta',
+    state = 'IL',
+    variables = absms_dictionary$var,
+    geometry = FALSE
+  ) %>%
+  select(-moe) %>%
+  tidyr::pivot_wider(names_from = variable, values_from = estimate)
+
+rename_vars <- setNames(absms_dictionary$var, absms_dictionary$varname)
+illinois_absms %<>% rename(!!rename_vars)
+
+illinois_absms %<>%
+  mutate(
+    # we calculate the people of color low income counts as the overall
+    # low income counts minus the white non-hispanic low income counts
+    people_of_color_low_income =
+      (hhinc_total_1 + hhinc_total_2 + hhinc_total_3 + hhinc_total_4) -
+      (hhinc_w_1 + hhinc_w_2 + hhinc_w_3 + hhinc_w_4),
+    # sum up the white non-hispanic high income counts
+    white_non_hispanic_high_income =
+      (hhinc_w_5 + hhinc_w_6 + hhinc_w_7 + hhinc_w_8),
+    # calculate the index of concentration at the extremes for racialized
+    # economic segregation (high income white non-hispanic vs. low income
+    # people of color)
+    ICEraceinc =
+      (white_non_hispanic_high_income - people_of_color_low_income) /
+      hhinc_total,
+    
+    # we don't need poverty here since we're going to use pre-specified cutpoints
+    # of 0-5%, 5-10%, 10-20% and 20%+ 
+    
+    # calculate crowding
+    crowding = (owner_occupied_crowding1 + owner_occupied_crowding2 + owner_occupied_crowding3 +
+        renter_occupied_crowding1 + renter_occupied_crowding2 + renter_occupied_crowding3) / crowding_total,
+    
+    # racial/ethnic composition variables
+    prop_black = total_black / total_popsize,
+    prop_hispanic = total_hispanic / total_popsize,
+    prop_white_nh = total_white_nh / total_popsize
+  ) 
+
+illinois_ICEraceinc_cutpoints <-
+  Hmisc::wtd.quantile(illinois_absms$ICEraceinc,
+                      illinois_absms$total_popsize,
+                      seq(0, 1, .2),
+                      na.rm = T)
+
+illinois_median_income_cutpoints <-
+  Hmisc::wtd.quantile(illinois_absms$median_income,
+                      illinois_absms$total_popsize,
+                      seq(0, 1, .2),
+                      na.rm = T)
+
+illinois_crowding_cutpoints <-
+  Hmisc::wtd.quantile(illinois_absms$crowding,
+                      illinois_absms$total_popsize,
+                      seq(0, 1, .2),
+                      na.rm = T)
+
+illinois_prop_hispanic_cutpoints <-
+  Hmisc::wtd.quantile(illinois_absms$prop_hispanic,
+                      illinois_absms$total_popsize,
+                      seq(0, 1, .2),
+                      na.rm = T)
+
+illinois_prop_black_cutpoints <-
+  Hmisc::wtd.quantile(illinois_absms$prop_black,
+                      illinois_absms$total_popsize,
+                      seq(0, 1, .2),
+                      na.rm = T)
+
+illinois_prop_white_nh_cutpoints <-
+  Hmisc::wtd.quantile(illinois_absms$prop_white_nh,
+                      illinois_absms$total_popsize,
+                      seq(0, 1, .2),
+                      na.rm = T)
+
+# create cutpoint-leveled version of key ABSM variables
+df$ICEraceinc_cut <- df$ICEraceinc %>% cut(., illinois_ICEraceinc_cutpoints, include.lowest=TRUE)
+df$median_income_cut <- df$median_income %>% cut(., illinois_median_income_cutpoints, include.lowest=TRUE)
+df$crowding_cut <- df$crowding %>% cut(., illinois_crowding_cutpoints, include.lowest=TRUE)
+df$prop_black_cut <- df$prop_black %>% cut(., illinois_prop_black_cutpoints, include.lowest=TRUE)
+df$prop_hispanic_cut <- df$prop_hispanic %>% cut(., illinois_prop_hispanic_cutpoints, include.lowest=TRUE)
+df$prop_white_nh_cut <- df$prop_white_nh %>% cut(., illinois_prop_white_nh_cutpoints, include.lowest=TRUE)
+```
+
+We have a few remaining necessary cleaning steps to perform before we're ready
+to model these data. Firstly, we're going to add discretized (cut) versions of
+the percent in poverty and median income measures.  This is because this helps
+to allow the model flexibility to fit nonlinear responses with increasing levels
+in these covariates.  Alternative approaches could involve fitting the models
+with smoothing splines on these variables instead, but we aren't showing that
+here today.
+
+Additionally, we have to make sure our factor variables have appropriate 
+reference levels set.  Typically we set the reference level as the most 
+privileged group so that we can frame the results as "the _____ group has
+X times the mortality rate of the reference group." 
+
+```{r final cleaning steps}
+#| echo = TRUE,
+#| eval = FALSE
+# prepare data for modeling  ----------------------------------------------
+
+# remove infinite or NA mortality rates since they will cause errors in trying
+# to fit the models
+df_prepped <- df %>% filter(
+  is.finite(mortality_per100k_py) &
+    ! is.na(mortality_per100k_py))
+
+# ungroup
+df_prepped %<>% ungroup()
+
+# make the most privileged the reference category
+df_prepped %<>% mutate(
+  race_ethnicity = forcats::fct_relevel(factor(race_ethnicity), "White, non-Hispanic"),
+  age_group = age_group,
+  ICEraceinc_cut = forcats::fct_rev(ICEraceinc_cut)
+)
+
+# add median income zscore since otherwise the model coefficients on income
+# are very small
+zscore <- function(x) { (x - mean(x, na.rm=T)) / sd(x, na.rm=T) }
+df_prepped$median_income_zscore <- zscore(df_prepped$median_income)
+
+# add in cutpoints for poverty and median income quantiles
+df_prepped %<>%
+  ungroup() %>%
+  mutate(
+  prop_in_poverty_cut = cut(prop_in_poverty, c(0, .05, .1, .2, 1), include.lowest=T),
+  median_income_quantiles = cut(median_income, quantile(median_income, seq(0,1,.2), na.rm=T), include.lowest=T)
+)
+
+# rename the estimate variable to 'population_estimate' to be more clear
+df_prepped %<>% rename(population_estimate = estimate)
+
+# save data 
+write.csv(df_prepped, "cook_county_mortality_cleaned.csv", row.names=F)
+saveRDS(df_prepped, "cook_county_mortality_cleaned.rds")
+```
+
+## Visualizing Your Data
+
+```{r visualize data, fig.width = 8, fig.height = 8}
+#| echo = TRUE,
+#| eval = FALSE
+df <- readRDS("data/09-cook-county-covid/cook_county_mortality_cleaned.rds")
+
+# let's start by mapping the crude mortality rates in each race/ethnicity and 
+# age strata
+
+df %<>% mutate(deaths = ifelse(is.na(deaths), 0, deaths))
+df %<>% mutate(mortality_per100k_py = deaths / person_time * 1e5)
+
+# plot raw mortality rates
+df %>% 
+  ggplot(aes(fill = mortality_per100k_py)) + 
+  geom_sf(data = cook_county, fill = 'dimgrey') + 
+  geom_sf(size = 0) + 
+  facet_grid(forcats::fct_rev(race_ethnicity)~age_group) + 
+  scale_fill_distiller(palette = 'Reds', trans = scales::pseudo_log_trans(sigma = 100), direction = 1, 
+                       labels = scales::comma_format(), na.value = 'dimgrey',
+                       breaks = c(0, 1000, 10000, 80000)) +
+  scale_x_continuous(breaks = c( -88.1, -87.7)) +   
+  theme(legend.position = 'bottom',
+        legend.text = element_text(angle = 75, hjust=1)
+        ) + 
+  ggtitle("Crude Mortality Rates by ZCTA, Race/Ethnicity and Age Group")
+
+ggsave("raw_rates_by_zcta.png", width = 14, height = 8)
+
+df %>% ggplot(aes(x = mortality_per100k_py, fill = race_ethnicity)) +
+  geom_histogram(alpha = .8, position = 'identity') +
+  facet_grid(age_group ~ forcats::fct_rev(race_ethnicity),
+             scales = 'free') +
+  scale_x_continuous(
+    trans = scales::pseudo_log_trans(sigma = 10),
+    labels = scales::comma_format(),
+    breaks = c(0, 100, 1000, 5e4)
+  ) + 
+  xlab("Mortality Rate per 100,000 Person Years") + 
+  theme(legend.position = 'bottom')
+
+ggsave("raw_rates_histogram.png",
+       width = 8,
+       height = 16)
+
+ggsave("raw_rates_histogram.png",
+       width = 8,
+       height = 16)
+
+df %>% ggplot(aes(x = population_estimate, y = mortality_per100k_py, color = race_ethnicity)) +
+  geom_point(alpha = .8) +
+  facet_grid(age_group ~ forcats::fct_rev(race_ethnicity)) +
+  scale_y_continuous(
+    trans = scales::pseudo_log_trans(sigma = 10),
+    labels = scales::comma_format(),
+    breaks = c(0, 100, 1000, 5e4)
+  ) + 
+  scale_x_continuous(
+    trans = scales::log_trans(),
+    labels = scales::comma_format(),
+  ) + 
+  ylab("Mortality Rate per 100,000 Person Years") + 
+  xlab("Population Size") + 
+  theme(legend.position = 'bottom')
+
+ggsave("raw_rates_scatter.png",
+       width = 8,
+       height = 16)
+
+
+# plot population sizes
+df %>% ggplot(aes(fill = population_estimate)) + 
+  geom_sf(data = cook_county, fill = 'dimgrey') + 
+  geom_sf(size = 0) + 
+  facet_grid(forcats::fct_rev(race_ethnicity)~age_group) + 
+  scale_fill_distiller(palette = 'Greens', trans = scales::pseudo_log_trans(sigma = 100), direction = 1, 
+                       labels = scales::comma_format(), na.value = 'dimgrey',
+                       limits = c(0, NA), 
+                       breaks = c(0, 1000, 10000, 30000)) +
+  scale_x_continuous(breaks = c( -88.1, -87.7)) +   
+  theme(legend.position = 'bottom',
+        legend.text = element_text(angle = 75, hjust=1)
+        ) + 
+  labs(fill = 'Population Estimate') + 
+  ggtitle("Population Size by ZCTA, Race/Ethnicity and Age Group")
+
+ggsave("population_size_by_zcta.png", width = 14, height = 8)
+
+```
+
+```{r visualize racial/ethnic breakdown by zip, fig.width = 8, fig.height = 4}
+#| echo = TRUE,
+#| eval = FALSE
+
+# in the following visualizations the motivating principle behind the direction of the 
+# color palette is to show (for sequential palettes) higher density with darker colors; 
+# for the ICEraceinc variable a divergent color palette is used to draw attention to the 
+# extreme ends of the scale
+
+# visualize the proportional racial/ethnic breakdown
+df %>% select(geoid, prop_black, prop_white_nh, prop_hispanic) %>% 
+  tidyr::pivot_longer(
+    cols = c(prop_black, prop_white_nh, prop_hispanic),
+    names_to = "race_ethnicity",
+    values_to = 'proportion'
+  ) %>% 
+  mutate(
+    race_ethnicity = recode(race_ethnicity, 
+                            prop_white_nh = 'White, non-Hispanic',
+                            prop_black = 'Black, Hispanic or non-Hispanic',
+                            prop_hispanic = 'Hispanic',
+                            )
+  ) %>% 
+  ggplot(aes(fill = proportion)) + 
+  geom_sf(size = 0) + 
+  facet_grid(~race_ethnicity) + 
+  scale_fill_distiller(
+    palette = "Greens",
+    direction = 1,
+    labels = scales::percent_format()
+  ) + 
+  theme_dark() + 
+  labs(fill = "Population Percentage") + 
+  ggtitle("Racial/Ethnic Composition of ZCTAs in Cook County") + 
+  theme(legend.position = 'bottom',
+        legend.text = element_text(angle = 75, hjust=1),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.ticks.y = element_blank()
+        )
+
+ggsave("racial_ethnic_composition.png", width = 12, height = 8)
+
+# visualize median income
+df %>% 
+  ggplot(aes(fill = median_income)) + 
+  geom_sf(size = 0) + 
+  scale_fill_viridis_c(direction = 1, 
+                       labels = scales::dollar_format()) +
+  theme_dark() + 
+  labs(fill = 'Median Income') + 
+  theme(legend.position = 'bottom',
+        legend.text = element_text(angle = 75, hjust=1),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.ticks.y = element_blank()
+        ) + 
+  ggtitle("Median Income in ZCTAs in Cook County")
+
+ggsave("median_income.png", width = 8, height = 8)
+
+# visualize ICEraceinc
+df %>% 
+  ggplot(aes(fill = ICEraceinc)) + 
+  geom_sf(size = 0) + 
+  scale_fill_distiller(palette = 'BrBG', direction = 1, limits = c(-1,1),
+                       labels = scales::number_format(accuracy = .01)) +
+  theme_dark() + 
+  labs(fill = paste0("High Income (>$100k annual household income) White non-Hispanic (high) vs.\n",
+                     "Low Income (<$25k annual household income) People of Color (low)")) + 
+  ggtitle("Index of Concentration at the Extremes for Racialized Economic Segregation",
+          "ZCTAs in Cook County") + 
+  guides(fill = guide_colourbar(
+    title.position = "top",
+    title.hjust = 0.5,
+    barwidth = 10,
+    
+  ))+
+  theme(
+    legend.position = 'bottom',
+        legend.title = element_text(size = 9),
+        legend.text = element_text(angle = 75, hjust = 1),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.ticks.y = element_blank()
+        )
+
+ggsave("ICEraceinc.png", width = 8, height = 8)
+
+
+# visualize crowding 
+df %>% 
+  ggplot(aes(fill = crowding)) + 
+  geom_sf(size = 0) + 
+  theme_dark() + 
+    scale_fill_viridis_c(direction = 1, 
+                       labels = scales::percent_format()) +
+  labs(fill = "% Household Crowding") + 
+  ggtitle("Household Crowding",
+          "ZCTAs in Cook County") + 
+  theme(
+    legend.position = 'bottom',
+        legend.title = element_text(size = 9),
+        legend.text = element_text(angle = 75, hjust = 1),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.ticks.y = element_blank()
+        )
+
+ggsave("crowding.png", width = 8, height = 8)
+
+
+# visualize poverty
+df %>% 
+  ggplot(aes(fill = prop_in_poverty)) + 
+  geom_sf(size = 0) + 
+  scale_fill_distiller(palette = 'Purples', direction = 1, limits = c(0,NA),
+                       labels = scales::percent_format()) +
+  theme_dark() + 
+  labs(fill = 'Poverty Level') + 
+  ggtitle("Poverty Level, ZCTAs in Cook County") + 
+  theme(legend.position = 'bottom',
+        legend.text = element_text(angle = 75, hjust=1),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.ticks.y = element_blank()
+        )
+
+ggsave("poverty.png", width = 8, height = 8)
+```
+

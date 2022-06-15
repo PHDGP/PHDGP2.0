@@ -48,6 +48,8 @@ top level directory, run the following:
 ```r
 # if you haven't already installed bookdown
 install.packages("bookdown") 
+install.packages("downlit") # for the bs4_theme
+remotes::install_github("rstudio/bslib") # for the bs4_theme
 
 bookdown::render_book('.')
 ```
