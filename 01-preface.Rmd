@@ -16,10 +16,3 @@ The texbook also offers three case examples that go through analysis of mortalit
 
 An [ecosocial lens](https://pubmed.ncbi.nlm.nih.gov/7992123/) informs this text, emphasizing multilevel spatiotemporal processes of embodying (in)justice.^[Krieger, Nancy. Ecosocial Theory, Embodied Truths, and the People's Health. Oxford University Press, 2021]. These course materials are written with as much emphasis on monitoring health for accountability as they are for etiological studies.
 
-
-Source of funding: American Cancer Society
-Creative copyright; Licensing - Credit for use is required. 
-(Licensing needs to be addressed in everything we hand out).
-
-Please cite this work as Chen JT, Testa C, Hall E, Javadi D,  Morgan J, Rushovich T,  Shah S, Waterman PD, Krieger N. The Public Health Disparities Geocoding Project 2.0. Course Material. Available as of June 30, 2022
-

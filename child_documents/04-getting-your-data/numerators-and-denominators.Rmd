@@ -1,0 +1,66 @@
+## Numerators and Denominators
+
+### Epi Primer
+
+When presenting data on disease distribution and measures of health disparities, the following types of measures are most often used:
+
+- Prevalence 
+- Cumulative incidence
+- Incidence rate
+
+These measures serve to answer different types of research questions:
+
+- Descriptive: describes the distribution of the outcome of interest 
+- Predictive: predicts who may experience the outcome of interest
+- Causal: seeks to determine modifiable causes of the outcome of interest
+
+**Prevalence** is defined as $Pr[Y=1] = \frac{\text{# existing cases}}{\text{# individuals in study population at a point in time}}$. Prevalence is dimensionless, ranges from 0 to 1, and requires a time reference (i.e. prevalence at a certain year, age, etc.). Prevalence measures are useful for descriptive and not causal questions. 
+
+**Cumulative incidence**, also known as incidence proportion, risk, or attack rate (although not a rate), is defined as $Pr[Y=1] = \frac{\text{# incident cases in a time period}}{\text{#individuals at risk at a baseline}}$. Cumulative incidence is also dimensionless and ranges from 0 to 1, but it must state a time period and anyone included in the denominator must be eligible to move into the numerator by meeting the case definition. Cumulative incidence is limited by a lack of information on the exact timing of the outcome of interest, time-varying exposures, competing risks, and loss to follow-up. 
+
+**Incidence rate**, also known as incidence density or hazard rate, is defined as $\frac{\text{# incident cases during $t_0$ to $t_1$}}{\text{$\sum$ person-time at risk accumulated during $t_0$ to $t_1$}}$. Person-time can be expressed in years, months, weeks, or days. Incidence rate is not a proportion and ranges from 0 to $\infty$.
+
+*Measures of disparity*
+
+- Ratio measures
+- Difference measures
+- Attributable fractions
+
+
+**Ratio measures** include cumulative incidence ratios (CIR), incidence rate ratios (IRR), and odds ratios (OR). The range for these is 0 to $\infty$ and no association is indicated by a ratio of 1.
+
+Odds ratios are defined by $$\frac{(Pr[Y=1|A=1]/ Pr[Y=0|A=1])}{(Pr[Y=1|A=0]/ Pr[Y=0|A=0])}$$
+
+**Differences measures** include cumulative incidence difference (CID), also known as attributable risk, and incidence rate difference (IRD), also known as attributable rate. The range for CID is -1 to 1 while the range for IRD is $-\infty$ to $\infty$. No association is indicated by a difference of 0.
+
+
+**Attributable Risk Percent** (AR) or excess fraction is the proportion of disease burden among the exposed that is associated with the exposure and is defined by:
+$$AR\%=\frac{CI_{Exposed} – CI_{unexposed}}{CI_{Exposed}}*100 $$
+
+**Population Attributable Risk Percent** (PAR) is the proportion of disease burden among the total population that is associated with the exposure and is defined by:
+$$AR\%*Pr[A=1|Y=1]=\frac{CI_{Total} – CI_{unexposed}}{CI_{Total}} $$
+
+The [analytic methods section](https://www.hsph.harvard.edu/thegeocodingproject/analytic-methods/) of the *Public Health Disparities Geocoding Project* monograph demonstrates how the measures described above are identified and aggregated over areas and strata of area-based socioeconomic or
+other social metrics (ABSMs). 
+
+### Numerator/Denominator Issues
+
+When calculating population rates of health outcomes, it is important to consider and avoid bias resulting from a mismatch between the numerator and the denominator of the rate. Typically, this can occur when the data sources for the numerator and the denominator differ - e.g. to calculate the rate of deaths resulting from a drug overdose in a particular county, data for the numerator of the rate could come from death certificates and the data for the denominator from the national census.  Using different data sources does not necessarily cause bias. It is when there is a mismatch between the two data sources that bias can result. For example, in the previous scenario, if the numerator data included all drug overdoses that occurred in a particular county, but the denominator only included residents of the county, bias could result as the numerator includes individuals that are not in the denominator. 
+
+For epidemiologic analyses of health disparities, data analysts generally rely on routinely collected data from health surveillance systems to define the numerators of rates. Such data are available on an ongoing basis with a lag of two or more years to allow for data compilation and cleaning. In contrast, data on population at risk may be obtained from a variety of sources depending on the need for stratification by demographic variables, time frame, and the desired level of geography. For example, the US Decennial Census provides detailed population estimates by age, sex-gender, and selected racialized groups in decennial years. For intercensal years, the US Census uses demographic modeling that takes into consideration births, deaths, and migrations to provide estimates for these demographic groups at the national, state, and county levels via its Population Estimates Program (PEP) [US Census PEP]. For smaller levels of geography, the US Census Bureau’s American Community Survey includes estimates of population for all census geographies larger than census blocks based on five year rolling averages. These are also typically made available after a two year delay.
+
+Formally, the US Census Bureau recommends the use of PEP or decennial census counts as population size estimates in intercensal years, while recommending that ACS data be used for information about changing socioeconomic and demographic features. However, for estimation of small area disease rates or analyses of health disparities by ABSM in intercensal years, decennial counts are usually outdated and PEP estimates are not available at the desired geographic level. Thus, in practice, many epidemiologic studies will continue to rely on ACS small-area estimates for population denominators. While private companies are increasingly producing high-resolution gridded population estimates (typically for the total population, not stratified by sub-groups, whether by age or diverse social groups) that are based on machine-learning models combining census, remote sensing, land use, and other information, with the promise of providing population sizes at very small geographies in near real time, to date we have not found these data products to provide substantial improvement over using ACS small area estimates and in some cases they can induce bias (Nethery et al. 2021).
+
+Because numerators (case data) and denominators (population estimates) come from different sources, and moreover, because intercensal population estimates in particular may be subject to uncertainty, it is possible to obtain sociodemographic strata in particular areas and years where the observed cases exceed the reported population at risk. This is particularly problematic when the number of cases is greater than zero but the reported population at risk is exactly zero. We term this phenomenon “numerator/denominator mismatch.”
+
+To ensure that there is no numerator/denominator mismatch and that all cases in the aggregated numerator are coming from the population pool in the aggregated denominator and that all those in the denominator have the potential to become cases, one must understand the sources of data being used. It is therefore critical to explore the data dictionaries and survey methodology for the various sources of data to better understand the eligibility criteria for who gets included in the denominator and who appears in the numerators to be used in aggregating data for analysis. This includes answering questions like:
+
+  - How are cases defined? 
+  - Does the data source include just adults or all ages? 
+  - Is the data source limited to non-institutionalized populations? 
+  - Does the data source include just residents of a jurisdiction?
+  - What happens to individuals who do not have an address of residence?
+
+Additionally, one should exclude all records that are not geocoded, do not meet the case definition, or are missing data on important covariates (e.g. age, gender, race/ethnicity, etc. depending on the question being asked). However, any such exclusions need to be clearly documented, with careful thought given to how the resulting selection bias can affect interpretation of the results.
+
+Numerator/denominator mismatch can also introduce bias when aggregating data over strata of ABSMs. Understanding the sources of bias arising from incompatibility and identifying population size estimates to limit bias is a critical part of designing the analytical approach. For example, temporally incompatible numerator and denominator data tends to result in greater bias for race-stratified models involving numerically smaller populations, with important implications for studying disparities (Nethery et al, 2021). 

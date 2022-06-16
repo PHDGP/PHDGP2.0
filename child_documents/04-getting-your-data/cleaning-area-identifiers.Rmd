@@ -1,0 +1,86 @@
+## Cleaning Area Identifiers
+
+One of the most important aspects to pay attention to when cleaning
+georeferenced data is that area identifiers are stored as
+character or factor data types and not numeric types because if they are stored
+as numeric types leading 0s will be dropped and this may cause issues when 
+merging multiple datasets together if the area-keys are not coded in the same 
+way (e.g. in one dataset area-keys might be coded numeric and in another dataset 
+area-keys might be coded as a character or factor). 
+
+This can happen often with FIPS codes, like the 2-character state FIPS
+codes and 3-digit county FIPS code. For states like Alabama and Alaska with FIPS
+codes `01` and `02`, if these are mistakenly stored as numeric values, they will
+be truncated to as `1` and `2` which can introduce errors when trying to merge
+multiple datasets using FIPS codes.
+
+:::: {.infobox .note}
+For county FIPS codes, the `tigris` package has a handy built-in reference. 
+
+Once you've installed `tigris` (e.g. run `install.packages('tigris')`) and
+load the package (`library(tigris)`) you can access the built-in `fips_codes`
+data.frame.
+
+```{r}
+#| echo = FALSE,
+#| eval = TRUE
+library(knitr)
+library(kableExtra)
+knitr::kable(tigris::fips_codes) %>% 
+  kableExtra::kable_styling() %>% 
+  kableExtra::scroll_box(height = '500px')
+```
+::::
+
+Suppose, as can happen, that you download your data and find that due to a
+coding error the 5-digit combined state and county FIPS codes have been stored
+as numeric, causing leading zeroes to be truncated off.  If you check the FIPS
+codes and are reasonably confident that the only error is that leading
+left-hand-side zeroes have been omitted, you could do the following to correct
+the mistake:
+
+```{r}
+#| echo = FALSE,
+#| eval = TRUE
+example_df <- tibble::tribble(
+    ~FIPS,      ~Name, ~State,
+  "01001",  "Autauga",   "AL",
+  "01003",  "Baldwin",   "AL",
+  "01005",  "Barbour",   "AL",
+  "01007",     "Bibb",   "AL",
+  "01009",   "Blount",   "AL",
+  "01011",  "Bullock",   "AL",
+  "01013",   "Butler",   "AL",
+  "01015",  "Calhoun",   "AL",
+  "01017", "Chambers",   "AL",
+  "01019", "Cherokee",   "AL",
+  "01021",  "Chilton",   "AL"
+  )
+example_df$FIPS <- as.integer(example_df$FIPS)
+library(dplyr)
+library(stringr)
+```
+
+```{r}
+#| echo = TRUE,
+#| eval = TRUE
+head(example_df)
+
+library(stringr)
+library(dplyr)
+example_df <- example_df %>% mutate(FIPS = ifelse(
+  nchar(FIPS) == 4,
+  str_pad(
+    FIPS,
+    width = 5,
+    pad = '0',
+    side = 'left'
+  ),
+  FIPS
+))
+
+head(example_df)
+```
+
+The above code uses the `dplyr` and `stringr` packages, both part of the `tidyverse`
+and which have introductions here: https://dplyr.tidyverse.org/ and here: https://stringr.tidyverse.org/. 
