@@ -24,6 +24,7 @@ the following free, online books:
   - Spatial Data Science with applications in R by Edzer Pebesma and Roger Bivand <br> https://r-spatial.org/book/
   - Geocomputation with R by Robin Lovelace, Jakub Nowosad, and Jannes Muenchow <br> https://geocompr.robinlovelace.net/ 
   - Analyzing US Census Data: Methods, Maps, and Models in R, by Kyle Walker <br> https://walker-data.com/census-r/ 
+  - Geospatial Health Data: Modeling and Visualization with R-INLA and Shiny by Paula Moraga. https://www.paulamoraga.com/book-geospatial/index.html.
 ::::
 
 
@@ -34,50 +35,69 @@ emphasize the need for careful choice of the area level at which results are
 presented. In part, this is because it is well established that changing the
 areal units into which data are aggregated and analyzed can change the
 relationships observed in the data. This is known as the Modifiable Areal Unit
-Problem, which can be read about in (Wong 2004) and (Buzzelli 2020).  
+Problem, which can be read about in (Wong 2004) and (Buzzelli 2020). Of note,
+choice of area should not be arbitrary, but should be guided by a priori
+reasons, including which areas make the most sense to use to answer which
+questions. For example, analyses of population-wide health inequities within the
+entire US may wish to use census tract or county level data, whereas analyses
+more specifically focused on the political geography of health inequities may
+wish to use areas with political boundaries, e.g., state or congressional
+legislative districts [ref].
 
 For example at small area levels like the Census tract level, the underlying
 population may be so small that the health outcomes observed are quite noisy
 because a single additional case represents a large shift in the rate. In such a
-situation, it wouldn't necessarily be correct to say that the Census tract where
-the highest rates were observed are where the greatest underlying risk is
-because it could be an artifact of noise. This motivates the need for spatial
-smoothing, and we encourage the use of spatially smoothed estimates for
-choropleth maps showing health outcome rates to avoid such a potential pitfall.
+situation, it it could potentially be erroneous to infer that the Census tract
+with the highest observed rate has the greatest underlying risk because it could
+be an artifact of noise. This motivates the need for spatial smoothing, and we
+encourage the use of spatially smoothed estimates for choropleth maps showing
+health outcome rates to avoid such a potential pitfall.
 As an introduction to these pitfalls, we recommend the [Pitfalls to avoid](https://mgimond.github.io/Spatial/pitfalls-to-avoid.html) chapter from (Gimond 2022).
 
 
 It is worthwhile to remark on how different areal units can either center or
-marginalize social groups based on the geographic boundaries drawn -- and
-moreover addressing the question of who are excluded or inaccurately represented
-in our data (often those experiencing homelessness, incarceration, or other
-kinds of marginalization) because of the process by which our data are geocoded
-is critical to ensuring that our efforts towards advancing health equity are
-hitting their mark. As an example, one lesson we have learned from analyzing
-Boston area mortality data is that it can be quite useful to know the locations
-of and areas containing homeless shelters as some individuals experiencing
-homelessness at the time of their death had these as coded as their address of
-residence. Oftentimes georeferenced and geocoded data will have anomalous or
-idiosyncratic features such as areas where the rate appears to be infinite
-because population estimates are zero for that area despite having observed
-health outcomes, especially if the data are for small areas or particular
-sub-populations. There is not a single solution to these problems that does not
-vary regardless of each individual data analysis projects' context, but we
-encourage data analysts and visualizers to carefully consider the impacts the
-choice of boundaries have and the power structures built into whose experiences
-they center or marginalize.
+marginalize social groups based on the geographic boundaries employed. It is
+also crucial to be clear about which social groups are excluded or inaccurately
+represented in the area-based data, including but not limited to people who are
+unhoused, incarcerated, otherwise institutionalized or experiencing other kinds
+of marginalization. Warranting scrutiny are the protocols employed by the data
+holders to assign addresses and/or georeferenced codes to the records of persons
+who are not living in non-institutional residences, as well as who is counted
+towards the population totals of the specified geographic areas.As an example,
+one lesson we have learned from analyzing Boston area mortality data is that it
+can be quite useful to know the locations of and areas containing homeless
+shelters, because we have found that individuals designated as experiencing
+homelessness at the time of their death have had their place of death in the
+residential field of the death certificate listed as the address of the homeless
+shelter. The net impact can be to inflate the mortality rate of the census
+tracts in which these shelters are located.
+
+Oftentimes georeferenced and geocoded data will have anomalous or idiosyncratic
+features such as areas where the rate appears to be infinite because population
+estimates are zero for that area despite having observed health outcomes,
+especially if the data are for small areas or particular sub-populations.
+Although there is not a single solution to these problems, a key starting place
+is to examine the data critically to understand the socially-produced data
+protocols and social distribution of the populations at issue, so as to be on
+the lookout for these very real problems that arise from and manifest social
+spatial inequities. We accordingly encourage data analysts and visualizers to
+consider carefully the impacts the choice of areas, their boundaries, the
+processes by which the locations of people are assigned to these areas (whether
+as “numerators” or “denominators”), and the power relations affecting who is
+likely to be geocoded to these areas – and who is missed – whether as a “case”
+or member of the population from which the cases arise (i.e., “denominator”).
+
 
 To start to develop a wider perspective on how data visualization and mapping
-can be used, have a few books and articles we would recommend. Because data
-visualization and mapping are simply tools we can use to communicate data
-that we believe are important to share, they are certainly capable of reflecting
-bias and telling lies (Deluca and Nelson, 2017), (Fleckenstein 1991),
-(Monmonier 2021).  Tracing the history of some of those who were first
-interested in understanding the geographic distribution of burden associated
-with human disease and able to make maps, Tom Koch outlines the history of
-disease mapping in his book Disease Maps, Epidemics on the Ground (2011). In his
-followup work, Ethics in Everyday Places: Mapping Moral Stress, Distress, and
-Injury, he takes a broader perspective. 
+can be used, we list below a range of recommended books and articles. Because
+data visualization and mapping are powerful tools to communicate (or
+miscommunicate) data, it is critical to be aware of how they can reflect bias
+and tell lies (Deluca and Nelson, 2017), (Fleckenstein 1991), (Monmonier 2021),
+as well as reveal powerful truths (Koch 2017om Koch outlines the history of
+disease mapping in his book Disease Maps, Epidemics on the Ground (2011), and in
+his 2017 follow-up book, Ethics in Everyday Places: Mapping Moral Stress,
+Distress, and Injury, he takes a broader perspective.
+
 
 <!-- 
   # discussed above:
@@ -112,7 +132,13 @@ Monmonier, M. (2018) How to Lie with Maps, Third Edition. Chicago, IL: Universit
 
 Koch, T. (2011) Disease Maps: Epidemics on the Ground. Chicago, IL: University of Chicago Press. Available at: https://press.uchicago.edu/ucp/books/book/chicago/D/bo8490164.html (Accessed: 7 June 2022).
 
-Ethics in Everyday Places: Mapping Moral Stress, Distress, and Injury | Esri Press (2017). Available at: https://www.esri.com/en-us/esri-press/browse/ethics-in-everyday-places-mapping-moral-stress-distress-and-injury (Accessed: 7 June 2022).
+Koch, T. (2017) Ethics in Everyday Places: Mapping Moral Stress, Distress, and Injury | Esri Press (2017). Available at: https://www.esri.com/en-us/esri-press/browse/ethics-in-everyday-places-mapping-moral-stress-distress-and-injury (Accessed: 7 June 2022).
+
+Dorling D, Fairbairn D (1997). Mapping: Ways of Representing the World. Old Tappen, UK: Routledge.
+
+Tufte D (2001). The Visual Display of Quantitative Information. 2nd ed. Cheshire, CT: Graphics Press.
+
+Tufte ER (2020). Seeing with Fresh Eyes: Meaning, Space, Data, Truth. Cheshire, CT: Graphics Press.
 
 Gimond, M. (2022) Intro to GIS and Spatial Analysis. Available at: https://mgimond.github.io/Spatial/index.html (Accessed: 7 June 2022).
 

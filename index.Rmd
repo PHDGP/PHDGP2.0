@@ -2,9 +2,10 @@
 title: "Public Health Disparities Geocoding Project 2.0 Training Manual"
 author: "Christian Testa, Jarvis T Chen, Enjoli Hall, Dena Javadi, Justin Morgan, Tamara Rushovich,  Sudipta (Shu) Shah, Pamela D Waterman, Nancy Krieger"
 date: ""
-description: This repository is home to the code behind the free, open-access, online training
-materials for the Population Health Disparities Geocoding Project (PHDGP) 2.0
-workshop on analyzing geo-referenced health outcomes data
+description: |
+  The online training materials for the Population Health Disparities 
+  Geocoding Project (PHDGP) 2.0 workshop on analyzing geo-referenced health 
+  outcomes data.
 documentclass: book
 bibliography: [references.bib, packages.bib]
 biblio-style: apalike
@@ -15,6 +16,8 @@ link-citations: yes
 knitr::opts_chunk$set(
   echo = TRUE,
   out.width = '100%')
+
+library(here)
 ```
 
 # Public Health Disparities Geocoding Project 2.0 Training Manual {-}
@@ -29,7 +32,7 @@ https://www.hsph.harvard.edu/thegeocodingproject/save-the-date-the-public-health
 <span style='color:red'>
 DRAFT: FOR WORKSHOP PARTICIPANTS ONLY <br>
 DO NOT COPY, CITE OR CIRCULATE WITHOUT PERMISSION <br>
-UNTIL AUGUST 1 2022
+INTENDED FOR RELEASE AUGUST 1 2022
 </span>
 </mark>
 </center>

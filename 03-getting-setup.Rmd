@@ -114,3 +114,4 @@ here, we would recommend:
   https://geocompr.robinlovelace.net/.
   - Spatial Data Science with Applications in R by Edzer Pebesma and Roger Bivand. 
   https://r-spatial.org/book/.
+  - Geospatial Health Data: Modeling and Visualization with R-INLA and Shiny by Paula Moraga. https://www.paulamoraga.com/book-geospatial/index.html.

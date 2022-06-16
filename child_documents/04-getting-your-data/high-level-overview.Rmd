@@ -1,0 +1,38 @@
+
+## High Level Overview
+
+For the application of mapping area health outcome rates, georeferenced data are
+made up of three components: health outcome counts, population estimates, and
+the geographic boundaries of the areal units of interest. Each of these data may
+each come from different data sources, but they are linked together in practice
+by merging the data together by geographic area identifiers.
+
+```{r overviewSchematic}
+#| echo = FALSE,
+#| include = TRUE,
+#| fig.align = 'center',
+#| out.width = '100%',
+#| fig.cap = "In this workflow schematic, the components for creating georeferenced data are shown in the first two rows."
+knitr::include_graphics("images/04-getting-your-data/overview_schematic.png")
+```
+
+Some examples of area identifiers common in the United States context include
+codes for ZIP codes, county FIPS codes, census block or census tract IDs, etc.
+As shown in Figure \@ref(fig:censusGeographicHierarchy) (below), there are two
+major sets of geographies employed by the US Census Bureau. The first concerns
+fundamental administrative and political units (referred to as the “spine” of US
+Census geography) which are relevant to the primary rationale of the US census
+to allocate political representation (Krieger 2019); these areas include census
+block, block-groups, tracts, counties, and states, and corresponding units for
+American Indian, Alaska Native and Native Hawaiian areas, with the census block
+being the core area used to create voting districts (at the local, state, and
+federal levels). The second set includes an array of additional areas, which
+often cross the boundaries of these core Census geographic areas, such as ZIP
+Codes, school districts, traffic analysis zones, etc.
+
+If you are studying area level health outcome rates, you may find that you must
+source these different necessary pieces from different places. Population
+estimates can often come from the Census or its related data products, health
+outcomes may come from healthcare providers, public health departments,
+electronic health records (EHR), or other sources, and geography shapefiles are
+similarly available from numerous sources including the Census.
