@@ -513,7 +513,7 @@ health_insurance %>%
   xlab("ICEraceinc") + 
   ylab("Percent with Health Insurance") + 
   scale_y_continuous(labels = scales::percent_format()) + 
-  ggtitle("Relationship Between ICE for Racialized Economic Segregation and Percent with Health Insurance",
+  ggtitle("Relationship Between ICE for Racialized Economic Segregation and \nPercent with Health Insurance",
           "County Observations, Texas -- Weighted by Inverse Margin of Error") 
 
 
@@ -714,7 +714,7 @@ saveWidget(map, "data/10-temporal-health-insurance/map.html")
 health_insurance_sf %>% 
   filter(year == min(year)) %>% 
   left_join(model_df %>% ungroup() %>% select(GEOID, change_over_time), by = c('GEOID' = 'GEOID')) %>% 
-  filter(state == 'Massachusetts') %>% 
+  filter(state == 'Texas') %>% 
   ggplot(aes(fill = change_over_time)) + 
   geom_sf(color = 'white', size = .05) + 
   scale_fill_manual(values = c('increasing' = '#91CF60', 
