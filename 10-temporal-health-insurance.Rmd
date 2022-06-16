@@ -9,15 +9,21 @@ To learn more about the survey methodology used, please visit the [ACS website](
 ## Motivation, Research Questions, and Learning Objectives
 
 The goal of this case study is to gain familiarity with the ACS, visualize trends over time, model the effect of different Area-Based Social Metrics (ABSMs) on trends in a particular outcome. The outcome of interest in this case study is health insurance. The specific learning objectives are to: 
-Download specific ACS data
-Visualize (plot) and map estimates
-Characterize trends in the estimates by social variables
-Work with estimate uncertainty (margin of error) data to:
-Aggregate it up from stratified estimates (like aggregating private and public insurance rates together into overall insurance rates)
-Visualize uncertainty for individual areal units over time
-Model trends over time
+- Download health outcome and ABSM data from the ACS   
+- Visualize (plot) and map data  
+- Characterize trends in outcome of interest by ABSMs  
+- Work with estimate uncertainty (margin of error) data to:  
+    + Aggregate it up from stratified estimates (like aggregating private and public insurance rates together into overall insurance rates)
+    + Visualize uncertainty for individual areal units over time
+    + Model trends over time
+
 Although this case study will follow insurance rates over time from specified counties, the skills learned should be generalizable to pulling other ACS variables at other geographic levels.
-In this case study, we are particularly interested in observed differences in health insurance coverage across four large states: Massachusetts, California, Texas, and Florida. Our research questions are: 1) What are the trends in health insurance coverage over time in each state and what is the level of certainty in these trends? 2) What is the role of county-level poverty in affecting health insurance coverage over time across counties? And 3) What is the role of county-level income and racial inequality as measured by ICE in affecting health insurance coverage over time across counties?
+
+In this case study, we are particularly interested in observed differences in health insurance coverage across four US states (Massachusetts, California, Texas, and Florida) from 2012-2019. Our research questions are:  
+
+1) What are the trends in health insurance coverage from 2012-2019 in each state and what is the level of certainty in these trends?    
+2) How is county-level poverty associated with health insurance coverage from 2012-2019 in each state?   
+3) How is county-level racialized economic segregation as measured by the Index of Concentration at the Extremes (ICE) associated with health insurance coverage from 2012-2019 in each state?  
 
 
  <!-- TODO: 
@@ -113,7 +119,9 @@ health_insurance %<>%
     names_from = 'variable',
     values_from = c('estimate', 'moe'))
 
-# calculate adult, child, and 0-64 insurance rates by county and year 
+# calculate adult (18+ years), child, and 0-64 insurance rates by county and year 
+# Below we are add the estimated number of insured adults with a disability and the number of insured adults without a disability 
+# to get the total number of insured adults. We do the same for children and people aged 0-64 years.
 health_insurance %<>% mutate(
   # calculate numerators
   estimate_adult_insurance_numerator = (estimate_adult_insured_with_disability + estimate_adult_insured_no_disability),
@@ -316,6 +324,8 @@ reasons:
   2. Because it's easier to do our aggregation and data manipulation without the
   spatial/geometry data and to add it in afterwards as some functions from
   `dplyr` or the `tidyverse` may not work well with spatial data frames.
+  
+When you look at the maps, make sure to note that the scales differ! 
 
 ```{r}
 counties_sf <- 
@@ -325,6 +335,7 @@ counties_sf <-
     resolution = '20m') # here we're downloading 1:20m resolution data 
 
 # make sure to do an inner join since we have more than 1 row per county
+# for more information on different types of joins: https://statisticsglobe.com/r-dplyr-join-inner-left-right-full-semi-anti
 health_insurance_sf <- inner_join(
   counties_sf %>% select(GEOID, STATE_NAME), # when joining spatial data in, put the spatial data argument first so
   # the output inherits the spatial data class 
@@ -337,7 +348,7 @@ map_health_insurance_over_time <- function(state_name, outcome_var,
                                            fill_label = 'Percent with Health Insurance') {
   health_insurance_sf %>% 
     filter(STATE_NAME == state_name) %>% 
-    ggplot(aes(fill = {{ outcome_var }}, label = 'NAME')) + 
+    ggplot(aes(fill = {{ outcome_var }}, label = NAME)) + 
     geom_sf(color = 'white', size = .15) + 
     facet_wrap(~year, nrow = 2) + 
     scale_fill_distiller(palette = 'Blues', direction = 1, labels = scales::percent_format()) + 
@@ -359,9 +370,12 @@ map_health_insurance_over_time('Florida', estimate_zero_to_64_insurance_prop)
 map_health_insurance_over_time('Massachusetts', estimate_zero_to_64_insurance_prop)
 map_health_insurance_over_time('Texas', estimate_zero_to_64_insurance_prop)
 
-# this is an example where the 5-year estimates look very strange
-# 
-# we had identified this county by using plotly::ggplotly() on the last map 
+# Notice, in Texas there is one county that seems to experience a decrease in insurance coverage over time. This seems strange! Let's investigate. We can use plotly to help us identify that McCulloch County is decreasing. Next, we can plot the estimates and margin of error for just McCulloch County over time. 
+
+# Try it out!
+# library(plotly)
+# ggplotly(map_health_insurance_over_time('Texas', estimate_zero_to_64_insurance_prop))
+
 health_insurance %>% 
   filter(NAME == 'McCulloch County, Texas') %>% 
   ggplot(aes(x = year, y = estimate_zero_to_64_insurance_prop,
@@ -414,7 +428,11 @@ and maps.
 
 ## Adding ABSMs
 
-Now let's look at our social metrics
+Now let's look at our ABSMs. We are going to assess the association between poverty and health insurance and between racialized economic segregation (as measured by the ICE) and health insurance. 
+
+First, we will assess the association between poverty and health insurance by plotting scatter plots of the county percent poverty and the county percent with health insurance. We will add a smoothed line to the scatter using linear regression.  In plot 1, we will use unweighted data, and in plot 2, will use the inverse of the margin of error to weight the data. Can you see a difference when the inverse margin of error weights are included? 
+
+Next, we will plot the trend in heath insurance status by quintiles of poverty and ICE using loess smoothing. 
 
 ```{r}
 
@@ -464,8 +482,8 @@ health_insurance %>%
   ylab("Percent with Health Insurance") + 
   scale_x_continuous(labels = scales::percent_format()) + 
   scale_y_continuous(labels = scales::percent_format()) + 
-  ggtitle("Relationship Between Percent in Poverty and Percent with Health Insurance",
-          "County Observations, Massachusetts -- Unweighted") 
+  labs(title=str_wrap("Relationship Between Percent in Poverty and Percent with Health Insurance",width =33, indent=0, exdent=0),
+       subtitle=str_wrap("County Observations, Massachusetts -- Unweighted",width =42, indent=0, exdent=0)) 
 
 # massachusetts poverty relationship weighted by inverse margin of error
 plt2 <- 
@@ -479,8 +497,8 @@ health_insurance %>%
   ylab("Percent with Health Insurance") + 
   scale_x_continuous(labels = scales::percent_format()) + 
   scale_y_continuous(labels = scales::percent_format()) + 
-  ggtitle("Relationship Between Percent in Poverty and Percent with Health Insurance",
-          "County Observations, Massachusetts -- Weighted by Inverse Margin of Error") 
+  labs(title=str_wrap("Relationship Between Percent in Poverty and Percent with Health Insurance",width =33, indent=0, exdent=0),
+       subtitle=str_wrap("County Observations, Massachusetts -- Weighted by Inverse Margin of Error",width =42, indent=0, exdent=0)) 
 
 # put plot 1 and 2 side by side
 plt1 + plt2 
@@ -498,29 +516,6 @@ health_insurance %>%
   ggtitle("Relationship Between ICE for Racialized Economic Segregation and Percent with Health Insurance",
           "County Observations, Texas -- Weighted by Inverse Margin of Error") 
 
-# show stat_ellipses for ICEraceinc and poverty 
-# 
-# TODO: I (Christian) think we should remove this;  it looks pretty, but not sure if it's
-# compelling?
-# 
-# health_insurance %>% 
-#   filter(state == 'Texas', year == 2019) %>% 
-#   ggplot(aes(x = poverty_prop, y = estimate_zero_to_64_insurance_prop, 
-#              fill = cut(ICEraceinc, quantile(ICEraceinc, seq(0, 1, .2)), include.lowest = TRUE),
-#              color = cut(ICEraceinc,  quantile(ICEraceinc, seq(0, 1, .2)), include.lowest = TRUE),
-#              weight = 1/moe_zero_to_64_insurance_prop)) + 
-#   geom_point() + 
-#   stat_ellipse(geom = "polygon", alpha = .25) + 
-#   facet_wrap(~year, nrow = 2) + 
-#   scale_fill_brewer(palette = 'BrBG') + 
-#   scale_color_brewer(palette = 'BrBG') + 
-#   xlab("Percent in Poverty") + 
-#   ylab("Percent with Health Insurance") + 
-#   scale_x_continuous(labels = scales::percent_format()) + 
-#   scale_y_continuous(labels = scales::percent_format()) + 
-#   ggtitle("Relationship Between Percent in Poverty and Percent with Health Insurance Stratified by ICE for Racialized Economic Segregation",
-#           "County Observations, Texas -- Weighted by Inverse Margin of Error") 
-# 
 
 # smoothed insurance relationship with ICEraceinc quantiles over time 
 # using loess smoothing
@@ -540,7 +535,7 @@ health_insurance %>%
   labs(fill = "ICEraceinc Quantile", color = "ICEraceinc Quantile") + 
   theme(legend.position = 'bottom') + 
   scale_y_continuous(labels = scales::percent_format()) + 
-  ggtitle("Relationship Between Percent with Health Insurance by ICE for Racialized Economic Segregation over Time",
+  ggtitle("Relationship Between Percent with Health Insurance by ICE for Racialized \nEconomic Segregation over Time",
           "County Observations, Texas -- Weighted by Inverse Margin of Error") 
 
 # smoothed relationship between poverty (cut in quantiles) and insurance rates
@@ -563,10 +558,11 @@ health_insurance %>%
   guides(fill = guide_legend(nrow = 2), color = guide_legend(nrow = 2)) + 
   labs(fill = "Poverty Quantile", color = "Poverty Quantile") + 
   theme(legend.position = 'bottom') + 
-  ggtitle("Relationship Between Percent with Health Insurance by Percent in Poverty over Time",
+  ggtitle("Relationship Between Percent with Health Insurance by Percent in Poverty \nover Time",
           "County Observations, Texas -- Weighted by Inverse Margin of Error")
 
 ```
+Now, we are going to use linear regression with inverse margin of error weighting to assess the trends in insurance coverage by county. We will categorize each county as increase, stable/uncertain, or decreasing. We will visualize these results with maps and histograms.
 
 ```{r fit models to insurance data}
 #| eval = FALSE,
