@@ -128,7 +128,7 @@ Since then, there has been significant development in both the
 conceptualization of geocoded health disparities, types of ABSMs, and
 the technologies available to capture, analyze, and visualize them.
 
-Many indices of ABSMs have been developed around the world. Globally,
+Many ABSMs have been developed around the world. Globally,
 the Gini coefficient is one of the standards for measuring income
 inequality (with caveats around its use beyond larger aggregations and
 issues around spatial social polarization) (Shaw et al, 2007; Krieger et
@@ -140,7 +140,7 @@ General's social class classification systems (an ad hoc approach based
 on skill-level demarcations in occupational class), which in was
 replaced in 2000 by the theoretically-grounded National Statistics
 Socio-economic Classification (NS-SEC), which emphasizes employment
-relations and the conditions of occupations (UK Office of National Statistics, 2022). In the US, studies
+relations and the conditions of occupations (UK Office of National Statistics, 2022). Also commonly used is the English Index of Multiple Deprivation (McLennan et al, 2019). In the US, studies
 have generated or used composite indices of deprivation or social
 vulnerability based on selected census variables (O'Campo et al, 2008;
 Messer et al, 2006; Hu et al, 2021; ATSDR 2022).
@@ -335,6 +335,8 @@ Massey DS. The age of extremes: concentrated affluence and poverty in the twenty
 Massey DS. The prodigal paradigm returns: ecology comes back to sociology. In: Booth A, Crouter A, editors. Does It Take a Village? Community Effects on Children, Adolescents, and Families. Mahwah, NJ: Lawrence Erlbaum Associates; 2001. pp. 41–48.
 
 Massey DS. Reflections on the dimensions of segregation. Soc Forces. 2012;91(1):39–43.
+
+McLennan, David, Stefan Noble, Michael Noble, Emma Plunkett, Gemma Wright, and Nils Gutacker. "The English indices of deprivation 2019: technical report." (2019).
 
 Messer, L.C., Laraia, B.A., Kaufman, J.S., Eyster, J., Holzman, C.,
 Culhane, J., Elo, I., Burke, J.G. and O'campo, P., 2006. The development
