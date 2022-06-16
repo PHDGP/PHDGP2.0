@@ -1,21 +1,24 @@
 # Case Study 4: Case Study on Temporal Trends using American Community Survey (ACS) data (2012-2019) {#temporal-health-insurance}
 
-Outline for Case Study: 
+## Introduction
 
-We want participants to learn the following skills from this case study.  Though this
-case study will follow insurance rates over time from specified counties, the
-skills learned should be generalizable to pulling other variables from the ACS at
-other geographic levels. 
+The American Community Survey (ACS), conducted by the U.S. census bureau is a yearly survey (monthly samples providing annual updates) that provides vital information on educational attainment, jobs, occupations, veterans, house ownership, disability, poverty status, demographics, [and more](https://www.census.gov/programs-surveys/acs/guidance/subjects.html).
 
-  - How to pull variables from the ACS over time
-  - How to visualize (plot) and map estimates 
-  - Characterizing trends in the estimates by social variables
-  - How to work with estimate uncertainty (margin of error) data to:
-      * Aggregate it up from stratified estimates (like aggregating 
-        private and public insurance rates together into overall 
-        insurance rates)
-      * Visualize uncertainty for individual areal units over time 
-  - Model trends over time
+To learn more about the survey methodology used, please visit the [ACS website](https://www.census.gov/programs-surveys/acs/methodology/design-and-methodology.html).
+
+## Motivation, Research Questions, and Learning Objectives
+
+The goal of this case study is to gain familiarity with the ACS, visualize trends over time, model the effect of different Area-Based Social Metrics (ABSMs) on trends in a particular outcome. The outcome of interest in this case study is health insurance. The specific learning objectives are to: 
+Download specific ACS data
+Visualize (plot) and map estimates
+Characterize trends in the estimates by social variables
+Work with estimate uncertainty (margin of error) data to:
+Aggregate it up from stratified estimates (like aggregating private and public insurance rates together into overall insurance rates)
+Visualize uncertainty for individual areal units over time
+Model trends over time
+Although this case study will follow insurance rates over time from specified counties, the skills learned should be generalizable to pulling other ACS variables at other geographic levels.
+In this case study, we are particularly interested in observed differences in health insurance coverage across four large states: Massachusetts, California, Texas, and Florida. Our research questions are: 1) What are the trends in health insurance coverage over time in each state and what is the level of certainty in these trends? 2) What is the role of county-level poverty in affecting health insurance coverage over time across counties? And 3) What is the role of county-level income and racial inequality as measured by ICE in affecting health insurance coverage over time across counties?
+
 
  <!-- TODO: 
    We have done linear models for each county, but we haven't gotten more
@@ -29,12 +32,16 @@ other geographic levels.
   - Model estimates incorporating spatial uncertainty to smooth estimates
     and reduce noisiness in estimates in areas where little data is observed
     --> 
-          
+
+## Downloading your data
+
+Explore the ACS data dictionary to identify the variables of interest and to create your own data dictionary. Here is an example of the [2016 dictionary](https://api.census.gov/data/2016/acs/acs5/variables.html).
 
 ```{r}
 #| echo = TRUE,
 #| eval = FALSE
 
+# We need to load the following packages:
 library(tidycensus)
 library(tidyverse)
 library(tidyr)
@@ -230,6 +237,8 @@ health_insurance <- readRDS("data/10-temporal-health-insurance/health_insurance.
 
 Congrats!  You've downloaded your dataset!
 
+## Visualizing your Data
+
 Now on to visualizing estimates:
 
 ```{r}
@@ -403,6 +412,7 @@ map_health_insurance_over_time('Florida', outcome_var = moe_zero_to_64_insurance
 Congrats!  You can now visualize your estimates and uncertainty in plots
 and maps. 
 
+## Adding ABSMs
 
 Now let's look at our social metrics
 
