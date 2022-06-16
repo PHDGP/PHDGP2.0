@@ -1,6 +1,6 @@
 # Glossary {#glossary}
 
-**ABSM** see “Area-based socioeconomic measure”
+**ABSM** see “Area-based socioeconomic measure”/”Area-based social metric”
 
 **address cleaning** The process of taking an original address and retaining only key elements of that address (building number, street and street type), as well as correcting spelling errors and standardizing abbreviations.
 
@@ -10,9 +10,9 @@
 
 **area** A geographic region whose boundaries may be defined socially, topographically, or ecologically (singly or in combination).
 
-**area-based measure** see “area-based socioeconomic measure”
+**area-based measure** see “area-based socioeconomic measure”/”area-based social metric”
 
-**area-based socioeconomic measure** A specifically defined measure that is used to characterize the socioeconomic conditions of an area (as opposed to the socioeconomic position of individuals); for example, percent of persons living below poverty.
+**area-based socioeconomic measure/area-based social metric** A specifically defined measure that is used to characterize the social and contextual conditions of an area (as opposed to the social or economic characteristics of individuals). An “area-based socioeconomic measures,” for example, might pertain to the “percent of persons living below poverty”; an “area-based social metric” is a broader construct that can include but not be limited to economic data, e.g., a metric to measure racialized segregation or racialized economic segregation.
 
 **block group** “A subdivision of a census tract, generally containing between 600 and 3,000 people, with an optimum size of 1,500 people. Most block groups were delineated by local participants as part of the U.S. Census Bureau’s Participant Statistical Areas Program. It is the lowest level of the geographic hierarchy for which the U.S. Census Bureau tabulates and presents sample data. (from Appendix A. Census 2000 Geographic Terms and Concepts. https://www2.census.gov/geo/pdfs/reference/glossry2.pdf )
 
@@ -44,11 +44,11 @@
 
 **contextual factors** Attributes of areas that derive from structural or social characteristics of the area.
 
-**CT see census tract
+**CT** see census tract
 
 **cumulative distribution function** For a given value, the area under the probability function up to that value (i.e. cdf(x) = Pr[X<=x]). When calculated as part of deriving the relative index of inequality, the cumulative distribution function of an area-based socioeconomic measure (ordered from most affluent to most deprived) for a given value can be interpreted as the proportion of the population who are more affluent.
 
-denominator There are two definitions of denominator that depend on the measure being calculated. For calculating rates, the denominator is the amount of person-time observed during which time cases were eligible to occur. For calculating ABSMs, the denominator is the total number of persons in an area for which the ABSM was measured.
+**denominator** There are two definitions of denominator that depend on the measure being calculated. For calculating rates, the denominator is the amount of person-time observed during which time cases were eligible to occur. For calculating ABSMs, the denominator is the total number of persons in an area for which the ABSM was measured.
 
 **deprivation** “Deprivation can be conceptualized and measured, at both the individual and area level, in relation to: material deprivation, referring to ‘dietary, clothing, housing, home facilities, environment, location and work (paid and unpaid), and social deprivation, referring to rights in relation to ’employment, family activities, integration into the community, formal participation in social institutions, recreation and education’ “(from Krieger N. A Glossary for Social Epidemiology, J Epidemiol Community Health 2001; 55:693-700.)
 
@@ -62,7 +62,7 @@ denominator There are two definitions of denominator that depend on the measure 
 
 **gamma confidence intervals** Confidence intervals for the direct standardized rate based on the gamma distribution. A practical consequence of using gamma confidence intervals is that confidence intervals for rates will not cross zero. For more details see Fay MP, Feuer EJ. Confidence intervals for directly standardized rates: a method based on the gamma distribution. Statistics in Medicine 1997;16:791-801
 
-**gender** “A social construct regarding culture-bound conventions, roles and behaviors for, as well as relationships between and among, women and men and boys and girls.” (from Krieger N. A Glossary for Social Epidemiology, J Epidemiol Community Health 2001; 55:693-700.)
+**gender** “A social construct regarding culture-bound conventions, roles and behaviors for, as well as relationships between and among, women and men and boys and girls.” (from Krieger N. A Glossary for Social Epidemiology, J Epidemiol Community Health 2001; 55:693-700.) – with this definition focused on social divisions predicated on dominant social structures and norms shaped by both both sexism and gender binarism (see: Krieger N. Measures of Racism, Sexism, Heterosexism, and Gender Binarism for Health Equity Research: From Structural Injustice to Embodied Harm-An Ecosocial Analysis. Annu Rev Public Health. 2020 Apr 2;41:37-62. doi: 10.1146/annurev-publhealth-040119-094017. Epub 2019 Nov 25.).
 
 **geocoding** The assignment of a numeric code to a geographical location
 
@@ -78,11 +78,11 @@ denominator There are two definitions of denominator that depend on the measure 
 
 **incidence rate ratio** The ratio of two incidence rates. The incidence rate among the exposed proportion of the population, divided by the incidence rate in the unexposed portion of the population, gives a relative measure of the effect of a given exposure.
 
-**index of concentration at the extremes (ICE)** a measure of spatial social polarization quantifying extremes of deprived and privileged social groups using a single metric while jointly measuring economic and racial/ethnic segregation.
+**index of concentration at the extremes (ICE)** a measure of spatial social polarization quantifying the concentrations, within a specified area, of social groups at what are defined to be the extremes of deprivation and privilege for the specific metric chosen; examples of ICE measures can be in relation to income (quantifying the concentration of high vs. low income households, capturing high vs low economic privilege), racialized segregation (e.g., using the social groups white non-Hispanic vs. Black non-Hispanic persons, thereby capturing high vs low racialized privilege), or racialized economic segregation (e.g., using the social groups white non-Hispanic high income households vs. Black non-Hispanic low-income households, thereby capturing the joint exposure of racialized and economic residential segregation).
 
 **indirect age standardization** A method for adjusting a population rate for age, yielding the hypothetical rate that would have been observed if the population being studied had the same age distribution as an externally defined standard population. Indirect standardization is based on deriving an expected number of events using an externally defined standard population, and contrasting this value to the observed number of events in the population being studied. The expected number of events is derived by multiplying the stratum-specific counts in the study population by stratum-specific rates from a standard population. The ratio of total observed events to the number expected is the standardized mortality (or morbidity) ratio (SMR). The indirect standardized rate is calculated by multiplying the SMR by the crude rate from the standard population.
 
-**lifecourse perspective** “Refers to how health status at any given age, for a given birth cohort, reflects not only contemporary conditions but embodiment of prior living circumstances, in utero onwards” (from Krieger N. A Glossary for Social Epidemiology, J Epidemiol Community Health 2001; 55:693-700.)
+**lifecourse perspective** “Refers to how health status at any given age, for a given birth cohort, reflects not only contemporary conditions but embodiment of prior living circumstances, in utero onwards” (from Krieger N. A Glossary for Social Epidemiology, J Epidemiol Community Health 2001; 55:693-700.), with analyses taking into account age at exposure, duration of exposure, etiologic period, and whether there are critical or sensitive periods (by age group) in which exposures are most likely to increase risk (or protect from) the specified health outcomes.
 
 **material deprivation** see deprivation
 
@@ -90,11 +90,11 @@ denominator There are two definitions of denominator that depend on the measure 
 
 **numerator** There are two definitions of numerator that depend on the measure calculated. For calculating rates, the numerator is the number of events observed. For calculating ABSMs, the numerator is the number of persons or households in an area with the socioeconomic characteristic of interest.
 
-**occupational class** A measurement of socioeconomic position based upon job characteristics. One example is the British Registrar General’s Social Class scheme, based on skill. This was replaced in 2001 by an occupational measure based on job relations, the National Statistics Socio-Economic Classification system (NS-SEC); related, in this study “working class” occupations were conceptually defined as those as those employing non-supervisory employees (and for the ABSM “working class” measure, were operationally defined as those census occupational categories comprised chiefly of working class occupations).
+**occupational class** A measurement of socioeconomic position based upon job characteristics. One example is the original British Registrar General’s Social Class scheme, created in the early 20th c CE, which was based on skill. This was replaced in 2001 by the National Statistics Socio-Economic Classification system (NS-SEC), an occupational metric based on “employment relations and conditions of occupations” (see: https://www.ons.gov.uk/methodology/classificationsandstandards/otherclassifications/thenationalstatisticssocioeconomicclassificationnssecrebasedonsoc2010 ). In a US context, the NS-SEC can be adapted to create an ABSM “working class” measure, comprised of occupations in which those employed are primarily non-supervisory employees (see: Krieger N, Barbeau EM, Soobader MJ. Class matters: U.S. versus U.K. measures of occupational disparities in access to health services and health status in the 2000 U.S. National Health Interview Survey. Int J Health Serv. 2005;35(2):213-36. doi: 10.2190/JKRE-AH92-EDV8-VHYC.)
 
 **operational definition** A description of a variable in terms of how the variable is actually measured.
 
-**person-tim** The sum of the time at risk for all persons in a population.
+**person-time** The sum of the time at risk for all persons in a population.
 
 **Poisson model** A regression model used for count data.
 
@@ -102,13 +102,13 @@ denominator There are two definitions of denominator that depend on the measure 
 
 **poverty** “To be impoverished is to lack or be denied adequate resources to participate meaningfully in society” (from Krieger N. A Glossary for Social Epidemiology, J Epidemiol Community Health 2001; 55:693-700.)
 
-**poverty area** In the US, the federal criteria for being a “poverty area” is to be an area with a 20% or more of the population below the poverty line.
+**poverty area** In the US, the federal criteria for being a “poverty area” is to be an area with a 20% or more of the population below the poverty line (see: https://www.census.gov/library/publications/1995/demo/sb95-13.html ).
 
 **poverty line** A poverty threshold that takes into account household size and age composition and intended to indicate an income level below which subsistence needs are not met. The poverty line in the US is based on a value of three times the cost of the economy food basket in 1963, adjusted for inflation. See: “How the Census Bureau Measures Poverty (Official Measure)” at: http://www.census.gov/hhes/poverty/ povdef.html
 
 **public health surveillance system** A structure that facilitates the continuous and systematic collection of descriptive information for monitoring the health of populations (from Buehler, Chapter 22: Surveillance, in Rothman and Greenland, Modern Epidemiology, 2nd edition, 1998, p 435-457).
 
-**race/ethnicity** “A social, not biological, category, referring to social groups, often sharing cultural heritage and ancestry, that are forged by oppressive systems of race relations, justified by ideology, in which one group benefits from dominating other groups, and defines itself and others through this domination and the possession of selective and arbitrary physical characteristics (for example, skin color)” (from Krieger N. A Glossary for Social Epidemiology, J Epidemiol Community Health 2001; 55:693-700.)
+**racialized group and US categories of "race/ethnicity"** “A social, not biological, category, referring to social groups, often sharing cultural heritage and ancestry, that are forged by oppressive systems of race relations, justified by ideology, in which one group benefits from dominating other groups, and defines itself and others through this domination and the possession of selective and arbitrary physical characteristics (for example, skin color)” (from Krieger N. A Glossary for Social Epidemiology, J Epidemiol Community Health 2001; 55:693-700.). In the US, all federal data, including US census data, must conform to the 1997 Office of Management and Budget Revisions to the Standards of Classification of Federal Data on Race and Ethnicity, which require classification into categories of “races” and “ethnicity” (defined solely as “Hispanic” vs. “non-Hispanic”); see: https://www.govinfo.gov/content/pkg/FR-1997-10-30/pdf/97-28653.pdf . Work is underway at the US Census to shift from asking 2 separate questions (one about “race,” the other about “ethnicity”) to one question that includes both (along with the option to tick as many boxes as relevant); see: https://www.census.gov/library/stories/2021/08/improved-race-ethnicity-measures-reveal-united-states-population-much-more-multiracial.html 
 
 **rate difference** see incidence rate difference
 
