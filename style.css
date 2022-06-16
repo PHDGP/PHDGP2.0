@@ -31,3 +31,7 @@ pre[class] {
   max-height: 500px;
   overflow-y: auto;
 }
+
+.figure {
+  width: 100%;
+}

@@ -28,6 +28,7 @@ by merging the data together by geographic area identifiers.
 #| echo = FALSE,
 #| include = TRUE,
 #| fig.align = 'center',
+#| out.width = '100%',
 #| fig.cap = "In this workflow schematic, the components for creating georeferenced data are shown in the first two rows."
 knitr::include_graphics("images/04-getting-your-data/overview_schematic.png")
 

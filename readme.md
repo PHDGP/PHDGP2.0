@@ -1,7 +1,8 @@
 # The Public Health Disparities Geocoding Project 2.0 
 
-This repository is home to the code behind the free, open-access, online book (PHDGP 2.0) 
-that teaches readers how to analyze geo-referenced health data.
+This repository is home to the code behind the free, open-access, online training
+materials for the Population Health Disparities Geocoding Project (PHDGP) 2.0
+workshop on analyzing geo-referenced health outcomes data.
 
 This project is currently under development.
 

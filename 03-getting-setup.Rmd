@@ -1,22 +1,19 @@
 # Getting Setup with R and RStudio {#getting-setup}
 
-We recommend before moving on, readers should take care of
-downloading and installing R and RStudio as well as getting 
-some dependencies installed.
+We recommend before moving on, readers should download and install R and RStudio
+and the recommended R packages and dependencies.
 
 ### Principles for Reproducible Workflow and Programming
 
-To give a brief explanation as to why R and RStudio have been chosen to use
-throughout these course materials, we wanted to emphasize the principles behind
-our decisions: 1) As a matter of equity, the use of free (both free to use and
-freely licensed) software such as R and RStudio help to enable people with less
-financial means to engage with our work, taking it further, and thereby
-promoting the inclusion of people from more diverse backgrounds in science; 2)
-Data analysis and science should be open and transparent wherever and whenever
-possible, so as to promote the external reproduction, verification, and
-validation of findings.
+Two principles underlie why R and RStudio have been chosen to use throughout
+these course materials. First, as a matter of equity, the use of free (both free
+to use and freely licensed) software such as R and RStudio removes financial and
+administrative barriers to engaging with our work and facilitates the inclusion
+of people from more diverse backgrounds in science. Second, data analysis and
+science should be open and transparent wherever and whenever possible, so as to
+promote the external reproduction, verification, and validation of findings.
 
-:::: {.infobox .info}
+:::: {.infobox}
 The code examples in this book assume familiarity with the R programming
 language. You can still benefit from this book by reading the exposition without
 focusing on the code examples if you are not very familiar with R programming.
@@ -76,18 +73,12 @@ install.packages("INLA",repos=c(getOption("repos"),INLA="https://inla.r-inla-dow
 ```
 
 
-For the `sf` package, there are additional instructions here:
-https://r-spatial.github.io/sf/ for getting setup with the `gdal` (or
-Geospatial Data Abstraction Library, a translator library for raster and vector
-geospatial data formats) which is a dependency of `sf`.
-
-
 ### Note about "compiling from source"
 
-If, when installing these packages, R prompts you asking whether you'd like to
-install these packages from source, you do not need to.  Sometimes compiling
+If, when installing these packages, R prompts you asking whether you would like
+to install these packages “from source,” you do not need to. Sometimes compiling
 from source can be more difficult than installing the pre-built packages from
-CRAN if there are compilation errors. 
+CRAN if there are compilation errors.
 
 ### Tidycensus Special Instructions
 

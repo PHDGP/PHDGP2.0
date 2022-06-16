@@ -1,4 +1,4 @@
-# Case Study 3: COVID-19 Mortality in Chicago {#cook-county-covid}
+# Case Study 3: COVID-19 Mortality in Chicago (March 2020 - March 2022) {#cook-county-covid}
 
 ## Introduction 
 

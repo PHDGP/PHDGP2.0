@@ -1,4 +1,4 @@
-# Case Study 5: Case Study Comparing County Analyses of Inequities in Health Insurance using ACS vs. CDC PLACES data [2019] {#health-insurance-comparison}
+# Case Study 5: Case Study Comparing County Analyses of Inequities in Health Insurance using ACS vs. CDC PLACES data (2019) {#health-insurance-comparison}
 
 ## Introduction 
 
