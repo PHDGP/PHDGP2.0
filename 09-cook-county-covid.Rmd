@@ -172,7 +172,7 @@ popsizes %<>%
   )
 ```
 
-Since the Cook County Medical Examiner Case Archive data includes records on  deaths where the decedents' residential ZIP codes are inside as well as outside  Cook County, Illinois, we want to restrict our dataset to deaths where their county of residence was in Cook County. 
+Since the Cook County Medical Examiner Case Archive data includes records on  deaths where the decedents' residential ZCTAs are inside as well as outside  Cook County, Illinois, we want to restrict our dataset to deaths where their county of residence was in Cook County. 
 
 ```{r get relevant zip codes}
 #| echo = TRUE,
@@ -272,17 +272,17 @@ ggplot() +
   ggtitle("Cook County and Zip Code Tabulation Areas 90% Contained Within")
 
 # save the plot
-ggsave(here("images/09-cook-county-covid/cook_county_and_zip_codes.png"), width = 10, height = 6)
+# ggsave(here("images/09-cook-county-covid/cook_county_and_zip_codes.png"), width = 10, height = 6)
 
 here("images/04-getting-your-data/poverty_suffolk_county.png")
-# group population sizes together by age groups and race/ethnicity and zip code
+# group population sizes together by age groups and racialized group and zip code
 zips_with_population_estimates_by_race_ethnicity_and_age <-
   popsizes %>%
   filter(! is.na(age) & concept != 'SEX BY AGE') %>% # filter for overall population
   filter(geoid %in% zips_with_over_90pct_overlap$geoid) %$%
   left_join(zips_with_over_90pct_overlap, .)
 
-# code the Census race/ethnicity groups
+# code the Census racialized groups
 zips_with_population_estimates_by_race_ethnicity_and_age %<>% mutate(
   race_ethnicity = case_when(
     concept ==  "SEX BY AGE (BLACK OR AFRICAN AMERICAN ALONE)" ~ "Black, Hispanic or non-Hispanic",
@@ -318,14 +318,14 @@ zips_with_population_estimates_by_race_ethnicity_and_age %<>% mutate(
     age == "85 years and over" ~ "85 years and over"
   ))
 
-# sum age group population sizes by race_ethnicity
+# sum age group population sizes by racialized group
 zips_with_population_estimates_by_race_ethnicity_and_age %<>% group_by(geoid, age_group, race_ethnicity) %>%
   dplyr::summarize(
     estimate = sum(estimate, na.rm=T),
     moe = moe_sum(moe, estimate)
   )
 
-# check how large the population sizes are by race/ethnicity and age
+# check how large the population sizes are by racialized group and age
 # in each ZCTA
 zips_with_population_estimates_by_race_ethnicity_and_age %>% 
   ggplot(
@@ -339,7 +339,7 @@ zips_with_population_estimates_by_race_ethnicity_and_age %>%
   theme(axis.text.x = element_text(angle = 75, hjust = 1))
   
 
-ggsave(here("images/09-cook-county-covid/population_count_histogram.png"), height = 8, width = 10)
+# ggsave(here("images/09-cook-county-covid/population_count_histogram.png"), height = 8, width = 10)
 
 # check how many have estimates less than 10
 zips_with_population_estimates_by_race_ethnicity_and_age %>% 
@@ -352,8 +352,9 @@ zips_with_population_estimates_by_race_ethnicity_and_age %>%
 knitr::include_graphics(here("images/09-cook-county-covid/cook_county_and_zip_codes.png"))
 ```
 
-Now we're ready to add the population size estimates for each race/ethnicity and
-age-group by ZIP code.
+Now we're ready to add the population size estimates for each racialized group (white non-Hispanic, Black non-Hispanic, and Hispanic) and age-group by ZIP code.
+
+Note that the unit of geography for analysis is the US census-defined Zip Code Tabulation Area (ZCTA), which is related to but not identical with the US Postal Service ZIP Code (which is a unit of mail delivery, reflecting postal carrier routes, such that a given spatial area can encompass several ZIP Codes). To create ZCTAs, the US Census assigns each census block the most frequently occurring ZIP Code within the block. For technical information about ZCTAs, see: https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html 
 
 ```{r add population size estimates}
 #| echo = TRUE,
@@ -363,7 +364,7 @@ age-group by ZIP code.
 cook_county_deaths <- 
   readr::read_csv(here("data/09-cook-county-covid/Medical_Examiner_Case_Archive_-_COVID-19_Related_Deaths.csv"))
 
-# merge race/ethnicity and age-group specific denominators ----------------
+# merge racialized group and age-group specific denominators ----------------
 
 # use janitor::clean_names to standardize column name syntax into snake_case
 cook_county_deaths %<>% janitor::clean_names()
@@ -463,7 +464,7 @@ deaths_by_race_ethnicity_group <-
       mutate(race_ethnicity = race_ethnicity_groups[[i]])
   })
 
-# bind the tables for each of the race_ethnicity groups together
+# bind the tables for each of the racialized groups together
 deaths_by_race_ethnicity_group %<>% bind_rows()
 
 # check how many of the deaths proportionally were NA
@@ -524,7 +525,7 @@ df %>%
   theme(axis.text.x = element_text(angle = 75, hjust = 1)) + 
   ggtitle("Age Distribution of COVID-19 Deaths in Cook County, IL")
 
-ggsave(here("images/09-cook-county-covid/age_distribution_deaths.png"), width = 8, height = 6)
+# ggsave(here("images/09-cook-county-covid/age_distribution_deaths.png"), width = 8, height = 6)
 ```
 
 
@@ -534,10 +535,7 @@ ggsave(here("images/09-cook-county-covid/age_distribution_deaths.png"), width = 
 knitr::include_graphics(here("images/09-cook-county-covid/age_distribution_deaths.png"))
 ```
 
-We're in shape to add our area based socioeconomic metrics. We'll add the
-Index of Concentration at the Extremes for Racialized Economic Segregation, the
-proportion of the population under the poverty line, and the median income in
-each ZIP code.
+We're in shape to add our area based social metrics. We'll add the Index of Concentration at the Extremes for Racialized Economic Segregation, the proportion of the population under the poverty line, and the median income in each ZCTA.
 
 ```{r add absms}
 #| echo = TRUE,
@@ -752,18 +750,9 @@ df$prop_hispanic_cut <- df$prop_hispanic %>% cut(., illinois_prop_hispanic_cutpo
 df$prop_white_nh_cut <- df$prop_white_nh %>% cut(., illinois_prop_white_nh_cutpoints, include.lowest=TRUE)
 ```
 
-We have a few remaining necessary cleaning steps to perform before we're ready
-to model these data. Firstly, we're going to add discretized (cut) versions of
-the percent in poverty and median income measures.  This is because this helps
-to allow the model flexibility to fit nonlinear responses with increasing levels
-in these covariates.  Alternative approaches could involve fitting the models
-with smoothing splines on these variables instead, but we aren't showing that
-here today.
+We have a few remaining necessary cleaning steps to perform before we're ready to model these data. Firstly, we're going to add discretized (cut, i.e. categorical) versions of the percent in poverty and median income measures.  This is because this helps to allow the model flexibility to fit nonlinear responses with increasing levels in these covariates.  Alternative approaches could involve fitting the models with smoothing splines on these variables instead, but we aren't showing that here today.
 
-Additionally, we have to make sure our factor variables have appropriate 
-reference levels set.  Typically we set the reference level as the most 
-privileged group so that we can frame the results as "the _____ group has
-X times the mortality rate of the reference group." 
+Additionally, we have to make sure our factor variables have appropriate reference levels set. Typically we set the reference level as the most privileged group so that we can frame the results as "the _____ group has X times the mortality rate of the reference group." 
 
 ```{r final cleaning steps}
 #| echo = TRUE,
@@ -796,12 +785,12 @@ saveRDS(df_prepped, here("data/09-cook-county-covid/cook_county_mortality_cleane
 
 ## Visualizing Your Data
 
-
 ```{r visualize data, fig.width = 8, fig.height = 8}
 #| eval = FALSE,
 #| echo = TRUE
 
-df <- readRDS(here("data/09-cook-county-covid/cook_county_mortality_cleaned.rds"))
+#change this to point to where your downloaded file is
+df <- readRDS(here("data/09-cook-county-covid/cook_county_mortality_cleaned.rds")) 
 
 counties <- read_sf(here('data/09-cook-county-covid/cb_2018_us_county_5m/cb_2018_us_county_5m.shp'))
 
@@ -814,7 +803,7 @@ cook_county <- counties %>% filter(
     filter(county == 'Cook County', state == 'IL') %$% 
     paste0(state_code, county_code))
 
-# let's start by mapping the crude mortality rates in each race/ethnicity and 
+# let's start by mapping the crude mortality rates in each racialized group and 
 # age strata
 
 df %<>% mutate(deaths = ifelse(is.na(deaths), 0, deaths))
@@ -833,9 +822,10 @@ df %>%
   theme(legend.position = 'bottom',
         legend.text = element_text(angle = 75, hjust=1)
         ) + 
-  ggtitle("Crude Mortality Rates by ZCTA, Race/Ethnicity and Age Group")
+  ggtitle("Crude COVID-19 Mortality Rates by ZCTA, Racialized Group and Age Group",
+          subtitle = "March 2020 - March 2022")
 
-ggsave(here("images/09-cook-county-covid/raw_rates_by_zcta.png"), width = 14, height = 8)
+# ggsave(here("images/09-cook-county-covid/raw_rates_by_zcta.png"), width = 14, height = 8)
 
 # plot population sizes
 df %>% ggplot(aes(fill = population_estimate)) + 
@@ -851,9 +841,10 @@ df %>% ggplot(aes(fill = population_estimate)) +
         legend.text = element_text(angle = 75, hjust=1)
         ) + 
   labs(fill = 'Population Estimate') + 
-  ggtitle("Population Size by ZCTA, Race/Ethnicity and Age Group")
+  ggtitle("Population Size by ZCTA, Racialized Group and Age Group",
+          subtitle = "Data from ACS 2015-2019")
 
-ggsave(here("images/09-cook-county-covid/population_size_by_zcta.png"), width = 14, height = 8)
+# ggsave(here("images/09-cook-county-covid/population_size_by_zcta.png"), width = 14, height = 8)
 
 
 df %>% ggplot(aes(x = mortality_per100k_py, fill = race_ethnicity)) +
@@ -866,9 +857,11 @@ df %>% ggplot(aes(x = mortality_per100k_py, fill = race_ethnicity)) +
     breaks = c(0, 100, 1000, 5e4)
   ) + 
   xlab("Mortality Rate per 100,000 Person Years") + 
+  ggtitle("Histogram of Mortality Rates by ZCTA, Age Group and Racialized Group",
+          subtitle = "March 2020 - March 2022") +
   theme(legend.position = 'bottom')
 
-ggsave(here("images/09-cook-county-covid/raw_rates_histogram.png"), width = 16, height = 8)
+# ggsave(here("images/09-cook-county-covid/raw_rates_histogram.png"), width = 16, height = 8)
 
 df %>% 
   ggplot(
@@ -888,14 +881,15 @@ df %>%
   ) + 
   ylab("Mortality Rate per 100,000 Person Years") + 
   xlab("Population Size") + 
-  theme(legend.position = 'bottom')
+  theme(legend.position = 'bottom') + 
+  ggtitle("Population Size and Mortality Rates by ZCTA, Age Group and Racialized Group")
 
-ggsave(here("images/09-cook-county-covid/raw_rates_scatter.png"), width = 16, height = 8)
+# ggsave(here("images/09-cook-county-covid/raw_rates_scatter.png"), width = 16, height = 8)
 
 ```
 
 
-In the code chunk above we do some exploratory visualizations of the data. The first series of maps show the crude mortality rates by ZCTA, Race/Ethnicity and Age Group.
+In the code chunk above we do some exploratory visualizations of the data. The first series of maps show the crude mortality rates by ZCTA, Race/Ethnicity and Age Group. **To see a larger version of this or any other image on the online version of the book right click and select open image in new tab.**
 
 ```{r image raw rates by ZCTA}
 #| eval = TRUE,
@@ -962,7 +956,8 @@ df %>% select(geoid, prop_black, prop_white_nh, prop_hispanic) %>%
   ) + 
   theme_dark() + 
   labs(fill = "Population Percentage") + 
-  ggtitle("Racial/Ethnic Composition of ZCTAs in Cook County") + 
+  ggtitle("Composition in Relation to Racialized Groups",
+          subtitle = "ZCTAs in Cook County (including Chicago); Data from ACS 2015-2019") + 
   theme(legend.position = 'bottom',
         legend.text = element_text(angle = 75, hjust=1),
         axis.text.x = element_blank(),
@@ -971,7 +966,7 @@ df %>% select(geoid, prop_black, prop_white_nh, prop_hispanic) %>%
         axis.ticks.y = element_blank()
         )
 
-ggsave(here("images/09-cook-county-covid/racial_ethnic_composition.png"), width = 12, height = 8)
+# ggsave(here("images/09-cook-county-covid/racial_ethnic_composition.png"), width = 12, height = 8)
 
 # visualize median income
 df %>% 
@@ -988,9 +983,10 @@ df %>%
         axis.ticks.x = element_blank(),
         axis.ticks.y = element_blank()
         ) + 
-  ggtitle("Median Income in ZCTAs in Cook County")
+  ggtitle("Median Income",
+          subtitle = "ZCTAs in Cook County (including Chicago); Data from ACS 2015-2019")
 
-ggsave(here("images/09-cook-county-covid/median_income.png"), width = 8, height = 8)
+# ggsave(here("images/09-cook-county-covid/median_income.png"), width = 8, height = 8)
 
 # visualize ICEraceinc
 df %>% 
@@ -1002,7 +998,7 @@ df %>%
   labs(fill = paste0("High Income (>$100k annual household income) White non-Hispanic (high) vs.\n",
                      "Low Income (<$25k annual household income) People of Color (low)")) + 
   ggtitle("Index of Concentration at the Extremes for Racialized Economic Segregation",
-          "ZCTAs in Cook County") + 
+          "ZCTAs in Cook County (including Chicago); Data from ACS 2015-2019") + 
   guides(fill = guide_colourbar(
     title.position = "top",
     title.hjust = 0.5,
@@ -1019,7 +1015,7 @@ df %>%
         axis.ticks.y = element_blank()
         )
 
-ggsave(here("images/09-cook-county-covid/ICEraceinc.png"), width = 8, height = 8)
+# ggsave(here("images/09-cook-county-covid/ICEraceinc.png"), width = 8, height = 8)
 
 
 # visualize crowding 
@@ -1031,7 +1027,7 @@ df %>%
                        labels = scales::percent_format()) +
   labs(fill = "% Household Crowding") + 
   ggtitle("Household Crowding",
-          "ZCTAs in Cook County") + 
+          "ZCTAs in Cook County (including Chicago); Data from ACS 2015-2019") + 
   theme(
     legend.position = 'bottom',
         legend.title = element_text(size = 9),
@@ -1042,7 +1038,7 @@ df %>%
         axis.ticks.y = element_blank()
         )
 
-ggsave(here("images/09-cook-county-covid/crowding.png"), width = 8, height = 8)
+# ggsave(here("images/09-cook-county-covid/crowding.png"), width = 8, height = 8)
 
 
 # visualize poverty
@@ -1053,7 +1049,8 @@ df %>%
                        labels = scales::percent_format()) +
   theme_dark() + 
   labs(fill = 'Poverty Level') + 
-  ggtitle("Poverty Level, ZCTAs in Cook County") + 
+  ggtitle("Poverty Level",
+          subtitle = "ZCTAs in Cook County (including Chicago); Data from ACS 2015-2019") + 
   theme(legend.position = 'bottom',
         legend.text = element_text(angle = 75, hjust=1),
         axis.text.x = element_blank(),
@@ -1062,13 +1059,13 @@ df %>%
         axis.ticks.y = element_blank()
         )
 
-ggsave(here("images/09-cook-county-covid/poverty.png"), width = 8, height = 8)
+# ggsave(here("images/09-cook-county-covid/poverty.png"), width = 8, height = 8)
 
 
 ```
 
 
-The code above produces a series of maps that visualize the different ABSMs we will use in this analysis.
+The code above produces a series of maps that visualize the different ABSMs we will use in this analysis. Note that Chicago is situated in Cook County.
 ```{r image racialized group composition map}
 #| echo = FALSE
 knitr::include_graphics(here(
@@ -1128,7 +1125,7 @@ mapview::mapview(df %>%
 
 ## Analyzing the data
 
-### Differences in COVID-19 mortality rates by race/ethnicity 
+### Differences in COVID-19 mortality rates by racialized group
 
 ```{r aggregation 1, fig.width = 10, fig.height = 8}
 #| echo = TRUE,
@@ -1157,14 +1154,14 @@ ggplot() +
     position = position_dodge(width = .4)) + 
   xlab("Age Group") +
   ylab("Mortality per 100,000 person years")  +
-  labs(color = 'Race / Ethnicity', shape = 'Race / Ethnicity') +
+  labs(color = 'Racialized Group', shape = 'Racialized Group') +
   scale_color_manual(values = c("#E69F00", "#56B4E9", "#009E73")) + 
   scale_y_log10() + 
-  ggtitle("Mortality Rates by Race/Ethnicity",
+  ggtitle("Mortality Rates by Racialized Group",
           subtitle = "Poisson Model Confidence Intervals Shown") + 
   theme(axis.text.x = element_text(angle = 75, hjust=1)) 
 
-ggsave(here("images/09-cook-county-covid/crude_rates_by_raceethnicity.png"), width = 8, height = 6)
+# ggsave(here("images/09-cook-county-covid/crude_rates_by_raceethnicity.png"), width = 8, height = 6)
 ```
 
 ```{r image crude rates by racialized group}
@@ -1216,12 +1213,12 @@ ggplot(crude_results,
     n.breaks = 4,
     trans = scales::pseudo_log_trans()
   ) +
-  ylab("Racial/Ethnic Group") + 
+  ylab("Racialized Group") + 
   theme(axis.text.x = element_text(angle = 75, hjust = 1)) + 
   ggtitle("Modeled Incident Rate Ratios",
           subtitle = "White, Non-Hispanic is the reference racialized group")
 
-ggsave(here("images/09-cook-county-covid/modeled_IRR_by_raceethnicity.png"), width = 8, height = 6)
+# ggsave(here("images/09-cook-county-covid/modeled_IRR_by_raceethnicity.png"), width = 6, height = 4)
 ```
 
 ```{r image crude models results}
@@ -1318,9 +1315,18 @@ overall_models %>%
   filter(term != '(Intercept)') %>%
   filter(! stringr::str_detect(term, "age_group")) %>%
   mutate(term = stringr::str_remove(term, exposure_var)) %>% 
-  mutate(exposure_var = stringr::str_replace_all(exposure_var, "_", " ")) %>% 
+  #mutate(exposure_var = stringr::str_replace_all(exposure_var, "_", " ")) %>% 
+  mutate(exposure_var = recode(exposure_var, 
+                               crowding_cut = "Household Crowding",
+                               ICEraceinc_cut = "ICE for Racialized Economic Segregation",
+                               median_income_cut = "Median Income",
+                               prop_hispanic_cut = "Proportion Hispanic",
+                               prop_black_cut = "Proportion Black, Hispanic and non-Hispanic",
+                               prop_white_nh_cut = "Proportion White, non-Hispanic",
+                               prop_in_poverty_cut = "Proportion in Poverty"
+                               )) %>%
   mutate(exposure_var = stringr::str_wrap(exposure_var, 10)) %>% 
-  mutate(term_size = as.numeric(stringr::str_extract(term, "[0-9\\.\\-]+"))) %>% 
+  mutate(term_size = as.numeric(stringr::str_extract(term, "(?<=[\\(\\[])(.*)(?=,)"))) %>% 
   mutate(term = forcats::fct_reorder(term, -term_size)) %>% 
   ggplot(
     aes(
@@ -1347,7 +1353,7 @@ overall_models %>%
   ggtitle("Incident Rate Ratios",
           subtitle = "Separate Models Fit for Each Categorical Exposure")
 
-ggsave(here("images/09-cook-county-covid/exposure_coefficient_estimates_ecological.png"), width = 8, height = 8)
+# ggsave(here("images/09-cook-county-covid/exposure_coefficient_estimates_ecological.png"), width = 8, height = 8)
 ```
 
 
@@ -1358,7 +1364,7 @@ knitr::include_graphics(here("images/09-cook-county-covid/exposure_coefficient_e
 
 
 
-### Gradients in COVID-19 mortality by race/ethnicity in relation to ABSMs
+### Gradients in COVID-19 mortality by Racialized Group in relation to ABSMs
 ```{r modeling 2, fig.width = 10, fig.height = 8}
 #| eval = FALSE,
 #| echo = TRUE
@@ -1430,9 +1436,18 @@ race_ethnicity_stratified_models %>%
   filter(term != '(Intercept)') %>%
   filter(! stringr::str_detect(term, "age_group")) %>%
   mutate(term = stringr::str_remove(term, exposure_var)) %>% 
-  mutate(exposure_var = stringr::str_replace_all(exposure_var, "_", " ")) %>% 
+  #mutate(exposure_var = stringr::str_replace_all(exposure_var, "_", " ")) %>% 
+  mutate(exposure_var = recode(exposure_var, 
+                               crowding_cut = "Household Crowding",
+                               ICEraceinc_cut = "ICE for Racialized Economic Segregation",
+                               median_income_cut = "Median Income",
+                               prop_hispanic_cut = "Proportion Hispanic",
+                               prop_black_cut = "Proportion Black, Hispanic and non-Hispanic",
+                               prop_white_nh_cut = "Proportion White, non-Hispanic",
+                               prop_in_poverty_cut = "Proportion in Poverty"
+                               )) %>%
   mutate(exposure_var = stringr::str_wrap(exposure_var, 10)) %>% 
-  mutate(term_size = as.numeric(stringr::str_extract(term, "[0-9\\.\\-]+"))) %>% 
+  mutate(term_size = as.numeric(stringr::str_extract(term, "(?<=[\\(\\[])(.*)(?=,)"))) %>% 
   mutate(term = forcats::fct_reorder(term, -term_size)) %>% 
   ggplot(
     aes(
@@ -1452,9 +1467,9 @@ race_ethnicity_stratified_models %>%
   facet_grid(exposure_var~race_ethnicity, scales='free_y') + 
   theme(axis.text.x = element_text(angle = 75, hjust = 1)) + 
   ggtitle("Incident Rate Ratios",
-          subtitle = "Separate Models Fit for Each Categorical Exposure")
+          subtitle = "Separate Models Fit for Each Categorical Exposure and Racialized Group")
 
-ggsave(here("images/09-cook-county-covid/exposure_coefficient_estimates.png"), width = 14, height = 18)
+# ggsave(here("images/09-cook-county-covid/exposure_coefficient_estimates.png"), width = 14, height = 18)
 
 race_ethnicity_stratified_models %>%
   filter(term != '(Intercept)') %>%
@@ -1476,10 +1491,9 @@ race_ethnicity_stratified_models %>%
   scale_x_continuous(limits = c(0, NA), n.breaks = 4, trans = scales::pseudo_log_trans()) + 
   facet_grid(exposure_var~race_ethnicity, scales='free_y') + 
   theme(axis.text.x = element_text(angle = 75, hjust = 1)) + 
-  ggtitle("Incident Rate Ratios",
-          subtitle = "")
+  ggtitle("Incident Rate Ratios")
 
-ggsave(here("images/09-cook-county-covid/age_coefficient_estimates.png"), width = 14, height = 18)
+# ggsave(here("images/09-cook-county-covid/age_coefficient_estimates.png"), width = 14, height = 18)
 
 
 ```
@@ -1493,7 +1507,7 @@ knitr::include_graphics(here("images/09-cook-county-covid/exposure_coefficient_e
 
 ### Hierarchical and Spatial Models
 
-In the above examples, we modeled the associations between individual- and area-based measures with the outcome in aggregate across the county. However, we may also be interested in modeling the risk of mortality in each ZCTA. This can help us better understand the spatial distribution of risk. 
+In the examples above, we modeled the associations between individual- and area-based measures with the outcome in aggregate across the county. However, we may also be interested in modeling the risk of mortality in each ZCTA. This can help us better understand the spatial distribution of risk. 
 
 We may also want to take into account the fact that these ZCTAs are likely not independent of each other, but rather related to each other in a spatially structured fashion. That is, ZCTAs that are next to each other are more likely to have similar rates than ZCTAs that are farther apart.
 
@@ -1501,9 +1515,9 @@ One of the *statistical* challenges of estimating the risk in each ZCTA (or any 
 
 Put another way: let us say that a particular part of the county has high mortality rates. If we look at observations over a limited period of time, in each specific ZCTA separately, we may miss this just by chance due to the fact that the populations in individual ZCTAs are small, and thus fewer events are observed. However, if we pool information from neighboring ZCTAs, we would be able to obtain a more stable estimate of the risk.
 
-Hierarchical Bayesian models are a popular set of tools to conduct such estimations. Often, in such approaches, we will model the Standardized Mortality Ratio (SMR), standardized by age. The relative risk or SMR in area $i$, ($\theta_i$) is obtained by dividing the expected count ($E_i$) by the observed count $O_i$). How we calculate the "expected count" depends on the objectives of our study and analysis. For example, if we know that there are strong age effects, and want to estimate excess risk after accounting for age-composition differences between ZCTAs, we can take the age-strata-specific mortality rates for all of Cook County, and apply it to the age-distribution of each ZCTA. This tells us what the "expected" mortality count would be if each ZCTA experienced Cook County's average age-specific mortality rates. One could also standardize by race/ethnicity composition, but then we would not be able to estimate how race/ethnicity was associated with mortality. Similarly, age-standardization precludes the ability to look at the interaction between age and race/ethnicity, for example.
+Hierarchical Bayesian models are a popular set of tools to conduct such estimations. Often, in such approaches, we will model the Standardized Mortality Ratio (SMR), standardized by age. The relative risk or SMR in area $i$, ($\theta_i$) is obtained by dividing the expected count ($E_i$) by the observed count $O_i$). How we calculate the "expected count" depends on the objectives of our study and analysis. For example, if we know that there are strong age effects, and want to estimate excess risk after accounting for age-composition differences between ZCTAs, we can take the age-strata-specific mortality rates for all of Cook County, and apply it to the age-distribution of each ZCTA. This tells us what the "expected" mortality count would be if each ZCTA experienced Cook County's average age-specific mortality rates. One could also standardize by composition in relation to racialized groups, but then we would not be able to estimate how membership in racialized groups was associated with mortality. Similarly, age-standardization precludes the ability to look at the interaction between age and membership in racialized groups, for example.
 
-In this case, we will estimate the SMR using age-standardization. For each race/ethnicity group in each ZCTA, we obtain the age standardized SMR.
+In this case, we will estimate the SMR using age-standardization. For each racialized group in each ZCTA, we obtain the age standardized SMR.
 
 ```{r SMR calculation}
 #| eval = FALSE,
@@ -1538,21 +1552,21 @@ smr_df <- df %>% st_drop_geometry %>%
 
 ```
 
-So, in our dataset can calculate the Observed count $O_i$, the Expected count $E_i$ (based on age standardization), and the SMR $\theta_i$. The observed count approximately follows a Poisson distribution, such that:
+So, in our dataset we can calculate the Observed count $O_i$, the Expected count $E_i$ (based on age standardization), and the SMR $\theta_i$. The observed count approximately follows a Poisson distribution, such that:
 
 $$
 O_i \sim Poisson(\theta_i*E_i)
 $$
 
-That is, the observed county in any one ZCTA follows a Poisson distribution whose mean is the expected county times a relative risk / SMR. We are interested in this last component since it quantifies the "excess" or "reduced" risk in each area beyond what is "expected" by an age-composition. In our particular case, since we actually have race/ethnicity strata within each ZCTA, we can create a hierarchical structure such that:
+That is, the observed county in any one ZCTA follows a Poisson distribution whose mean is the expected county times a relative risk / SMR. We are interested in this last component since it quantifies the "excess" or "reduced" risk in each area beyond what is "expected" by an age-composition. In our particular case, since we actually have strata of racialized groups within each ZCTA, we can create a hierarchical structure such that:
 
 $$
 O_{ij} \sim Poisson(\theta_{ij}*E_{ij})
 $$
 
-Now, we are looking at observed, expected counts and SMR within each race-ethnicity strata $j$, within each ZCTA $i$.
+Now, we are looking at observed, expected counts and SMR within each racialized group strata $j$, within each ZCTA $i$.
 
-Let us visualize these crude SMRs for each ZCTA-race-ethnicity strata, along with their confidence intervals
+Let us visualize these crude SMRs for each ZCTA-racialized group strata, along with their confidence intervals
 
 ```{r crude_SMR_plot}
 #| eval = FALSE,
@@ -1566,11 +1580,11 @@ ggplot(data = smr_df %>% arrange(raw_SMR, desc(Exp)) %>% ungroup() %>%
                 size=0.2, alpha=0.4) +
   ylim(0,40) +
   ylab("Crude SMR") +
-  xlab("ZCTA-race/ethnicity strata") +
+  xlab("ZCTA-Racialized Group strata") +
   theme_bw() +
   theme(axis.text.x = element_blank())
 
-ggsave(here("images/09-cook-county-covid/raw_SMR_caterpillar.png"), height = 6, width = 8)
+# ggsave(here("images/09-cook-county-covid/raw_SMR_caterpillar.png"), height = 6, width = 8)
   
 ```
 
@@ -1591,7 +1605,7 @@ $$
 
 Here there is a county-wide intercept $\beta_0$, and ZCTA random effects $v_i$ that quantify the excess/reduced risk in each area from the county-wide average. Note that this is not a spatial model and we are still assuming that the ZCTAs are independent of each other.
 
-However, this model does not have any fixed effects for individual-level variables, so we are estimating the same SMR for each race/ethnicity strata within each ZCTA. We may do just this if we did not have any individual-level data. However, in our case, we are interested in estimating the effect of race-ethnicity, and we can include that in the fixed part of the model such that:
+However, this model does not have any fixed effects for individual-level variables, so we are estimating the same SMR for each racialized group strata within each ZCTA. We may do just this if we did not have any individual-level data. However, in our case, we are interested in estimating the effect of race-ethnicity, and we can include that in the fixed part of the model such that:
 
 $$
 log(\theta_{ij}) = \beta_0 + \mathbf{\beta}(race\_ethnicity_j) + v_i \\
@@ -1746,7 +1760,7 @@ coefficients_together %>%
   scale_x_continuous(limits = c(0, NA), n.breaks = 4) +
   ggtitle("Comparing Coefficient Estimates for Racialized Groups from Different Models")
 
-ggsave(here("images/09-cook-county-covid/coefficient_comparison.png"), height = 6, width = 8)
+# ggsave(here("images/09-cook-county-covid/coefficient_comparison.png"), height = 6, width = 8)
 
 ```
 
@@ -1756,7 +1770,7 @@ ggsave(here("images/09-cook-county-covid/coefficient_comparison.png"), height = 
 knitr::include_graphics(here("images/09-cook-county-covid/coefficient_comparison.png"))
 ```
 
-One of the motivations for fitting the hierarchical models is to get stable and smoothed estimates of each ZCTA. Let us visualize the modeled SMRs for each ZCTA-race-ethnicity strata, along with their confidence intervals, and compare them to the crude SMRs we calculated in the beginning.
+One of the motivations for fitting the hierarchical models is to get stable and smoothed estimates of each ZCTA. Let us visualize the modeled SMRs for each ZCTA-racialized group strata, along with their confidence intervals, and compare them to the crude SMRs we calculated in the beginning.
 
 ```{r SMR plots}
 #| eval = FALSE,
@@ -1781,14 +1795,14 @@ ggplot(data = caterpillar_plot) +
   facet_wrap(~SMR_type) +
   ylim(0,10) +
   ylab("Estimated and Crude SMRs") +
-  xlab("ZCTA-race/ethnicity strata") +
+  xlab("ZCTA-Racialized Group strata") +
   theme_bw() +
   theme(axis.text.x = element_blank()) +
   labs(color = "SMR Type") +
   ggtitle("Raw and Modeled SMRs for each ZCTA-Racialized Group strata")
   
 
-ggsave(here("images/09-cook-county-covid/caterpillar_plot_SMRs.png"), width = 9, height = 6)
+# ggsave(here("images/09-cook-county-covid/caterpillar_plot_SMRs.png"), width = 9, height = 6)
   
 ```
 
@@ -1798,7 +1812,7 @@ knitr::include_graphics(here("images/09-cook-county-covid/caterpillar_plot_SMRs.
 ```
 
 
-The hierarchical models can be most useful when we visualize the estimated ZCTA-specific effects. Since we have race/ethnicity strata within ZCTAs, we can plot maps for each group.
+The hierarchical models can be most useful when we visualize the estimated ZCTA-specific effects. Since we have racialized group strata within ZCTAs, we can plot maps for each group.
 
 ```{r modeled SMR comparison}
 #| eval = FALSE,
@@ -1835,7 +1849,7 @@ smr_df %>%
         ) +
   ggtitle("Raw and Modeled SMR Maps")
 
-ggsave(here("images/09-cook-county-covid/modeled_SMR_comparison_1.png"), width = 10, height = 8)
+# ggsave(here("images/09-cook-county-covid/modeled_SMR_comparison_1.png"), width = 10, height = 8)
   
 
 ```
@@ -2022,7 +2036,7 @@ smr_df %>%
         ) +
   ggtitle("Modeled SMR Maps", subtitle = "Each Racialized Group Modeled Separately") 
 
-ggsave(here("images/09-cook-county-covid/modeled_SMR_race_specific.png"), width = 12, height = 8)
+# ggsave(here("images/09-cook-county-covid/modeled_SMR_race_specific.png"), width = 12, height = 8)
 ```
 
 ```{r image racialized group specific SMR map}
@@ -2069,7 +2083,7 @@ smr_df %>%
   labs(fill = "Residual SMR") +
   ggtitle("ZCTA-specific model residuals", subtitle = "Each Racialized Group Modeled Separately") 
 
-ggsave(here("images/09-cook-county-covid/model_residuals_race_specific.png"), width = 9, height = 8)
+# ggsave(here("images/09-cook-county-covid/model_residuals_race_specific.png"), width = 9, height = 8)
 ```
 
 
@@ -2097,14 +2111,6 @@ Let us fit this model, using only the ICE for racialized economic segregation as
 smr_df_wnh <- smr_df %>% 
   filter(race_ethnicity == "White, non-Hispanic")
 #BYM
-formula_bym_mod2 <- Obs ~ 1 + race_ethnicity + ICEraceinc_cut + f(id, model="bym2", graph=INLA_adj_mat, scale.model=TRUE, constr=TRUE)
-
-model_bym_mod2 <- inla(formula_bym_mod2, family="poisson", 
-                          data = smr_df, E=Exp,
-                          control.predictor=list(compute=TRUE), 
-                          control.compute = list(dic = TRUE), verbose = F)
-
-
 formula_bym_wnh2 <- Obs ~ 1 + ICEraceinc_cut + f(id, model="bym2", graph=INLA_adj_mat, scale.model=TRUE, constr=TRUE)
 
 model_bym_wnh2 <- inla(formula_bym_wnh2, family="poisson", 
@@ -2151,7 +2157,7 @@ smr_df_h <- smr_df %>%
   filter(race_ethnicity == "Hispanic")
 
 #BYM
-formula_bym_h2 <- Obs ~ 1 + prop_in_poverty_cut + f(id, model="bym2", graph=INLA_adj_mat, scale.model=TRUE, constr=TRUE)
+formula_bym_h2 <- Obs ~ 1 + ICEraceinc_cut + f(id, model="bym2", graph=INLA_adj_mat, scale.model=TRUE, constr=TRUE)
 
 model_bym_h2 <- inla(formula_bym_h2, family="poisson", 
                           data = smr_df_h, E=Exp,
@@ -2178,13 +2184,52 @@ spatial_frac(model_bym_h2, length(unique(smr_df_h$geoid)))
 #| echo = TRUE
 
 coefficients_together2 <-
-  bind_rows(race_ethnicity_stratified_models,
-            tidy.inla(model_poisson_mod1) %>%
-              mutate(Model = "Hierarchical Poisson",
+  bind_rows(race_ethnicity_stratified_models %>% 
+              select(-data) %>%
+              filter(exposure_var == "ICEraceinc_cut"),
+            tidy.inla(model_bym_wnh2) %>%
+              mutate(model = "BYM",
+                     race_ethnicity = "White, non-Hispanic",
+                     exposure_var = "ICEraceinc_cut",
                      across(estimate:conf.high, ~ exp(.x))),
-            tidy.inla(model_bym_mod1) %>%
-              mutate(Model = "BYM",
-                     across(estimate:conf.high, ~ exp(.x)))) %>%
-  mutate(term = str_replace(term, "race_ethnicity", ""))
+            tidy.inla(model_bym_bhnh2) %>%
+              mutate(model = "BYM",
+                     race_ethnicity = "Black, Hispanic or non-Hispanic",
+                     exposure_var = "ICEraceinc_cut",
+                     across(estimate:conf.high, ~ exp(.x))),
+            tidy.inla(model_bym_h2) %>%
+              mutate(model = "BYM",
+                     race_ethnicity = "Hispanic",
+                     exposure_var = "ICEraceinc_cut",
+                     across(estimate:conf.high, ~ exp(.x)))) 
+
+
+
+coefficients_together2 %>%
+  filter(term != '(Intercept)') %>%
+  filter(! stringr::str_detect(term, "age_group")) %>%
+  mutate(term = stringr::str_remove(term, exposure_var)) %>% 
+  mutate(term_size = as.numeric(stringr::str_extract(term, "(?<=[\\(\\[])(.*)(?=,)"))) %>% 
+  mutate(term = forcats::fct_reorder(term, -term_size)) %>% 
+  ggplot(
+    aes(
+      x = estimate,
+      xmax = conf.high,
+      xmin = conf.low,
+      y = term,
+      color = model,
+      fill = model,
+      shape = model,
+      group = model  
+    )
+  ) +
+  geom_vline(xintercept = 1, linetype = 'dashed') +
+  geom_pointrange(position = position_dodge(width=.45)) +
+  scale_x_continuous(limits = c(0, NA), n.breaks = 4, trans = scales::pseudo_log_trans()) + 
+  facet_grid(~race_ethnicity, scales='free_y') + 
+  theme(axis.text.x = element_text(angle = 75, hjust = 1)) + 
+  ggtitle("Incident Rate Ratios",
+          subtitle = "Separate Models Fit for Each Categorical Exposure and Racialized Group")
+
 
 ```
