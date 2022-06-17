@@ -144,3 +144,48 @@ Gimond, M. (2022) Intro to GIS and Spatial Analysis. Available at: https://mgimo
 
 Lovelace, R., Nowosad, J. and Muenchow, J. (2022) Geocomputation with R. Available at: https://geocompr.robinlovelace.net/ (Accessed: 7 June 2022).
 
+## Health Equity 
+
+To understand the distribution of health and disease in place, it is necessary to collect, analyze, and visualize health data and area-based social metrics. It is equally important, however, that when documenting and mapping health inequities, we contextualize such data with adequate analysis of social, political, and ecological context. Shared observations of disparities in health do not necessarily translate to common understandings of cause, especially when population patterns of disease and health mirror population distributions of deprivation and privilege. Mapping and visualizing the uneven social and spatial distribution of health and disease in areas – which can be a particularly effective way of communicating health inequities to decision makers – without offering some explanatory context of the allocation of resources and hazards in these areas can perpetuate harmful ideas and actions that actually undermine the goal of eliminating health inequities.
+
+With the increasing availability of local health data such as the CDC PLACES program, as well as advancements in the availability and accessibility of geocoding services, there is ample opportunity to disaggregate health data, particularly to the neighborhood (census tract) level. Geographic disaggregation allows for more fine-grained analyses, including multilevel spatial modeling, which can inform more “targeted” interventions. But when presented by themselves with no explanatory context, such granular data can create or reinforce what sociologist Loïc Wacquant refers to as “territorial stigmatization,” whereby the characteristics or features of a place are associated with the moral character and behavior of its residents, or vice versa—especially for people and places who are already politically, economically, and socially marginalized and/or materially deprived of important resources (Chowkwanyun and Reed 2020). For example, if some places are found to have a high concentration of illness or disease, narratives and representations of those places as “diseased,” “contaminated,” could produce or reinforce existing stigma and lead to targeted interventions such as heightened policing and surveillance in an attempt to contain and control residents, reclamation or demolition of physical structures, and social neglect and abandonment (There are too many historical case studies of this, for these potential risks to be downplayed or ignored: Craddock 2004; Molina 2006; Roberts 2009; Lopez 2009; Krupar and Ehlers 2017).
+
+There are various approaches to countering territorial stigmatization. Mapping place-based risks and resource deficits that might help explain the spatial distribution of disease, illness, and injury along racial and socioeconomic lines can focus public and policy attention on shifting the context for health rather than individual behaviors and attitudes. For example, in the case of Covid-19, this could look like mapping and visualizing the uneven geographic distribution of preventive health care facilities or the concentration of respiratory hazards in areas of racialized concentrated poverty. Furthermore, one could map historical and political variables such as historical redlining that can offer important insight into how and why the social and spatial patterning of life-enhancing and harmful resources exists in an area as a result of racist policies and practices (Rothstein 2017; Mapping Inequality 2022; Krieger et al 2020a, 2020b; Wright et al. 2022). Additionally, asset mapping can provide helpful information about the strengths and resources of a community to facilitate discussion and action around building on these assets to address community needs and improve community health. 
+
+Analyzing and visualizing patterns of White wealth and health is also important to understanding and addressing patterns of population health and health inequities. Mapping and visualizing “racially concentrated areas of affluence” can help move research and policy attention away from a predominant concern for racially concentrated areas of poverty and toward a more holistic consideration of the full range of health outcomes, resources, and hazards in an area (Goetz et al. 2019). A focus on racially concentrated areas of affluence underscores the reality that structural racism produces both racialized concentrations of poverty (and hazards) and racialized concentrations of wealth (and health-enabling resources). Other measures such as the Index of Concentration of the Extremes (ICE), which quantifies the distribution of persons at the extremes of relationships of privilege and deprivation, also bring the full population and power relations into view, and can be scaled for use at multiple levels of geography (e.g., census block, census block group, census tract, city/town, county, etc.) (Massey 2001; Krieger et al. 2015, 2016, 2017, 2018). Initially developed to measure spatial polarization in economic terms (i.e., economic residential segregation), in public health studies we have extended its use to include novel measures of racialized residential segregation and racialized economic segregation (Krieger et al. 2015, 2016, 2017, 2018). 
+
+In summary, addressing health inequities requires a relational understanding of how systems of power and resource allocation simultaneously produce poor health for some and good health for others. This approach may require analyzing and visualizing patterns in population health and health inequities at large geographic scales such as counties and regions, rather than at the city level for example, to capture a wider range of values for health outcome data and area-based social metrics. 
+
+## References
+
+Chowkwanyun, M., & Reed Jr., A. L. (2020). Racial health disparities and Covid-19—Caution and context. New England Journal of Medicine, 383(3), 201-203. doi:10.1056/NEJMp2012910
+
+Craddock, S. (2004). City of plagues: Disease, poverty, and deviance in San Francisco. University of Minnesota Press. 
+Goetz, E. G., Damiano, A., & Williams, R. A. Racially concentrated areas of affluence: A preliminary investigation. Cityscape, 21(1), 99-123. 
+
+Krieger N, Van Wye G, Huynh M, Waterman PD, Maduro G, Li W, Gwynn C, Barbot O, Bassett MT. Historical redlining, structural racism, and preterm birth risk in New York City (2013-2017). Am J Public Health 2020; 110(7):1046-1053.
+
+Krieger N, Wright E, Chen JT, Waterman PD, Huntley ER, Arcaya M. Cancer stage at diagnosis, historical redlining, and current neighborhood characteristics: breast, cervical, lung, and colorectal cancer, Massachusetts, 2001-2015. Am J Epidemiol 2020; 189(10):1065-1075.  
+
+Krieger N, Waterman PD, Spasojevic J, Li W, Maduro G, Van Wye G. Public health monitoring of privilege and deprivation using the Index of Concentration at the Extremes (ICE). Am J Public Health 2016; 106: 256-253
+
+Krieger N, Waterman PD, Gryparis A, Coull BA. Black carbon exposure, socioeconomic and racial/ethnic spatial polarization, and the Index of Concentration at the Extremes (ICE). Health & Place 2015; 34:215-228.
+
+Krieger N, Feldman JM, Waterman PD, Chen JT, Coull BA, Hemenway D. Local residential segregation matters: stronger association of census tract compared to conventional city-level measures with fatal and non-fatal assaults (total and firearm related), using the Index of Concentration at the Extremes (ICE) for racial, economic, and racialized economic segregation, Massachusetts (US), 1995-2010. J Urban Health 2017; 94:244-258. 
+
+Krieger N, Kim R, Feldman J, Waterman PD. Using the Index of Concentration at the Extremes at multiple geographic levels to monitor health inequities in an era of growing spatial social polarization: Massachusetts, USA (2010-2014). Int J Epidemiol 2018; 47:788-819.
+
+Krupar, S., & Ehlers, N. (2017). Biofutures: Race and the governance of health. Environment and Planning D: Society and Space, 35(2), 222-240. doi:10.1177/0263775816654475
+
+Lopez, R. P. (2009). Public health, the APHA, and urban renewal. American Journal of Public Health, 99(9), 1603-1611. doi:10.2105/AJPH.2008.150136
+
+Mapping Inequality: Redlining in New Deal America. https://dsl.richmond.edu/panorama/redlining/#loc=5/39.1/-94.58&text=about ; accessed June 17, 2022.
+
+Molina, N. (2006). Fit to be citizens? Public health and race in Los Angeles, 1879-1939. University of California Press.
+
+Roberts Jr., S. K. (2009). Infectious fear: Politics, disease, and the health effects of segregation. University of North Carolina Press. 
+
+Rothstein R (2017). The Color of Law: A Forgotten History of How Our Government Segregated America. New York: Liveright Publishing Co., W.W. Norton & Co.
+
+Wright E, Waterman PD, Testa C, Chen JT, Krieger N. Breast Cancer Incidence, Hormone Receptor Status, Historical Redlining, and Current Neighborhood Characteristics in Massachusetts, 2005-2015. JNCI Cancer Spectrum 2022; 6(2);  https://doi.org/10.1093/jncics/pkac016; epub on-line: Feb 18, 2022.
+
