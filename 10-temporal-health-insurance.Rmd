@@ -527,8 +527,8 @@ health_insurance %>%
              weight = 1/moe_zero_to_64_insurance_prop)) + 
   # geom_jitter(height = 0) + 
   geom_smooth(alpha = 0.5, alpha = .5) +
-  scale_color_brewer(palette = 'Dark2') + 
-  scale_fill_brewer(palette = 'Dark2') + 
+  scale_color_brewer(palette = 'RdYlBu') + 
+  scale_fill_brewer(palette = 'RdYlBu') + 
   xlab("Year") +
   ylab("Percent with Health Insurance") + 
   guides(fill = guide_legend(nrow = 2), color = guide_legend(nrow = 2)) + 
@@ -550,8 +550,8 @@ health_insurance %>%
              weight = 1/moe_zero_to_64_insurance_prop
              )) + 
   geom_smooth() + 
-  scale_color_brewer(palette = 'Dark2', direction = -1) + 
-  scale_fill_brewer(palette = 'Dark2', direction = -1) + 
+  scale_color_brewer(palette = 'RdYlBu', direction = -1) + 
+  scale_fill_brewer(palette = 'RdYlBu', direction = -1) + 
   xlab("Year") +
   ylab("Percent with Health Insurance") + 
   scale_y_continuous(labels = scales::percent_format()) + 
@@ -560,6 +560,7 @@ health_insurance %>%
   theme(legend.position = 'bottom') + 
   ggtitle("Relationship Between Percent with Health Insurance by Percent in Poverty \nover Time",
           "County Observations, Texas -- Weighted by Inverse Margin of Error")
+
 
 ```
 Now, we are going to use linear regression with inverse margin of error weighting to assess the trends in insurance coverage by county. We will categorize each county as increase, stable/uncertain, or decreasing. We will visualize these results with maps and histograms.
