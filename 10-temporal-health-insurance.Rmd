@@ -759,6 +759,7 @@ ggsave("images/10-temporal-health-insurance/health_insurance_county_temporal.png
 #| echo = FALSE,
 #| include = TRUE,
 #| fig.cap = 'County observations of adult (age 19-64) health insurance rates in California, Florida, Massachusetts, and Texas'
+#| eval = FALSE
 knitr::include_graphics("images/10-temporal-health-insurance/health_insurance_county_temporal.png")
 
 # TODO: add figure caption explaining the jitter and transparency mapping to quantile ranges
