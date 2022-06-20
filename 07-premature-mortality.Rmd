@@ -1,10 +1,10 @@
 # Case Study 1: Premature Mortality in Massachusetts {#premature-mortality}
 
-## 6.1 Introduction
+## Introduction
 
 For this case study, we will be working with mortality data from the Massachusetts Registry of Vital Records and Statistics [https://www.mass.gov/lists/death-data] for the years 2013-2017. Vital Statistics registries are how states (which submit their data to the federal government) keep an official enumeration of deaths^1-3^; because the death certificates require data on residential address at time of death, they can be useful tools for monitoring health and health equity. Having data on the residential address of each individual allows us to geocode each observation to the physical and social environment in which the person lived. Death records also typically include demographic information about the deceased, including categories for racialized groups that conform to the 1997 US Office of Management and Budget (OMB) standards for the classification of federal data on race and ethnicity^4^. We will explore how social membership in racialized groups, area-based social metrics (ABSMs), and local government spending might impact premature mortality (mortality before the age of 65) across Massachusetts. To do this, we will pair our mortality data with demographic and socioeconomic data from the Census Bureau's 5-year American Community Survey (ACS) files, and utilize expenditure reports from the government of Massachusetts.
 
-## 6.2 Motivation, Research Questions, and Learning Objectives
+## Motivation, Research Questions, and Learning Objectives
 
 The goal of this case study is to develop familiarity with methods of exploring and visualizing racial disparities in health data. Our specific goals will be to:
 
@@ -25,13 +25,13 @@ The research questions we will seek to answer throughout this case study include
   4a. We can observe this with a multilevel model with city/town level with a random slope for race
   4b. We can also control for city expenditures
 
-## 6.3 Getting and Wrangling Your Data
+## Getting and Wrangling Your Data
 
 We are providing datasets for you to use throughout these case studies that have been wrangled and reshaped for your use, and we also provide code to show how you could go through that process on your own. Once you copy and run the code for your "Dependencies" You can skip ahead to the "Approach" section and follow along with the case study without issue.
  
 You can look at whole datasets in RStudio using the `View()` command, or look at summaries of the datasets by simply typing the dataset name into the console.
 
-### 6.3.1 Dependencies
+### Dependencies
 
 You will need these packages throughout our case study
 
@@ -55,7 +55,7 @@ library(INLA)
 library(broom)
 ```
 
-### 6.3.2 Your Health Outcome Data - Premature Mortality
+### Your Health Outcome Data - Premature Mortality
 
 Your data has been aggregated from individual observations into death counts by age, racialized group, census tract, and town. When you get unrestricted mortality files from government sources for research, you will likely receive files with one observation per death. After you have geocoded these observations, you will need to aggregate them up to the level of interest for your analysis. This requires aggregation not only up to the census tract level, but also age groups so we can do an appropriate age standardization, racialized groups so we can stratify our analyses by these groups, and towns so we can explore a second areal level of analysis. Below is some code (for example) to turn a raw mortality file into what has been provided to you, by merging census tracts and towns to the data, and then aggregating into groups that align with the age and racialized groups that match your denominator data. The vast majority of our area-based social metrics come from the U.S. Census, so the most detailed level for analysis available will be the census tract. We can use the `tigris` package to download census tract geometries and the `sf` package to link our geocoded observations to the appropriate census tracts. Ideally when performing an analysis that might include two or more levels, the smaller level (here, census tracts) would be nested entirely within the larger level (towns). In Massachusetts though, there are many towns that have such small populations that they are smaller than census tracts. For these towns, we have created a crosswalk wherein small towns have been combined to create larger super towns. These super towns each make up one census tract, so that each super town in the analysis will now have at least one census tract nested within it for an eventual multilevel analysis
 
@@ -234,7 +234,7 @@ head_ma_mort_agg <- read_rds("data/07-premature-mortality/head_ma_mort_agg.rds")
 head_ma_mort_agg
 ```
 
-### 6.3.3 Your Denominator Data and ABSM’s
+### Your Denominator Data and ABSM’s
 
 We download population data to use as denominators in our rates and ABSMs from the U.S. Census Bureau using the tidycensus package. This requires registering with the U.S. Census for an API key. The key is redacted here, but you can get your own from https://api.census.gov/data/key_signup.html. The ABSMs we will use for this analysis are percentage of the population in poverty, the Index of Concentration at the Extremes (ICE) which quantifies how persons in a specified area are concentrated into the top vs bottom of a specified societal distribution, and the ATSDR/CDC Social Vulnerability Index, which employs data on poverty, transportation access, crowded housing and other social variables to generate a measure of vulnerability for communities.
 
@@ -650,7 +650,7 @@ head_ma_absm_sum <- read_rds("data/07-premature-mortality/head_ma_absm_sum.rds")
 head_ma_absm_sum
 ```
 
-## 6.4 Approach 
+## Approach 
 
 Now that we have our data, let’s revisit our questions of interest:
 
@@ -661,7 +661,7 @@ Now that we have our data, let’s revisit our questions of interest:
 
 Let’s first visualize the overall socioeconomic gradient in premature mortality.
 
-### 6.4.1 What is the overall socioeconomic gradient in premature mortality?
+### What is the overall socioeconomic gradient in premature mortality?
 
 ```{r}
 include_graphics("images/07-premature-mortality/adj_smr_map.png")
@@ -1085,7 +1085,7 @@ In comparing the smoothed effect from our null model and the effects of our mode
 include_graphics("images/07-premature-mortality/smooth_smr_map.png")
 ```
 
-### 6.4.2 What is the racial disparity in premature mortality overall?
+### What is the racial disparity in premature mortality overall?
 
 ```{r}
 include_graphics("images/07-premature-mortality/map.irr.png")
@@ -1374,7 +1374,7 @@ ggsave("map.irr.png")
 include_graphics("images/07-premature-mortality/map.irr.png")
 ```
 
-### 6.4.3 What are the associations with ABSM by racialized group? 
+### What are the associations with ABSM by racialized group? 
 
 ```{r, echo = FALSE}
 include_graphics("images/07-premature-mortality/adj_map.p.irr.png")
@@ -1634,7 +1634,7 @@ summary.model1
 
 The impact of race becomes non-significant when poverty is included in the model. We could interpret this as poverty driving the relationship between race and premature mortality. If this is the case, what conclusions could we draw about the need for appropriately contextualized maps
 
-### 6.4.4 How does the racialized disparity vary across space? 
+### How does the racialized disparity vary across space? 
 
 Although much of our data is at the census tract level, census tracts are not areas of political decision making. Political decisions in Massachusetts are made at the level of cities and towns. We would expect that cities and towns might be more important than census tracts in determining premature mortality, because it is at those boundaries that resources are distributed. We can fit a multilevel model to test this hypothesis.
 
@@ -1742,7 +1742,7 @@ summary.mlm3 <- read_rds("data/07-premature-mortality/mlm3.rds")
 summary.mlm3
 ```
 
-## 6.5 Bibliography
+## Bibliography
 
 1) Friedman D, Hunter E, Parrish R (eds). (2005). Health statistics. New York: Oxford University Press.
 
