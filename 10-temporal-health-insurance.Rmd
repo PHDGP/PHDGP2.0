@@ -8,7 +8,10 @@ To learn more about the survey methodology used, please visit the [ACS website](
 
 ## Motivation, Research Questions, and Learning Objectives
 
-The goal of this case study is to gain familiarity with the ACS, visualize trends over time, model the effect of different Area-Based Social Metrics (ABSMs) on trends in a particular outcome. The outcome of interest in this case study is health insurance. The specific learning objectives are to: 
+The goal of this case study is to gain familiarity with the ACS, visualize trends over time, model the effect of different Area-Based Social Metrics (ABSMs) on trends in a particular outcome. 
+
+The outcome of interest in this case study is health insurance. The specific learning objectives are to: 
+
 - Download health outcome and ABSM data from the ACS   
 - Visualize (plot) and map data  
 - Characterize trends in outcome of interest by ABSMs  
