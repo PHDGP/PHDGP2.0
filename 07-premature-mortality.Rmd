@@ -1,10 +1,14 @@
 # Case Study 1: Premature Mortality in Massachusetts {#premature-mortality}
 
-## Introduction
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 6.1 Introduction
 
 For this case study, we will be working with mortality data from the Massachusetts Registry of Vital Records and Statistics [https://www.mass.gov/lists/death-data] for the years 2013-2017. Vital Statistics registries are how states (which submit their data to the federal government) keep an official enumeration of deaths^1-3^; because the death certificates require data on residential address at time of death, they can be useful tools for monitoring health and health equity. Having data on the residential address of each individual allows us to geocode each observation to the physical and social environment in which the person lived. Death records also typically include demographic information about the deceased, including categories for racialized groups that conform to the 1997 US Office of Management and Budget (OMB) standards for the classification of federal data on race and ethnicity^4^. We will explore how social membership in racialized groups, area-based social metrics (ABSMs), and local government spending might impact premature mortality (mortality before the age of 65) across Massachusetts. To do this, we will pair our mortality data with demographic and socioeconomic data from the Census Bureau's 5-year American Community Survey (ACS) files, and utilize expenditure reports from the government of Massachusetts.
 
-## Motivation, Research Questions, and Learning Objectives
+## 6.2 Motivation, Research Questions, and Learning Objectives
 
 The goal of this case study is to develop familiarity with methods of exploring and visualizing racial disparities in health data. Our specific goals will be to:
 
@@ -25,22 +29,17 @@ The research questions we will seek to answer throughout this case study include
   4a. We can observe this with a multilevel model with city/town level with a random slope for race
   4b. We can also control for city expenditures
 
-## Getting and Wrangling Your Data
+## 6.3 Getting and Wrangling Your Data
 
 We are providing datasets for you to use throughout these case studies that have been wrangled and reshaped for your use, and we also provide code to show how you could go through that process on your own. Once you copy and run the code for your "Dependencies" You can skip ahead to the "Approach" section and follow along with the case study without issue.
  
 You can look at whole datasets in RStudio using the `View()` command, or look at summaries of the datasets by simply typing the dataset name into the console.
 
-### Dependencies
+### 6.3.1 Dependencies
 
 You will need these packages throughout our case study
 
 ```{r dependencies, message = FALSE}
-
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
-
 # Libraries - if this code does not run for you, you may need to run install.package("package_name")
 library(knitr)
 library(tidyverse)
@@ -60,25 +59,20 @@ library(INLA)
 library(broom)
 ```
 
-### Your Health Outcome Data - Premature Mortality
+### 6.3.2 Your Health Outcome Data - Premature Mortality
 
 Your data has been aggregated from individual observations into death counts by age, racialized group, census tract, and town. When you get unrestricted mortality files from government sources for research, you will likely receive files with one observation per death. After you have geocoded these observations, you will need to aggregate them up to the level of interest for your analysis. This requires aggregation not only up to the census tract level, but also age groups so we can do an appropriate age standardization, racialized groups so we can stratify our analyses by these groups, and towns so we can explore a second areal level of analysis. Below is some code (for example) to turn a raw mortality file into what has been provided to you, by merging census tracts and towns to the data, and then aggregating into groups that align with the age and racialized groups that match your denominator data. The vast majority of our area-based social metrics come from the U.S. Census, so the most detailed level for analysis available will be the census tract. We can use the `tigris` package to download census tract geometries and the `sf` package to link our geocoded observations to the appropriate census tracts. Ideally when performing an analysis that might include two or more levels, the smaller level (here, census tracts) would be nested entirely within the larger level (towns). In Massachusetts though, there are many towns that have such small populations that they are smaller than census tracts. For these towns, we have created a crosswalk wherein small towns have been combined to create larger super towns. These super towns each make up one census tract, so that each super town in the analysis will now have at least one census tract nested within it for an eventual multilevel analysis
 
 ```{r wrangling_outcome, eval = FALSE}
-
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
-
 # the raw mortality data, with the geocoded coordinates converted into spatial feature (sf) data
-ma_mort <- read_rds("data/07-premature-mortality/ma_mort_geo.RDS") %>% 
+ma_mort <- read_rds("ma_mort_geo.RDS") %>% 
   st_as_sf(coords=c("lon","lat"), crs = 4269)
 
 # Importing tract shapefile using tigris package
 tracts_sf <- tracts(state = "25", year = "2010")
 
 # Linking Census Tracts and Tiny Towns File
-supertowns <- read_excel("data/07-premature-mortality/ma ct to supertinytowns.xlsx", col_names = FALSE, col_types = "text") %>%
+supertowns <- read_excel("ma ct to supertinytowns.xlsx", col_names = FALSE, col_types = "text") %>%
   transmute(GEOID10 = ...1,
             super_town = str_to_lower(...2))
 
@@ -121,16 +115,16 @@ ma_mort_ct <- st_join(tracts_sf, ma_mort, left = FALSE) %>%
 
 # Aggregating the data by our selected variables of interest
 # Dropping deaths that occurred after age 65
+# Creating Category Totals foe each variable
 ma_mort_agg <- ma_mort_ct %>%
   filter(age < 65) %>% 
   mutate(age_cat = cut(age,
                        breaks = c(-1,4,9,14,19,24,29,34,39,44,49,54,59,64),
                        labels = c("0-4",  "5-9",  "10-14","15-19","20-24",
                                   "25-29","30-34","35-39","40-44","45-49",
-                                  "50-54","55-59","60-64")),
-         race_group = racegroup) %>%
+                                  "50-54","55-59","60-64"))) %>%
   select(-c(age, race, immigrant, educ_years, contains("icd10"),
-            contains("address"), zip, geo_town, contains("type"),
+            contains("address"), zip, super_town, contains("type"),
             north, south, east, west, date, hisp)) %>%
   group_by(year,
            age_cat,
@@ -139,10 +133,106 @@ ma_mort_agg <- ma_mort_ct %>%
            super_town,
            GEOID10) %>%
   summarise(deaths = n()) %>%
-  ungroup() 
+  ungroup() %>%
+  pivot_wider(id_cols = c(year, GEOID10, super_town),
+              names_from = c("race_group","sex","age_cat"),
+              values_from = deaths,
+              names_sep = "__",
+              values_fill = 0) %>%
+  rowwise() %>%
+  mutate(`Total__Male__0-4` = sum(c_across(ends_with("__Male__0-4"))),
+         `Total__Male__5-9` = sum(c_across(ends_with("__Male__5-9"))),
+         `Total__Male__10-14` = sum(c_across(ends_with("__Male__10-14"))),
+         `Total__Male__15-19` = sum(c_across(ends_with("__Male__15-19"))),
+         `Total__Male__20-24` = sum(c_across(ends_with("__Male__20-24"))),
+         `Total__Male__25-29` = sum(c_across(ends_with("__Male__25-29"))),
+         `Total__Male__30-34` = sum(c_across(ends_with("__Male__30-34"))),
+         `Total__Male__35-39` = sum(c_across(ends_with("__Male__35-39"))),
+         `Total__Male__40-44` = sum(c_across(ends_with("__Male__40-44"))),
+         `Total__Male__45-49` = sum(c_across(ends_with("__Male__45-49"))),
+         `Total__Male__50-54` = sum(c_across(ends_with("__Male__50-54"))),
+         `Total__Male__55-59` = sum(c_across(ends_with("__Male__55-59"))),
+         `Total__Male__60-64` = sum(c_across(ends_with("__Male__60-64"))),
+          Total__Male__Total  = sum(c_across(starts_with("Total__Male"))),
 
+         `Total__Female__0-4` = sum(c_across(ends_with("__Female__0-4"))),
+         `Total__Female__5-9` = sum(c_across(ends_with("__Female__5-9"))),
+         `Total__Female__10-14` = sum(c_across(ends_with("__Female__10-14"))),
+         `Total__Female__15-19` = sum(c_across(ends_with("__Female__15-19"))),
+         `Total__Female__20-24` = sum(c_across(ends_with("__Female__20-24"))),
+         `Total__Female__25-29` = sum(c_across(ends_with("__Female__25-29"))),
+         `Total__Female__30-34` = sum(c_across(ends_with("__Female__30-34"))),
+         `Total__Female__35-39` = sum(c_across(ends_with("__Female__35-39"))),
+         `Total__Female__40-44` = sum(c_across(ends_with("__Female__40-44"))),
+         `Total__Female__45-49` = sum(c_across(ends_with("__Female__45-49"))),
+         `Total__Female__50-54` = sum(c_across(ends_with("__Female__50-54"))),
+         `Total__Female__55-59` = sum(c_across(ends_with("__Female__55-59"))),
+         `Total__Female__Total` = sum(c_across(starts_with("Total__Female"))),
+         `Total__Female__60-64` = sum(c_across(ends_with("__Female__60-64"))),
+          Total__Total__Total  = `Total__Female__Total` + `Total__Male__Total`,
+
+         `Non-Hispanic Black__Male__35-44` = `Non-Hispanic Black__Male__35-39` + `Non-Hispanic Black__Male__40-44`,
+         `Non-Hispanic Black__Male__45-54` = `Non-Hispanic Black__Male__45-49` + `Non-Hispanic Black__Male__50-54`,
+         `Non-Hispanic Black__Male__55-64` = `Non-Hispanic Black__Male__55-59` + `Non-Hispanic Black__Male__60-64`,
+         `Non-Hispanic Black__Male__Total` = sum(c_across(starts_with("Non-Hispanic Black__Male"))),
+
+         `Non-Hispanic Black__Female__35-44` = `Non-Hispanic Black__Female__35-39` + `Non-Hispanic Black__Female__40-44`,
+         `Non-Hispanic Black__Female__45-54` = `Non-Hispanic Black__Female__45-49` + `Non-Hispanic Black__Female__50-54`,
+         `Non-Hispanic Black__Female__55-64` = `Non-Hispanic Black__Female__55-59` + `Non-Hispanic Black__Female__60-64`,
+         `Non-Hispanic Black__Female__Total` = sum(c_across(starts_with("Non-Hispanic Black__Female"))),
+         `Non-Hispanic Black__Total__Total` = `Non-Hispanic Black__Female__Total` + `Non-Hispanic Black__Male__Total`,
+
+         `Non-Hispanic Native American, Alaskan Native, Other__Male__35-44` = `Non-Hispanic Native American, Alaskan Native, Other__Male__35-39` + `Non-Hispanic Native American, Alaskan Native, Other__Male__40-44`,
+         `Non-Hispanic Native American, Alaskan Native, Other__Male__45-54` = `Non-Hispanic Native American, Alaskan Native, Other__Male__45-49` + `Non-Hispanic Native American, Alaskan Native, Other__Male__50-54`,
+         `Non-Hispanic Native American, Alaskan Native, Other__Male__55-64` = `Non-Hispanic Native American, Alaskan Native, Other__Male__55-59` + `Non-Hispanic Native American, Alaskan Native, Other__Male__60-64`,
+         `Non-Hispanic Native American, Alaskan Native, Other__Male__Total` = sum(c_across(starts_with("Non-Hispanic Native American, Alaskan Native, Other__Male"))),
+
+         `Non-Hispanic Native American, Alaskan Native, Other__Female__35-44` = `Non-Hispanic Native American, Alaskan Native, Other__Female__35-39` + `Non-Hispanic Native American, Alaskan Native, Other__Female__40-44`,
+         `Non-Hispanic Native American, Alaskan Native, Other__Female__45-54` = `Non-Hispanic Native American, Alaskan Native, Other__Female__45-49` + `Non-Hispanic Native American, Alaskan Native, Other__Female__50-54`,
+         `Non-Hispanic Native American, Alaskan Native, Other__Female__55-64` = `Non-Hispanic Native American, Alaskan Native, Other__Female__55-59` + `Non-Hispanic Native American, Alaskan Native, Other__Female__60-64`,
+         `Non-Hispanic Native American, Alaskan Native, Other__Female__Total` = sum(c_across(starts_with("Non-Hispanic Native American, Alaskan Native, Other__Female"))),
+         `Non-Hispanic Native American, Alaskan Native, Other__Total__Total` = `Non-Hispanic Native American, Alaskan Native, Other__Female__Total` + `Non-Hispanic Native American, Alaskan Native, Other__Male__Total`,
+
+         `Non-Hispanic White__Male__35-44` = `Non-Hispanic White__Male__35-39` + `Non-Hispanic White__Male__40-44`,
+         `Non-Hispanic White__Male__45-54` = `Non-Hispanic White__Male__45-49` + `Non-Hispanic White__Male__50-54`,
+         `Non-Hispanic White__Male__55-64` = `Non-Hispanic White__Male__55-59` + `Non-Hispanic White__Male__60-64`,
+         `Non-Hispanic White__Male__Total` = sum(c_across(starts_with("Non-Hispanic White__Male"))),
+
+         `Non-Hispanic White__Female__35-44` = `Non-Hispanic White__Female__35-39` + `Non-Hispanic White__Female__40-44`,
+         `Non-Hispanic White__Female__45-54` = `Non-Hispanic White__Female__45-49` + `Non-Hispanic White__Female__50-54`,
+         `Non-Hispanic White__Female__55-64` = `Non-Hispanic White__Female__55-59` + `Non-Hispanic White__Female__60-64`,
+         `Non-Hispanic White__Female__Total` = sum(c_across(starts_with("Non-Hispanic White__Female"))),
+         `Non-Hispanic White__Total__Total` = `Non-Hispanic White__Female__Total` + `Non-Hispanic White__Male__Total`,
+
+         `Non-Hispanic Asian or Pacific Islander__Male__35-44` = `Non-Hispanic Asian or Pacific Islander__Male__35-39` + `Non-Hispanic Asian or Pacific Islander__Male__40-44`,
+         `Non-Hispanic Asian or Pacific Islander__Male__45-54` = `Non-Hispanic Asian or Pacific Islander__Male__45-49` + `Non-Hispanic Asian or Pacific Islander__Male__50-54`,
+         `Non-Hispanic Asian or Pacific Islander__Male__55-64` = `Non-Hispanic Asian or Pacific Islander__Male__55-59` + `Non-Hispanic Asian or Pacific Islander__Male__60-64`,
+         `Non-Hispanic Asian or Pacific Islander__Male__Total` = sum(c_across(starts_with("Non-Hispanic Asian or Pacific Islander__Male"))),
+
+         `Non-Hispanic Asian or Pacific Islander__Female__35-44` = `Non-Hispanic Asian or Pacific Islander__Female__35-39` + `Non-Hispanic Asian or Pacific Islander__Female__40-44`,
+         `Non-Hispanic Asian or Pacific Islander__Female__45-54` = `Non-Hispanic Asian or Pacific Islander__Female__45-49` + `Non-Hispanic Asian or Pacific Islander__Female__50-54`,
+         `Non-Hispanic Asian or Pacific Islander__Female__55-64` = `Non-Hispanic Asian or Pacific Islander__Female__55-59` + `Non-Hispanic Asian or Pacific Islander__Female__60-64`,
+         `Non-Hispanic Asian or Pacific Islander__Female__Total` = sum(c_across(starts_with("Non-Hispanic Asian or Pacific Islander__Female"))),
+         `Non-Hispanic Asian or Pacific Islander__Female__Total__Total` = `Non-Hispanic Asian or Pacific Islander__Female__Total` + `Non-Hispanic Asian or Pacific Islander__Male__Total`,
+
+         `Hispanic__Male__35-44` = `Hispanic__Male__35-39` + `Hispanic__Male__40-44`,
+         `Hispanic__Male__45-54` = `Hispanic__Male__45-49` + `Hispanic__Male__50-54`,
+         `Hispanic__Male__55-64` = `Hispanic__Male__55-59` + `Hispanic__Male__60-64`,
+         `Hispanic__Male__Total` = sum(c_across(starts_with("Hispanic__Male"))),
+         `Hispanic__Female__35-44` = `Hispanic__Female__35-39` + `Hispanic__Female__40-44`,
+         `Hispanic__Female__45-54` = `Hispanic__Female__45-49` + `Hispanic__Female__50-54`,
+         `Hispanic__Female__55-64` = `Hispanic__Female__55-59` + `Hispanic__Female__60-64`,
+         `Hispanic__Female__Total` = sum(c_across(starts_with("Hispanic__Female"))),
+         `Hispanic__Total__Total` = `Hispanic__Female__Total` + `Hispanic__Male__Total`) %>%
+  ungroup() %>%
+  pivot_longer(cols = `Non-Hispanic White__Male__0-4`:`Hispanic__Total__Total`,
+               names_to = c("race_group","sex","age_cat"),
+               names_sep = "__",
+               values_to = "deaths")
+               
 ma_mort_agg
 ```
+
 ```{r head_ma_mort_agg, echo = FALSE}
 head_ma_mort_agg <- read_rds("data/07-premature-mortality/head_ma_mort_agg.rds")
 head_ma_mort_agg
@@ -153,11 +243,6 @@ head_ma_mort_agg
 We download population data to use as denominators in our rates and ABSMs from the U.S. Census Bureau using the tidycensus package. This requires registering with the U.S. Census for an API key. The key is redacted here, but you can get your own from https://api.census.gov/data/key_signup.html. The ABSMs we will use for this analysis are percentage of the population in poverty, the Index of Concentration at the Extremes (ICE) which quantifies how persons in a specified area are concentrated into the top vs bottom of a specified societal distribution, and the ATSDR/CDC Social Vulnerability Index, which employs data on poverty, transportation access, crowded housing and other social variables to generate a measure of vulnerability for communities.
 
 ```{r wrangling_denominators, eval = FALSE}
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
-
-
 # Population Denominators
 ma_demo_acs <- vector(mode = "list", length = 5)
 names(ma_demo_acs) <- c(2013,2014,2015,2016,2017)
@@ -384,7 +469,7 @@ for (nm in names(ma_demo_acs)) {
                                starts_with("native"),
                                starts_with("white"),
                                starts_with("asian")),
-                 names_to  = c("racegroup", "sex", "age_cat"),
+                 names_to  = c("race_group", "sex", "age_cat"),
                  names_sep = "_",
                  values_to = "population") %>%
     mutate(age_cat   = case_when(age_cat == "00-04" ~ "0-4",
@@ -392,12 +477,12 @@ for (nm in names(ma_demo_acs)) {
                                  age_cat == "total" ~ "Total",
                                  TRUE               ~ age_cat),
            sex       = str_to_title(sex),
-           racegroup = case_when(racegroup == "white"  ~ "Non-Hispanic White",
-                                 racegroup == "black"  ~ "Non-Hispanic Black",
-                                 racegroup == "native" ~ "Non-Hispanic Native American, Alaskan Native, Other",
-                                 racegroup == "asian"  ~ "Non-Hispanic Asian or Pacific Islander",
-                                 racegroup == "hisp"   ~ "Hispanic",
-                                 racegroup == "total"  ~ "Total"))
+           race_group = case_when(race_group == "white"  ~ "Non-Hispanic White",
+                                  race_group == "black"  ~ "Non-Hispanic Black",
+                                  race_group == "native" ~ "Non-Hispanic Native American, Alaskan Native, Other",
+                                  race_group == "asian"  ~ "Non-Hispanic Asian or Pacific Islander",
+                                  race_group == "hisp"   ~ "Hispanic",
+                                  race_group == "total"  ~ "Total"))
 }
 # Combining all 5 years into one dataset
 ma_demo_acs <- rbind(ma_demo_acs[[1]],
@@ -407,18 +492,13 @@ ma_demo_acs <- rbind(ma_demo_acs[[1]],
                      ma_demo_acs[[5]]) %>%
   select(year, GEOID10, GEO_NAME = NAME, everything(), -GEOID)
 ```
+
 ```{r head_ma_demo_acs, echo = FALSE}
 head_ma_demo_acs <- read_rds("data/07-premature-mortality/head_ma_demo_acs.rds")
 head_ma_demo_acs
 ```
 
 ```{r wrandling_absm, eval = FALSE}
-
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
-
-
 # Area Based Social Metrics
 ma_absm_acs <- vector(mode = "list", length = 5)
 names(ma_absm_acs) <- c(2013,2014,2015,2016,2017)
@@ -500,7 +580,7 @@ for (nm in names(ma_absm_acs)) {
      select(GEOID10 = GEOID, ICEwbinc, ICEwnhinc, tractPov, tractCrowd, tractSevereCrowd, year,
             ice_wnh_highinc, ice_wnh_lowinc, ice_poc_lowinc, ice_poc_highinc)
     
-    ma_absm_acs[[nm]] <- left_join(ma_absm_acs[[nm]], d.merge, by=c("GEOID","year"))
+    ma_absm_acs[[nm]] <- left_join(ma_absm_acs[[nm]], d.merge, by=c("GEOID10","year"))
 }
 
 ma_absm_acs <- rbind(ma_absm_acs[[1]],
@@ -513,14 +593,14 @@ ma_absm_acs <- rbind(ma_absm_acs[[1]],
 # Downloading and formatting the SVI data
 
 svi.tract <- read.csv("data/07-premature-mortality/ma_svi.csv") %>%
-  mutate(GEOID=ifelse(FIPS<9999999999, paste0("0",FIPS), paste0(FIPS)),
+  mutate(GEOID10=ifelse(FIPS<9999999999, paste0("0",FIPS), paste0(FIPS)),
          svi_themes = ifelse(RPL_THEMES==-999, NA, RPL_THEMES),
          svi_theme1 = ifelse(RPL_THEME1==-999, NA, RPL_THEME1),
          svi_theme2 = ifelse(RPL_THEME2==-999, NA, RPL_THEME2),
          svi_theme3 = ifelse(RPL_THEME3==-999, NA, RPL_THEME3),
          svi_theme4 = ifelse(RPL_THEME4==-999, NA, RPL_THEME4)) %>%
-  dplyr::select(GEOID, svi_themes, svi_theme1, svi_theme2, svi_theme3, svi_theme4) %>%
-  filter(substr(GEOID,1,2)=="25")
+  dplyr::select(GEOID10, svi_themes, svi_theme1, svi_theme2, svi_theme3, svi_theme4) %>%
+  filter(substr(GEOID10,1,2)=="25")
 
 
 # Creating a dataset for visualization and analysis from the weighted ABSM over all 5 years
@@ -568,12 +648,13 @@ ma_absm_sum <- ma_absm_acs %>%
                     na.rm=TRUE, 
                     include.lowest=T))
 ```
+
 ```{r head_absm_sum, echo = FALSE}
 head_ma_absm_sum <- read_rds("data/07-premature-mortality/head_ma_absm_sum.rds")
 head_ma_absm_sum
 ```
 
-## Approach 
+## 6.4 Approach 
 
 Now that we have our data, let’s revisit our questions of interest:
 
@@ -584,10 +665,10 @@ Now that we have our data, let’s revisit our questions of interest:
 
 Let’s first visualize the overall socioeconomic gradient in premature mortality.
 
-### What is the overall socioeconomic gradient in premature mortality?
+### 6.4.1 What is the overall socioeconomic gradient in premature mortality?
 
 ```{r}
-include_graphics("adj_smr_map.png")
+include_graphics("images/07-premature-mortality/adj_smr_map.png")
 ```
 
 How exactly do we get from our data to this map visualizing how the standard mortality ratio for premature mortality varies across space?
@@ -609,33 +690,31 @@ ref_pop <- ma_demo_acs %>%
                values_to = "population")
 
 ref_rates <- ma_mort_agg %>% 
-  filter(race_group == "Total",
+  filter(race_group =="Total",
          sex != "Total",
-         age_cat != "Total") %>% 
-  pivot_wider(id_cols = c(year, GEOID10,super_town,race_group,sex),
+         age_cat != "Total")%>% 
+  pivot_wider(id_cols = c(year, GEOID10,super_town,sex, race_group),
               names_from = age_cat,
-              values_from = deaths) %>% 
-  mutate(`35-44` = `35-39` + `40-44`,
+              values_from = deaths)%>% 
+  mutate(across(`0-4`:`60-64`, ~ ifelse(is.na(.),0,.)),
+         `35-44` = `35-39` + `40-44`,
          `45-54` = `45-49` + `50-54`,
-         `55-64` = `55-59` + `60-64`) %>% 
+         `55-64` = `55-59` + `60-64`)%>% 
   pivot_longer(cols = `0-4`:`55-64`,
                names_to = "age_cat",
                values_to = "deaths") %>% 
-  left_join(ref_pop, by = c("year","GEOID10","race_group","sex","age_cat")) %>% 
+  left_join(ref_pop, by = c("year","GEOID10","sex","age_cat","race_group")) %>% 
   group_by(age_cat) %>%
   summarise(num = sum(deaths),
             den = sum(population)) %>%
   mutate(ref_rate = num/den) %>%
   select(age_cat, ref_rate)
+
 ```
 
 Once we have the data age standardized we can calculate raw standardized mortality ratios. These ratios are susceptible to much of what is discussed in previous chapters with regards to infinity rates and small sample sizes leading to extreme results. But as we are going to eventually smooth this data with our model, we are not as concerned here about the state of the raw data. Here we can see our raw standardized mortality ratios extend from zero to infinity.
 
 ```{r std_data, eval = FALSE}
-
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
 ma_mort_indirect <- ma_mort_agg %>% 
   inner_join(ma_demo_acs, by = c("year","GEOID10","race_group","sex","age_cat")) %>% 
   filter(race_group == "Total",
@@ -672,16 +751,11 @@ ma_mort_indirect <- ma_mort_agg %>%
 ```
 
 ```{r head_ma_mort_indirect, echo = FALSE}
-head_ma_mort_indirect <- read_rds("head_ma_mort_indirect.rds")
+head_ma_mort_indirect <- read_rds("data/07-premature-mortality/head_ma_mort_indirect.rds")
 head_ma_mort_indirect
 ```
 
 ```{r raw_smr_dotplot, eval = FALSE}
-
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
-
 raw_smr_dotplot <- ma_mort_indirect %>%
   ungroup() %>% 
   arrange(raw_smr) %>% 
@@ -702,7 +776,7 @@ ggsave("raw_smr_dotplot.png")
 ```
 
 ```{r, echo = FALSE}
-include_graphics("raw_smr_dotplot.png")
+include_graphics("images/07-premature-mortality/raw_smr_dotplot.png")
 ```
 
 We can also produce a map of these relationships. To do so, we will import a map file produced by the State of Massachuestts [https://www.mass.gov/info-details/massgis-data-municipalities].
@@ -713,18 +787,14 @@ tract_geometry <- st_read("CENSUS2010_BLK_BG_TRCT_SHP",
   mutate(id_order = row_number()) %>% 
   select(GEOID10, id_order)
 ```
+
 ```{r head_geoms, echo = FALSE}
-head_geoms <- readRDS("head_geoms.RDS")
+head_geoms <- readRDS("data/07-premature-mortality/head_geoms.RDS")
 head_geoms
 ```
 We will include a cut-out of Boston so we can see some census tracts in more detail:
 
 ```{r raw_smr_map, eval = FALSE}
-
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
-
 raw_smr_map.state <- ma_mort_indirect %>% 
   left_join(tract_geometry, by= "GEOID10") %>% 
   ggplot() +
@@ -770,19 +840,13 @@ raw_smr_map <- ggdraw() +
 
 ggsave("raw_smr_map.png")
 ```
-
 ```{r raw_smr_map.png, echo = FALSE}
-include_graphics("raw_smr_map.png")
+include_graphics("images/07-premature-mortality/raw_smr_map.png")
 ```
 
 We can fit a spatial model using the INLA package which will “smooth” our results by fitting our data to a BYM model that will adjust estimates based on the surrounding areas. We first need to be able to create an adjacency matrix, so that the package knows which census tracts are neighbors
 
 ```{r inla_model, eval = FALSE}
-
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
-
 # Make sure that the data file has areas in the same order as the shape file
 ma_mort_indirect_ordered <- ma_mort_indirect %>% 
   mutate(intercept = 1) %>%
@@ -850,11 +914,6 @@ Note the code above provides code to calculate the percentage of the variance in
 We can now visualize our smoothed SMR. First, lets look at a similar dot plot to what we did with the raw SMR:
 
 ```{r smoothed_plot, eval = FALSE}
-
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
-
 smooth_smr_dotplot <- ma_mort_indirect_ordered %>%
   ungroup() %>% 
   arrange(smooth_smr) %>% 
@@ -873,15 +932,13 @@ ggsave("smooth_smr_dotplot.png")
 ```
 
 ```{r, echo = FALSE}
-include_graphics("smooth_smr_dotplot.png")
+include_graphics("images/07-premature-mortality/smooth_smr_dotplot.png")
 ```
 
 And now we can visualize the smooth map
 
 ```{r, echo = FALSE, eval = FALSE}
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
+
 smooth_smr_map.state <- ma_mort_indirect_ordered %>% 
   left_join(tract_geometry, by= "GEOID10") %>% 
   ggplot() +
@@ -929,16 +986,13 @@ ggsave("smooth_smr_map.png")
 ```
 
 ```{r, echo = FALSE}
-include_graphics("smooth_smr_map.png")
+include_graphics("images/07-premature-mortality/smooth_smr_map.png")
 ```
 
 We can see from the plot and the map that while there is still variation in the SMR - it is much less extreme than the raw SMR.
 But to get a true sense of how premature mortality varies across the socioeconomic gradient, we should look at a model that adjusts for our ABSMs and see if there are any changes in variation. Lets look at the SMR after we adjust for poverty, giving us the map we introduced this section with.
 
 ```{r, eval = FALSE}
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
 #Code to include our ABSM
 these_variables <- c("pov_cat_2 + pov_cat_3 + pov_cat_4 + pov_cat_NA",
                      "ICE_qt_1 + ICE_qt_2 + ICE_qt_3 + ICE_qt_4 + ICE_qt_NA",
@@ -1026,19 +1080,19 @@ ggsave("adj_smr_map.png")
 ```
 
 ```{r, echo=FALSE}
-include_graphics("adj_smr_map.png")
+include_graphics("images/07-premature-mortality/adj_smr_map.png")
 ```
 
 In comparing the smoothed effect from our null model and the effects of our model adjusting for poverty, we can visualize the extent of the impact poverty has on the distribution of premature mortality
 
 ```{r, echo=FALSE}
-include_graphics("smooth_smr_map.png")
+include_graphics("images/07-premature-mortality/smooth_smr_map.png")
 ```
 
 ### 6.4.2 What is the racial disparity in premature mortality overall?
 
 ```{r}
-include_graphics("map.irr.png")
+include_graphics("images/07-premature-mortality/map.irr.png")
 ```
 
 We can describe inequities in race much the same way we describe inequities in ABSM - by aggregating death and population data. We've already got this data aggregated - we can stratify our analysis to compare the White Non-Hispanic and Black Non-Hispanic populations. Throughout the example we may refer to these groups as White and Black as a shorthand.
@@ -1046,9 +1100,6 @@ We can describe inequities in race much the same way we describe inequities in A
 We will need to age-adjust our data here, as differences in premature mortality may be due to differential distribution of ages by race:
 
 ```{r, eval = FALSE, echo = FALSE}
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
 tab_age_race <- ma_demo_acs %>%
       filter(race_group %in% c("Non-Hispanic White","Non-Hispanic Black"),
          sex != "Total",
@@ -1078,22 +1129,19 @@ ggsave("tab_age_race.png")
 ```
 
 ```{r, echo = FALSE}
-include_graphics("tab_age_race.png")
+include_graphics("images/07-premature-mortality/tab_age_race.png")
 ```
 
 Direct age adjustment to get standardized mortality ratios will require a reference population, which we have downloaded (and wrangled) from the National Cancer Institute (https://seer.cancer.gov/stdpopulations/).
 
 ```{r, echo = FALSE}
-seer_std <- readRDS("seer_std.RDS")
+seer_std <- readRDS("data/07-premature-mortality/seer_std.RDS")
 seer_std
 ```
 
 Let’s now age adjust our aggregated data by racialized group so we can compare standardized mortality rates.
 
 ```{r, eval = FALSE}
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
 ma_mort_direct <- ma_mort_agg %>%
   inner_join(ma_demo_acs, by = c("year","GEOID10","race_group","sex","age_cat")) %>% 
   filter(race_group %in% c("Non-Hispanic White","Non-Hispanic Black"),
@@ -1143,14 +1191,12 @@ ggsave("plot.agg_rates.png")
 ```
 
 ```{r, echo = FALSE}
-include_graphics("plot.agg_rates.png")
+include_graphics("images/07-premature-mortality/plot.agg_rates.png")
 ```
 We can see lots of variation here as the mortality rates increase - what is causing that?
 
 ```{r, eval = FALSE, echo = FALSE}
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
+
 ordered.agg_rates <- ma_mort_direct %>% 
   filter(!is.na(std_rate)) %>% 
   select(GEOID10, race_group, contains("std_rate"), den) %>% 
@@ -1169,15 +1215,12 @@ ggsave("ordered.agg_rates.png")
 ```
 
 ```{r, echo = FALSE}
-include_graphics("ordered.agg_rates.png")
+include_graphics("images/07-premature-mortality/ordered.agg_rates.png")
 ```
 
 As we might expect, these extremely variable mortality rates are occurring in small populations. What do these maps look like?
 
 ```{r, eval = FALSE}
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
 plotlist <- vector(mode = "list", length = 2)
 names(plotlist) <- c("Non-Hispanic White","Non-Hispanic Black")
 for (plt in names(plotlist)) {
@@ -1243,15 +1286,12 @@ ggsave("byrace_std_rates.png")
 ```
 
 ```{r, echo = FALSE}
-include_graphics("byrace_std_rates.png")
+include_graphics("images/07-premature-mortality/byrace_std_rates.png")
 ```
 
 We are seeing some really extreme rates in the Black population, where we have smaller overall sample sizes. We are also seeing many census tracts with no black population. We can also display these two maps as one, by calculating the Rate Difference, or the Rate Ratio. Here we will show the Rate Ratio of the Age Standardized rates, as we visualized at the start of this section. Key is understanding that these rates are influenced by the small sample sizes and large potential errors we have previously visualized. It's for researchers and communities to interpret how "real" the effects we see are
 
 ```{r, eval = FALSE}
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
 irr_data <- ma_mort_direct %>% 
   select(GEOID10,super_town,race_group, std_rate, var_std_rate) %>% 
   pivot_wider(id_cols = c(GEOID10,super_town),
@@ -1282,9 +1322,6 @@ irr_plot
 When we map the IRR, we can see the crude rate ratio between Non-Hispanic Black and Non-Hispanic White populations:
 
 ```{r, eval = FALSE}
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
 map.state.irr <- irr_data %>% 
   mutate(irr = case_when(irr > 4  ~ 4,
                          TRUE     ~ irr)) %>% 
@@ -1338,13 +1375,13 @@ ggsave("map.irr.png")
 ```
 
 ```{r, echo = FALSE}
-include_graphics("map.irr.png")
+include_graphics("iamges/07-premature-mortality/map.irr.png")
 ```
 
 ### 6.4.3 What are the associations with ABSM by racialized group? 
 
 ```{r, echo = FALSE}
-include_graphics("adj_map.p.irr.png")
+include_graphics("images/07-premature-mortality/adj_map.p.irr.png")
 ```
 
 In order to visualize differences in how an ABSM - we will use poverty - interacts with racialized group, we can use a poisson model for the mortality rates, and include an interaction term between race and poverty.
@@ -1352,9 +1389,7 @@ In order to visualize differences in how an ABSM - we will use poverty - interac
 Let's first plot the IRR produced by a poisson model for the rates.
 
 ```{r poisson, eval = FALSE}
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
+
 poisson_data <- ma_mort_agg %>%
   inner_join(ma_demo_acs, by = c("year","GEOID10","race_group","sex","age_cat")) %>%
   filter(race_group %in% c("Non-Hispanic White","Non-Hispanic Black"),
@@ -1422,15 +1457,12 @@ ggsave("poisson_irr_plot.png")
 ```
 
 ```{r, echo = FALSE}
-include_graphics("poisson_irr_plot.png")
+include_graphics("images/07-premature-mortality/poisson_irr_plot.png")
 ```
 
 And of course, now we can map that value as well.
 
 ```{r poisson map, eval = FALSE, echo = FALSE}
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
 map.state.p.irr <- poisson_irr %>% 
   mutate(fit_irr = case_when(fit_irr > 4  ~ 4,
                          TRUE     ~ fit_irr)) %>% 
@@ -1483,16 +1515,14 @@ ggsave("map.p.irr.png")
 
 ```
 
+
 ```{r, echo = FALSE}
-include_graphics("map.p.irr.png")
+include_graphics("images/07-premature-mortality/map.p.irr.png")
 ```
 
 An adjusted model would allow for us to see how poverty rates are impacting the IRR.
 
 ```{r, eval = FALSE}
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
 # Adjusted Poisson Model
 model1 <- glm(num ~ race_group + factor(age_cat) + (race_group * factor(pov_cat, exclude = NULL)) + offset(log(den)),
                         family=poisson(link=log),
@@ -1533,15 +1563,12 @@ ggsave("adj_poisson_irr_plot.png")
 ```
 
 ```{r, echo = FALSE}
-include_graphics("adj_poisson_irr_plot.png")
+include_graphics("images/07-premature-mortality/adj_poisson_irr_plot.png")
 ```
 
 And now the map:
 
 ```{r, eval = FALSE}
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
 adj_map.state.p.irr <- adj_poisson_irr %>% 
   mutate(adj_fit_irr = case_when(adj_fit_irr > 4  ~ 4,
                          TRUE     ~ adj_fit_irr)) %>% 
@@ -1594,18 +1621,18 @@ ggsave("adj_map.p.irr.png")
 ```
 
 ```{r, echo = FALSE}
-include_graphics("adj_map.p.irr.png")
+include_graphics("images/07-premature-mortality/adj_map.p.irr.png")
 ```
 
 To understand statistically how poverty is impacting the relationship between racialized groups and premature mortality, we can compare the models with and without poverty. We can see the impact of race is reduced with the presence of the census tract level poverty.
 
 ```{r, echo = FALSE}
-summary.model0 <- readRDS("poisson0.rds")
+summary.model0 <- readRDS("data/07-premature-mortality/poisson0.rds")
 summary.model0
 ```
 
 ```{r, echo = FALSE}
-summary.model1 <- readRDS("poisson1.rds")
+summary.model1 <- readRDS("data/07-premature-mortality/poisson1.rds")
 summary.model1
 ```
 
@@ -1616,9 +1643,6 @@ The impact of race becomes non-significant when poverty is included in the model
 Although much of our data is at the census tract level, census tracts are not areas of political decision making. Political decisions in Massachusetts are made at the level of cities and towns. We would expect that cities and towns might be more important than census tracts in determining premature mortality, because it is at those boundaries that resources are distributed. We can fit a multilevel model to test this hypothesis.
 
 ```{r multilevel, eval = FALSE}
-#| eval = FALSE,
-#| warning = FALSE,
-#| message = FALSE
 # Bringing in city expenditure data
 expenditures <- readRDS("expenditures.RDS")
 
@@ -1696,21 +1720,21 @@ So how do we interpret these models? What do they tell us about whether we shoul
 
 #### Null Model
 ```{r, echo = FALSE}
-summary.mlm0 <- read_rds("mlm0.rds")
+summary.mlm0 <- read_rds("data/07-premature-mortality/mlm0.rds")
 summary.mlm0
 ```
 
 #### Race and Age Fixed Effects Model
 
 ```{r, echo = FALSE}
-summary.mlm1 <- read_rds("mlm1.rds")
+summary.mlm1 <- read_rds("data/07-premature-mortality/mlm1.rds")
 summary.mlm1
 ```
 
 #### Race Random Effect at the Town Level
 
 ```{r, echo = FALSE}
-summary.mlm2 <- read_rds("mlm2.rds")
+summary.mlm2 <- read_rds("data/07-premature-mortality/mlm2.rds")
 summary.mlm2
 
 ```
@@ -1718,7 +1742,7 @@ summary.mlm2
 #### Town Level Spending Random Effect
 
 ```{r, echo = FALSE}
-summary.mlm3 <- read_rds("mlm3.rds")
+summary.mlm3 <- read_rds("data/07-premature-mortality/mlm3.rds")
 summary.mlm3
 ```
 
@@ -1731,3 +1755,4 @@ summary.mlm3
 3) Krieger N. The US Census and the People's Health: Public Health Engagement From Enslavement and "Indians Not Taxed" to Census Tracts and Health Equity (1790-2018). Am J Public Health. 2019 Aug;109(8):1092-1100. doi: 10.2105/AJPH.2019.305017. Epub 2019 Jun 20.
 
 4) US Office of Management and Budget. Revisions to the Standards for the Classification of Federal Data on Race and Ethnicity. Federal Register 1997; 62(210):58782-58790. https://www.govinfo.gov/content/pkg/FR-1997-10-30/pdf/97-28653.pdf ; accessed June 14, 2022.
+
