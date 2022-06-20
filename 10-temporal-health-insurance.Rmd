@@ -12,13 +12,14 @@ The goal of this case study is to gain familiarity with the ACS, visualize trend
 
 The outcome of interest in this case study is health insurance. The specific learning objectives are to: 
 
-- Download health outcome and ABSM data from the ACS   
-- Visualize (plot) and map data  
-- Characterize trends in outcome of interest by ABSMs  
-- Work with estimate uncertainty (margin of error) data to:  
-    + Aggregate it up from stratified estimates (like aggregating private and public insurance rates together into overall insurance rates)
-    + Visualize uncertainty for individual areal units over time
-    + Model trends over time
+  - Download health outcome and ABSM data from the ACS   
+  - Visualize (plot) and map data  
+  - Characterize trends in outcome of interest by ABSMs  
+  - Work with estimate uncertainty (margin of error) data to:  
+  
+      - Aggregate it up from stratified estimates (like aggregating private and public insurance rates together into overall insurance rates)
+      - Visualize uncertainty for individual areal units over time
+      - Model trends over time
 
 Although this case study will follow insurance rates over time from specified counties, the skills learned should be generalizable to pulling other ACS variables at other geographic levels.
 
