@@ -71,14 +71,14 @@ Your data has been aggregated from individual observations into death counts by 
 #| message = FALSE
 
 # the raw mortality data, with the geocoded coordinates converted into spatial feature (sf) data
-ma_mort <- read_rds("ma_mort_geo.RDS") %>% 
+ma_mort <- read_rds("data/07-premature-mortality/ma_mort_geo.RDS") %>% 
   st_as_sf(coords=c("lon","lat"), crs = 4269)
 
 # Importing tract shapefile using tigris package
 tracts_sf <- tracts(state = "25", year = "2010")
 
 # Linking Census Tracts and Tiny Towns File
-supertowns <- read_excel("ma ct to supertinytowns.xlsx", col_names = FALSE, col_types = "text") %>%
+supertowns <- read_excel("data/07-premature-mortality/ma ct to supertinytowns.xlsx", col_names = FALSE, col_types = "text") %>%
   transmute(GEOID10 = ...1,
             super_town = str_to_lower(...2))
 
@@ -144,7 +144,7 @@ ma_mort_agg <- ma_mort_ct %>%
 ma_mort_agg
 ```
 ```{r head_ma_mort_agg, echo = FALSE}
-head_ma_mort_agg <- read_rds("head_ma_mort_agg.rds")
+head_ma_mort_agg <- read_rds("data/07-premature-mortality/head_ma_mort_agg.rds")
 head_ma_mort_agg
 ```
 
@@ -408,7 +408,7 @@ ma_demo_acs <- rbind(ma_demo_acs[[1]],
   select(year, GEOID10, GEO_NAME = NAME, everything(), -GEOID)
 ```
 ```{r head_ma_demo_acs, echo = FALSE}
-head_ma_demo_acs <- read_rds("head_ma_demo_acs.rds")
+head_ma_demo_acs <- read_rds("data/07-premature-mortality/head_ma_demo_acs.rds")
 head_ma_demo_acs
 ```
 
@@ -512,7 +512,7 @@ ma_absm_acs <- rbind(ma_absm_acs[[1]],
 
 # Downloading and formatting the SVI data
 
-svi.tract <- read.csv("ma_svi.csv") %>%
+svi.tract <- read.csv("data/07-premature-mortality/ma_svi.csv") %>%
   mutate(GEOID=ifelse(FIPS<9999999999, paste0("0",FIPS), paste0(FIPS)),
          svi_themes = ifelse(RPL_THEMES==-999, NA, RPL_THEMES),
          svi_theme1 = ifelse(RPL_THEME1==-999, NA, RPL_THEME1),
@@ -569,7 +569,7 @@ ma_absm_sum <- ma_absm_acs %>%
                     include.lowest=T))
 ```
 ```{r head_absm_sum, echo = FALSE}
-head_ma_absm_sum <- read_rds("head_ma_absm_sum.rds")
+head_ma_absm_sum <- read_rds("data/07-premature-mortality/head_ma_absm_sum.rds")
 head_ma_absm_sum
 ```
 
