@@ -1371,7 +1371,7 @@ ggsave("map.irr.png")
 ```
 
 ```{r, echo = FALSE}
-include_graphics("iamges/07-premature-mortality/map.irr.png")
+include_graphics("images/07-premature-mortality/map.irr.png")
 ```
 
 ### 6.4.3 What are the associations with ABSM by racialized group? 
