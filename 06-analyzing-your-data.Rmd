@@ -511,8 +511,8 @@ summary(model_multi)
 
 ````
 
-```{r, echo=FALSE, fig.cap="Maps of CT raw SMRs (left) and smoothed SMRs from a Poisson multilevel model"}
-knitr::include_graphics("premature_raw_SMR_v_multimod.png", eval=FALSE)
+```{r, echo=FALSE, fig.cap="Maps of CT raw SMRs (left) and smoothed SMRs from a Poisson multilevel model", eval=FALSE}
+knitr::include_graphics("premature_raw_SMR_v_multimod.png")
 ```
 
 ```{r, echo=FALSE, fig.cap="Map of the neighborhood level variation in relative risk (Level 2 of the Poisson multilevel model)", eval=FALSE}
