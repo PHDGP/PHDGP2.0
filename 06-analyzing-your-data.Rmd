@@ -32,13 +32,13 @@ As the choice of methods for any data analysis depends fundamentally on the goal
   We need to flesh out this text.
   I think the main point is that we try to analyze at the geographic level that makes sense. The breast cancer mortality example will show that while we can append CT level ABSMs to the data and use the aggregation method or non-spatial regression here, doing spatial analyses doesn't yield much spatial variation at the CT level because the counts are too small. We should bring this point out in this section.
   
-  Similarly, rationale for the ZIP code level analysis of Chicago COVID data.
+  Similarly, rationale for the ZIP Code level analysis of Chicago COVID data.
 --> 
 
 - A pragmatic question and approach: at what level(s) are data available?
 - For small area level analyses, do the number of events support small area-level analyses?
 - census tract (CT) vs. city/town, e.g. breast cancer mortality analysis
-- ZIP codes and US Census defined ZIP Code Tabulation Areas (ZCTAs)
+- ZIP Codes and US Census defined ZIP Code Tabulation Areas (ZCTAs)
 - Modifiable Areal Unit Problem (discussed in Christian's section?)
 
 - note that the smallest level of Census geography with intercensal population estimates is the county. The US Census Population Estimates Program (PEP) estimates rely on demographic modeling. 
