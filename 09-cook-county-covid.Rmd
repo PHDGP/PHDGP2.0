@@ -80,12 +80,12 @@ acs_vars <- tidycensus::load_variables(2019, dataset = 'acs5')
 # the ACS 2015-2019 variables can be viewed online here: 
 # https://api.census.gov/data/2019/acs/acs5/variables.html
 # 
-# the race/ethnicity and age-group stratified population estimates from ACS are
+# the racialized group and age-group stratified population estimates from ACS are
 # in the B01001 table.
 # 
 # B01001_001 through _049 are the sex/gender overall population size estimates,
-# and B01001A through B01001I are the race/ethnicity specific tables.  For the
-# race/ethnicity specific tables the age-groups suffixes range from _001 to _031
+# and B01001A through B01001I are the "race/ethnicity" specific tables.  For the
+# "race/ethnicity" specific tables the age-groups suffixes range from _001 to _031
 # 
 # in the following three steps, we programmatically construct the population
 # size variables that we want to retrieve from the ACS since otherwise there are
@@ -132,7 +132,7 @@ acs_vars %<>% mutate_at(.vars = vars(estimate, total, gender, age, subgroup),
 # select only what we need
 acs_vars %<>% select(name, total, gender, age, concept)
 
-# get sex, race (incl. hispanic or latino), and age stratified population
+# get sex, racialized group (incl. hispanic or latino), and age stratified population
 # estimates
 popsizes <-
   tidycensus::get_acs(
@@ -375,7 +375,7 @@ cook_county_deaths %<>% janitor::clean_names()
 #ggplot(cook_county_deaths, aes(x = latino)) + geom_bar() + facet_wrap(~race)
 #ggplot(cook_county_deaths, aes(x = latino)) + geom_bar()
 
-# code race/ethnicity into the following: 
+# code racialized groups into the following: 
 #  Black (Hispanic or non-Hispanic)
 #  Hispanic and non-Hispanic
 #  White non-Hispanic
@@ -432,7 +432,7 @@ cook_county_deaths$age_group %<>% factor(
    "85 years and over")
   )
 
-# separate out deaths into the racial categories we're interested in 
+# separate out deaths into the racialized group categories we're interested in 
 # 
 # note that these do have overlap: since the ACS variables do not include 
 # age tables for the Black non-Hispanic group, we are using the Black 
@@ -452,7 +452,7 @@ race_ethnicity_groups <- c(
   "White, non-Hispanic"
 )
 
-# for each racial group, tabulate the number of deaths by age group and 
+# for each racialized group, tabulate the number of deaths by age group and 
 # residence zip code. 
 # 
 # here, purrr::map is applying a function which does that tabulation to each of
@@ -474,7 +474,7 @@ ggplot(deaths_by_race_ethnicity_group, aes(x = age_group, y = deaths)) +
   ylab("Count of Deaths") + 
   theme(axis.text.x = element_text(angle = 75, hjust = 1))
 
-# remove missing age, missing race/ethnicity deaths
+# remove missing age, missing deaths in racialized groups
 deaths_by_race_ethnicity_group %<>% filter(! is.na(age_group))
 deaths_by_race_ethnicity_group %<>% filter(! is.na(race_ethnicity))
 
@@ -889,7 +889,7 @@ df %>%
 ```
 
 
-In the code chunk above we do some exploratory visualizations of the data. The first series of maps show the crude mortality rates by ZCTA, Race/Ethnicity and Age Group. **To see a larger version of this or any other image on the online version of the book right click and select open image in new tab.**
+In the code chunk above we do some exploratory visualizations of the data. The first series of maps show the crude mortality rates by ZCTA, racialized group and Age Group. **To see a larger version of this or any other image on the online version of the book right click and select open image in new tab.**
 
 ```{r image raw rates by ZCTA}
 #| eval = TRUE,
@@ -1605,7 +1605,7 @@ $$
 
 Here there is a county-wide intercept $\beta_0$, and ZCTA random effects $v_i$ that quantify the excess/reduced risk in each area from the county-wide average. Note that this is not a spatial model and we are still assuming that the ZCTAs are independent of each other.
 
-However, this model does not have any fixed effects for individual-level variables, so we are estimating the same SMR for each racialized group strata within each ZCTA. We may do just this if we did not have any individual-level data. However, in our case, we are interested in estimating the effect of race-ethnicity, and we can include that in the fixed part of the model such that:
+However, this model does not have any fixed effects for individual-level variables, so we are estimating the same SMR for each racialized group strata within each ZCTA. We may do just this if we did not have any individual-level data. However, in our case, we are interested in estimating the effect of membership in racialized groups, and we can include that in the fixed part of the model such that:
 
 $$
 log(\theta_{ij}) = \beta_0 + \mathbf{\beta}(race\_ethnicity_j) + v_i \\

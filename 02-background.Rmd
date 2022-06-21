@@ -55,7 +55,7 @@ population-defined and defining relationships and characteristics that
 create and are created by structures and systems. Further, theories of
 disease distribution and the underlying agendas, ideologies, and
 motivations contributing to their implicit or explicit use in turn shape
-what data gets analyzed, how the analysis is interpreted, and what
+what data get analyzed, how the analysis is interpreted, and what
 visualizations are used to disseminate findings (Krieger, 2011). Misuse or poor
 use of data analysis and visualization tools can contribute to obscuring
 health inequities, leaving out certain subpopulations or misrepresenting
@@ -85,7 +85,7 @@ socioeconomic data was carried out by the National Tuberculosis
 Association in the 1920s and 1930s (Green, 1932; Nathan, 1932).
 Similarly, cancer epidemiologists have used geocoded data to generate
 and stratify cancer incidence, categorizing social groups using
-variables defined in relation to race/ethnicity, sex, and socioeconomic
+variables defined in relation to "race/ethnicity," sex, and socioeconomic
 position, for many decades (Krieger, 2001). Of note, US health data have
 long been reported by US government agencies (federal, state, and local)
 stratified by "race" and "sex," informed by a long history of biological

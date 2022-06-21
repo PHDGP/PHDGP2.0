@@ -326,7 +326,7 @@ reasons:
   up more space than necessary; and
   
   2. Because it's easier to do our aggregation and data manipulation without the
-  spatial/geometry data and to add it in afterwards as some functions from
+  spatial/geometry data and to add them in afterwards as some functions from
   `dplyr` or the `tidyverse` may not work well with spatial data frames.
   
 When you look at the maps, make sure to note that the scales differ! 
