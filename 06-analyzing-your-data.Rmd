@@ -10,11 +10,11 @@ library(kableExtra)
 ```
 
 
-## Overview of Methods
+# Overview of Methods
 
 In the years since we initially presented the **Public Health Disparities Geocoding Training** in 2004, there has been a huge increase in conceptual and methodological work regarding use of ABSMs to document and analyze health inequities, and the computing tools and statistical methods to conduct these analyses. In particular, the availability of software that facilitates data access, mapping, visualization, and fitting of multilevel and spatial models has greatly enhanced the accessibility of these analytic methods for public health scientists and advocates interested in advancing health equity. Our goal in presenting these updated methods is to illustrate their applicability to monitoring, reporting, and investigating health inequities. In doing so, we highlight many of the assumptions underlying the use of these methods and show how they can be applied to real-life data that arise in public health surveillance and health equity monitoring. We comment on some of the pitfalls that may arise when working with imperfect data in real time and discuss analytic and interpretive strategies keeping in mind the overarching goal of accurately documenting health inequities for accountability. Where appropriate, we also comment on ongoing methodologic work to improve analytic approaches.
 
-### Motivating Questions
+## Motivating Questions
 
 As the choice of methods for any data analysis depends fundamentally on the goals of the analysis, we will focus our presentation on the following motivating questions:
 
@@ -25,7 +25,7 @@ As the choice of methods for any data analysis depends fundamentally on the goal
 3. "How can geographic variation in health outcomes be modeled in order to facilitate mapping of **small-area disease estimates** and **estimation of social inequities**?" We review concepts from the extensive statistical literature on small-area estimation and disease mapping with the goal of visualizing geographic patterns in health outcomes for studies of health equity. While these methods entail more complex modeling frameworks and computational details, we focus on their application to health equity and the interpretation and use of model outputs in the context of monitoring and reporting of health disparities. We consider settings in which **multilevel modeling** approaches and **spatial modeling** approaches may be preferred and discuss considerations contributing to the choice of modeling framework.
 
 
-### Choice of geographic level
+## Choice of geographic level
 
 <!--
     TODO:
@@ -45,14 +45,16 @@ As the choice of methods for any data analysis depends fundamentally on the goal
 - CT level population estimates are in the US Census American Community Survey (ACS), but ACS specifically cautions against using these as population denominator estimates in small area estimation. However, we generally do not have any other sources of population denominators on which to rely. Five year average estimates may help, but there is still year to year variability. Margin of error estimates are available, but how to incorporate denominator uncertainty into analyses is still an area of active research.
 
 
-### Numerator/denominator mismatch
+
+
+
+## Numerator/denominator mismatch
 
 For epidemiologic analyses of health disparities, we generally rely on routinely collected data from health surveillance systems to define the numerators of rates. Such data are available on an ongoing basis with a lag of two or more years to allow for data compilation and cleaning. In contrast, data on population at risk may be obtained from a variety of sources depending on the need for stratification by demographic variables, time frame, and the desired level of geography. For example, the US Decennial Census provides detailed population estimates by age, sex-gender, and selected racialized groups in decennial years. For intercensal years, the US Census uses demographic modeling that takes into consideration births, deaths, and migrations to provide estimates for these demographic groups at the national, state, and county levels via its Population Estimates Program (PEP) [US Census PEP]. For smaller levels of geography, the US Census Bureau's American Community Survey includes estimates of population for all census geographies larger than census blocks based on five year rolling averages. These are also typically made available after a two year delay.
 
 Formally, the US Census Bureau recommends the use of PEP or decennial census counts as population size estimates in intercensal years, while recommending that ACS data be used for information about changing socioeconomic and demographic features. However, for estimation of small area disease rates or analyses of health disparities by ABSM in intercensal years, decennial counts are usually outdated and PEP estimates are not available at the desired geographic level. Thus, in practice, many epidemiologic studies will continue to rely on ACS small-area estimates for population denominators. While private companies are increasingly producing high-resolution gridded population estimates that are based on machine-learning models combining census, remote sensing, land use, and other information, with the promise of providing population sizes (primarily for the total population, not by population sub-groups) at very small geographies in near real time, to date we have not found these data products to provide substantial improvement over using ACS small area estimates and in some cases they can induce bias [ref: Nethery et al. 2021].
 
-Because numerators (case data) and denominators (population estimates) come from different sources, and moreover, because intercensal population estimates in particular may be subject to uncertainty, it is possible to obtain sociodemographic strata in particular areas and years where the observed cases exceed the reported population at risk. This is particularly problematic when the the number of cases is greater than zero but the reported population at risk is exactly zero. We term this phenomenon "numerator/denominator mismatch." Some of the analytic methods we describe will be able yield valid estimates of social inequities in spite of these data anomalies. For example, the aggregation method avoids this problem by aggregating over small areas, whereby small discrepancies in numerators and population at risk are averaged out over areas within ABSM strata. In other modeling approaches, we may need to take steps to address these issues in the data. When doing so, we need to be mindful about potential distortions to the data and their impact on estimates of social inequities. In particular, we must consider that when such data anomalies are more likely for some demographic groups than others (for example, in many areas of the US, historically marginalized racialized groups designated as Black, Indigenous, and people of color, will be of smaller population size non-white racialized groups will be of smaller population size than the white non-hispanic population), this may result greater bias for demographically stratified analyses (e.g. models stratified by racialized group) (Nethery et al. 2021).
-
+Because numerators (case data) and denominators (population estimates) come from different sources, and moreover, because intercensal population estimates in particular may be subject to uncertainty, it is possible to obtain sociodemographic strata in particular areas and years where the observed cases exceed the reported population at risk. This is particularly problematic when the the number of cases is greater than zero but the reported population at risk is exactly zero. We term this phenomenon "numerator/denominator mismatch." Some of the analytic methods we describe will be able yield valid estimates of social inequities in spite of these data anomalies. For example, the aggregation method avoids this problem by aggregating over small areas, whereby small discrepancies in numerators and population at risk are averaged out over areas within ABSM strata. In other modeling approaches, we may need to take steps to address these issues in the data. When doing so, we need to be mindful about potential distortions to the data and their impact on estimates of social inequities. In particular, we must consider that when such data anomalies are more likely for some demographic groups than others (for example, in many areas of the US, historically marginalized racialized groups designated as Black, Indigenous, and people of color, will be of smaller population size than the white non-hispanic population), this may result greater bias for demographically stratified analyses (e.g. models stratified by racialized group) (Nethery et al. 2021).
 
 ### Example: Age-specific all-cause mortality by racialized group in Massachusetts, 2013-2017
 
@@ -63,7 +65,6 @@ When the log(population person-time at risk) variable is zero, however, this pre
 Unfortunately, it turns out that numerator/denominator mismatch occurs more frequently for Black observations in the dataset, due to patterns of racialized residential segregation and that fact that the Black population accounts for a much smaller proportion of the population  compared with the white non-Hispanic population (10.1% vs. 72.9% in Massachusetts according to the ACS population estimates we used for our population denominators). That is, at the census tract level, there are more likely to be age strata where there are deaths reported by zero population person-time at risk for the Black population compared with the white non-Hispanic population.  As a result, when we delete these observations, we end up deleting a larger proportion of the Black deaths across the whole state, which has an impact on our estimates of rates and rate ratios.
 
 To see this, consider the following table where we show the number of deaths and population by age and racialized group aggregated across census tracts. In columns 2-8, we show the deaths, population, and estimated rates per 100,000 person-years for white Non-Hispanics and Blacks in the full dataset, while in columns 9-15 we show the deaths and population after deleting observations where the numerator is greater than zero but the denominator is zero. In columns 16-22 we show the percent bias by strata comparing the dataset with deleted observations to the full dataset. As is evident in column 19, the effect of deleting these observations is to reduce the Black death count in age strata (between 4-30% across strata) to a much greater degree than among the white non-Hispanic age strata (between 0-2%). As a result, the age-specific incidence rate ratios can be depressed by as much as 30% relative to the IRRs calculated using the full aggregated data.
-
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 table_removezeroes <- read_csv("data/06-analyzing-your-data/numden_mismatch_remove_zeroes.csv")
@@ -78,14 +79,15 @@ knitr::kable(table_removezeroes,
                            "% bias IRR"),
              digits=c(0,0,0,1,0,0,1,2,0,0,1,0,0,1,2,3,3,3,3,3,3,3),
              html=TRUE) %>%
-            add_header_above(c(" "=1, "Full dataset" = 7, "Adjusted dataset" = 7, "% Bias" = 7))
+            add_header_above(c(" "=1, "Full dataset" = 7, "Adjusted dataset" = 7, "% Bias" = 7))%>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 
 ```
 
 If instead of deleting those strata where deaths>0 and denominator=0, we replace the denominator with the number of deaths, we end up with very slightly larger population counts overall, but the effect on the rates is to bring them more in line with the aggregated analysis. Here is the comparable table comparing the full aggregated dataset (columns 2-8) with a dataset in which the denominators are adjusted to increase the person time at risk to equal the number of deaths the affected strata. 
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
-  table_adjustdenom <- read_csv("data/06-analyzing-your-data/numden_mismatch_adjust_denom.csv")
+table_adjustdenom <- read_csv("data/06-analyzing-your-data/numden_mismatch_adjust_denom.csv")
 
 knitr::kable(table_adjustdenom, 
              col.names = c("Age", "NHW deaths", "NHW pop", "NHW Rate", 
@@ -97,7 +99,8 @@ knitr::kable(table_adjustdenom,
                            "% bias IRR"),
              digits=c(0,0,0,1,0,0,1,2,0,0,1,0,0,1,2,3,3,3,3,3,3,3),
              html=TRUE) %>%
-            add_header_above(c(" "=1, "Full dataset" = 7, "Adjusted dataset" = 7, "% Bias" = 7))
+            add_header_above(c(" "=1, "Full dataset" = 7, "Adjusted dataset" = 7, "% Bias" = 7)) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
 
 ```
 
@@ -106,8 +109,11 @@ An even better solution, and the one we ultimately recommend, is to add a small 
 To visualize the effect of these adjustments on estimates of the age-specific disparity by racialized group, we plot estimates from aggregated analyses and Poisson models with deletion and denominator adjustment in Figure 1.1. The plot confirms that either (a) adjusting denominators to match the number of observed deaths in problematic strata in census tracts or (b) adding a small number to all population person time estimates (preferred) yields comparable estimates to the aggregation method, whereas removing problematic observations results in bias.
 
 ```{r, echo=FALSE, fig.cap="Comparison of estimated age-specific Black/White mortality rate ratios using different methods to address numerator/denominator mismatch"}
-knitr::include_graphics("images/06-analyzing-your-data/age_specific_comparison_plot.pdf")
+knitr::include_graphics("images/06-analyzing-your-data/age_specific_comparison_plot.png")
 ```
+
+
+# Chapter 5: Analyzing Your Data
 
 ## Aggregation Method
 
@@ -162,12 +168,12 @@ Throughout this section, we will be using data from the Greater Boston Area for 
 - population attributable fraction
 - a comment on life expectancy
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE, eval=FALSE}
-knitr::include_graphics("absm_age_plot.png")
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+knitr::include_graphics("images/06-analyzing-your-data/absm_age_plot.png")
 ```
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE, eval=FALSE}
-table_direct_age_std <- read_csv("direct_age_standardization_example.csv")
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+table_direct_age_std <- read_csv("data/06-analyzing-your-data/direct_age_standardization_example.csv")
 
 knitr::kable(table_direct_age_std, 
              col.names = c("CT % below poverty", "Age category", "Deaths", "Person-years", 
@@ -178,8 +184,8 @@ knitr::kable(table_direct_age_std,
 
 ```
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE, eval=FALSE}
-table_direct_std_rates <- read_csv("age_standardization_example_summed.csv")
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+table_direct_std_rates <- read_csv("data/06-analyzing-your-data/age_standardization_example_summed.csv")
 
 knitr::kable(table_direct_std_rates, 
              col.names = c("CT % below poverty", "Deaths", "Person-years", 
@@ -191,10 +197,6 @@ knitr::kable(table_direct_std_rates,
 ```
 
 
-### Stratified Analyses
-- Age-specific analyses
-- Analyses by racialized group and ABSM
-- Reporting on interaction
 
 ## Non-Spatial Regression Methods
 
@@ -209,6 +211,7 @@ Y_{ij} & \sim \mbox{Poisson}(\mu_i) \\
 \log(\mu_{ij}) & = \beta_0 + \beta_1 I(pov=5-9.9\%) + \beta_2 I(pov=10-19.9\%) + \beta_3 I(pov=20-100\%) + \sum_{j=2}^{J} \alpha_j I(age=age_j) + \log(n_{ij})
 \end{align*}
 \]
+
 
 
 ### Quasi-poisson regression
@@ -252,9 +255,9 @@ p-value of overdispersion test is  0
 
 We can also visualize the predicted counts vs. the standardized residuals.
 
-```{r, echo=FALSE, fig.cap="Predicted counts vs. standardized residuals. The standardized residuals should have mean 0 and standard deviation 1 (hence the dashed lines at $\\pm2$ indicating approximate 95% error bounds). The variance of the standardized residuals is larger than 1, indicating in this case a moderate amount of overdispersion.", eval=FALSE}
+```{r, echo=FALSE, fig.cap="Predicted counts vs. standardized residuals. The standardized residuals should have mean 0 and standard deviation 1 (hence the dashed lines at $\\pm2$ indicating approximate 95% error bounds). The variance of the standardized residuals is larger than 1, indicating in this case a moderate amount of overdispersion."}
 
-knitr::include_graphics("fig_standardized_residual_plot.png")
+knitr::include_graphics("images/06-analyzing-your-data/fig_standardized_residual_plot.png")
 
 ```
 
@@ -272,9 +275,9 @@ How do these models handle numerator/denominator mismatch? Zero numerator/zero d
 
 ### Comparison of non-spatial regression estimates
 
-```{r, echo=FALSE, out.width="100%", fig.cap="Comparison of estimates of social inequities by ABSM from the aggregated method and from non-spatial regression models", eval=FALSE}
+```{r, echo=FALSE, out.width="100%", fig.cap="Comparison of estimates of social inequities by ABSM from the aggregated method and from non-spatial regression models"}
 
-knitr::include_graphics("non_spatial_coefficient_plot.png")
+knitr::include_graphics("images/06-analyzing-your-data/non_spatial_coefficient_plot.png")
 
 ```
 
@@ -424,15 +427,15 @@ rawSMR_caterpillar_eb + ebSMR_caterpillar_eb
 
 From the caterpillar plots, we observe that the empirial Bayes estimates are substantially smoothed relative to the raw SMRs. The observations at the extremes of the distribution with huge confidence intervals are smoothed towards the mean, and the spread of smoothed SMRs is generally narrower than the raw SMRs.
 
-```{r, echo=FALSE, fig.cap="Caterpillar plots of raw SMRs with 95% CIs and smoothed SMRs from a Poisson gamma model with 95% credible intervals", eval=FALSE}
-knitr::include_graphics("rawVsEB_SMR_caterpillar.png")
+```{r, echo=FALSE, fig.cap="Caterpillar plots of raw SMRs with 95% CIs and smoothed SMRs from a Poisson gamma model with 95% credible intervals"}
+knitr::include_graphics("images/06-analyzing-your-data/rawVsEB_SMR_caterpillar.png")
 ```
 
 This is also evident if we compare maps of the raw SMRs to the empirical Bayes SMRs, where the more extreme low or high SMRs are smoothed towards the middle values.
 
 
-```{r, echo=FALSE, fig.cap="Maps of raw SMRs (left) and smoothed SMRs from a Poisson gamma model", eval=FALSE}
-knitr::include_graphics("premature_raw_SMR_v_empbayes.png")
+```{r, echo=FALSE, fig.cap="Maps of raw SMRs (left) and smoothed SMRs from a Poisson gamma model"}
+knitr::include_graphics("images/06-analyzing-your-data/premature_raw_SMR_v_empbayes.png")
 ```
 
 
@@ -455,6 +458,7 @@ NOTE
 
 **Fixed vs Random Effects:** in standard regression models, fixed and random effects refer to the type of statistical model being used. When using fixed effects analysis of variance (ANOVA), the assumptions being made are about the independent variable and the error distributions for the variable. Fixed effects are estimated with maximum likelihood (the traditional beta estimates we see in regression models). They are most appropriate when trying to generalize results to values for the fixed variables used in the study (fixed variables are "assumed to be measured without error ... and assumed that the values of a fixed variable in one study are the same as values of the fixed variable in another study") (Newsom, 2019). If however, the researcher is seeking to make inferences beyond particular values of the independent variable, a random effects model is used. Random effects are estimated with shrinkage (partial pooling or linear unbiased predictions). Random effects models are accounting for "additional expected random variation on the independent variable" and instead of the value of the variable itself being of interest, the random variables "are assumed to be values that are drawn from a larger population of values and thus will represent them" (Newsom, 2019; Gelman, 2005)
 
+
 It should be noted here that, as pointed out by Wolpert and Ickstadt (1998), the Poisson log normal model does not aggregate consistently. That is, if one specifies a log normal distribution for each of the relative risks and then combines two areas and specifies a log normal distribution for the relative risk of the combined area, then these distributions are inconsistent (because the sum of log normal distributions is not log normal). This can be understood as a form of ecologic bias whereby risk relationships do not remain constant across levels of aggregation (Wakefield et al., 2000). Nevertheless, a normal second-stage distribution has been observed empirically to provide a good model for log relative risks over a range of aggregations, and does present advantages with respect to model flexibility and ease of computation. 
 
 Unlike the Poisson gamma model, there is no analytically tractable closed-form solution for the posterior distributions. Instead, we will use INLA to fit this model.
@@ -472,12 +476,12 @@ summary(model_iid)
 
 We can see from the caterpillar plots of the raw SMRs vs. the smoothed SMRs from the Poisson lognormal model that, similar to the Poisson gamma model, the Poisson lognormal model smooths extreme SMRs towards the overall mean. 
 
-```{r, echo=FALSE, fig.cap="Caterpillar plots of raw SMRs with 95% CIs and smoothed SMRs from a Poisson lognormal model with 95% credible intervals", eval=FALSE}
-knitr::include_graphics("raw_vs_poissoniid.png")
+```{r, echo=FALSE, fig.cap="Caterpillar plots of raw SMRs with 95% CIs and smoothed SMRs from a Poisson lognormal model with 95% credible intervals"}
+knitr::include_graphics("images/06-analyzing-your-data/raw_vs_poissoniid.png")
 ```
 
-```{r, echo=FALSE, fig.cap="Maps of raw SMRs (left) and smoothed SMRs from a Poisson lognormal model", eval=FALSE}
-knitr::include_graphics("premature_boston_raw_poissonmod0.png")
+```{r, echo=FALSE, fig.cap="Maps of raw SMRs (left) and smoothed SMRs from a Poisson lognormal model"}
+knitr::include_graphics("images/06-analyzing-your-data/premature_boston_raw_poissonmod0.png")
 ```
 
 The estimate of the SMR for area $i$ relative to the reference mortality rate (from the indirect age standardization) is $\exp(\alpha + v_{i})$, while $\exp(v_{i})$ is the residual relative risk for area $i$ relative to the mean over the study area. Note that if an internal set of reference rates for indirect age standardization has been used, i.e. based on the observed rates over the whole study area itself, then $\alpha$ will generally be close to zero. 
@@ -511,16 +515,17 @@ summary(model_multi)
 
 ````
 
-```{r, echo=FALSE, fig.cap="Maps of CT raw SMRs (left) and smoothed SMRs from a Poisson multilevel model", eval=FALSE}
-knitr::include_graphics("premature_raw_SMR_v_multimod.png")
+```{r, echo=FALSE, fig.cap="Maps of CT raw SMRs (left) and smoothed SMRs from a Poisson multilevel model"}
+knitr::include_graphics("images/06-analyzing-your-data/premature_raw_SMR_v_multimod.png")
 ```
 
-```{r, echo=FALSE, fig.cap="Map of the neighborhood level variation in relative risk (Level 2 of the Poisson multilevel model)", eval=FALSE}
-knitr::include_graphics("premature_boston_neigh_rr.png")
+```{r, echo=FALSE, fig.cap="Map of the neighborhood level variation in relative risk (Level 2 of the Poisson multilevel model)"}
+knitr::include_graphics("images/06-analyzing-your-data/premature_boston_neigh_rr.png")
 ```
 
 
 ### Poisson BYM model
+
 
 In the multilevel Poisson log normal model with independent census tracts and neighborhoods, the 
 neighborhood units were specified **a priori**. In a sense, the neighborhood boundaries are fixed, and crossing a boundary means that one's relative risk may jump by quite a lot. What if one wants to account for spatial correlation in a **smoother** manner? One way to do this is to specify a multivariate normal prior distribution for all the area parameters with a spatially-structured covariance matrix. Many different ways have been proposed to specify spatially structured multivariate normal distributions for $\log (\theta_{i})$ (Wakefield et al., 2000; Banerjee et al., 2004). 
@@ -552,9 +557,11 @@ and $m_{i}$ is the number of adjacent areas. To understand this, consider the re
 distribution for $u_{i}$ has conditional mean equal to the average of the neighbouring $u_{j}$'s and variance inversely proportional to the number of adjacent neighbours. The effect is to smooth $u_{i}$ toward the mean risk in the set of neighbouring areas. Note that $\tau^{2}_{u}$ is the \textit{conditional} variance (scaled by $\sum_{j \in \partial_{i}} {w_{ij}} = m_{i}$, i.e. the number of neighbours); to emphasize that it is only interpretable conditionally, we have labeled it $\tau^{2}_{u}$ instead of $\sigma^{2}_{u}$.
 
 
-```{r caridea, echo=FALSE, out.width="60%", fig.cap="Illustration of the CAR idea", eval=FALSE}
-knitr::include_graphics("CARillustration.png")
+
+```{r caridea, echo=FALSE, out.width="60%", fig.cap="Illustration of the CAR idea"}
+knitr::include_graphics("images/06-analyzing-your-data/CARillustration.png")
 ```
+
 
 
 Besag, Yorke and Mollié (1991) recommend combining the CAR prior and the standard normal prior to allow for both
@@ -584,7 +591,7 @@ With an estimate of the marginal between-area variance, one can also characteriz
 \mathrm{frac_{spatial}} = s^{2}_{u} / (s^{2}_{u} + \sigma^{2}_{v}) \]
 When $\mathrm{frac_{spatial}}$ is close to 1, spatial heterogeneity dominates. When $\mathrm{frac_{spatial}}$ is close to 0, unstructured heterogeneity dominates (Best et al. 2005).
 
-Define:
+To aid with interpretation of the variability in the posterior estimates of $SMR_i = \exp(u_i + v_i)$, we define a quantity which we will call QR90 (Best et al. 2005)
 \[ QR_{90} = \mbox{exp}(q_{95\%} - q_{5\%}) = \mbox{ relative risk between top and bottom 5\% of areas}
 \]
 where
@@ -594,23 +601,23 @@ q_{5\%} & = \mbox{ log relative risk for the area ranked at the 5th percentile} 
 q_{95\%} & = \mbox{ log relative risk for the area ranked at the 95th percentile}
 \end{align*}
 \]
+The advantage of QR90 is that it expresses the variability in the SMRs on the relative risk scale, which facilitates comparison of the disparities between areas to the estimated inequities (also on the relative risk scale) attributable to categories of ABSMs.
 
-
-```{r qr90idea, echo=FALSE, out.width="60%", fig.cap="Depiction of QR90: the contrast between the 95th and 5th quantiles of the random effects distribution", eval=FALSE}
-knitr::include_graphics("qr90_idea.png")
+```{r qr90idea, echo=FALSE, out.width="60%", fig.cap="Depiction of QR90: the relative risk comparing the 95th and 5th quantiles of the random effects distribution", fig.align="center"}
+knitr::include_graphics("images/06-analyzing-your-data/qr90_idea.png")
 ```
 \includegraphics[width=3.5in]{../qr90_idea.pdf}
 
 
 
-```{r, echo=FALSE, fig.cap="Caterpillar plots of raw SMRs with 95% CIs and smoothed SMRs from a Poisson BYM model with 95% credible intervals", eval=FALSE}
-knitr::include_graphics("raw_vs_bymmod0.png")
+```{r, echo=FALSE, fig.cap="Caterpillar plots of raw SMRs with 95% CIs and smoothed SMRs from a Poisson BYM model with 95% credible intervals"}
+knitr::include_graphics("images/06-analyzing-your-data/raw_vs_bymmod0.png")
 ```
 
 
 
-```{r, echo=FALSE, fig.cap="Comparison of premature mortality raw SMRs and smoothed (BYM) SMRs", eval=FALSE}
-knitr::include_graphics("premature_boston_raw_smooth.png")
+```{r, echo=FALSE, fig.cap="Comparison of premature mortality raw SMRs and smoothed (BYM) SMRs"}
+knitr::include_graphics("images/06-analyzing-your-data/premature_boston_raw_smooth.png")
 ```
 
 
@@ -618,16 +625,16 @@ knitr::include_graphics("premature_boston_raw_smooth.png")
 
 ### Premature mortality 
 
-```{r, echo=FALSE, fig.cap="ABSMs vs. smoothed SMRs (BYM)", eval=FALSE}
-knitr::include_graphics("premature_smoothSMR_vs_absms.png")
+```{r, echo=FALSE, fig.cap="ABSMs vs. smoothed SMRs (BYM)"}
+knitr::include_graphics("images/06-analyzing-your-data/premature_smoothSMR_vs_absms.png")
 ```
 
-```{r, echo=FALSE, fig.cap="Comparison of premature mortality inequities by ABSM categories across all analytic methods and models", eval=FALSE}
-knitr::include_graphics("premature_all_coefficients_plot.png")
+```{r, echo=FALSE, fig.cap="Comparison of premature mortality inequities by ABSM categories across all analytic methods and models"}
+knitr::include_graphics("images/06-analyzing-your-data/premature_all_coefficients_plot.png")
 ```
 
-```{r, echo=FALSE, message=FALSE, eval=FALSE}
-table_absm_inla <- read_csv("coefficient_tab_inla.csv") %>%
+```{r, echo=FALSE, message=FALSE}
+table_absm_inla <- read_csv("data/06-analyzing-your-data/coefficient_tab_inla.csv") %>%
   dplyr::select(term, qval, estimate, conf.low, conf.high, method) %>%
   filter(method %in% c("Aggregated", "Quasipoisson", "Negative binomial", "BYM")) %>%
   pivot_wider(id_cols = c(term, qval),
@@ -659,32 +666,32 @@ knitr::kable(table_absm_inla,
 
 ```
 
-```{r, echo=FALSE, fig.cap="Premature mortality: comparison of smoothed SMRs (BYM) before and after adjustment for CT % below poverty", eval=FALSE}
-knitr::include_graphics("premature_boston_apINDPOV_before_after.png")
+```{r, echo=FALSE, fig.cap="Premature mortality: comparison of smoothed SMRs (BYM) before and after adjustment for CT % below poverty"}
+knitr::include_graphics("images/06-analyzing-your-data/premature_boston_apINDPOV_before_after.png")
 ```
 
-```{r, echo=FALSE, fig.cap="Premature mortality: comparison of smoothed SMRs (BYM) before and after adjustment for CT Index of Concentration at the Extremes (racialized economic segregation)", eval=FALSE}
-knitr::include_graphics("premature_boston_qICEwnhinc_before_after.png")
+```{r, echo=FALSE, fig.cap="Premature mortality: comparison of smoothed SMRs (BYM) before and after adjustment for CT Index of Concentration at the Extremes (racialized economic segregation)"}
+knitr::include_graphics("images/06-analyzing-your-data/premature_boston_qICEwnhinc_before_after.png")
 ```
 
-```{r, echo=FALSE, fig.cap="Premature mortality: comparison of smoothed SMRs (BYM) before and after adjustment for CT Social Vulnerability Index", eval=FALSE}
-knitr::include_graphics("premature_boston_qsvi_before_after.png")
+```{r, echo=FALSE, fig.cap="Premature mortality: comparison of smoothed SMRs (BYM) before and after adjustment for CT Social Vulnerability Index"}
+knitr::include_graphics("images/06-analyzing-your-data/premature_boston_qsvi_before_after.png")
 ```
 
 
 ### Lung cancer mortality
 
-```{r, echo=FALSE, fig.cap="Lung cancer mortality: CT ABSMs vs. smoothed SMRs (BYM)", eval=FALSE}
-knitr::include_graphics("lung_smoothSMR_vs_absms.png")
+```{r, echo=FALSE, fig.cap="Lung cancer mortality: CT ABSMs vs. smoothed SMRs (BYM)"}
+knitr::include_graphics("images/06-analyzing-your-data/lung_smoothSMR_vs_absms.png")
 ```
 
-```{r, echo=FALSE, fig.cap="Comparison of lung cancer mortality inequities by CT ABSM categories across all analytic methods and models", eval=FALSE}
-knitr::include_graphics("lung_all_coefficients_plot.png")
+```{r, echo=FALSE, fig.cap="Comparison of lung cancer mortality inequities by CT ABSM categories across all analytic methods and models"}
+knitr::include_graphics("images/06-analyzing-your-data/lung_all_coefficients_plot.png")
 ```
 
 
-```{r, echo=FALSE, message=FALSE, eval=FALSE}
-lung_table_absm_inla <- read_csv("lung_coefficient_tab_inla.csv") %>%
+```{r, echo=FALSE, message=FALSE}
+lung_table_absm_inla <- read_csv("data/06-analyzing-your-data/lung_coefficient_tab_inla.csv") %>%
   dplyr::select(term, qval, estimate, conf.low, conf.high, method) %>%
   filter(method %in% c("Aggregated", "Quasipoisson", "Negative binomial", "BYM")) %>%
   pivot_wider(id_cols = c(term, qval),
@@ -717,17 +724,131 @@ knitr::kable(lung_table_absm_inla,
 
 ```
 
-```{r, echo=FALSE, fig.cap="Lung cancer: comparison of smoothed SMRs (BYM) before and after adjustment for CT % below poverty", eval=FALSE}
-knitr::include_graphics("lung_boston_apINDPOV_before_after.png")
+```{r, echo=FALSE, fig.cap="Lung cancer: comparison of smoothed SMRs (BYM) before and after adjustment for CT % below poverty"}
+knitr::include_graphics("images/06-analyzing-your-data/lung_boston_apINDPOV_before_after.png")
 ```
 
-```{r, echo=FALSE, fig.cap="Lung cancer: comparison of smoothed SMRs (BYM) before and after adjustment for CT Index of Concentration at the Extremes (racialized economic segregation)", eval=FALSE}
-knitr::include_graphics("lung_boston_qICEwnhinc_before_after.png")
+```{r, echo=FALSE, fig.cap="Lung cancer: comparison of smoothed SMRs (BYM) before and after adjustment for CT Index of Concentration at the Extremes (racialized economic segregation)"}
+knitr::include_graphics("images/06-analyzing-your-data/lung_boston_qICEwnhinc_before_after.png")
 ```
 
-```{r, echo=FALSE, fig.cap="Lung cancer: comparison of smoothed SMRs (BYM) before and after adjustment for CT Social Vulnerability Index", eval=FALSE}
-knitr::include_graphics("lung_boston_qsvi_before_after.png")
+```{r, echo=FALSE, fig.cap="Lung cancer: comparison of smoothed SMRs (BYM) before and after adjustment for CT Social Vulnerability Index"}
+knitr::include_graphics("images/06-analyzing-your-data/lung_boston_qsvi_before_after.png")
 ```
+
+
+## Intersectional analysis of inequities by racialized group and CT ABSMs
+
+In this section, we explore intersectional patterns of inequities in premature mortality by racialized group and CT ABSMs in the census tracts comprising the Greater Boston study area. That is, we focus on the joint patterning of inequities by membership in racialized groups (as captured by individual-level membership in racialized groups) and residence in census tracts characterized by area-based social metrics as indicative of **racialized societal inequities**. To accomplish this, we operationalize intersectional effects using methods for analyzing statistical interactions (Knol and VanderWeele 2012; Jackson et al. 2016; VanderWeele 2015). In contrast to analyses that focus on racial/ethnic disparities "controlling" for area-based social metrics or, conversely, disparities by ABSM "controlling" for racialized group membership, this framework emphasizes the importance of describing the joint patterning of racialized social inequities.
+
+Drawing on recommendations on reporting interactions (Knol and VanderWeele 2012), we propose that health disparities researchers should be interested in reporting these interactions in three different ways:
+
+* highlighting inequities by racialized group **within** categories of CT ABSMs
+
+* highlighting inequities by CT ABSM **within** racialized groups
+
+* highlighting the joint inequities by racialized group and CT ABSM relative to a *common reference group*
+
+Moreover, a thorough reporting of interaction analyses should present measures of effect measure modification on both the additive and multiplicative scales. 
+
+### Aggregated analysis
+
+We begin by computing age-standardized premature mortality rates by racialized group and CT ABSMs. Similar to how we computed these age-standardized rates by CT ABSMs alone, we aggregate age-specific death counts and population person-time by racialized group across census tracts within categories of CT ABSM and apply direct age-standardization. We present theses estimated age-standardized premature mortality rates and 95% confidence intervals in Figure \@ref(fig:age-std-intersectional).
+
+Several patterns are apparent from the visualization of the age-standardized rates. Firstly, gradients in inequities by CT ABSM are apparent for all three ABSMs, with premature mortality rates higher in more disadvantaged census tracts. This gradient is more pronounced among the non-Hispanic white population, with steeper gradients and tighter confidence limits. Among the Black population, inequities across CT ABSM categories are more shallow, with wider confidence limits in the more advantaged categories reflecting the smaller population sizes of Black individuals living in these census tracts.
+
+Focusing on the Black/white inequities across CT ABSM categories, there is some suggestion of qualitative interaction. That is, Black/white inequities are largest in the most advantaged census tracts, but in more disadvantaged census tracts, non-Hispanic whites have higher rates of premature mortality than Black populations living in the same areas, particular by quintile of CT ICE and SVI. 
+
+```{r age-std-intersectional, echo=FALSE, fig.cap="Age-standardized premature mortality rates by racialized group and CT ABSM, Greater Boston, 2013-2017, as computed by the aggregated method"}
+
+knitr::include_graphics("images/06-analyzing-your-data/fig_aggregate_twoway_rates.png")
+
+```
+
+To evaluate the magnitude of the CT ABSM inequities **within** racialized group, we present (a) age-standardized rate differences per 100,000 person-years and (b) age-standardized incidence rate ratios in Figure \@ref(fig:agg-absm-byRace). On both the additive (incidence rate difference) and multiplicative scales (incidence rate ratio), ABSM gradients are much steeper among the non-Hispanic white population compared with the Black population. ABSM gradients among the Black population are attenuated towards the null and have much wider confidence limits. 
+
+```{r agg-absm-byRace, echo=FALSE, fig.cap="ABSM gradients in premature mortality by racialized group (Blacks vs. Non-Hispanic whites): age-standardized rate differences per 100,000 person-years (top row) and rate ratios (bottom row) computed using the aggregation method, Greater Boston, 2013-2017. In each plot, the reference group is the most advantaged racialized group-specific ABSM category."}
+
+knitr::include_graphics("images/06-analyzing-your-data/fig_aggregate_byRace_plots.png")
+
+```
+
+Meanwhile, Black/white inequities as depicted in Figure \@ref(fig:agg-race-by-absm) confirm the pattern of Black/white crossover suggested in Figure \@ref(fig:age-std-intersectional), with non-Hispanic white premature mortality rates significantly elevated in the most disadvantaged census tracts by CT Index of Concentration at the Extremes and CT Social Vulnerability Index. 
+
+```{r agg-race-by-absm, echo=FALSE, fig.cap="Black/white inequities in premature mortality by category of CT ABSM: age-standardized rate differences per 100,000 person-years (top row) and rate ratios (bottom row) computed using the aggregation method, Greater Boston, 2013-2017."}
+
+knitr::include_graphics("images/06-analyzing-your-data/fig_aggregate_byABSM_plots.png")
+
+```
+
+We visualize the joint pattern of inequities on the additive (incidence rate difference) and multiplicative (incidence rate ratio) scales relative to a common reference group in Figure \@ref(fig:agg-twoway-irdirr). In general, it gives insights similar to visualization of age-standardized incidence rates by racialized group and CT ABSM in Figure \@ref(fig:age-std-intersectional) above.
+
+```{r agg-twoway-irdirr, echo=FALSE, fig.cap="Intersectional age-standardized incidence rate differences per 100,000 person-years (top row) and age-standardized rate ratios (bottom row) by racialized group and category of CT ABSM computed using the aggregation method, Greater Boston, 2013-2017. Presented with a common reference group (non-Hispanic whites in the most advantaged categories of CT ABSMs"}
+
+knitr::include_graphics("images/06-analyzing-your-data/fig_aggregate_twoway_irdirr.png")
+
+```
+
+
+
+### Intersectional inequities as estimated by non-spatial, multilevel, and spatial regression models
+
+Intersectional inequities by racialized group and CT ABSM can also be estimated using regression models. 
+
+```{r, echo=FALSE, fig.cap="Comparison of inequities in premature mortality by racialized group and CT ABSM as estimated by the aggregated method, Poisson regression with robust variance estimator, multilevel Poisson regression (census tracts in city/town/neighborhoods), and spatial Poisson regression with BYM prior, Greater Boston, 2013-2017. Here, we focus on estimated incidence rate ratios with a common reference group (non-Hispanic whites in the most advantaged census tracts)"}
+
+knitr::include_graphics("images/06-analyzing-your-data/fig_interaction_twoway_plot.png")
+
+```
+
+```{r tab-interaction-twoway, echo=FALSE, message=FALSE}
+interaction_twoway_irr <- read_csv("data/06-analyzing-your-data/interaction_twoway_irr_estimates.csv") %>%
+  dplyr::select(-absm) %>%
+  mutate(racegroup=ifelse(racegroup=="Non-Hispanic White", "NHW", racegroup))
+
+options(knitr.kable.NA='')
+knitr::kable(interaction_twoway_irr, 
+             col.names = c("Racialized group", "ABSM", "IRR", "conf.low", "conf.high",
+                            "IRR", "conf.low", "conf.high",
+                            "IRR", "conf.low", "conf.high",
+                            "IRR", "conf.low", "conf.high"),
+             digits=c(0, 0, 2, 2, 2,
+                      2, 2, 2, 
+                      2, 2, 2, 
+                      2, 2, 2),
+             html=TRUE,
+caption = "Comparison of intersectional inequities in premature mortality by 
+racialized group and category of CT ABSMs from aggregated analysis, Poisson with robust variance estimator, multilevel, and BYM models. Note the common reference group (non-Hispanic whites in the most advantaged CTs)") %>%
+  add_header_above(c(" "=2, "Aggregated" = 3, "Poisson robust" = 3, "Multilevel" = 3, 
+                     "BYM" = 3))%>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  pack_rows("CT % below poverty", 1, 8) %>%
+  pack_rows("CT Index of Concentration at the Extremes", 9, 18) %>%
+  pack_rows("CT Social Vulnerability Index", 19, 28)
+
+```
+
+
+
+```{r absm-byRace, echo=FALSE, fig.cap="Comparison of CT ABSM inequities in premature mortality within racialized group (Black and Non-Hispanic White) as estimated by the aggregated method, Poisson regression with robust variance estimator, multilevel Poisson regression (census tracts in city/town/neighborhoods), and spatial Poisson regression with BYM prior, Greater Boston, 2013-2017. In each plot, the reference group is the most advantaged ABSM category **within** racialized group."}
+
+knitr::include_graphics("images/06-analyzing-your-data/fig_absm_inequities_within_race.png")
+
+```
+
+As seen in Figure \@ref(fig:absm-byRace), inequities in premature mortality across CT ABSM categories are much more pronounced for the non-Hispanic white population, whereas the gradient in age-adjusted incidence rate ratios for CT ABSM categories within the Black population is much shallower.
+
+
+```{r bw-byabsm, echo=FALSE, fig.cap="Comparison of Black vs. non-Hispanic white inequities in premature mortality within category of CT ABSM as estimated by the aggregated method, Poisson regression with robust variance estimator, multilevel Poisson regression (census tracts in city/town/neighborhoods), and spatial Poisson regression with BYM prior, Greater Boston, 2013-2017"}
+
+knitr::include_graphics("images/06-analyzing-your-data/fig_bw_inequities_within_absm.png")
+
+```
+
+As seen in Figure \@ref(fig:bw-byabsm), Black-white inequities as measured by incidence rate ratios are largest in the most advantaged census tracts, whereas inequities by racialized group are smaller or even reversed in the most disadvantaged census tracts. That is, Non-Hispanic Whites living in the most disadvantaged census tracts have higher observed age-adjusted premature mortality rates than Black populations living in the same areas.
+
+Across methods, we note that the confidence limits on age-standardized rates, incidence rate differences, and incidence rate ratios are much wider for the aggregated method compared with model-based estimates. This reflects the impact of age-standardization, whereby age strata with relatively less information may nevertheless contribute strongly to the age-standardized estimates if those age strata are highly weighted in the standard population. The result is that standard errors and confidence limits from the aggregated method will usually be larger than their corresponding model-based estimates. Thus, the aggregated method has less power to detect statistically significant inequities.
+
 
 ## REFERENCES
 
@@ -741,6 +862,10 @@ Clayton D, Kaldor J. Empirical Bayes estimates of age-standardized relative risk
 
 Gelman, A. Why I don’t use the term “fixed and random effects.” Post in Statistical Modeling, Causal Inference, and Social Science. 01,25,2005. Available at: https://statmodeling.stat.columbia.edu/2005/01/25/why_i_dont_use/
 
+Jackson JW, Williams DR, VanderWeele TJ. Disparities at the intersection of marginalized groups. Soc Psychiatry Psychiatr Epidemiol. 2016 Oct;51(10):1349-1359. doi: 10.1007/s00127-016-1276-6. Epub 2016 Aug 16. PMID: 27531592; PMCID: PMC5350011.
+
+Knol MJ, VanderWeele TJ. Recommendations for presenting analyses of effect modification and interaction. Int J Epidemiol. 2012 Apr;41(2):514-20. doi: 10.1093/ije/dyr218. Epub 2012 Jan 9. PMID: 22253321; PMCID: PMC3324457.
+
 Krieger N, Waterman PD, Chen JT, Rehkopf DH, Subramanian SV. The Public Health Disparities Geocoding Project Monograph. Available as of June 30, 2004 at: http://www.hsph.harvard.edu/thegeocodingproject
 
 Lawson AB, Browne WJ, Rodeiro CL. Disease mapping with WinBUGS and MLwiN. John Wiley & Sons; 2003 Sep 12.
@@ -753,6 +878,9 @@ Pickle LW, White AA. Effects of the choice of age‐adjustment method on maps of
 
 United States Census Bureau. Population and Housing Estimate Program (PEP). Updated 2022. Available at: https://www.census.gov/programs-surveys/popest.html
 
+VanderWeele TJ. Explanation in Causal Inference: Methods for Mediation and Interaction. New York, NY: Oxford University Press, 2015.
+
 Wakefield, J.C., Best, N.G. and Waller, L. Bayesian approaches to diseasemapping,  In:  Elliott,  P.,  Wakefield,  J.C.,  Best,  N.G.  and  Briggs,  D.J. SpatialEpidemiology: Methods and Applications, Oxford University Press, London, UK.pp 104–127, 2000.
 
 Wolpert RL, Ickstadt K. Poisson/gamma random field models for spatial statistics. Biometrika. 1998 Jun 1;85(2):251-67.
+
