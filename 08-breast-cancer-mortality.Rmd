@@ -1009,7 +1009,7 @@ include_graphics("images/08-breast-cancer-mortality/poisson_irr_plot_bc.png")
 
 And of course, now we can map that value as well.
 
-```{r poisson map, eval = FALSE, echo = FALSE}
+```{r poisson map1, eval = FALSE, echo = FALSE}
 map.state.p.irr <- poisson_irr %>% 
   mutate(fit_irr = case_when(fit_irr > 4  ~ 4,
                          TRUE     ~ fit_irr)) %>% 
