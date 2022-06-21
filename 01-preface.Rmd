@@ -28,25 +28,44 @@ to geocode their data to the census tract level and enable researchers
 to access not only county-level ABSMs (public access data) but also
 census tract level ABSMs (restricted data).
 
-Since 2004, there has been a huge increase in conceptual and
-methodological work regarding use of ABSMs to document and analyze
+Since 2004, there has been a huge increase in conceptual and methodological work regarding use of ABSMs to document and analyze health inequities, and the computing tools and statistical methods to measure them have evolved. In particular, the availability of software
+that facilitates data access, mapping, visualization, and fitting of multilevel and spatial models has greatly enhanced the accessibility of these analytic methods for public health scientists, advocates, activists, and policy makers interested in advancing health equity. The
+updated [*Public Health Disparities Geocoding Project  2.0*](https://www.hsph.harvard.edu/thegeocodingproject/save-the-date-the-public-health-disparities-geocoding-project-2-0/) training (PHDGP2.0, 2022), held in June and July 2022, builds on our prior 2004 training, and expands on why & how to analyze population health and health inequities in relation to census tract, county, and other georeferenced societal
+and environmental data.
+
+This online manual for the virtual training serves as a guide to help users explore the following topics:
+
+- the history and context of, and rationale for, conducting this type of work
+- getting data from the Census and other sources
+- visualizing geocoded data and social metrics
+- conducting analyses with data aggregated to a specified level of geography vs. multi-level analyses with 2 or more levels of geography
+- interpreting data through a health equity lens
+
+The PHDGP 2.0 manual also offers three case examples that go through analysis of mortality data (including aggregation and spatial analysis), and two case examples to illustrate the use of aggregated data from the American Community Survey (ACS) and the CDC\'s PLACES dataset.
+
+The theory informing the work of this project is the ecosocial theory of disease distribution, first proposed in 1994 and elaborated since (Krieger, 1994; Krieger 2011, Krieger 2021). This theory not only provides conceptual tools for analyzing multilevel spatiotemporal processes of embodying (in)justice, but also calls attention to who and what is responsible for health inequities, and who holds or blocks agency and accountability to achieve health
+justice (Krieger, 1994; Krieger 2011, Krieger 2021). These course materials are written with as much emphasis on monitoring health for accountability and action as they are for etiological studies.
+
+Source of funding: American Cancer Society
+Creative copyright; Licensing - Credit for use is required. 
+(Licensing needs to be addressed in everything we hand out).
+
+Please cite this work as Chen JT, Testa C, Hall E, Javadi D,  Morgan J, Rushovich T,  Shah S, Waterman PD, Krieger N. The Public Health Disparities Geocoding Project 2.0. Course Material. Available as of June 30, 2022
 
 REFERENCES
 
-
-Krieger N. Overcoming the absence of socioeconomic data in medical records: validation and application of a census-based methodology. Am J Public Health. 1992 May;82(5):703-10. doi: 10.2105/ajph.82.5.703.
-
-Krieger N. Epidemiology and the web of causation: has anyone seen the spider? Soc Sci Med. 1994 Oct;39(7):887-903. doi: 10.1016/0277-9536(94)90202-x.
-
-Krieger N (PI). Area-based socioeconomic measures for health data. NIH (NICHD) R01 HD3865-01 (1998-2003).
-
-Krieger N, Waterman PD, Chen JT, Rehkopf DH, Subramanian SV. The Public Health Disparities Geocoding Project Monograph. Available as of June 30, 2004 at: http://www.hsph.harvard.edu/thegeocodingproject
-
-Krieger N, Waterman PD, Chen JT, Rehkopf DH, Subramanian SV. The Public Health Disparities Geocoding Project Monograph: Publications. Available as of June 30, 2004 at: https://www.hsph.harvard.edu/thegeocodingproject/publications
+Krieger N. Ecosocial Theory, Embodied Truths, and The People's Health. New York: Oxford University Press, 2021.
 
 Krieger, N. Epidemiology and The People’s Health: Theory and Context. New York: Oxford University Press, 2011.
 
-Krieger N. Ecosocial Theory, Embodied Truths, and The People's Health. New York: Oxford University Press, 2021.
+Krieger N, Waterman PD, Chen JT, Rehkopf DH, Subramanian SV. The Public Health Disparities Geocoding Project Monograph. Available as of June 30, 2004 at: http://www.hsph.harvard.edu/thegeocodingproject
+
+Krieger N, Waterman PD, Chen JT, Rehkopf DH, Subramanian SV. The Public Health Disparities Geocoding Project Monograph: Publications. Available as of June 30, 2004 at: https://www.hsph.harvard.edu/thegeocodingproject/publications/
+
+Krieger N. Epidemiology and the web of causation: has anyone seen the spider? Soc Sci Med. 1994 Oct;39(7):887-903. doi: 10.1016/0277-9536(94)90202-x.
+
+Krieger N. Overcoming the absence of socioeconomic data in medical records: validation and application of a census-based methodology. Am J Public Health. 1992 May;82(5):703-10. doi: 10.2105/ajph.82.5.703.
+
+Krieger N (PI). Area-based socioeconomic measures for health data. NIH (NICHD) R01 HD3865-01 (1998-2003).
 
 PHDGP.The Public Health Disparities Geocoding Project 2.0. Available as of March 15, 2022 at: https://www.hsph.harvard.edu/thegeocodingproject/save-the-date-the-public-health-disparities-geocoding-project-2-0/
-
