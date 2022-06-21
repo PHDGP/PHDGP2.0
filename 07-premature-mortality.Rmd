@@ -22,12 +22,12 @@ The research questions we will seek to answer throughout this case study include
 3) What are the associations with ABSM by racialized group?/ How does ABSM interact with individual level membership in racialized groups? (i.e., interactions between socioeconomic position and racialized groups, not just socioeconomic inequities within racialized groups)
   3a. We can observe this using a poisson model with and interaction term
 4) How does the racialized disparity vary across space? 
-  4a. We can observe this with a multilevel model with city/town level with a random slope for race
+  4a. We can observe this with a multilevel model with city/town level with a random slope for racialized group
   4b. We can also control for city expenditures
 
 ## Getting and Wrangling Your Data
 
-We are providing datasets for you to use throughout these case studies that have been wrangled and reshaped for your use, and we also provide code to show how you could go through that process on your own. Once you copy and run the code for your "Dependencies" You can skip ahead to the "Approach" section and follow along with the case study without issue.
+We are providing datasets for you to use throughout these case studies that have been wrangled and reshaped for your use, and we also provide code to show how you could go through that process on your own. Once you copy and run the code for your "Dependencies" you can skip ahead to the "Approach" section and follow along with the case study without issue.
  
 You can look at whole datasets in RStudio using the `View()` command, or look at summaries of the datasets by simply typing the dataset name into the console.
 
@@ -57,7 +57,7 @@ library(broom)
 
 ### Your Health Outcome Data - Premature Mortality
 
-Your data has been aggregated from individual observations into death counts by age, racialized group, census tract, and town. When you get unrestricted mortality files from government sources for research, you will likely receive files with one observation per death. After you have geocoded these observations, you will need to aggregate them up to the level of interest for your analysis. This requires aggregation not only up to the census tract level, but also age groups so we can do an appropriate age standardization, racialized groups so we can stratify our analyses by these groups, and towns so we can explore a second areal level of analysis. Below is some code (for example) to turn a raw mortality file into what has been provided to you, by merging census tracts and towns to the data, and then aggregating into groups that align with the age and racialized groups that match your denominator data. The vast majority of our area-based social metrics come from the U.S. Census, so the most detailed level for analysis available will be the census tract. We can use the `tigris` package to download census tract geometries and the `sf` package to link our geocoded observations to the appropriate census tracts. Ideally when performing an analysis that might include two or more levels, the smaller level (here, census tracts) would be nested entirely within the larger level (towns). In Massachusetts though, there are many towns that have such small populations that they are smaller than census tracts. For these towns, we have created a crosswalk wherein small towns have been combined to create larger super towns. These super towns each make up one census tract, so that each super town in the analysis will now have at least one census tract nested within it for an eventual multilevel analysis
+Your data have been aggregated from individual observations into death counts by age, racialized group, census tract, and town. When you get unrestricted mortality files from government sources for research, you will likely receive files with one observation per death. After you have geocoded these observations, you will need to aggregate them up to the level of interest for your analysis. This requires aggregation not only up to the census tract level, but also age groups so we can do an appropriate age standardization, racialized groups so we can stratify our analyses by these groups, and towns so we can explore a second areal level of analysis. Below is some code (for example) to turn a raw mortality file into what has been provided to you, by merging census tracts and towns to the data, and then aggregating into groups that align with the age and racialized groups that match your denominator data. The vast majority of our area-based social metrics come from the U.S. Census, so the most detailed level for analysis available will be the census tract (for which all the ABSMs are available, which is not the case for the census block group or census block). We can use the `tigris` package to download census tract geometries and the `sf` package to link our geocoded observations to the appropriate census tracts. Ideally when performing an analysis that might include two or more levels, the smaller level (here, census tracts) would be nested entirely within the larger level (towns). In Massachusetts though, there are several towns that have such small populations that they are smaller than census tracts. For these towns, we have created a crosswalk wherein small towns have been combined to create larger super towns. These super towns each make up one census tract, so that each super town in the analysis will now have at least one census tract nested within it for an eventual multilevel analysis
 
 ```{r wrangling_outcome, eval = FALSE}
 # the raw mortality data, with the geocoded coordinates converted into spatial feature (sf) data
@@ -775,7 +775,7 @@ ggsave("raw_smr_dotplot.png")
 include_graphics("images/07-premature-mortality/raw_smr_dotplot.png")
 ```
 
-We can also produce a map of these relationships. To do so, we will import a map file produced by the State of Massachuestts [https://www.mass.gov/info-details/massgis-data-municipalities].
+We can also produce a map of these relationships. To do so, we will import a map file produced by the State of Massachusetts [https://www.mass.gov/info-details/massgis-data-municipalities].
 
 ```{r, eval = FALSE}
 tract_geometry <- st_read("CENSUS2010_BLK_BG_TRCT_SHP",
@@ -907,7 +907,7 @@ ma_mort_indirect_ordered <- data.frame(smooth_smr = null_random) %>%
 
 Note the code above provides code to calculate the percentage of the variance in the data that is spatially correlated - in this case,  about 80%.
 
-We can now visualize our smoothed SMR. First, lets look at a similar dot plot to what we did with the raw SMR:
+We can now visualize our smoothed SMR. First, let's look at a similar dot plot to what we did with the raw SMR:
 
 ```{r smoothed_plot, eval = FALSE}
 smooth_smr_dotplot <- ma_mort_indirect_ordered %>%
@@ -986,7 +986,7 @@ include_graphics("images/07-premature-mortality/smooth_smr_map.png")
 ```
 
 We can see from the plot and the map that while there is still variation in the SMR - it is much less extreme than the raw SMR.
-But to get a true sense of how premature mortality varies across the socioeconomic gradient, we should look at a model that adjusts for our ABSMs and see if there are any changes in variation. Lets look at the SMR after we adjust for poverty, giving us the map we introduced this section with.
+But to get a true sense of how premature mortality varies across the socioeconomic gradient, we should look at a model that adjusts for our ABSMs and see if there are any changes in variation. Let's look at the SMR after we adjust for poverty, giving us the map we introduced this section with.
 
 ```{r, eval = FALSE}
 #Code to include our ABSM
@@ -1085,15 +1085,15 @@ In comparing the smoothed effect from our null model and the effects of our mode
 include_graphics("images/07-premature-mortality/smooth_smr_map.png")
 ```
 
-### What is the racial disparity in premature mortality overall?
+### What is the racialized disparity in premature mortality overall?
 
 ```{r}
 include_graphics("images/07-premature-mortality/map.irr.png")
 ```
 
-We can describe inequities in race much the same way we describe inequities in ABSM - by aggregating death and population data. We've already got this data aggregated - we can stratify our analysis to compare the White Non-Hispanic and Black Non-Hispanic populations. Throughout the example we may refer to these groups as White and Black as a shorthand.
+We can describe inequities by racialized groups much the same way we describe inequities in ABSM - by aggregating death and population data. We already have these aggregated - we can stratify our analysis to compare the White Non-Hispanic and Black Non-Hispanic populations. Throughout the example we may refer to these groups as White and Black as a shorthand.
 
-We will need to age-adjust our data here, as differences in premature mortality may be due to differential distribution of ages by race:
+We will need to age-adjust our data here, as differences in premature mortality may be due to differential distribution of ages by racialized group:
 
 ```{r, eval = FALSE, echo = FALSE}
 tab_age_race <- ma_demo_acs %>%
@@ -1380,7 +1380,7 @@ include_graphics("images/07-premature-mortality/map.irr.png")
 include_graphics("images/07-premature-mortality/adj_map.p.irr.png")
 ```
 
-In order to visualize differences in how an ABSM - we will use poverty - interacts with racialized group, we can use a poisson model for the mortality rates, and include an interaction term between race and poverty.
+In order to visualize differences in how an ABSM - we will use poverty - interacts with racialized group, we can use a poisson model for the mortality rates, and include an interaction term between racialized group and poverty.
 
 Let's first plot the IRR produced by a poisson model for the rates.
 
@@ -1620,7 +1620,7 @@ ggsave("adj_map.p.irr.png")
 include_graphics("images/07-premature-mortality/adj_map.p.irr.png")
 ```
 
-To understand statistically how poverty is impacting the relationship between racialized groups and premature mortality, we can compare the models with and without poverty. We can see the impact of race is reduced with the presence of the census tract level poverty.
+To understand statistically how poverty is impacting the relationship between racialized groups and premature mortality, we can compare the models with and without poverty. We can see the impact of membership in racialized groups is reduced with the presence of the census tract level poverty.
 
 ```{r, echo = FALSE}
 summary.model0 <- readRDS("data/07-premature-mortality/poisson0.rds")
@@ -1632,11 +1632,11 @@ summary.model1 <- readRDS("data/07-premature-mortality/poisson1.rds")
 summary.model1
 ```
 
-The impact of race becomes non-significant when poverty is included in the model. We could interpret this as poverty driving the relationship between race and premature mortality. If this is the case, what conclusions could we draw about the need for appropriately contextualized maps
+The impact of membership in racialized groups becomes non-significant when poverty is included in the model. We could interpret this as poverty driving the relationship between racialized group and premature mortality. If this is the case, what conclusions could we draw about the need for appropriately contextualized maps
 
 ### How does the racialized disparity vary across space? 
 
-Although much of our data is at the census tract level, census tracts are not areas of political decision making. Political decisions in Massachusetts are made at the level of cities and towns. We would expect that cities and towns might be more important than census tracts in determining premature mortality, because it is at those boundaries that resources are distributed. We can fit a multilevel model to test this hypothesis.
+Although much of our data are at the census tract level, census tracts are not areas of political decision making. Political decisions in Massachusetts are made at the level of cities and towns. We would expect that cities and towns might be more important than census tracts in determining premature mortality, because it is at those boundaries that resources are distributed. We can fit a multilevel model to test this hypothesis.
 
 ```{r multilevel, eval = FALSE}
 # Bringing in city expenditure data
@@ -1720,14 +1720,14 @@ summary.mlm0 <- read_rds("data/07-premature-mortality/mlm0.rds")
 summary.mlm0
 ```
 
-#### Race and Age Fixed Effects Model
+#### Racialized group and Age Fixed Effects Model
 
 ```{r, echo = FALSE}
 summary.mlm1 <- read_rds("data/07-premature-mortality/mlm1.rds")
 summary.mlm1
 ```
 
-#### Race Random Effect at the Town Level
+#### Racialized group Random Effect at the Town Level
 
 ```{r, echo = FALSE}
 summary.mlm2 <- read_rds("data/07-premature-mortality/mlm2.rds")
