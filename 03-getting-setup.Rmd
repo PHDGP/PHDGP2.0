@@ -35,7 +35,7 @@ https://www.rstudio.com/.
 
 Throughout this text, the example code given will depend on various R packages
 which are all available free and open-source, easily installed in R with the 
-`install.packges` function. 
+`install.packages` function. 
 
 To work through the case examples here, you will need to install at least the 
 following packages: 
