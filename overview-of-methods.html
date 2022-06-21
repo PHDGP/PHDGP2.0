@@ -1,240 +1,87 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
+<html lang="en">
 <head>
-
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>7 Overview of Methods | The Public Health Disparities Geocoding Project 2.0</title>
-  <meta name="description" content="7 Overview of Methods | The Public Health Disparities Geocoding Project 2.0" />
-  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
-
-  <meta property="og:title" content="7 Overview of Methods | The Public Health Disparities Geocoding Project 2.0" />
-  <meta property="og:type" content="book" />
-  
-  
-  
-
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="7 Overview of Methods | The Public Health Disparities Geocoding Project 2.0" />
-  
-  
-  
-
-<meta name="author" content="Jarvis Chen, Enjoli Hall, Dena Javadi, Nancy Krieger, Justin Morgan, Christian Testa (alphabetic order by last name)" />
-
-
-
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  
-  
-<link rel="prev" href="analyzing-your-data.html"/>
-<link rel="next" href="premature-mortality.html"/>
-<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
-<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
-
-
-
-
-
-
-
-
-<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
-<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
-<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
-<script src="libs/leaflet-1.3.1/leaflet.js"></script>
-<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
-<script src="libs/proj4-2.6.2/proj4.min.js"></script>
-<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
-<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
-<script src="libs/leaflet-binding-2.1.1/leaflet.js"></script>
-<script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
-<script src="libs/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script>
-<link href="libs/HomeButton-0.0.1/home-button.css" rel="stylesheet" />
-<script src="libs/HomeButton-0.0.1/home-button.js"></script>
-<script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script>
-<script src="libs/clipboard-0.0.1/setClipboardText.js"></script>
-<link href="libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
-<link href="libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
-<script src="libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-
-
-<style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
-
-
-<link rel="stylesheet" href="style.css" type="text/css" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>6 Overview of Methods | Public Health Disparities Geocoding Project 2.0 Training Manual</title>
+<meta name="author" content="Christian Testa, Jarvis T Chen, Enjoli Hall, Dena Javadi, Justin Morgan, Tamara Rushovich, Sudipta (Shu) Saha, Pamela D Waterman, Nancy Krieger">
+<meta name="description" content="In the years since we initially presented the Public Health Disparities Geocoding Training in 2004, there has been a huge increase in conceptual and methodological work regarding use of ABSMs to...">
+<meta name="generator" content="bookdown 0.26 with bs4_book()">
+<meta property="og:title" content="6 Overview of Methods | Public Health Disparities Geocoding Project 2.0 Training Manual">
+<meta property="og:type" content="book">
+<meta property="og:description" content="In the years since we initially presented the Public Health Disparities Geocoding Training in 2004, there has been a huge increase in conceptual and methodological work regarding use of ABSMs to...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="6 Overview of Methods | Public Health Disparities Geocoding Project 2.0 Training Manual">
+<meta name="twitter:description" content="In the years since we initially presented the Public Health Disparities Geocoding Training in 2004, there has been a huge increase in conceptual and methodological work regarding use of ABSMs to...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1.9000/transition.js"></script><script src="libs/bs3compat-0.3.1.9000/tabs.js"></script><script src="libs/bs3compat-0.3.1.9000/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script><link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
+<script src="libs/leaflet-1.3.1/leaflet.js"></script><link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
+<script src="libs/proj4-2.6.2/proj4.min.js"></script><script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script><link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
+<script src="libs/leaflet-binding-2.1.1/leaflet.js"></script><script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script><script src="libs/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script><link href="libs/HomeButton-0.0.1/home-button.css" rel="stylesheet">
+<script src="libs/HomeButton-0.0.1/home-button.js"></script><script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script><script src="libs/clipboard-0.0.1/setClipboardText.js"></script><link href="libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet">
+<link href="libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet">
+<script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
 </head>
+<body data-spy="scroll" data-target="#toc">
 
-<body>
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
 
-
-
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
-
-    <div class="book-summary">
-      <nav role="navigation">
-
-<ul class="summary">
-<li><a href="./preface.html">PHDGP 2.0</a></li>
-
-<li class="divider"></li>
-<li class="chapter" data-level="1" data-path="preface.html"><a href="preface.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
-<li class="chapter" data-level="2" data-path="background.html"><a href="background.html"><i class="fa fa-check"></i><b>2</b> Background and History of Analytic Methods</a></li>
-<li class="chapter" data-level="3" data-path="getting-setup.html"><a href="getting-setup.html"><i class="fa fa-check"></i><b>3</b> Getting Setup with R and RStudio</a>
-<ul>
-<li class="chapter" data-level="3.0.1" data-path="getting-setup.html"><a href="getting-setup.html#principles-for-reproducible-workflow-and-programming"><i class="fa fa-check"></i><b>3.0.1</b> Principles for Reproducible Workflow and Programming</a></li>
-<li class="chapter" data-level="3.1" data-path="getting-setup.html"><a href="getting-setup.html#downloading-and-installing-r-and-rstudio"><i class="fa fa-check"></i><b>3.1</b> Downloading and Installing R and RStudio</a></li>
-<li class="chapter" data-level="3.2" data-path="getting-setup.html"><a href="getting-setup.html#basic-features-of-r"><i class="fa fa-check"></i><b>3.2</b> Basic Features of R</a>
-<ul>
-<li class="chapter" data-level="3.2.1" data-path="getting-setup.html"><a href="getting-setup.html#note-about-compiling-from-source"><i class="fa fa-check"></i><b>3.2.1</b> Note about “compiling from source”</a></li>
-<li class="chapter" data-level="3.2.2" data-path="getting-setup.html"><a href="getting-setup.html#tidycensus-special-instructions"><i class="fa fa-check"></i><b>3.2.2</b> Tidycensus Special Instructions</a></li>
-<li class="chapter" data-level="3.2.3" data-path="getting-setup.html"><a href="getting-setup.html#sf-special-instructions"><i class="fa fa-check"></i><b>3.2.3</b> sf Special Instructions</a></li>
-<li class="chapter" data-level="3.2.4" data-path="getting-setup.html"><a href="getting-setup.html#inla-install-instructions"><i class="fa fa-check"></i><b>3.2.4</b> INLA Install Instructions</a></li>
-</ul></li>
-<li class="chapter" data-level="3.3" data-path="getting-setup.html"><a href="getting-setup.html#references-for-spatial-programming-in-r"><i class="fa fa-check"></i><b>3.3</b> References for Spatial Programming in R</a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="getting-your-data.html"><a href="getting-your-data.html"><i class="fa fa-check"></i><b>4</b> Getting your data</a>
-<ul>
-<li class="chapter" data-level="4.1" data-path="getting-your-data.html"><a href="getting-your-data.html#high-level-overview"><i class="fa fa-check"></i><b>4.1</b> High Level Overview</a></li>
-<li class="chapter" data-level="4.2" data-path="getting-your-data.html"><a href="getting-your-data.html#data-sources"><i class="fa fa-check"></i><b>4.2</b> Data Sources</a></li>
-<li class="chapter" data-level="4.3" data-path="getting-your-data.html"><a href="getting-your-data.html#loading-spreadsheet-data-into-r"><i class="fa fa-check"></i><b>4.3</b> Loading Spreadsheet Data into R</a></li>
-<li class="chapter" data-level="4.4" data-path="getting-your-data.html"><a href="getting-your-data.html#connecting-to-databases"><i class="fa fa-check"></i><b>4.4</b> Connecting to Databases</a></li>
-<li class="chapter" data-level="4.5" data-path="getting-your-data.html"><a href="getting-your-data.html#tidycensus"><i class="fa fa-check"></i><b>4.5</b> tidycensus</a></li>
-<li class="chapter" data-level="4.6" data-path="getting-your-data.html"><a href="getting-your-data.html#cleaning-area-identifiers"><i class="fa fa-check"></i><b>4.6</b> Cleaning Area Identifiers</a></li>
-<li class="chapter" data-level="4.7" data-path="getting-your-data.html"><a href="getting-your-data.html#numerators-and-denominators"><i class="fa fa-check"></i><b>4.7</b> Numerators and Denominators</a>
-<ul>
-<li class="chapter" data-level="4.7.1" data-path="getting-your-data.html"><a href="getting-your-data.html#epi-primer"><i class="fa fa-check"></i><b>4.7.1</b> Epi Primer</a></li>
-<li class="chapter" data-level="4.7.2" data-path="getting-your-data.html"><a href="getting-your-data.html#numeratordenominator-mismatch"><i class="fa fa-check"></i><b>4.7.2</b> Numerator/Denominator Mismatch</a></li>
-</ul></li>
-<li class="chapter" data-level="4.8" data-path="getting-your-data.html"><a href="getting-your-data.html#geocoding"><i class="fa fa-check"></i><b>4.8</b> Geocoding</a></li>
-<li class="chapter" data-level="4.9" data-path="getting-your-data.html"><a href="getting-your-data.html#data-governance"><i class="fa fa-check"></i><b>4.9</b> Data Governance</a></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="visualizing-your-data.html"><a href="visualizing-your-data.html"><i class="fa fa-check"></i><b>5</b> Visualizing your data</a>
-<ul>
-<li class="chapter" data-level="5.1" data-path="visualizing-your-data.html"><a href="visualizing-your-data.html#references"><i class="fa fa-check"></i><b>5.1</b> References</a></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="analyzing-your-data.html"><a href="analyzing-your-data.html"><i class="fa fa-check"></i><b>6</b> Analyzing your data</a></li>
-<li class="chapter" data-level="7" data-path="overview-of-methods.html"><a href="overview-of-methods.html"><i class="fa fa-check"></i><b>7</b> Overview of Methods</a>
-<ul>
-<li class="chapter" data-level="7.1" data-path="overview-of-methods.html"><a href="overview-of-methods.html#motivating-questions"><i class="fa fa-check"></i><b>7.1</b> Motivating Questions</a></li>
-<li class="chapter" data-level="7.2" data-path="overview-of-methods.html"><a href="overview-of-methods.html#choice-of-geographic-level"><i class="fa fa-check"></i><b>7.2</b> Choice of geographic level</a></li>
-<li class="chapter" data-level="7.3" data-path="overview-of-methods.html"><a href="overview-of-methods.html#numeratordenominator-mismatch-1"><i class="fa fa-check"></i><b>7.3</b> Numerator/denominator mismatch</a>
-<ul>
-<li class="chapter" data-level="7.3.1" data-path="overview-of-methods.html"><a href="overview-of-methods.html#example-age-specific-all-cause-mortality-by-racialized-group-in-massachusetts-2013-2017"><i class="fa fa-check"></i><b>7.3.1</b> Example: Age-specific all-cause mortality by racialized group in Massachusetts, 2013-2017</a></li>
-</ul></li>
-<li class="chapter" data-level="7.4" data-path="overview-of-methods.html"><a href="overview-of-methods.html#inference-for-the-aggregation-approach"><i class="fa fa-check"></i><b>7.4</b> Inference for The Aggregation Approach</a></li>
-<li class="chapter" data-level="7.5" data-path="overview-of-methods.html"><a href="overview-of-methods.html#overdispersion"><i class="fa fa-check"></i><b>7.5</b> Overdispersion</a></li>
-<li class="chapter" data-level="7.6" data-path="overview-of-methods.html"><a href="overview-of-methods.html#age-standardization"><i class="fa fa-check"></i><b>7.6</b> Age Standardization</a></li>
-<li class="chapter" data-level="7.7" data-path="overview-of-methods.html"><a href="overview-of-methods.html#small-area-estimation"><i class="fa fa-check"></i><b>7.7</b> Small Area Estimation</a></li>
-<li class="chapter" data-level="7.8" data-path="overview-of-methods.html"><a href="overview-of-methods.html#multilevel-and-spatial-modeling"><i class="fa fa-check"></i><b>7.8</b> Multilevel and Spatial Modeling</a></li>
-</ul></li>
-<li class="chapter" data-level="8" data-path="premature-mortality.html"><a href="premature-mortality.html"><i class="fa fa-check"></i><b>8</b> Case Study 1: Premature Mortality in Massachusetts</a></li>
-<li class="chapter" data-level="9" data-path="breast-cancer-mortality.html"><a href="breast-cancer-mortality.html"><i class="fa fa-check"></i><b>9</b> Case Study 2: Breast Cancer Mortality in Massachusetts</a></li>
-<li class="chapter" data-level="10" data-path="cook-county-covid.html"><a href="cook-county-covid.html"><i class="fa fa-check"></i><b>10</b> Case Study 3: COVID-19 Mortality in Chicago</a></li>
-<li class="chapter" data-level="11" data-path="temporal-health-insurance.html"><a href="temporal-health-insurance.html"><i class="fa fa-check"></i><b>11</b> Case Study 4: Health Insurance over Time</a></li>
-<li class="chapter" data-level="12" data-path="health-insurance-comparison.html"><a href="health-insurance-comparison.html"><i class="fa fa-check"></i><b>12</b> Case Study 5: Comparing Health Insurance Rates in ACS and Places</a>
-<ul>
-<li class="chapter" data-level="12.1" data-path="health-insurance-comparison.html"><a href="health-insurance-comparison.html#introduction"><i class="fa fa-check"></i><b>12.1</b> Introduction</a></li>
-</ul></li>
-<li class="chapter" data-level="13" data-path="conclusions.html"><a href="conclusions.html"><i class="fa fa-check"></i><b>13</b> Conclusions</a></li>
-<li class="chapter" data-level="14" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>14</b> Glossary</a></li>
-</ul>
-
-      </nav>
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Public Health Disparities Geocoding Project 2.0 Training Manual</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
     </div>
 
-    <div class="book-body">
-      <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">The Public Health Disparities Geocoding Project 2.0</a>
-          </h1>
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Public Health Disparities Geocoding Project 2.0 Training Manual</a></li>
+<li><a class="" href="preface.html">Preface</a></li>
+<li><a class="" href="background.html"><span class="header-section-number">1</span> Background and History of Analytic Methods</a></li>
+<li><a class="" href="getting-setup.html"><span class="header-section-number">2</span> Getting Setup with R and RStudio</a></li>
+<li><a class="" href="getting-your-data.html"><span class="header-section-number">3</span> Getting your data</a></li>
+<li><a class="" href="visualizing-your-data.html"><span class="header-section-number">4</span> Visualizing your data</a></li>
+<li><a class="" href="analyzing-your-data.html"><span class="header-section-number">5</span> Analyzing your data</a></li>
+<li><a class="active" href="overview-of-methods.html"><span class="header-section-number">6</span> Overview of Methods</a></li>
+<li><a class="" href="chapter-5-analyzing-your-data.html"><span class="header-section-number">7</span> Chapter 5: Analyzing Your Data</a></li>
+<li><a class="" href="premature-mortality.html"><span class="header-section-number">8</span> Case Study 1: Premature Mortality in Massachusetts</a></li>
+<li><a class="" href="breast-cancer-mortality.html"><span class="header-section-number">9</span> Case Study 2: Breast Cancer Mortality in Massachusetts</a></li>
+<li><a class="" href="cook-county-covid.html"><span class="header-section-number">10</span> Case Study 3: COVID-19 Mortality in Cook County (March 2020 - March 2022)</a></li>
+<li><a class="" href="temporal-health-insurance.html"><span class="header-section-number">11</span> Case Study 4: Case Study on Temporal Trends using American Community Survey (ACS) data (2012-2019)</a></li>
+<li><a class="" href="health-insurance-comparison.html"><span class="header-section-number">12</span> Case Study 5: Case Study Comparing County Analyses of Inequities in Health Insurance using ACS vs. CDC PLACES data (2019)</a></li>
+<li><a class="" href="conclusions.html"><span class="header-section-number">13</span> Conclusions</a></li>
+<li><a class="" href="glossary.html"><span class="header-section-number">14</span> Glossary</a></li>
+</ul>
+
+        <div class="book-extra">
+          
         </div>
-
-        <div class="page-wrapper" tabindex="-1" role="main">
-          <div class="page-inner">
-
-            <section class="normal" id="section-">
-<div id="overview-of-methods" class="section level1 hasAnchor" number="7">
-<h1><span class="header-section-number">7</span> Overview of Methods<a href="overview-of-methods.html#overview-of-methods" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>In the years since we initially presented the Public Health Disparities Geocoding Training, both the theories around public health disparities and the analytic tools to measure them have evolved. In particular, the availability of software that facilitates data access, mapping, visualization, and fitting of multilevel and spatial models has greatly enhanced the accessibility of these analytic methods for public health scientists and advocates interested in advancing health equity. Our goal in presenting these updated methods is to illustrate their applicability to monitoring, reporting, and investigating health inequities. In doing so, we highlight many of the assumptions underlying the use of these methods and show how they can be applied to real-life data that arise in public health surveillance and health equity monitoring. We comment on some of the pitfalls that may arise when working with imperfect data in real time and discuss analytic and interpretive strategies keeping in mind the overarching goal of accurately documenting health inequities for accountability. Where appropriate, we also comment on ongoing methodologic work to improve analytic approaches.</p>
-<div id="motivating-questions" class="section level2 hasAnchor" number="7.1">
-<h2><span class="header-section-number">7.1</span> Motivating Questions<a href="overview-of-methods.html#motivating-questions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="overview-of-methods" class="section level1" number="6">
+<h1>
+<span class="header-section-number">6</span> Overview of Methods<a class="anchor" aria-label="anchor" href="#overview-of-methods"><i class="fas fa-link"></i></a>
+</h1>
+<p>In the years since we initially presented the <strong>Public Health Disparities Geocoding Training</strong> in 2004, there has been a huge increase in conceptual and methodological work regarding use of ABSMs to document and analyze health inequities, and the computing tools and statistical methods to conduct these analyses. In particular, the availability of software that facilitates data access, mapping, visualization, and fitting of multilevel and spatial models has greatly enhanced the accessibility of these analytic methods for public health scientists and advocates interested in advancing health equity. Our goal in presenting these updated methods is to illustrate their applicability to monitoring, reporting, and investigating health inequities. In doing so, we highlight many of the assumptions underlying the use of these methods and show how they can be applied to real-life data that arise in public health surveillance and health equity monitoring. We comment on some of the pitfalls that may arise when working with imperfect data in real time and discuss analytic and interpretive strategies keeping in mind the overarching goal of accurately documenting health inequities for accountability. Where appropriate, we also comment on ongoing methodologic work to improve analytic approaches.</p>
+<div id="motivating-questions" class="section level2" number="6.1">
+<h2>
+<span class="header-section-number">6.1</span> Motivating Questions<a class="anchor" aria-label="anchor" href="#motivating-questions"><i class="fas fa-link"></i></a>
+</h2>
 <p>As the choice of methods for any data analysis depends fundamentally on the goals of the analysis, we will focus our presentation on the following motivating questions:</p>
 <ol style="list-style-type: decimal">
 <li><p>“What is the <strong>geographic distribution</strong> of area-based social metrics across the study area?” This is of particular interest for exploratory analyses in order to understand who in what areas are most affected by social advantage and disadvantage as captured by area-based social metrics. Mapping and visualization tools can be used to communicate geographic patterns and to elicit local knowledge in order to spur hypothesis generation and prioritization of research questions.</p></li>
@@ -242,37 +89,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>“How can geographic variation in health outcomes be modeled in order to facilitate mapping of <strong>small-area disease estimates</strong> and <strong>estimation of social inequities</strong>?” We review concepts from the extensive statistical literature on small-area estimation and disease mapping with the goal of visualizing geographic patterns in health outcomes for studies of health equity. While these methods entail more complex modeling frameworks and computational details, we focus on their application to health equity and the interpretation and use of model outputs in the context of monitoring and reporting of health disparities. We consider settings in which <strong>multilevel modeling</strong> approaches and <strong>spatial modeling</strong> approaches may be preferred and discuss considerations contributing to the choice of modeling framework.</p></li>
 </ol>
 </div>
-<div id="choice-of-geographic-level" class="section level2 hasAnchor" number="7.2">
-<h2><span class="header-section-number">7.2</span> Choice of geographic level<a href="overview-of-methods.html#choice-of-geographic-level" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="choice-of-geographic-level" class="section level2" number="6.2">
+<h2>
+<span class="header-section-number">6.2</span> Choice of geographic level<a class="anchor" aria-label="anchor" href="#choice-of-geographic-level"><i class="fas fa-link"></i></a>
+</h2>
 <!--
     TODO:
   We need to flesh out this text.
   I think the main point is that we try to analyze at the geographic level that makes sense. The breast cancer mortality example will show that while we can append CT level ABSMs to the data and use the aggregation method or non-spatial regression here, doing spatial analyses doesn't yield much spatial variation at the CT level because the counts are too small. We should bring this point out in this section.
   
-  Similarly, rationale for the ZIP code level analysis of Chicago COVID data.
+  Similarly, rationale for the ZIP Code level analysis of Chicago COVID data.
 -->
 <ul>
-<li><p>A pragmatic approach: at what level are data available?</p></li>
+<li><p>A pragmatic question and approach: at what level(s) are data available?</p></li>
 <li><p>For small area level analyses, do the number of events support small area-level analyses?</p></li>
-<li><p>CT vs. city/town, e.g. breast cancer mortality analysis</p></li>
-<li><p>ZIP codes and ZCTAs</p></li>
-<li><p>MAUP</p></li>
-<li><p>note that the smallest level of Census geography with intercensal population estimates is the county. County PEP estimates rely on demographic modeling.</p></li>
-<li><p>CT level estimates are in the ACS, but ACS specifically cautions against using these as population denominator estimates in small area estimation. However, we generally do not have any other sources of population denominators on which to rely. Five year average estimates may help, but there is still year to year variability. Margin of error estimates available, but how to incorporate denominator uncertainty into analyses is still an area of active research.</p></li>
+<li><p>census tract (CT) vs. city/town, e.g. breast cancer mortality analysis</p></li>
+<li><p>ZIP Codes and US Census defined ZIP Code Tabulation Areas (ZCTAs)</p></li>
+<li><p>Modifiable Areal Unit Problem (discussed in Christian’s section?)</p></li>
+<li><p>note that the smallest level of Census geography with intercensal population estimates is the county. The US Census Population Estimates Program (PEP) estimates rely on demographic modeling.</p></li>
+<li><p>CT level population estimates are in the US Census American Community Survey (ACS), but ACS specifically cautions against using these as population denominator estimates in small area estimation. However, we generally do not have any other sources of population denominators on which to rely. Five year average estimates may help, but there is still year to year variability. Margin of error estimates are available, but how to incorporate denominator uncertainty into analyses is still an area of active research.</p></li>
 </ul>
 </div>
-<div id="numeratordenominator-mismatch-1" class="section level2 hasAnchor" number="7.3">
-<h2><span class="header-section-number">7.3</span> Numerator/denominator mismatch<a href="overview-of-methods.html#numeratordenominator-mismatch-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="numeratordenominator-mismatch" class="section level2" number="6.3">
+<h2>
+<span class="header-section-number">6.3</span> Numerator/denominator mismatch<a class="anchor" aria-label="anchor" href="#numeratordenominator-mismatch"><i class="fas fa-link"></i></a>
+</h2>
 <p>For epidemiologic analyses of health disparities, we generally rely on routinely collected data from health surveillance systems to define the numerators of rates. Such data are available on an ongoing basis with a lag of two or more years to allow for data compilation and cleaning. In contrast, data on population at risk may be obtained from a variety of sources depending on the need for stratification by demographic variables, time frame, and the desired level of geography. For example, the US Decennial Census provides detailed population estimates by age, sex-gender, and selected racialized groups in decennial years. For intercensal years, the US Census uses demographic modeling that takes into consideration births, deaths, and migrations to provide estimates for these demographic groups at the national, state, and county levels via its Population Estimates Program (PEP) [US Census PEP]. For smaller levels of geography, the US Census Bureau’s American Community Survey includes estimates of population for all census geographies larger than census blocks based on five year rolling averages. These are also typically made available after a two year delay.</p>
-<p>Formally, the US Census Bureau recommends the use of PEP or decennial census counts as population size estimates in intercensal years, while recommending that ACS data be used for information about changing socioeconomic and demographic features. However, for estimation of small area disease rates or analyses of health disparities by ABSM in intercensal years, decennial counts are usually outdated and PEP estimates are not available at the desired geographic level. Thus, in practice, many epidemiologic studies will continue to rely on ACS small-area estimates for population denominators. While private companies are increasingly producing high-resolution gridded population estimates that are based on machine-learning models combining census, remote sensing, land use, and other information, with the promise of providing population sizes at very small geographies in near real time, to date we have not found these data products to provide substantial improvement over using ACS small area estimates and in some cases they can induce bias [ref: Nethery et al. 2021].</p>
-<p>Because numerators (case data) and denominators (population estimates) come from different sources, and moreover, because intercensal population estimates in particular may be subject to uncertainty, it is possible to obtain sociodemographic strata in particular areas and years where the observed cases exceed the reported population at risk. This is particularly problematic when the the number of cases is greater than zero but the reported population at risk is exactly zero. We term this phenomenon “numerator/denominator mismatch.” Some of the analytic methods we describe will be able yield valid estimates of social inequities in spite of these data anomalies. For example, the aggregation method avoids this problem by aggregating over small areas, whereby small discrepancies in numerators and population at risk are averaged out over areas within ABSM strata. In other modeling approaches, we may need to take steps to address these issues in the data. When doing so, we need to be mindful about potential distortions to the data and their impact on estimates of social inequities. In particular, we must consider that when such data anomalies are more likely for some demographic groups than others (for example, in many areas of the US non-white racialized groups will be of smaller population size), this may result greater bias for demographically stratified analyses (e.g. models stratified by racialized group) (Nethery et al. 2021).</p>
-<div id="example-age-specific-all-cause-mortality-by-racialized-group-in-massachusetts-2013-2017" class="section level3 hasAnchor" number="7.3.1">
-<h3><span class="header-section-number">7.3.1</span> Example: Age-specific all-cause mortality by racialized group in Massachusetts, 2013-2017<a href="overview-of-methods.html#example-age-specific-all-cause-mortality-by-racialized-group-in-massachusetts-2013-2017" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Formally, the US Census Bureau recommends the use of PEP or decennial census counts as population size estimates in intercensal years, while recommending that ACS data be used for information about changing socioeconomic and demographic features. However, for estimation of small area disease rates or analyses of health disparities by ABSM in intercensal years, decennial counts are usually outdated and PEP estimates are not available at the desired geographic level. Thus, in practice, many epidemiologic studies will continue to rely on ACS small-area estimates for population denominators. While private companies are increasingly producing high-resolution gridded population estimates that are based on machine-learning models combining census, remote sensing, land use, and other information, with the promise of providing population sizes (primarily for the total population, not by population sub-groups) at very small geographies in near real time, to date we have not found these data products to provide substantial improvement over using ACS small area estimates and in some cases they can induce bias (Nethery et al. 2021).</p>
+<p>Because numerators (case data) and denominators (population estimates) come from different sources, and moreover, because intercensal population estimates in particular may be subject to uncertainty, it is possible to obtain sociodemographic strata in particular areas and years where the observed cases exceed the reported population at risk. This is particularly problematic when the the number of cases is greater than zero but the reported population at risk is exactly zero. We term this phenomenon “numerator/denominator mismatch.” Some of the analytic methods we describe will be able yield valid estimates of social inequities in spite of these data anomalies. For example, the aggregation method avoids this problem by aggregating over small areas, whereby small discrepancies in numerators and population at risk are averaged out over areas within ABSM strata. In other modeling approaches, we may need to take steps to address these issues in the data. When doing so, we need to be mindful about potential distortions to the data and their impact on estimates of social inequities. In particular, we must consider that when such data anomalies are more likely for some demographic groups than others (for example, in many areas of the US, historically marginalized racialized groups designated as Black, Indigenous, and people of color, will be of smaller population size than the white non-hispanic population), this may result greater bias for demographically stratified analyses (e.g. models stratified by racialized group) (Nethery et al. 2021).</p>
+<div id="example-age-specific-all-cause-mortality-by-racialized-group-in-massachusetts-2013-2017" class="section level3" number="6.3.1">
+<h3>
+<span class="header-section-number">6.3.1</span> Example: Age-specific all-cause mortality by racialized group in Massachusetts, 2013-2017<a class="anchor" aria-label="anchor" href="#example-age-specific-all-cause-mortality-by-racialized-group-in-massachusetts-2013-2017"><i class="fas fa-link"></i></a>
+</h3>
 <p>We compared the use of the aggregation method to a non-spatial Poisson model for analyzing deaths from all causes by age and racialized group. Using the aggregation method, deaths and population person-time at risk are aggregated into strata by age (0-4, 5-9, 10-14, 15-19, 20-24, 25-29, 30-34, 35-44, 45-54, 55-64, 65-74, 75-84, 85+) and racialized group (white non-Hispanic and Black), and mortality rates per 100,000 person-years are computed using the formulas listed in Section xxx. For the non-spatial Poisson model, the inputs are age- and racialized-group specific deaths for each census tract in the study area, the log(population person-time at risk) as an offset, and a set of indicators for each stratum of age category by racialized group.</p>
 <p>When the log(population person-time at risk) variable is zero, however, this presents a problem for the Poisson model-fitting algorithm as the rate is undefined. Census tracts where there are zero deaths and zero person-time at risk in a particular strata can be deleted from the dataset as these observations contribute no information. But situations where the count of deaths in a stratum is greater than zero but the population person-time at risk is zero continue to be an issue (numerator/denominator mismatch). It may be tempting to delete these observations from the dataset as well, reasoning that as these usually involve just one death occurring in a stratum where the population estimate is zero, deleting these observations will not unduly affect the analysis.</p>
 <p>Unfortunately, it turns out that numerator/denominator mismatch occurs more frequently for Black observations in the dataset, due to patterns of racialized residential segregation and that fact that the Black population accounts for a much smaller proportion of the population compared with the white non-Hispanic population (10.1% vs. 72.9% in Massachusetts according to the ACS population estimates we used for our population denominators). That is, at the census tract level, there are more likely to be age strata where there are deaths reported by zero population person-time at risk for the Black population compared with the white non-Hispanic population. As a result, when we delete these observations, we end up deleting a larger proportion of the Black deaths across the whole state, which has an impact on our estimates of rates and rate ratios.</p>
 <p>To see this, consider the following table where we show the number of deaths and population by age and racialized group aggregated across census tracts. In columns 2-8, we show the deaths, population, and estimated rates per 100,000 person-years for white Non-Hispanics and Blacks in the full dataset, while in columns 9-15 we show the deaths and population after deleting observations where the numerator is greater than zero but the denominator is zero. In columns 16-22 we show the percent bias by strata comparing the dataset with deleted observations to the full dataset. As is evident in column 19, the effect of deleting these observations is to reduce the Black death count in age strata (between 4-30% across strata) to a much greater degree than among the white non-Hispanic age strata (between 0-2%). As a result, the age-specific incidence rate ratios can be depressed by as much as 30% relative to the IRRs calculated using the full aggregated data.</p>
-<table>
+<div class="inline-table"><table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
@@ -1248,9 +1101,9 @@ IRR
 </td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p>If instead of deleting those strata where deaths&gt;0 and denominator=0, we replace the denominator with the number of deaths, we end up with very slightly larger population counts overall, but the effect on the rates is to bring them more in line with the aggregated analysis. Here is the comparable table comparing the full aggregated dataset (columns 2-8) with a dataset in which the denominators are adjusted to increase the person time at risk to equal the number of deaths the affected strata.</p>
-<table>
+<div class="inline-table"><table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
@@ -2226,101 +2079,55 @@ IRR
 </td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p>An even better solution, and the one we ultimately recommend, is to add a small number (e.g. 0.001) to all of the population person-time denominators to allow the Poisson model fitting algorithm to incorporate these observations into the analysis. The resulting effect on the overall population denominators is negligible, but this allows for estimation of rates and rate ratios of interest. Note that this is only needed when fitting non-spatial regression models to the data. The aggregation method does not incur this problem as small discrepancies are averaged out over areas, and the spatial models we discuss in Section xx address the problem of zero or infinite rates by smoothing.</p>
-<p>To visualize the effect of these adjustments on estimates of the age-specific disparity by racialized group, we plot estimates from aggregated analyses and Poisson models with deletion and denominator adjustment in Figure x. The plot confirms that either (a) adjusting denominators to match the number of observed deaths in problematic strata in census tracts or (b) adding a small number to all population person time estimates (preferred) yields comparable estimates to the aggregation method, whereas removing problematic observations results in bias.</p>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-20"></span>
-<img src="images/06-analyzing-your-data/age_specific_comparison_plot.pdf" alt="Comparison of estimated age-specific Black/White mortality rate ratios using different methods to address numerator/denominator mismatch"  />
-<p class="caption">
-Figure 7.1: Comparison of estimated age-specific Black/White mortality rate ratios using different methods to address numerator/denominator mismatch
+<p>To visualize the effect of these adjustments on estimates of the age-specific disparity by racialized group, we plot estimates from aggregated analyses and Poisson models with deletion and denominator adjustment in Figure 1.1. The plot confirms that either (a) adjusting denominators to match the number of observed deaths in problematic strata in census tracts or (b) adding a small number to all population person time estimates (preferred) yields comparable estimates to the aggregation method, whereas removing problematic observations results in bias.</p>
+<div class="figure">
+<span style="display:block;" id="fig:unnamed-chunk-13"></span>
+<img src="images/06-analyzing-your-data/age-specific-comparison-plot.png" alt="Comparison of estimated age-specific Black/White mortality rate ratios using different methods to address numerator/denominator mismatch" width="100%"><p class="caption">
+Figure 6.1: Comparison of estimated age-specific Black/White mortality rate ratios using different methods to address numerator/denominator mismatch
 </p>
 </div>
 </div>
 </div>
-<div id="inference-for-the-aggregation-approach" class="section level2 hasAnchor" number="7.4">
-<h2><span class="header-section-number">7.4</span> Inference for The Aggregation Approach<a href="overview-of-methods.html#inference-for-the-aggregation-approach" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>(not done yet)</p>
 </div>
-<div id="overdispersion" class="section level2 hasAnchor" number="7.5">
-<h2><span class="header-section-number">7.5</span> Overdispersion<a href="overview-of-methods.html#overdispersion" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>(not done yet)</p>
+  <div class="chapter-nav">
+<div class="prev"><a href="analyzing-your-data.html"><span class="header-section-number">5</span> Analyzing your data</a></div>
+<div class="next"><a href="chapter-5-analyzing-your-data.html"><span class="header-section-number">7</span> Chapter 5: Analyzing Your Data</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#overview-of-methods"><span class="header-section-number">6</span> Overview of Methods</a></li>
+<li><a class="nav-link" href="#motivating-questions"><span class="header-section-number">6.1</span> Motivating Questions</a></li>
+<li><a class="nav-link" href="#choice-of-geographic-level"><span class="header-section-number">6.2</span> Choice of geographic level</a></li>
+<li>
+<a class="nav-link" href="#numeratordenominator-mismatch"><span class="header-section-number">6.3</span> Numerator/denominator mismatch</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#example-age-specific-all-cause-mortality-by-racialized-group-in-massachusetts-2013-2017"><span class="header-section-number">6.3.1</span> Example: Age-specific all-cause mortality by racialized group in Massachusetts, 2013-2017</a></li></ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
 </div>
-<div id="age-standardization" class="section level2 hasAnchor" number="7.6">
-<h2><span class="header-section-number">7.6</span> Age Standardization<a href="overview-of-methods.html#age-standardization" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>(not done yet)</p>
+    </nav>
 </div>
-<div id="small-area-estimation" class="section level2 hasAnchor" number="7.7">
-<h2><span class="header-section-number">7.7</span> Small Area Estimation<a href="overview-of-methods.html#small-area-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>(not done yet)</p>
-</div>
-<div id="multilevel-and-spatial-modeling" class="section level2 hasAnchor" number="7.8">
-<h2><span class="header-section-number">7.8</span> Multilevel and Spatial Modeling<a href="overview-of-methods.html#multilevel-and-spatial-modeling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>(not done yet)</p>
 
 </div>
-</div>
-            </section>
+</div> <!-- .container -->
 
-          </div>
-        </div>
-      </div>
-<a href="analyzing-your-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="premature-mortality.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
-    </div>
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Public Health Disparities Geocoding Project 2.0 Training Manual</strong>" was written by Christian Testa, Jarvis T Chen, Enjoli Hall, Dena Javadi, Justin Morgan, Tamara Rushovich, Sudipta (Shu) Saha, Pamela D Waterman, Nancy Krieger. </p>
   </div>
-<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
-<script>
-gitbook.require(["gitbook"], function(gitbook) {
-gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"whatsapp": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": ["phdgp2.pdf", "phdgp2.epub"],
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "section"
-}
-});
-});
-</script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
@@ -2332,7 +2139,22 @@ gitbook.start({
     script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
 </script>
 </body>
-
 </html>
