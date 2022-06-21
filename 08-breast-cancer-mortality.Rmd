@@ -69,7 +69,7 @@ Below is some code (for example) to turn a raw mortality file into what has been
 
 Ideally when performing an analysis that might include two or more levels the smaller level (e.g., census tracts) would be nested entirely within the larger level (e.g., towns). In Massachusetts though, there are many towns that have such small populations that they are smaller than census tracts. For these towns, we have created a crosswalk wherein small towns have been combined to create larger super towns. These super towns each make up one census tract, so that each super town in the analysis will now have at least one census tract nested within it. Please note that for this analysis we will be focusing on breast cancer mortality in women. 
 
-```{r wrangling_outcome, eval = FALSE}
+```{r wrangling_outcome1, eval = FALSE}
 # the raw mortality data, with the geocoded coordinates converted into spatial feature (sf) data
 ma_mort <- read_rds("data/08-breast-cancer-mortality/ma_mort_geo.RDS") %>% 
   st_as_sf(coords=c("lon","lat"), crs = 4269)
@@ -182,8 +182,9 @@ town_ma_mort_bc <- ma_mort_bc %>%
   ungroup()
 
 ```
-```{r head_ma_mort_agg, echo = FALSE}
-head_town_ma_mort_bc <- read_rds("head_town_ma_mort_bc.rds")
+
+```{r head_ma_mort_agg1, echo = FALSE}
+head_town_ma_mort_bc <- read_rds("data/08-breast-cancer-mortality/head_town_ma_mort_bc.rds")
 head_town_ma_mort_bc
 ```
 
@@ -376,12 +377,12 @@ town_ma_demo_acs_bc <- ma_demo_acs_bc %>%
   ungroup()
 ```
 
-```{r head_town_ma_demo_acs, echo = FALSE}
+```{r head_town_ma_demo_acs1, echo = FALSE}
 head_town_ma_demo_acs_bc <- read_rds("data/08-breast-cancer-mortality/head_town_ma_demo_acs_bc.rds")
 head_town_ma_demo_acs_bc
 ```
 
-```{r wrandling_absm, eval = FALSE}
+```{r wrangling_absm1, eval = FALSE}
 # Area-Based Social Metrics
 ma_absm_acs <- vector(mode = "list", length = 5)
 names(ma_absm_acs) <- c(2013,2014,2015,2016,2017)
@@ -556,7 +557,8 @@ town_ma_absm_sum <- ma_absm_acs %>%
 
 
 ```
-```{r head_absm_sum, echo = FALSE}
+
+```{r head_absm_sum1, echo = FALSE}
 head_town_ma_absm_sum <- read_rds("data/08-breast-cancer-mortality/head_town_ma_absm_sum.rds")
 head_town_ma_absm_sum
 ```
@@ -572,7 +574,7 @@ Now that we have our data, let’s revisit our questions of interest:
 
 First, let's just look at the spatial distribution of the area-based socioeconomic measure of poverty that we constructed: the percentage of the city/town population below poverty. Here is a map of the percentage of population below poverty by Massachusetts city/town poverty quantile for years 2013-2017.
 
-```{r poverty map, eval = FALSE}
+```{r poverty map1, eval = FALSE}
 ma_poverty_map <- town_ma_absm_sum %>% 
   left_join(town_geometry, by= "super_town") %>% 
   ggplot() +
@@ -601,7 +603,7 @@ include_graphics("images/08-breast-cancer-mortality/ma_poverty_map.png")
 
 Now, let’s look at the spatial distribution of the other area-based socioeconomic measure that we constructed: the ICE measure for racialized economic segregation. Compare this map of city/town ICE (racialized group + income) quantile to the first map of city/town poverty quantile. Do you notice any differences? Do you find one of these area-based socioeconomic measures to be more visually clear and compelling than the other, and why or why not?
 
-```{r ice map, eval = FALSE}
+```{r ice map1, eval = FALSE}
 ma_ice_map <- town_ma_absm_sum %>% 
   left_join(town_geometry, by= "super_town") %>% 
   ggplot() +
@@ -636,7 +638,7 @@ seer_std
 ```
 
 
-```{r age standardized by poverty, eval = FALSE}
+```{r age standardized by poverty1, eval = FALSE}
 ma_mort_ice_qt <- town_ma_mort_bc %>%
   inner_join(town_ma_demo_acs_bc, by = c("year","super_town","race_group","sex","age_cat")) %>% 
   left_join(town_ma_absm_sum, by= "super_town") %>% 
@@ -686,7 +688,7 @@ We can describe inequities by racialized groups much the same way we describe in
 
 As we did for the first question, we age-adjust our aggregated data by racialized group to compare standardized mortality rates for Black and White populations. We can see lots of variation here as the mortality rates increase - what is causing that?
 
-```{r stratified analyses, eval = FALSE}
+```{r stratified analyses1, eval = FALSE}
 ma_mort_stratified <- town_ma_mort_bc %>%
   inner_join(town_ma_demo_acs_bc, by = c("year","super_town","race_group","sex","age_cat"))%>% 
   filter(race_group %in% c("Non-Hispanic White","Non-Hispanic Black"),
@@ -742,7 +744,7 @@ include_graphics("images/08-breast-cancer-mortality/bc_dotplot_agg_rates.png")
 
 Before we explore that variation, as a reminder, we age-adjust our aggregated data by racialized group so we can compare standardized mortality rates, as differences in breast cancer mortality between the two groups may be due to differential distribution of ages by race. We can see that the age distributions for each racialized group are quite different. How would you describe the differences? 
 
-```{r age_cat_bar_chart, eval = FALSE}
+```{r age_cat_bar_chart1, eval = FALSE}
 bc_tab_age_race <- town_ma_demo_acs_bc %>%
       filter(race_group %in% c("Non-Hispanic White","Non-Hispanic Black"),
          sex == "Female",
@@ -939,7 +941,7 @@ Note that the boundaries for some cities and towns are completely blank. These a
 
 ### Question 3: How do area-based socioeconomic measures interact with individual-level membership in racialized groups to affect patterns of breast cancer mortality (i.e., interactions between socioeconomic position and racialized groups, not just socioeconomic inequities within racialized groups)? 
 
-```{r poisson, eval = FALSE}
+```{r poisson1, eval = FALSE}
 
 poisson_data <- town_ma_mort_bc %>%
   inner_join(town_ma_demo_acs_bc, by = c("year","super_town","race_group","sex","age_cat")) %>%
