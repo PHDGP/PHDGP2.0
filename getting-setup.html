@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>2 Getting Setup with R and RStudio | Public Health Disparities Geocoding Project 2.0 Training Manual</title>
+<meta name="author" content="Christian Testa, Jarvis T Chen, Enjoli Hall, Dena Javadi, Justin Morgan, Tamara Rushovich, Sudipta (Shu) Saha, Pamela D Waterman, Nancy Krieger">
+<meta name="description" content="We recommend before moving on, readers should download and install R and RStudio and the recommended R packages and dependencies.  2.0.1 Principles for Reproducible Workflow and Programming Two...">
+<meta name="generator" content="bookdown 0.26 with bs4_book()">
+<meta property="og:title" content="2 Getting Setup with R and RStudio | Public Health Disparities Geocoding Project 2.0 Training Manual">
+<meta property="og:type" content="book">
+<meta property="og:description" content="We recommend before moving on, readers should download and install R and RStudio and the recommended R packages and dependencies.  2.0.1 Principles for Reproducible Workflow and Programming Two...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2 Getting Setup with R and RStudio | Public Health Disparities Geocoding Project 2.0 Training Manual">
+<meta name="twitter:description" content="We recommend before moving on, readers should download and install R and RStudio and the recommended R packages and dependencies.  2.0.1 Principles for Reproducible Workflow and Programming Two...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1.9000/transition.js"></script><script src="libs/bs3compat-0.3.1.9000/tabs.js"></script><script src="libs/bs3compat-0.3.1.9000/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script><link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
+<script src="libs/leaflet-1.3.1/leaflet.js"></script><link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
+<script src="libs/proj4-2.6.2/proj4.min.js"></script><script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script><link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
+<script src="libs/leaflet-binding-2.1.1/leaflet.js"></script><script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script><script src="libs/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script><link href="libs/HomeButton-0.0.1/home-button.css" rel="stylesheet">
+<script src="libs/HomeButton-0.0.1/home-button.js"></script><script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script><script src="libs/clipboard-0.0.1/setClipboardText.js"></script><link href="libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet">
+<link href="libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet">
+<script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Public Health Disparities Geocoding Project 2.0 Training Manual</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Public Health Disparities Geocoding Project 2.0 Training Manual</a></li>
+<li><a class="" href="preface.html">Preface</a></li>
+<li><a class="" href="background.html"><span class="header-section-number">1</span> Background and History of Analytic Methods</a></li>
+<li><a class="active" href="getting-setup.html"><span class="header-section-number">2</span> Getting Setup with R and RStudio</a></li>
+<li><a class="" href="getting-your-data.html"><span class="header-section-number">3</span> Getting your data</a></li>
+<li><a class="" href="visualizing-your-data.html"><span class="header-section-number">4</span> Visualizing your data</a></li>
+<li><a class="" href="analyzing-your-data.html"><span class="header-section-number">5</span> Analyzing your data</a></li>
+<li><a class="" href="premature-mortality.html"><span class="header-section-number">6</span> Case Study 1: Premature Mortality in Massachusetts</a></li>
+<li><a class="" href="breast-cancer-mortality.html"><span class="header-section-number">7</span> Case Study 2: Breast Cancer Mortality in Massachusetts</a></li>
+<li><a class="" href="cook-county-covid.html"><span class="header-section-number">8</span> Case Study 3: COVID-19 Mortality in Cook County (March 2020 - March 2022)</a></li>
+<li><a class="" href="temporal-health-insurance.html"><span class="header-section-number">9</span> Case Study 4: Case Study on Temporal Trends using American Community Survey (ACS) data (2012-2019)</a></li>
+<li><a class="" href="health-insurance-comparison.html"><span class="header-section-number">10</span> Case Study 5: Case Study Comparing County Analyses of Inequities in Health Insurance using ACS vs. CDC PLACES data (2019)</a></li>
+<li><a class="" href="conclusions.html"><span class="header-section-number">11</span> Conclusions</a></li>
+<li><a class="" href="glossary.html"><span class="header-section-number">12</span> Glossary</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="getting-setup" class="section level1" number="2">
+<h1>
+<span class="header-section-number">2</span> Getting Setup with R and RStudio<a class="anchor" aria-label="anchor" href="#getting-setup"><i class="fas fa-link"></i></a>
+</h1>
+<p>We recommend before moving on, readers should download and install R and RStudio
+and the recommended R packages and dependencies.</p>
+<div id="principles-for-reproducible-workflow-and-programming" class="section level3" number="2.0.1">
+<h3>
+<span class="header-section-number">2.0.1</span> Principles for Reproducible Workflow and Programming<a class="anchor" aria-label="anchor" href="#principles-for-reproducible-workflow-and-programming"><i class="fas fa-link"></i></a>
+</h3>
+<p>Two principles underlie why R and RStudio have been chosen to use throughout
+these course materials. First, as a matter of equity, the use of free (both free
+to use and freely licensed) software such as R and RStudio removes financial and
+administrative barriers to engaging with our work and facilitates the inclusion
+of people from more diverse backgrounds in science. Second, data analysis and
+science should be open and transparent wherever and whenever possible, so as to
+promote the external reproduction, verification, and validation of findings.</p>
+<div class="infobox">
+<p>The code examples in this book assume familiarity with the R programming
+language. You can still benefit from this book by reading the exposition without
+focusing on the code examples if you are not very familiar with R programming.</p>
+<p>If you want to become more familiar with R programming, you may want to start by
+familiarizing yourself with R. The <em>R for Data Science</em> book, available free and
+online here: <a href="https://r4ds.had.co.nz/" class="uri">https://r4ds.had.co.nz/</a>, which provides a free, online, accessible
+introduction.</p>
+</div>
+</div>
+<div id="downloading-and-installing-r-and-rstudio" class="section level2" number="2.1">
+<h2>
+<span class="header-section-number">2.1</span> Downloading and Installing R and RStudio<a class="anchor" aria-label="anchor" href="#downloading-and-installing-r-and-rstudio"><i class="fas fa-link"></i></a>
+</h2>
+<p>In order to follow along with these resources, you will need to have R and
+RStudio installed and setup. You can download R from
+<a href="https://www.r-project.org/" class="uri">https://www.r-project.org/</a>. You can download RStudio from
+<a href="https://www.rstudio.com/" class="uri">https://www.rstudio.com/</a>.</p>
+</div>
+<div id="basic-features-of-r" class="section level2" number="2.2">
+<h2>
+<span class="header-section-number">2.2</span> Basic Features of R<a class="anchor" aria-label="anchor" href="#basic-features-of-r"><i class="fas fa-link"></i></a>
+</h2>
+<p>Throughout this text, the example code given will depend on various R packages
+which are all available free and open-source, easily installed in R with the
+<code>install.packges</code> function.</p>
+<p>To work through the case examples here, you will need to install at least the
+following packages:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># for data manipulation and visualization</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"tidyverse"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"Hmisc"</span><span class="op">)</span> <span class="co"># mostly for the weighted quantile function</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"fastDummies"</span><span class="op">)</span> <span class="co"># for creating "dummy"/ "indicator" variables</span>
+
+
+<span class="co"># for retrieving census data</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"tidycensus"</span><span class="op">)</span> <span class="co"># note the special instructions below</span>
+
+<span class="co"># for mapping</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"sf"</span><span class="op">)</span> <span class="co"># note the special instructions below</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"mapview"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"tigris"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"leaflet"</span><span class="op">)</span>
+
+
+<span class="co"># for visualization/color palettes</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"RColorBrewer"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"viridis"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"cowplot"</span><span class="op">)</span>
+
+<span class="co"># for multilevel modeling</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"lme4"</span><span class="op">)</span>
+
+<span class="co"># for spatial modeling</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"INLA"</span>,repos<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/options.html">getOption</a></span><span class="op">(</span><span class="st">"repos"</span><span class="op">)</span>,INLA<span class="op">=</span><span class="st">"https://inla.r-inla-download.org/R/stable"</span><span class="op">)</span>, dep<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<div id="note-about-compiling-from-source" class="section level3" number="2.2.1">
+<h3>
+<span class="header-section-number">2.2.1</span> Note about “compiling from source”<a class="anchor" aria-label="anchor" href="#note-about-compiling-from-source"><i class="fas fa-link"></i></a>
+</h3>
+<p>If, when installing these packages, R prompts you asking whether you would like
+to install these packages “from source,” you do not need to. Sometimes compiling
+from source can be more difficult than installing the pre-built packages from
+CRAN if there are compilation errors.</p>
+</div>
+<div id="tidycensus-special-instructions" class="section level3" number="2.2.2">
+<h3>
+<span class="header-section-number">2.2.2</span> Tidycensus Special Instructions<a class="anchor" aria-label="anchor" href="#tidycensus-special-instructions"><i class="fas fa-link"></i></a>
+</h3>
+<p>You need to register for a Census API key as part of the setup
+procedures to use <code>tidycensus</code>.</p>
+<p>See the instructions for installing <a href="https://walker-data.com/tidycensus/articles/basic-usage.html">on the tidycensus
+website</a>.</p>
+<p>Note that you only need to run the <code>census_api_key("YOUR API KEY GOES HERE")</code>
+command once.</p>
+</div>
+<div id="sf-special-instructions" class="section level3" number="2.2.3">
+<h3>
+<span class="header-section-number">2.2.3</span> sf Special Instructions<a class="anchor" aria-label="anchor" href="#sf-special-instructions"><i class="fas fa-link"></i></a>
+</h3>
+<p>For the <code>sf</code> package, there are additional instructions here: <a href="https://r-spatial.github.io/sf/" class="uri">https://r-spatial.github.io/sf/</a>
+which are OS (Mac, Windows, Linux) specific, which walk through getting setup
+with the <code>gdal</code> (or Geospatial Data Abstraction Library, a translator library
+for raster and vector geospatial data formats) which is a dependency of <code>sf</code>.</p>
+</div>
+<div id="inla-install-instructions" class="section level3" number="2.2.4">
+<h3>
+<span class="header-section-number">2.2.4</span> INLA Install Instructions<a class="anchor" aria-label="anchor" href="#inla-install-instructions"><i class="fas fa-link"></i></a>
+</h3>
+<p>The code above installs the stable version of INLA. Should you ever need
+to upgrade your installation, instructions are online here:
+<a href="https://www.r-inla.org/download-install" class="uri">https://www.r-inla.org/download-install</a></p>
+</div>
+</div>
+<div id="references-for-spatial-programming-in-r" class="section level2" number="2.3">
+<h2>
+<span class="header-section-number">2.3</span> References for Spatial Programming in R<a class="anchor" aria-label="anchor" href="#references-for-spatial-programming-in-r"><i class="fas fa-link"></i></a>
+</h2>
+<p>As additional reference material to supplement the R programming code provided
+here, we would recommend:</p>
+<ul>
+<li>Geocomputation with R by Robin Lovelace, Jakub Nowosad, and Jannes Muenchow.
+<a href="https://geocompr.robinlovelace.net/" class="uri">https://geocompr.robinlovelace.net/</a>.</li>
+<li>Spatial Data Science with Applications in R by Edzer Pebesma and Roger Bivand.
+<a href="https://r-spatial.org/book/" class="uri">https://r-spatial.org/book/</a>.</li>
+<li>Geospatial Health Data: Modeling and Visualization with R-INLA and Shiny by Paula Moraga. <a href="https://www.paulamoraga.com/book-geospatial/index.html" class="uri">https://www.paulamoraga.com/book-geospatial/index.html</a>.</li>
+</ul>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="background.html"><span class="header-section-number">1</span> Background and History of Analytic Methods</a></div>
+<div class="next"><a href="getting-your-data.html"><span class="header-section-number">3</span> Getting your data</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li>
+<a class="nav-link" href="#getting-setup"><span class="header-section-number">2</span> Getting Setup with R and RStudio</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#principles-for-reproducible-workflow-and-programming"><span class="header-section-number">2.0.1</span> Principles for Reproducible Workflow and Programming</a></li></ul>
+</li>
+<li><a class="nav-link" href="#downloading-and-installing-r-and-rstudio"><span class="header-section-number">2.1</span> Downloading and Installing R and RStudio</a></li>
+<li>
+<a class="nav-link" href="#basic-features-of-r"><span class="header-section-number">2.2</span> Basic Features of R</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#note-about-compiling-from-source"><span class="header-section-number">2.2.1</span> Note about “compiling from source”</a></li>
+<li><a class="nav-link" href="#tidycensus-special-instructions"><span class="header-section-number">2.2.2</span> Tidycensus Special Instructions</a></li>
+<li><a class="nav-link" href="#sf-special-instructions"><span class="header-section-number">2.2.3</span> sf Special Instructions</a></li>
+<li><a class="nav-link" href="#inla-install-instructions"><span class="header-section-number">2.2.4</span> INLA Install Instructions</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#references-for-spatial-programming-in-r"><span class="header-section-number">2.3</span> References for Spatial Programming in R</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Public Health Disparities Geocoding Project 2.0 Training Manual</strong>" was written by Christian Testa, Jarvis T Chen, Enjoli Hall, Dena Javadi, Justin Morgan, Tamara Rushovich, Sudipta (Shu) Saha, Pamela D Waterman, Nancy Krieger. </p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

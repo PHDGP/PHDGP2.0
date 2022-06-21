@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>4 Visualizing your data | Public Health Disparities Geocoding Project 2.0 Training Manual</title>
+<meta name="author" content="Christian Testa, Jarvis T Chen, Enjoli Hall, Dena Javadi, Justin Morgan, Tamara Rushovich, Sudipta (Shu) Saha, Pamela D Waterman, Nancy Krieger">
+<meta name="description" content="Data visualization is a critical component in communicating and advocating for health equity as it makes data accessible and transparent. However, it is not without its pitfalls, and in this...">
+<meta name="generator" content="bookdown 0.26 with bs4_book()">
+<meta property="og:title" content="4 Visualizing your data | Public Health Disparities Geocoding Project 2.0 Training Manual">
+<meta property="og:type" content="book">
+<meta property="og:description" content="Data visualization is a critical component in communicating and advocating for health equity as it makes data accessible and transparent. However, it is not without its pitfalls, and in this...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="4 Visualizing your data | Public Health Disparities Geocoding Project 2.0 Training Manual">
+<meta name="twitter:description" content="Data visualization is a critical component in communicating and advocating for health equity as it makes data accessible and transparent. However, it is not without its pitfalls, and in this...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1.9000/transition.js"></script><script src="libs/bs3compat-0.3.1.9000/tabs.js"></script><script src="libs/bs3compat-0.3.1.9000/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script><link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
+<script src="libs/leaflet-1.3.1/leaflet.js"></script><link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
+<script src="libs/proj4-2.6.2/proj4.min.js"></script><script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script><link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
+<script src="libs/leaflet-binding-2.1.1/leaflet.js"></script><script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script><script src="libs/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script><link href="libs/HomeButton-0.0.1/home-button.css" rel="stylesheet">
+<script src="libs/HomeButton-0.0.1/home-button.js"></script><script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script><script src="libs/clipboard-0.0.1/setClipboardText.js"></script><link href="libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet">
+<link href="libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet">
+<script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Public Health Disparities Geocoding Project 2.0 Training Manual</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Public Health Disparities Geocoding Project 2.0 Training Manual</a></li>
+<li><a class="" href="preface.html">Preface</a></li>
+<li><a class="" href="background.html"><span class="header-section-number">1</span> Background and History of Analytic Methods</a></li>
+<li><a class="" href="getting-setup.html"><span class="header-section-number">2</span> Getting Setup with R and RStudio</a></li>
+<li><a class="" href="getting-your-data.html"><span class="header-section-number">3</span> Getting your data</a></li>
+<li><a class="active" href="visualizing-your-data.html"><span class="header-section-number">4</span> Visualizing your data</a></li>
+<li><a class="" href="analyzing-your-data.html"><span class="header-section-number">5</span> Analyzing your data</a></li>
+<li><a class="" href="premature-mortality.html"><span class="header-section-number">6</span> Case Study 1: Premature Mortality in Massachusetts</a></li>
+<li><a class="" href="breast-cancer-mortality.html"><span class="header-section-number">7</span> Case Study 2: Breast Cancer Mortality in Massachusetts</a></li>
+<li><a class="" href="cook-county-covid.html"><span class="header-section-number">8</span> Case Study 3: COVID-19 Mortality in Cook County (March 2020 - March 2022)</a></li>
+<li><a class="" href="temporal-health-insurance.html"><span class="header-section-number">9</span> Case Study 4: Case Study on Temporal Trends using American Community Survey (ACS) data (2012-2019)</a></li>
+<li><a class="" href="health-insurance-comparison.html"><span class="header-section-number">10</span> Case Study 5: Case Study Comparing County Analyses of Inequities in Health Insurance using ACS vs. CDC PLACES data (2019)</a></li>
+<li><a class="" href="conclusions.html"><span class="header-section-number">11</span> Conclusions</a></li>
+<li><a class="" href="glossary.html"><span class="header-section-number">12</span> Glossary</a></li>
+</ul>
+
+        <div class="book-extra">
+          
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="visualizing-your-data" class="section level1" number="4">
+<h1>
+<span class="header-section-number">4</span> Visualizing your data<a class="anchor" aria-label="anchor" href="#visualizing-your-data"><i class="fas fa-link"></i></a>
+</h1>
+<p>Data visualization is a critical component in communicating and advocating for
+health equity as it makes data accessible and transparent. However, it is not
+without its pitfalls, and in this chapter we will discuss some of the important
+points to consider when visualizing data for advancing health equity.</p>
+<p>Firstly, as a matter of accessibility, we strive to use colorblind friendly
+color palettes when using color so that individuals with one of the different
+kinds of colorblindness can still interpret our visualizations.
+We encourage you to learn more about colorblindness and colorblind friendly
+palettes from a number of resources (Katsnelson, 2021) (Ou, 2021). The color
+vision deficiency simulator from the <code>colorblindr</code> package is especially helpful
+in testing if a visual you are creating is colorblind friendly.</p>
+<div class="infobox info">
+<p>If you are looking for help learning how to create data visualizations in R, we
+recommend checking out the online, free book:
+<a href="https://ggplot2-book.org/">ggplot2: Elegant Graphics for Data Analysis</a>.</p>
+<p>If you are looking for help learning how to work with spatial data in R, we recommend
+the following free, online books:</p>
+<ul>
+<li>Spatial Data Science with applications in R by Edzer Pebesma and Roger Bivand <br><a href="https://r-spatial.org/book/" class="uri">https://r-spatial.org/book/</a>
+</li>
+<li>Geocomputation with R by Robin Lovelace, Jakub Nowosad, and Jannes Muenchow <br><a href="https://geocompr.robinlovelace.net/" class="uri">https://geocompr.robinlovelace.net/</a>
+</li>
+<li>Analyzing US Census Data: Methods, Maps, and Models in R, by Kyle Walker <br><a href="https://walker-data.com/census-r/" class="uri">https://walker-data.com/census-r/</a>
+</li>
+<li>Geospatial Health Data: Modeling and Visualization with R-INLA and Shiny by Paula Moraga. <a href="https://www.paulamoraga.com/book-geospatial/index.html" class="uri">https://www.paulamoraga.com/book-geospatial/index.html</a>.</li>
+</ul>
+</div>
+<p>One of the main points we urge caution around with respect to the visualization
+and mapping of area based health outcome data are the presentation of rates
+which are unstable due to small population sizes. As a broader principle, we
+emphasize the need for careful choice of the area level at which results are
+presented. In part, this is because it is well established that changing the
+areal units into which data are aggregated and analyzed can change the
+relationships observed in the data. This is known as the Modifiable Areal Unit
+Problem, which can be read about in (Wong 2004) and (Buzzelli 2020). Of note,
+choice of area should not be arbitrary, but should be guided by a priori
+reasons, including which areas make the most sense to use to answer which
+questions. For example, analyses of population-wide health inequities within the
+entire US may wish to use census tract or county level data, whereas analyses
+more specifically focused on the political geography of health inequities may
+wish to use areas with political boundaries, e.g., state or congressional
+legislative districts (Keena et al, 2021; Krieger, 2019; Krieger et al, 2022).</p>
+<p>For example at small area levels like the Census tract level, the underlying
+population may be so small that the health outcomes observed are quite noisy
+because a single additional case represents a large shift in the rate. In such a
+situation, it it could potentially be erroneous to infer that the Census tract
+with the highest observed rate has the greatest underlying risk because it could
+be an artifact of noise. This motivates the need for spatial smoothing, and we
+encourage the use of spatially smoothed estimates for choropleth maps showing
+health outcome rates to avoid such a potential pitfall.
+As an introduction to these pitfalls, we recommend the <a href="https://mgimond.github.io/Spatial/pitfalls-to-avoid.html">Pitfalls to avoid</a> chapter from (Gimond 2022).</p>
+<p>It is worthwhile to remark on how different areal units can either center or
+marginalize social groups based on the geographic boundaries employed. It is
+also crucial to be clear about which social groups are excluded or inaccurately
+represented in the area-based data, including but not limited to people who are
+unhoused, incarcerated, otherwise institutionalized or experiencing other kinds
+of marginalization. Warranting scrutiny are the protocols employed by the data
+holders to assign addresses and/or georeferenced codes to the records of persons
+who are not living in non-institutional residences, as well as who is counted
+towards the population totals of the specified geographic areas.As an example,
+one lesson we have learned from analyzing Boston area mortality data is that it
+can be quite useful to know the locations of and areas containing homeless
+shelters, because we have found that individuals designated as experiencing
+homelessness at the time of their death have had their place of death in the
+residential field of the death certificate listed as the address of the homeless
+shelter. The net impact can be to inflate the mortality rate of the census
+tracts in which these shelters are located.</p>
+<p>Oftentimes georeferenced and geocoded data will have anomalous or idiosyncratic
+features such as areas where the rate appears to be infinite because population
+estimates are zero for that area despite having observed health outcomes,
+especially if the data are for small areas or particular sub-populations.
+Although there is not a single solution to these problems, a key starting place
+is to examine the data critically to understand the socially-produced data
+protocols and social distribution of the populations at issue, so as to be on
+the lookout for these very real problems that arise from and manifest social
+spatial inequities. We accordingly encourage data analysts and visualizers to
+consider carefully the impacts the choice of areas, their boundaries, the
+processes by which the locations of people are assigned to these areas (whether
+as “numerators” or “denominators”), and the power relations affecting who is
+likely to be geocoded to these areas – and who is missed – whether as a “case”
+or member of the population from which the cases arise (i.e., “denominator”).</p>
+<p>To start to develop a wider perspective on how data visualization and mapping
+can be used, we list below a range of recommended books and articles. Because
+data visualization and mapping are powerful tools to communicate (or
+miscommunicate) data, it is critical to be aware of how they can reflect bias
+and tell lies (Deluca and Nelson, 2017), (Fleckenstein 1991), (Monmonier 2021),
+as well as reveal powerful truths (Koch 2017om Koch outlines the history of
+disease mapping in his book Disease Maps, Epidemics on the Ground (2011), and in
+his 2017 follow-up book, Ethics in Everyday Places: Mapping Moral Stress,
+Distress, and Injury, he takes a broader perspective.</p>
+<!-- 
+  # discussed above:
+  - ggplot2, color palettes & accessibility 
+  - mapping point estimates vs uncertainty 
+  - references: "how maps lie";  tom koch disease maps, "ethics in everyday places: mapping moral stress, distress, and injury"
+  - point layers vs. choropleth layers 
+  - visualizing raw data may be unstable 
+  
+  # TODO: 
+  do we cover these topics here again, in addition to in "getting your data"?
+  - visualizing health measures (actually getting to look at maps)
+  - showing how mapview helps to reality-check your understanding of the geography 
+  based on including streetmap features, satellite imagery, etc.
+  -->
+<div id="references-1" class="section level2" number="4.1">
+<h2>
+<span class="header-section-number">4.1</span> References<a class="anchor" aria-label="anchor" href="#references-1"><i class="fas fa-link"></i></a>
+</h2>
+<p>Katsnelson, A. (2021) ‘Colour me better: fixing figures for colour blindness’, Nature, 598(7879), pp. 224–225. <a href="doi:10.1038/d41586-021-02696-z" class="uri">doi:10.1038/d41586-021-02696-z</a>.</p>
+<p>Ou, J. (2021) Safe colorsets. Available at: <a href="https://cran.r-project.org/web/packages/colorBlindness/vignettes/colorBlindness.html" class="uri">https://cran.r-project.org/web/packages/colorBlindness/vignettes/colorBlindness.html</a> (Accessed: 7 June 2022).</p>
+<p>Wong, D. (2004) ‘The modifiable areal unit problem (MAUP)’, in WorldMinds: Geographical Perspectives on 100 Problems. Springer Netherlands. Available at: <a href="https://link.springer.com/chapter/10.1007/978-1-4020-2352-1_93" class="uri">https://link.springer.com/chapter/10.1007/978-1-4020-2352-1_93</a>.</p>
+<p>Buzzelli, M. (2020) ‘Modifiable Areal Unit Problem’, International Encyclopedia of Human Geography, pp. 169–173. <a href="doi:10.1016/B978-0-08-102295-5.10406-8" class="uri">doi:10.1016/B978-0-08-102295-5.10406-8</a>.</p>
+<p>Deluca, E. and Nelson, S. (2017) ‘Lying With Maps’. Available at: <a href="https://open.lib.umn.edu/mapping/chapter/7-lying-with-maps/" class="uri">https://open.lib.umn.edu/mapping/chapter/7-lying-with-maps/</a> (Accessed: 7 June 2022).</p>
+<p>Fleckenstein, L. (1991) ‘How Maps Lie’, Syracuse University Magazine, December. Available at: <a href="https://surface.syr.edu/cgi/viewcontent.cgi?article=1245&amp;context=sumagazine" class="uri">https://surface.syr.edu/cgi/viewcontent.cgi?article=1245&amp;context=sumagazine</a>.</p>
+<p>Monmonier, M. (2018) How to Lie with Maps, Third Edition. Chicago, IL: University of Chicago Press. Available at: <a href="https://press.uchicago.edu/ucp/books/book/chicago/H/bo27400568.html" class="uri">https://press.uchicago.edu/ucp/books/book/chicago/H/bo27400568.html</a> (Accessed: 7 June 2022).</p>
+<p>Koch, T. (2011) Disease Maps: Epidemics on the Ground. Chicago, IL: University of Chicago Press. Available at: <a href="https://press.uchicago.edu/ucp/books/book/chicago/D/bo8490164.html" class="uri">https://press.uchicago.edu/ucp/books/book/chicago/D/bo8490164.html</a> (Accessed: 7 June 2022).</p>
+<p>Koch, T. (2017) Ethics in Everyday Places: Mapping Moral Stress, Distress, and Injury | Esri Press (2017). Available at: <a href="https://www.esri.com/en-us/esri-press/browse/ethics-in-everyday-places-mapping-moral-stress-distress-and-injury" class="uri">https://www.esri.com/en-us/esri-press/browse/ethics-in-everyday-places-mapping-moral-stress-distress-and-injury</a> (Accessed: 7 June 2022).</p>
+<p>Dorling D, Fairbairn D (1997). Mapping: Ways of Representing the World. Old Tappen, UK: Routledge.</p>
+<p>Tufte D (2001). The Visual Display of Quantitative Information. 2nd ed. Cheshire, CT: Graphics Press.</p>
+<p>Tufte ER (2020). Seeing with Fresh Eyes: Meaning, Space, Data, Truth. Cheshire, CT: Graphics Press.</p>
+<p>Gimond, M. (2022) Intro to GIS and Spatial Analysis. Available at: <a href="https://mgimond.github.io/Spatial/index.html" class="uri">https://mgimond.github.io/Spatial/index.html</a> (Accessed: 7 June 2022).</p>
+<p>Lovelace, R., Nowosad, J. and Muenchow, J. (2022) Geocomputation with R. Available at: <a href="https://geocompr.robinlovelace.net/" class="uri">https://geocompr.robinlovelace.net/</a> (Accessed: 7 June 2022).</p>
+</div>
+<div id="health-equity" class="section level2" number="4.2">
+<h2>
+<span class="header-section-number">4.2</span> Health Equity<a class="anchor" aria-label="anchor" href="#health-equity"><i class="fas fa-link"></i></a>
+</h2>
+<p>To understand the distribution of health and disease in place, it is necessary to collect, analyze, and visualize health data and area-based social metrics. It is equally important, however, that when documenting and mapping health inequities, we contextualize such data with adequate analysis of social, political, and ecological context. Shared observations of disparities in health do not necessarily translate to common understandings of cause, especially when population patterns of disease and health mirror population distributions of deprivation and privilege. Mapping and visualizing the uneven social and spatial distribution of health and disease in areas – which can be a particularly effective way of communicating health inequities to decision makers – without offering some explanatory context of the allocation of resources and hazards in these areas can perpetuate harmful ideas and actions that actually undermine the goal of eliminating health inequities.</p>
+<p>With the increasing availability of local health data such as the CDC PLACES program, as well as advancements in the availability and accessibility of geocoding services, there is ample opportunity to disaggregate health data, particularly to the neighborhood (census tract) level. Geographic disaggregation allows for more fine-grained analyses, including multilevel spatial modeling, which can inform more “targeted” interventions. But when presented by themselves with no explanatory context, such granular data can create or reinforce what sociologist Loïc Wacquant refers to as “territorial stigmatization,” whereby the characteristics or features of a place are associated with the moral character and behavior of its residents, or vice versa—especially for people and places who are already politically, economically, and socially marginalized and/or materially deprived of important resources (Chowkwanyun and Reed 2020). For example, if some places are found to have a high concentration of illness or disease, narratives and representations of those places as “diseased,” “contaminated,” could produce or reinforce existing stigma and lead to targeted interventions such as heightened policing and surveillance in an attempt to contain and control residents, reclamation or demolition of physical structures, and social neglect and abandonment (There are too many historical case studies of this, for these potential risks to be downplayed or ignored: Craddock 2004; Molina 2006; Roberts 2009; Lopez 2009; Krupar and Ehlers 2017).</p>
+<p>There are various approaches to countering territorial stigmatization. Mapping place-based risks and resource deficits that might help explain the spatial distribution of disease, illness, and injury along racial and socioeconomic lines can focus public and policy attention on shifting the context for health rather than individual behaviors and attitudes. For example, in the case of Covid-19, this could look like mapping and visualizing the uneven geographic distribution of preventive health care facilities or the concentration of respiratory hazards in areas of racialized concentrated poverty. Furthermore, one could map historical and political variables such as historical redlining that can offer important insight into how and why the social and spatial patterning of life-enhancing and harmful resources exists in an area as a result of racist policies and practices (Rothstein 2017; Mapping Inequality 2022; Krieger et al 2020a, 2020b; Wright et al. 2022). Additionally, asset mapping can provide helpful information about the strengths and resources of a community to facilitate discussion and action around building on these assets to address community needs and improve community health.</p>
+<p>Analyzing and visualizing patterns of White wealth and health is also important to understanding and addressing patterns of population health and health inequities. Mapping and visualizing “racially concentrated areas of affluence” can help move research and policy attention away from a predominant concern for racially concentrated areas of poverty and toward a more holistic consideration of the full range of health outcomes, resources, and hazards in an area (Goetz et al. 2019). A focus on racially concentrated areas of affluence underscores the reality that structural racism produces both racialized concentrations of poverty (and hazards) and racialized concentrations of wealth (and health-enabling resources). Other measures such as the Index of Concentration of the Extremes (ICE), which quantifies the distribution of persons at the extremes of relationships of privilege and deprivation, also bring the full population and power relations into view, and can be scaled for use at multiple levels of geography (e.g., census block, census block group, census tract, city/town, county, etc.) (Massey 2001; Krieger et al. 2015, 2016, 2017, 2018). Initially developed to measure spatial polarization in economic terms (i.e., economic residential segregation), in public health studies we have extended its use to include novel measures of racialized residential segregation and racialized economic segregation (Krieger et al. 2015, 2016, 2017, 2018).</p>
+<p>In summary, addressing health inequities requires a relational understanding of how systems of power and resource allocation simultaneously produce poor health for some and good health for others. This approach may require analyzing and visualizing patterns in population health and health inequities at large geographic scales such as counties and regions, rather than at the city level for example, to capture a wider range of values for health outcome data and area-based social metrics.</p>
+</div>
+<div id="references-2" class="section level2" number="4.3">
+<h2>
+<span class="header-section-number">4.3</span> References<a class="anchor" aria-label="anchor" href="#references-2"><i class="fas fa-link"></i></a>
+</h2>
+<p>Chowkwanyun, M., &amp; Reed Jr., A. L. (2020). Racial health disparities and Covid-19—Caution and context. New England Journal of Medicine, 383(3), 201-203. <a href="doi:10.1056/NEJMp2012910" class="uri">doi:10.1056/NEJMp2012910</a></p>
+<p>Craddock, S. (2004). City of plagues: Disease, poverty, and deviance in San Francisco. University of Minnesota Press.</p>
+<p>Goetz, E. G., Damiano, A., &amp; Williams, R. A. Racially concentrated areas of affluence: A preliminary investigation. Cityscape, 21(1), 99-123.</p>
+<p>Keena A, Latner M., McGann AJM, Smith CA. Gerrymandering the States: Partisanship, Race, and the Transformation of American Federalism. Cambridge, UK: Cambridge University Press, 2021.</p>
+<p>Krieger N, Van Wye G, Huynh M, Waterman PD, Maduro G, Li W, Gwynn C, Barbot O, Bassett MT. Historical redlining, structural racism, and preterm birth risk in New York City (2013-2017). Am J Public Health 2020; 110(7):1046-1053.</p>
+<p>Krieger N, Wright E, Chen JT, Waterman PD, Huntley ER, Arcaya M. Cancer stage at diagnosis, historical redlining, and current neighborhood characteristics: breast, cervical, lung, and colorectal cancer, Massachusetts, 2001-2015. Am J Epidemiol 2020; 189(10):1065-1075.</p>
+<p>Krieger N, Waterman PD, Spasojevic J, Li W, Maduro G, Van Wye G. Public health monitoring of privilege and deprivation using the Index of Concentration at the Extremes (ICE). Am J Public Health 2016; 106: 256-253</p>
+<p>Krieger N, Waterman PD, Gryparis A, Coull BA. Black carbon exposure, socioeconomic and racial/ethnic spatial polarization, and the Index of Concentration at the Extremes (ICE). Health &amp; Place 2015; 34:215-228.</p>
+<p>Krieger N, Feldman JM, Waterman PD, Chen JT, Coull BA, Hemenway D. Local residential segregation matters: stronger association of census tract compared to conventional city-level measures with fatal and non-fatal assaults (total and firearm related), using the Index of Concentration at the Extremes (ICE) for racial, economic, and racialized economic segregation, Massachusetts (US), 1995-2010. J Urban Health 2017; 94:244-258.</p>
+<p>Krieger N, Kim R, Feldman J, Waterman PD. Using the Index of Concentration at the Extremes at multiple geographic levels to monitor health inequities in an era of growing spatial social polarization: Massachusetts, USA (2010-2014). Int J Epidemiol 2018; 47:788-819.</p>
+<p>Krieger N. The US Census and the people’s health: Public health engagement from enslavement and “Indians Not Taxed” to census tracts and health equity (1790-2018). Am J Public Health 2019; 109(8):1092-1100.</p>
+<p>Krieger N, Testa C, Chen JT, Hanage WP, McGregor AJ. Relationship of political ideology of US Federal and State elected officials and key COVID pandemic outcomes during the vaccine era: April 2021-March 2022. Available at SSRN: <a href="https://ssrn.com/abstract=4131161" class="uri">https://ssrn.com/abstract=4131161</a> ; posted: June 8, 2022</p>
+<p>Krupar, S., &amp; Ehlers, N. (2017). Biofutures: Race and the governance of health. Environment and Planning D: Society and Space, 35(2), 222-240. <a href="doi:10.1177/0263775816654475" class="uri">doi:10.1177/0263775816654475</a></p>
+<p>Lopez, R. P. (2009). Public health, the APHA, and urban renewal. American Journal of Public Health, 99(9), 1603-1611. <a href="doi:10.2105/AJPH.2008.150136" class="uri">doi:10.2105/AJPH.2008.150136</a></p>
+<p>Mapping Inequality: Redlining in New Deal America. <a href="https://dsl.richmond.edu/panorama/redlining/#loc=5/39.1/-94.58&amp;text=about" class="uri">https://dsl.richmond.edu/panorama/redlining/#loc=5/39.1/-94.58&amp;text=about</a> ; accessed June 17, 2022.</p>
+<p>Molina, N. (2006). Fit to be citizens? Public health and race in Los Angeles, 1879-1939. University of California Press.</p>
+<p>Roberts Jr., S. K. (2009). Infectious fear: Politics, disease, and the health effects of segregation. University of North Carolina Press.</p>
+<p>Rothstein R (2017). The Color of Law: A Forgotten History of How Our Government Segregated America. New York: Liveright Publishing Co., W.W. Norton &amp; Co.</p>
+<p>Wright E, Waterman PD, Testa C, Chen JT, Krieger N. Breast Cancer Incidence, Hormone Receptor Status, Historical Redlining, and Current Neighborhood Characteristics in Massachusetts, 2005-2015. JNCI Cancer Spectrum 2022; 6(2); <a href="https://doi.org/10.1093/jncics/pkac016" class="uri">https://doi.org/10.1093/jncics/pkac016</a>; epub on-line: Feb 18, 2022.</p>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="getting-your-data.html"><span class="header-section-number">3</span> Getting your data</a></div>
+<div class="next"><a href="analyzing-your-data.html"><span class="header-section-number">5</span> Analyzing your data</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#visualizing-your-data"><span class="header-section-number">4</span> Visualizing your data</a></li>
+<li><a class="nav-link" href="#references-1"><span class="header-section-number">4.1</span> References</a></li>
+<li><a class="nav-link" href="#health-equity"><span class="header-section-number">4.2</span> Health Equity</a></li>
+<li><a class="nav-link" href="#references-2"><span class="header-section-number">4.3</span> References</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Public Health Disparities Geocoding Project 2.0 Training Manual</strong>" was written by Christian Testa, Jarvis T Chen, Enjoli Hall, Dena Javadi, Justin Morgan, Tamara Rushovich, Sudipta (Shu) Saha, Pamela D Waterman, Nancy Krieger. </p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>
