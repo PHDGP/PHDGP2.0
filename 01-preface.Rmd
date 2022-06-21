@@ -46,11 +46,7 @@ The PHDGP 2.0 manual also offers three case examples that go through analysis of
 The theory informing the work of this project is the ecosocial theory of disease distribution, first proposed in 1994 and elaborated since (Krieger, 1994; Krieger 2011, Krieger 2021). This theory not only provides conceptual tools for analyzing multilevel spatiotemporal processes of embodying (in)justice, but also calls attention to who and what is responsible for health inequities, and who holds or blocks agency and accountability to achieve health
 justice (Krieger, 1994; Krieger 2011, Krieger 2021). These course materials are written with as much emphasis on monitoring health for accountability and action as they are for etiological studies.
 
-Source of funding: American Cancer Society
-Creative copyright; Licensing - Credit for use is required. 
-(Licensing needs to be addressed in everything we hand out).
 
-Please cite this work as Chen JT, Testa C, Hall E, Javadi D,  Morgan J, Rushovich T,  Shah S, Waterman PD, Krieger N. The Public Health Disparities Geocoding Project 2.0. Course Material. Available as of June 30, 2022
 
 REFERENCES
 
