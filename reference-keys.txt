@@ -68,7 +68,6 @@ motivating-questions
 choice-of-geographic-level
 numeratordenominator-mismatch
 example-age-specific-all-cause-mortality-by-racialized-group-in-massachusetts-2013-2017
-chapter-5-analyzing-your-data
 aggregation-method
 direct-age-standardization
 non-spatial-regression-methods
