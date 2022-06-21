@@ -40,7 +40,7 @@ Next, you will need to open RStudio and create a new R Project file to work on t
 ### Dependencies
 Run the lines of code below to load the R packages that you will need throughout the case study. If this code does not run for you, you may need to run `install.packages(“package_name”)`.
 
-```{r dependencies, message = FALSE, eval = FALSE}
+```{r, message = FALSE, eval = FALSE}
 # Libraries - if this code does not run for you, you may need to run install.package("package_name")
 library(knitr)
 library(tidyverse)
