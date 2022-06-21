@@ -653,30 +653,30 @@ ggsave(
 knitr::include_graphics("images/11-health-insurance-comparison/modeled_effects_for_each_absm.png")
 ```
 
-## Using CDC’s PLACES
+<!-- ## Using CDC’s PLACES -->
 
-_**What are the strengths and limitations of CDC’s PLACES SAEs?**_
+<!-- _**What are the strengths and limitations of CDC’s PLACES SAEs?**_ -->
 
-STRENGTHS: 
+<!-- STRENGTHS:  -->
 
-  -	unique source of CT-level health relevant data
-  -	can be linked to other CT and other area-based measures of structural and social determinants of health
-  -	Good starting point for understanding baseline health-related disparities 
-  -	Can be used to assess general trends across areas in order to inform outreach and further contextualized research and program planning
-  
-WEAKNESSES: 
+<!--   -	unique source of CT-level health relevant data -->
+<!--   -	can be linked to other CT and other area-based measures of structural and social determinants of health -->
+<!--   -	Good starting point for understanding baseline health-related disparities  -->
+<!--   -	Can be used to assess general trends across areas in order to inform outreach and further contextualized research and program planning -->
 
-  -	Data not meant for longitudinal research (studies have tried to use PLACES
-  estimates as outcomes and applied regressions on exposure data extracted
-  elsewhere, despite warning at the PLACES website that the data should not be
-  used in this way)
-  -	Post-stratification done using 2010 census estimates (cannot disentangle
-  predictors)
-  -	Environmental exposures are not captured (as the assumption is that
-  confounding by these are accounted for by looking at census tract level), so
-  estimates cannot be used to evaluate local policies or programs
-  -	Stratification by racialized group, age, or socioeconomic position not
-  available (hence cannot do sub-analyses for specific age/racialized/income
-  groups)
-  -	Paucity of validation studies 
+<!-- WEAKNESSES:  -->
+
+<!--   -	Data not meant for longitudinal research (studies have tried to use PLACES -->
+<!--   estimates as outcomes and applied regressions on exposure data extracted -->
+<!--   elsewhere, despite warning at the PLACES website that the data should not be -->
+<!--   used in this way) -->
+<!--   -	Post-stratification done using 2010 census estimates (cannot disentangle -->
+<!--   predictors) -->
+<!--   -	Environmental exposures are not captured (as the assumption is that -->
+<!--   confounding by these are accounted for by looking at census tract level), so -->
+<!--   estimates cannot be used to evaluate local policies or programs -->
+<!--   -	Stratification by racialized group, age, or socioeconomic position not -->
+<!--   available (hence cannot do sub-analyses for specific age/racialized/income -->
+<!--   groups) -->
+<!--   -	Paucity of validation studies  -->
 

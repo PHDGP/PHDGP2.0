@@ -1,5 +1,7 @@
 # The Public Health Disparities Geocoding Project 2.0 
 
+[![DOI](https://zenodo.org/badge/471407435.svg)](https://zenodo.org/badge/latestdoi/471407435)
+
 This repository is home to the code behind the free, open-access, online training
 materials for the Population Health Disparities Geocoding Project (PHDGP) 2.0
 workshop on analyzing geo-referenced health outcomes data.
