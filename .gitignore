@@ -5,3 +5,4 @@
 _book/
 _bookdown_files/
 .DS_Store
+data/11-health-insurance-comparison/places_2021_release_county_level.csv

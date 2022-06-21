@@ -1104,21 +1104,21 @@ df <- readRDS(here("data/09-cook-county-covid/cook_county_mortality_cleaned.rds"
 #| echo = TRUE,
 #| eval = TRUE
 # launch an interactive map to view Cook County ICEraceinc by zip code
-mapview::mapview(df, zcol = "ICEraceinc")
+# mapview::mapview(df, zcol = "ICEraceinc")
 ```
 
 ```{r mapview example two}
 #| echo = FALSE,
 #| eval = FALSE
 # launch an interactive map to view Cook County ICEraceinc by zip code
-mapview::mapview(df %>%
-                   group_by(geoid) %>%
-                   dplyr::summarize(deaths = sum(deaths),
-                             person_time = sum(person_time)) %>%
-                   mutate(mortality_per100k_py = (deaths/person_time) * 1e5), 
-                 zcol = "mortality_per100k_py",
-                 legend = T,
-                 layer.name = 'Mortality per 100,000 person years')
+# mapview::mapview(df %>%
+#                    group_by(geoid) %>%
+#                    dplyr::summarize(deaths = sum(deaths),
+#                              person_time = sum(person_time)) %>%
+#                    mutate(mortality_per100k_py = (deaths/person_time) * 1e5), 
+#                  zcol = "mortality_per100k_py",
+#                  legend = T,
+#                  layer.name = 'Mortality per 100,000 person years')
 ```
 
 

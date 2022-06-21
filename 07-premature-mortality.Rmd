@@ -36,6 +36,7 @@ You can look at whole datasets in RStudio using the `View()` command, or look at
 You will need these packages throughout our case study
 
 ```{r dependencies, message = FALSE}
+#| eval=FALSE
 # Libraries - if this code does not run for you, you may need to run install.package("package_name")
 library(knitr)
 library(tidyverse)
@@ -60,6 +61,7 @@ library(broom)
 Your data have been aggregated from individual observations into death counts by age, racialized group, census tract, and town. When you get unrestricted mortality files from government sources for research, you will likely receive files with one observation per death. After you have geocoded these observations, you will need to aggregate them up to the level of interest for your analysis. This requires aggregation not only up to the census tract level, but also age groups so we can do an appropriate age standardization, racialized groups so we can stratify our analyses by these groups, and towns so we can explore a second areal level of analysis. Below is some code (for example) to turn a raw mortality file into what has been provided to you, by merging census tracts and towns to the data, and then aggregating into groups that align with the age and racialized groups that match your denominator data. The vast majority of our area-based social metrics come from the U.S. Census, so the most detailed level for analysis available will be the census tract (for which all the ABSMs are available, which is not the case for the census block group or census block). We can use the `tigris` package to download census tract geometries and the `sf` package to link our geocoded observations to the appropriate census tracts. Ideally when performing an analysis that might include two or more levels, the smaller level (here, census tracts) would be nested entirely within the larger level (towns). In Massachusetts though, there are several towns that have such small populations that they are smaller than census tracts. For these towns, we have created a crosswalk wherein small towns have been combined to create larger super towns. These super towns each make up one census tract, so that each super town in the analysis will now have at least one census tract nested within it for an eventual multilevel analysis
 
 ```{r wrangling_outcome, eval = FALSE}
+#| eval=FALSE
 # the raw mortality data, with the geocoded coordinates converted into spatial feature (sf) data
 ma_mort <- read_rds("ma_mort_geo.RDS") %>% 
   st_as_sf(coords=c("lon","lat"), crs = 4269)
@@ -664,7 +666,8 @@ Let’s first visualize the overall socioeconomic gradient in premature mortalit
 ### What is the overall socioeconomic gradient in premature mortality?
 
 ```{r}
-include_graphics("images/07-premature-mortality/adj_smr_map.png")
+#| echo=FALSE
+knitr::include_graphics("images/07-premature-mortality/adj_smr_map.png")
 ```
 
 How exactly do we get from our data to this map visualizing how the standard mortality ratio for premature mortality varies across space?
@@ -772,7 +775,7 @@ ggsave("raw_smr_dotplot.png")
 ```
 
 ```{r, echo = FALSE}
-include_graphics("images/07-premature-mortality/raw_smr_dotplot.png")
+knitr::include_graphics("images/07-premature-mortality/raw_smr_dotplot.png")
 ```
 
 We can also produce a map of these relationships. To do so, we will import a map file produced by the State of Massachusetts [https://www.mass.gov/info-details/massgis-data-municipalities].
