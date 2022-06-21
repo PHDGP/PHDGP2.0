@@ -109,7 +109,7 @@ An even better solution, and the one we ultimately recommend, is to add a small 
 To visualize the effect of these adjustments on estimates of the age-specific disparity by racialized group, we plot estimates from aggregated analyses and Poisson models with deletion and denominator adjustment in Figure 1.1. The plot confirms that either (a) adjusting denominators to match the number of observed deaths in problematic strata in census tracts or (b) adding a small number to all population person time estimates (preferred) yields comparable estimates to the aggregation method, whereas removing problematic observations results in bias.
 
 ```{r, echo=FALSE, fig.cap="Comparison of estimated age-specific Black/White mortality rate ratios using different methods to address numerator/denominator mismatch"}
-knitr::include_graphics("images/06-analyzing-your-data/age_specific_comparison_plot.png")
+knitr::include_graphics("images/06-analyzing-your-data/age-specific-comparison-plot.png")
 ```
 
 
