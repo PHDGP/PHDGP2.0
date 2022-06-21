@@ -13,7 +13,7 @@ palettes from a number of resources (Katsnelson, 2021) (Ou, 2021). The color
 vision deficiency simulator from the `colorblindr` package is especially helpful
 in testing if a visual you are creating is colorblind friendly.
 
-:::: {.infobox .info}
+:::: {.infobox}
 If you are looking for help learning how to create data visualizations in R, we
 recommend checking out the online, free book: 
 [ggplot2: Elegant Graphics for Data Analysis](https://ggplot2-book.org/).

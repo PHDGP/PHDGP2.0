@@ -10,7 +10,7 @@ library(kableExtra)
 ```
 
 
-# Overview of Methods
+## Overview of Methods
 
 In the years since we initially presented the **Public Health Disparities Geocoding Training** in 2004, there has been a huge increase in conceptual and methodological work regarding use of ABSMs to document and analyze health inequities, and the computing tools and statistical methods to conduct these analyses. In particular, the availability of software that facilitates data access, mapping, visualization, and fitting of multilevel and spatial models has greatly enhanced the accessibility of these analytic methods for public health scientists and advocates interested in advancing health equity. Our goal in presenting these updated methods is to illustrate their applicability to monitoring, reporting, and investigating health inequities. In doing so, we highlight many of the assumptions underlying the use of these methods and show how they can be applied to real-life data that arise in public health surveillance and health equity monitoring. We comment on some of the pitfalls that may arise when working with imperfect data in real time and discuss analytic and interpretive strategies keeping in mind the overarching goal of accurately documenting health inequities for accountability. Where appropriate, we also comment on ongoing methodologic work to improve analytic approaches.
 
@@ -112,8 +112,6 @@ To visualize the effect of these adjustments on estimates of the age-specific di
 knitr::include_graphics("images/06-analyzing-your-data/age-specific-comparison-plot.png")
 ```
 
-
-# Chapter 5: Analyzing Your Data
 
 ## Aggregation Method
 
