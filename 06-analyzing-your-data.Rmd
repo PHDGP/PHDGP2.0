@@ -452,10 +452,25 @@ where $\alpha$ is an intercept term representing the overall log relative risk o
 \log(\theta_{i}) = \alpha + \beta_{1} x_{1} + \ldots + \beta_{p} x_{p} + v_{i} . \]
 In this case the $\{v_{i}\}$ are interpretable as ***residual** area-specific effects conditional on the fixed covariates. Similarly, the $\beta$s are interpretable as covariate effects **conditional** on the area random effects.
 
-NOTE
-
+:::: {.infobox}
 **Fixed vs Random Effects:** in standard regression models, fixed and random effects refer to the type of statistical model being used. When using fixed effects analysis of variance (ANOVA), the assumptions being made are about the independent variable and the error distributions for the variable. Fixed effects are estimated with maximum likelihood (the traditional beta estimates we see in regression models). They are most appropriate when trying to generalize results to values for the fixed variables used in the study (fixed variables are "assumed to be measured without error ... and assumed that the values of a fixed variable in one study are the same as values of the fixed variable in another study") (Newsom, 2019). If however, the researcher is seeking to make inferences beyond particular values of the independent variable, a random effects model is used. Random effects are estimated with shrinkage (partial pooling or linear unbiased predictions). Random effects models are accounting for "additional expected random variation on the independent variable" and instead of the value of the variable itself being of interest, the random variables "are assumed to be values that are drawn from a larger population of values and thus will represent them" (Newsom, 2019; Gelman, 2005)
 
+<!-- possible alternate text: 
+Here we outline five definitions that we have seen:
+
+Fixed effects are constant across individuals, and random effects vary. For example, in a growth study, a model with random intercepts 𝑎𝑖 and fixed slope 𝑏 corresponds to parallel lines for different individuals 𝑖, or the model 𝑦𝑖𝑡=𝑎𝑖+𝑏𝑡. Kreft and De Leeuw (1998) thus distinguish between fixed and random coefficients.
+
+Effects are fixed if they are interesting in themselves or random if there is interest in the underlying population. Searle, Casella, and McCulloch (1992, Section 1.4) explore this distinction in depth.
+
+“When a sample exhausts the population, the corresponding variable is fixed; when the sample is a small (i.e., negligible) part of the population the corresponding variable is random.” (Green and Tukey, 1960)
+
+“If an effect is assumed to be a realized value of a random variable, it is called a random effect.” (LaMotte, 1983)
+
+Fixed effects are estimated using least squares (or, more generally, maximum likelihood) and random effects are estimated with shrinkage (“linear unbiased prediction” in the terminology of Robinson, 1991). This definition is standard in the multilevel modeling literature (see, for example, Snijders and Bosker, 1999, Section 4.2) and in econometrics.
+
+[Gelman, 2004, Analysis of variance—why it is more important than ever. The Annals of Statistics.]
+--> 
+::::
 
 It should be noted here that, as pointed out by Wolpert and Ickstadt (1998), the Poisson log normal model does not aggregate consistently. That is, if one specifies a log normal distribution for each of the relative risks and then combines two areas and specifies a log normal distribution for the relative risk of the combined area, then these distributions are inconsistent (because the sum of log normal distributions is not log normal). This can be understood as a form of ecologic bias whereby risk relationships do not remain constant across levels of aggregation (Wakefield et al., 2000). Nevertheless, a normal second-stage distribution has been observed empirically to provide a good model for log relative risks over a range of aggregations, and does present advantages with respect to model flexibility and ease of computation. 
 
