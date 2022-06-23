@@ -132,7 +132,7 @@ The following steps are used to generate age-standardized disease rates stratifi
 5. Generate age-standardized rates and other summary measures.
 
 
-:::
+:::: {.infobox}
 
 Advantages:
 
@@ -154,7 +154,7 @@ Disadvantages:
 
 - may preclude further adjustment for compositional differences or area-level covariates that vary within ABSM strata
 
-:::
+::::
 
 Throughout this section, we will be using data from the Greater Boston Area for the years 2013-2017, drawing on Massachusetts Mortality data and the American Community Survey (ACS) population data.
 
