@@ -16,6 +16,9 @@ top level directory, run the following:
 ```r
 # if you haven't already installed these dependencies
 install.packages("bookdown") 
+install.packages("here")
+install.package("ggdist")
+devtools::install_github("clauswilke/colorblindr")
 install.packages("downlit") # for the bs4_theme
 install.packages("mapview") # used for interactive maps 
 remotes::install_github("rstudio/bslib") # for the bs4_theme
