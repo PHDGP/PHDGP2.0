@@ -135,7 +135,7 @@ library(tidycensus)
 # get our data from PLACES 
 # download the county level data from https://chronicdata.cdc.gov/500-Cities-Places/PLACES-Local-Data-for-Better-Health-County-Data-20/swc5-untb 
 # rename it to "places_2021_release_county_level.csv"
-places <- readr::read_csv("places_2021_release_county_level.csv")
+places <- readr::read_csv("data/11-health-insurance-comparison/places_2021_release_county_level.csv")
 
 
 # filter for our measure of interest
@@ -205,6 +205,9 @@ acs_cleaned %<>%
       ) * 100
   ) %>%
   select(geoid, pct_uninsured_19_64_acs, pct_uninsured_19_64_acs_moe, estimate_total_19_64_population) # select only the columns we need
+
+# select for the crude prevalence
+places %<>% filter(Data_Value_Type == 'Crude prevalence')
 
 # join the places and acs datasets
 uninsurance <- places %>% full_join(acs_cleaned, by = c("LocationID" = "geoid"))
@@ -588,6 +591,35 @@ uninsurance %<>% mutate(
 )
 ```
 
+
+```{r}
+# relationship between ICE and percent without insurance in PLACES
+model <- lm(
+  formula = pct_uninsured_18_64_places ~ ICEraceinc_cut,
+  data = uninsurance
+)
+
+broom::tidy(model)
+
+# relationship between ICE and percent without insurance in ACS
+model <- lm(
+  formula = pct_uninsured_19_64_acs ~ ICEraceinc_cut,
+  data = uninsurance
+)
+
+broom::tidy(model)
+
+
+# relationship between poverty and percent without insurance in ACS
+model <- lm(
+  formula = pct_uninsured_19_64_acs ~ poverty_cut,
+  data = uninsurance
+)
+
+broom::tidy(model)
+```
+
+
 ```{r}
 #| eval=FALSE
 model_formulae <- 
@@ -651,6 +683,214 @@ ggsave(
 ```{r}
 #| echo=FALSE
 knitr::include_graphics("images/11-health-insurance-comparison/modeled_effects_for_each_absm.png")
+```
+
+
+```{r}
+#| echo = TRUE,
+#| eval = FALSE
+
+# let's take a look at massachusetts
+
+max_uninsurance_rate <- 
+  pmax(max(uninsurance %>% 
+    filter(state_abbr == 'TX') %>% pull(pct_uninsured_19_64_acs)),
+  max(uninsurance %>% 
+    filter(state_abbr == 'TX') %>% pull(pct_uninsured_18_64_places)))
+
+acs_figure <- uninsurance %>% 
+  filter(state_abbr == 'TX') %>% 
+  ggplot(aes(fill = pct_uninsured_19_64_acs)) + 
+  geom_sf(size = .1, color = 'white') + 
+  scale_fill_viridis_c(limits = c(0, max_uninsurance_rate),
+                       labels = scales::percent_format(scale = 1)) + 
+  labs(fill = "Percent Uninsured (19-64)") + 
+  ggtitle("ACS Percent Uninsurance Estimates")
+
+places_figure <- uninsurance %>% 
+  filter(state_abbr == 'TX') %>% 
+  ggplot(aes(fill = pct_uninsured_18_64_places)) + 
+  geom_sf(size = .1, color = 'white') + 
+  scale_fill_viridis_c(limits = c(0, max_uninsurance_rate),
+                       labels = scales::percent_format(scale = 1)) + 
+  labs(fill = "Percent Uninsured (18-64)") + 
+  ggtitle("Places Percent Uninsurance Estimates")
+
+
+library(patchwork)
+acs_figure + places_figure
+
+ggsave("images/11-health-insurance-comparison/texas_comparison.png",
+       height = 6, width = 12)
+
+uninsurance %>% 
+  filter(state_abbr == 'TX') %>% 
+  ggplot(aes(x = pct_uninsured_19_64_acs, y = pct_uninsured_18_64_places)) + 
+  geom_point() + 
+  xlim(c(0, max_uninsurance_rate)) + 
+  ylim(c(0, max_uninsurance_rate)) + 
+  geom_abline(slope = 1, intercept = 0)
+
+ggsave("images/11-health-insurance-comparison/texas_comparison_scatter.png",
+       height = 6, width = 6)
+
+
+
+max_uninsurance_rate <- 
+  pmax(max(uninsurance %>% 
+    filter(state_abbr == 'FL') %>% pull(pct_uninsured_19_64_acs)),
+  max(uninsurance %>% 
+    filter(state_abbr == 'FL') %>% pull(pct_uninsured_18_64_places)))
+
+acs_figure <- uninsurance %>% 
+  filter(state_abbr == 'FL') %>% 
+  ggplot(aes(fill = pct_uninsured_19_64_acs)) + 
+  geom_sf(size = .1, color = 'white') + 
+  scale_fill_viridis_c(limits = c(0, max_uninsurance_rate),
+                       labels = scales::percent_format(scale = 1)) + 
+  labs(fill = "Percent Uninsured (19-64)") + 
+  ggtitle("ACS Percent Uninsurance Estimates")
+
+places_figure <- uninsurance %>% 
+  filter(state_abbr == 'FL') %>% 
+  ggplot(aes(fill = pct_uninsured_18_64_places)) + 
+  geom_sf(size = .1, color = 'white') + 
+  scale_fill_viridis_c(limits = c(0, max_uninsurance_rate),
+                       labels = scales::percent_format(scale = 1)) + 
+  labs(fill = "Percent Uninsured (18-64)") + 
+  ggtitle("Places Percent Uninsurance Estimates")
+
+acs_figure + places_figure
+
+ggsave("images/11-health-insurance-comparison/florida_comparison.png",
+       height = 6, width = 12)
+
+
+uninsurance %>% 
+  filter(state_abbr == 'FL') %>% 
+  ggplot(aes(x = pct_uninsured_19_64_acs, y = pct_uninsured_18_64_places)) + 
+  geom_point() + 
+  xlim(c(0, max_uninsurance_rate)) + 
+  ylim(c(0, max_uninsurance_rate)) + 
+  geom_abline(slope = 1, intercept = 0)
+
+ggsave("images/11-health-insurance-comparison/florida_comparison_scatter.png",
+       height = 6, width = 6)
+
+
+# minnesota --- 
+max_uninsurance_rate <- 
+  pmax(max(uninsurance %>% 
+    filter(state_abbr == 'MN') %>% pull(pct_uninsured_19_64_acs)),
+  max(uninsurance %>% 
+    filter(state_abbr == 'MN') %>% pull(pct_uninsured_18_64_places)))
+
+acs_figure <- uninsurance %>% 
+  filter(state_abbr == 'MN') %>% 
+  ggplot(aes(fill = pct_uninsured_19_64_acs)) + 
+  geom_sf(size = .1, color = 'white') + 
+  scale_fill_viridis_c(limits = c(0, max_uninsurance_rate),
+                       labels = scales::percent_format(scale = 1)) + 
+  labs(fill = "Percent Uninsured (19-64)") + 
+  ggtitle("ACS Percent Uninsurance Estimates")
+
+places_figure <- uninsurance %>% 
+  filter(state_abbr == 'MN') %>% 
+  ggplot(aes(fill = pct_uninsured_18_64_places)) + 
+  geom_sf(size = .1, color = 'white') + 
+  scale_fill_viridis_c(limits = c(0, max_uninsurance_rate),
+                       labels = scales::percent_format(scale = 1)) + 
+  labs(fill = "Percent Uninsured (18-64)") + 
+  ggtitle("Places Percent Uninsurance Estimates")
+
+acs_figure + places_figure
+
+ggsave("images/11-health-insurance-comparison/minnesota_comparison.png",
+       height = 6, width = 12)
+
+uninsurance %>% 
+  filter(state_abbr == 'WI') %>% 
+  ggplot(
+    aes(x = pct_uninsured_19_64_acs, 
+        xmin = pct_uninsured_18_64_acs_ci_low, 
+        xmax = pct_uninsured_18_64_acs_ci_high,
+        y = pct_uninsured_18_64_places, 
+        ymin = pct_uninsured_18_64_places_ci_low,
+        ymax = pct_uninsured_18_64_places_ci_high,
+        size = estimate_total_19_64_population)
+  ) + 
+  geom_point(alpha = .5) + 
+  geom_errorbar(size = .1) + 
+  geom_errorbarh(size = .1) + 
+  xlim(c(0, max_uninsurance_rate+8)) + 
+  ylim(c(0, max_uninsurance_rate+8)) + 
+  scale_size_continuous(trans = scales::log10_trans(), labels = scales::comma_format(),
+                        range = c(0.1, 3)) + 
+  geom_abline(slope = 1, intercept = 0) + 
+  ggtitle("Percent Without Health Insurance in Minnesota",
+          "95% Margins of Error Shown for Each of PLACES and ACS")
+
+ggsave("images/11-health-insurance-comparison/minnesota_comparison_scatter.png",
+       height = 6, width = 9)
+
+
+# wisconsin --- 
+max_uninsurance_rate <- 
+  pmax(max(uninsurance %>% 
+    filter(state_abbr == 'WI') %>% pull(pct_uninsured_19_64_acs)),
+  max(uninsurance %>% 
+    filter(state_abbr == 'WI') %>% pull(pct_uninsured_18_64_places)))
+
+acs_figure <- uninsurance %>% 
+  filter(state_abbr == 'WI') %>% 
+  ggplot(aes(fill = pct_uninsured_19_64_acs)) + 
+  geom_sf(size = .1, color = 'white') + 
+  scale_fill_viridis_c(limits = c(0, max_uninsurance_rate),
+                       labels = scales::percent_format(scale = 1)) + 
+  labs(fill = "Percent Uninsured (19-64)") + 
+  ggtitle("ACS Percent Uninsurance Estimates")
+
+
+
+places_figure <- uninsurance %>% 
+  filter(state_abbr == 'WI') %>% 
+  ggplot(aes(fill = pct_uninsured_18_64_places)) + 
+  geom_sf(size = .1, color = 'white') + 
+  scale_fill_viridis_c(limits = c(0, max_uninsurance_rate),
+                       labels = scales::percent_format(scale = 1)) + 
+  labs(fill = "Percent Uninsured (18-64)") + 
+  ggtitle("Places Percent Uninsurance Estimates")
+
+
+acs_figure + places_figure
+
+ggsave("images/11-health-insurance-comparison/wisconson_comparison.png",
+       height = 6, width = 12)
+
+uninsurance %>% 
+  filter(state_abbr == 'WI') %>% 
+  ggplot(
+    aes(x = pct_uninsured_19_64_acs, 
+        xmin = pct_uninsured_18_64_acs_ci_low, 
+        xmax = pct_uninsured_18_64_acs_ci_high,
+        y = pct_uninsured_18_64_places, 
+        ymin = pct_uninsured_18_64_places_ci_low,
+        ymax = pct_uninsured_18_64_places_ci_high,
+        size = estimate_total_19_64_population)
+  ) + 
+  geom_point(alpha = .5) + 
+  geom_errorbar(size = .1) + 
+  geom_errorbarh(size = .1) + 
+  xlim(c(0, max_uninsurance_rate+8)) + 
+  ylim(c(0, max_uninsurance_rate+8)) + 
+  scale_size_continuous(trans = scales::log10_trans(), labels = scales::comma_format(),
+                        range = c(0.1, 3)) + 
+  geom_abline(slope = 1, intercept = 0) + 
+  ggtitle("Percent Without Health Insurance in Wisconsin",
+          "95% Margins of Error Shown for Each of PLACES and ACS")
+
+ggsave("images/11-health-insurance-comparison/wisconsin_comparison_scatter.png",
+       height = 6, width = 9)
 ```
 
 <!-- ## Using CDC’s PLACES -->
