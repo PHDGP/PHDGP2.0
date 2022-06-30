@@ -296,7 +296,6 @@ for (nm in names(ma_demo_acs)) {
                                output = "wide",
                                state = "MA",
                                geometry = FALSE,
-                               key = "4407a63721e192545e1e2a2fc7f6920477b10108",
                                moe_level = 95,
                                survey = "acs5") %>%
     rowwise() %>%
@@ -1119,7 +1118,7 @@ tab_age_race <- ma_demo_acs %>%
     labs(title ="Age Distribution by Racialized Group",
          fill = "Age Category",
          caption = "5-Year ACS files from end-years 2015-2019") +
-    ylab("Percentage pf Population") +
+    ylab("Percentage of Population") +
     xlab("Racialized Group") +
     theme(legend.position="bottom") +
     theme_minimal()
@@ -1313,7 +1312,7 @@ irr_plot <- irr_data %>%
          caption = expression(atop("Source: Massachusetts Mortality Data 2013-2017",
                                    "5-Year ACS files from end-years 2015-2019"))) +
          xlab("Census Tracts") +
-         ylab("Mortality Rates") +
+         ylab("IRR") +
     theme_minimal() 
   
 irr_plot
@@ -1449,7 +1448,7 @@ poisson_irr_plot <- poisson_irr %>%
          caption = expression(atop("Source: Massachusetts Mortality Data 2013-2017",
                                    "5-Year ACS files from end-years 2015-2019"))) +
          xlab("Census Tracts") +
-         ylab("Mortality Rates") +
+         ylab("IRR") +
     theme_minimal() 
 
 ggsave("poisson_irr_plot.png")
@@ -1554,7 +1553,7 @@ adj_poisson_irr_plot <- adj_poisson_irr %>%
          caption = expression(atop("Source: Massachusetts Mortality Data 2013-2017",
                                    "5-Year ACS files from end-years 2015-2019"))) +
          xlab("Census Tracts") +
-         ylab("Mortality Rates") +
+         ylab("IRR") +
     theme_minimal() 
 
 ggsave("adj_poisson_irr_plot.png")

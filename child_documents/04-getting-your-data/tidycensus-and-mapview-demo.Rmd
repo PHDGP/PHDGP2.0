@@ -251,7 +251,7 @@ ICEraceinc <- ICEraceinc %>% select(-moe) %>%
 # 
 # then we use rename_vars with the rename function from dplyr. 
 # typically the rename function takes a syntax as follows: 
-#   data %>% rename(oldname1 = newname1, oldname2 = newname2, ...)
+#   data %>% rename(newname1 = oldname1, newname2 = oldname2, ...)
 # but in our case, we already have a named vector (rename_vars) that we 
 # want to use, and so to use the rename_vars named vector inside rename
 # we use the injection-operator `!!`.  you can learn more about the injection

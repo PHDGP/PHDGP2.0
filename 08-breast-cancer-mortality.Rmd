@@ -234,7 +234,6 @@ for (nm in names(ma_demo_acs_bc)) {
                                output = "wide",
                                state = "MA",
                                geometry = FALSE,
-                               key = "4407a63721e192545e1e2a2fc7f6920477b10108",
                                moe_level = 95,
                                survey = "acs5") %>%
     rowwise() %>%
@@ -877,7 +876,7 @@ irr_plot <- irr_data %>%
          caption = expression(atop("Source: Massachusetts Mortality Data 2013-2017",
                                    "5-Year ACS files from end-years 2015-2019"))) +
          xlab("Census Tracts") +
-         ylab("Incidence Rate Ration") +
+         ylab("Incidence Rate Ratio") +
     theme_minimal() 
   
 irr_plot
@@ -1077,7 +1076,7 @@ adj_poisson_irr_plot <- adj_poisson_irr %>%
          caption = expression(atop("Source: Massachusetts Mortality Data 2013-2017",
                                    "5-Year ACS files from end-years 2015-2019"))) +
          xlab("Census Tracts") +
-         ylab("Mortality Rates") +
+         ylab("IRR") +
     theme_minimal() 
 
 ggsave("adj_poisson_irr_plot_bc.png")
