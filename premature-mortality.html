@@ -20,9 +20,11 @@
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script><link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
 <script src="libs/leaflet-1.3.1/leaflet.js"></script><link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
 <script src="libs/proj4-2.6.2/proj4.min.js"></script><script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script><link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
-<script src="libs/leaflet-binding-2.1.1/leaflet.js"></script><script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script><script src="libs/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script><link href="libs/HomeButton-0.0.1/home-button.css" rel="stylesheet">
+<script src="libs/leaflet-binding-2.1.1/leaflet.js"></script><script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script><script src="libs/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script><script src="libs/FlatGeoBuf-3.21.3/fgb.js"></script><script src="libs/FlatGeoBuf-3.21.3/flatgeobuf-geojson.min.js"></script><script src="libs/chromajs-2.1.0/chroma.min.js"></script><link id="poverty-percent_in_poverty-1-attachment" rel="attachment" href="libs/poverty-percent_in_poverty-0.0.1/poverty-percent_in_poverty_layer.fgb">
+<link href="libs/HomeButton-0.0.1/home-button.css" rel="stylesheet">
 <script src="libs/HomeButton-0.0.1/home-button.js"></script><script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script><script src="libs/clipboard-0.0.1/setClipboardText.js"></script><link href="libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet">
 <link href="libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet">
+<link id="ICEraceinc-ICEraceinc-1-attachment" rel="attachment" href="libs/ICEraceinc-ICEraceinc-0.0.1/ICEraceinc-ICEraceinc_layer.fgb">
 <script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
     
@@ -381,7 +383,6 @@
                                output <span class="op">=</span> <span class="st">"wide"</span>,
                                state <span class="op">=</span> <span class="st">"MA"</span>,
                                geometry <span class="op">=</span> <span class="cn">FALSE</span>,
-                               key <span class="op">=</span> <span class="st">"4407a63721e192545e1e2a2fc7f6920477b10108"</span>,
                                moe_level <span class="op">=</span> <span class="fl">95</span>,
                                survey <span class="op">=</span> <span class="st">"acs5"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span>
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rowwise.html">rowwise</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span>
@@ -733,17 +734,18 @@
                     na.rm<span class="op">=</span><span class="cn">TRUE</span>, 
                     include.lowest<span class="op">=</span><span class="cn">T</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 6 × 25
-##   GEOID10 percBlack percHisp percColor ICEwbinc ICEwnhinc tractPov tractCrowd tractSevereCrowd ice_wnh_highinc ice_wnh_lowinc
-##   &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;            &lt;dbl&gt;           &lt;dbl&gt;          &lt;dbl&gt;
-## 1 250010…   0.0232   0.0530     0.126     0.211     0.184   0.119     0.0168           0.0157            0.210          0.232
-## 2 250010…   0.0191   0.00477    0.0829    0.229     0.228   0.0999    0.0102           0.00601           0.231          0.234
-## 3 250010…   0.0150   0.0154     0.0365    0.216     0.216   0.0825    0                0                 0.216          0.153
-## 4 250010…   0.00587  0.00926    0.0550    0.328     0.328   0.0413    0.0111           0                 0.328          0.171
-## 5 250010…   0.0290   0.0141     0.0830    0.175     0.175   0.0879    0.0141           0                 0.190          0.127
-## 6 250010…   0.0549   0.0234     0.0902    0.234     0.223   0.0626    0.00864          0.00416           0.230          0.225
-## # … with 14 more variables: ice_poc_lowinc &lt;dbl&gt;, ice_poc_highinc &lt;dbl&gt;, pop_total &lt;dbl&gt;, svi_themes &lt;dbl&gt;,
-## #   svi_theme1 &lt;dbl&gt;, svi_theme2 &lt;dbl&gt;, svi_theme3 &lt;dbl&gt;, svi_theme4 &lt;dbl&gt;, pov_cat &lt;fct&gt;, pov_qt &lt;fct&gt;, ICE_qt &lt;fct&gt;,
-## #   perc_Color_qt &lt;fct&gt;, perc_BLACK_qt &lt;fct&gt;, SVI_qt &lt;fct&gt;</code></pre>
+##   GEOID10     percBlack percHisp percColor ICEwbinc ICEwnhinc tractPov tractCrowd tractSevereCrowd
+##   &lt;chr&gt;           &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;            &lt;dbl&gt;
+## 1 25001010100   0.0232   0.0530     0.126     0.211     0.184   0.119     0.0168           0.0157 
+## 2 25001010206   0.0191   0.00477    0.0829    0.229     0.228   0.0999    0.0102           0.00601
+## 3 25001010208   0.0150   0.0154     0.0365    0.216     0.216   0.0825    0                0      
+## 4 25001010304   0.00587  0.00926    0.0550    0.328     0.328   0.0413    0.0111           0      
+## 5 25001010306   0.0290   0.0141     0.0830    0.175     0.175   0.0879    0.0141           0      
+## 6 25001010400   0.0549   0.0234     0.0902    0.234     0.223   0.0626    0.00864          0.00416
+## # … with 16 more variables: ice_wnh_highinc &lt;dbl&gt;, ice_wnh_lowinc &lt;dbl&gt;, ice_poc_lowinc &lt;dbl&gt;,
+## #   ice_poc_highinc &lt;dbl&gt;, pop_total &lt;dbl&gt;, svi_themes &lt;dbl&gt;, svi_theme1 &lt;dbl&gt;, svi_theme2 &lt;dbl&gt;,
+## #   svi_theme3 &lt;dbl&gt;, svi_theme4 &lt;dbl&gt;, pov_cat &lt;fct&gt;, pov_qt &lt;fct&gt;, ICE_qt &lt;fct&gt;, perc_Color_qt &lt;fct&gt;,
+## #   perc_BLACK_qt &lt;fct&gt;, SVI_qt &lt;fct&gt;</code></pre>
 </div>
 </div>
 <div id="approach" class="section level2" number="6.4">
@@ -834,21 +836,21 @@ We can visualize how premature mortality varies across space using spatial model
          SVI_qt_4 <span class="op">=</span> <span class="st">"SVI_qt_(0.583,0.781]"</span>,
          SVI_qt_5 <span class="op">=</span> <span class="st">"SVI_qt_(0.781,1]"</span><span class="op">)</span> </code></pre></div>
 <pre><code>## # A tibble: 6 × 50
-##   GEOID10     super_town       O     E raw_smr var_raw_smr raw_smr_lo95 raw_smr_up95 percBlack percHisp percColor ICEwbinc
-##   &lt;chr&gt;       &lt;chr&gt;        &lt;int&gt; &lt;dbl&gt;   &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 25001010100 provincetown    38  38.9   0.976      0.0251        0.666         1.29   0.0232   0.0530     0.126     0.211
-## 2 25001010206 wellfleet       31  33.1   0.935      0.0282        0.606         1.26   0.0191   0.00477    0.0829    0.229
-## 3 25001010208 truro           19  15.5   1.22       0.0789        0.674         1.78   0.0150   0.0154     0.0365    0.216
-## 4 25001010304 eastham         25  21.7   1.15       0.0532        0.701         1.60   0.00587  0.00926    0.0550    0.328
-## 5 25001010306 eastham         35  26.8   1.31       0.0487        0.873         1.74   0.0290   0.0141     0.0830    0.175
-## 6 25001010400 orleans         29  31.3   0.925      0.0295        0.589         1.26   0.0549   0.0234     0.0902    0.234
-## # … with 38 more variables: ICEwnhinc &lt;dbl&gt;, tractPov &lt;dbl&gt;, tractCrowd &lt;dbl&gt;, tractSevereCrowd &lt;dbl&gt;,
-## #   ice_wnh_highinc &lt;dbl&gt;, ice_wnh_lowinc &lt;dbl&gt;, ice_poc_lowinc &lt;dbl&gt;, ice_poc_highinc &lt;dbl&gt;, pop_total &lt;dbl&gt;,
-## #   svi_themes &lt;dbl&gt;, svi_theme1 &lt;dbl&gt;, svi_theme2 &lt;dbl&gt;, svi_theme3 &lt;dbl&gt;, svi_theme4 &lt;dbl&gt;, pov_cat &lt;fct&gt;, pov_qt &lt;fct&gt;,
-## #   ICE_qt &lt;fct&gt;, perc_Color_qt &lt;fct&gt;, perc_BLACK_qt &lt;fct&gt;, SVI_qt &lt;fct&gt;, id &lt;int&gt;, pov_cat_1 &lt;int&gt;, pov_cat_2 &lt;int&gt;,
-## #   pov_cat_3 &lt;int&gt;, pov_cat_4 &lt;int&gt;, pov_cat_NA &lt;int&gt;, ICE_qt_1 &lt;int&gt;, ICE_qt_2 &lt;int&gt;, ICE_qt_3 &lt;int&gt;, ICE_qt_4 &lt;int&gt;,
-## #   ICE_qt_5 &lt;int&gt;, ICE_qt_NA &lt;int&gt;, SVI_qt_1 &lt;int&gt;, SVI_qt_2 &lt;int&gt;, SVI_qt_3 &lt;int&gt;, SVI_qt_4 &lt;int&gt;, SVI_qt_5 &lt;int&gt;,
-## #   SVI_qt_NA &lt;int&gt;</code></pre>
+##   GEOID10  super_town     O     E raw_smr var_raw_smr raw_smr_lo95 raw_smr_up95 percBlack percHisp percColor
+##   &lt;chr&gt;    &lt;chr&gt;      &lt;int&gt; &lt;dbl&gt;   &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+## 1 2500101… provincet…    38  38.9   0.976      0.0251        0.666         1.29   0.0232   0.0530     0.126 
+## 2 2500101… wellfleet     31  33.1   0.935      0.0282        0.606         1.26   0.0191   0.00477    0.0829
+## 3 2500101… truro         19  15.5   1.22       0.0789        0.674         1.78   0.0150   0.0154     0.0365
+## 4 2500101… eastham       25  21.7   1.15       0.0532        0.701         1.60   0.00587  0.00926    0.0550
+## 5 2500101… eastham       35  26.8   1.31       0.0487        0.873         1.74   0.0290   0.0141     0.0830
+## 6 2500101… orleans       29  31.3   0.925      0.0295        0.589         1.26   0.0549   0.0234     0.0902
+## # … with 39 more variables: ICEwbinc &lt;dbl&gt;, ICEwnhinc &lt;dbl&gt;, tractPov &lt;dbl&gt;, tractCrowd &lt;dbl&gt;,
+## #   tractSevereCrowd &lt;dbl&gt;, ice_wnh_highinc &lt;dbl&gt;, ice_wnh_lowinc &lt;dbl&gt;, ice_poc_lowinc &lt;dbl&gt;,
+## #   ice_poc_highinc &lt;dbl&gt;, pop_total &lt;dbl&gt;, svi_themes &lt;dbl&gt;, svi_theme1 &lt;dbl&gt;, svi_theme2 &lt;dbl&gt;,
+## #   svi_theme3 &lt;dbl&gt;, svi_theme4 &lt;dbl&gt;, pov_cat &lt;fct&gt;, pov_qt &lt;fct&gt;, ICE_qt &lt;fct&gt;, perc_Color_qt &lt;fct&gt;,
+## #   perc_BLACK_qt &lt;fct&gt;, SVI_qt &lt;fct&gt;, id &lt;int&gt;, pov_cat_1 &lt;int&gt;, pov_cat_2 &lt;int&gt;, pov_cat_3 &lt;int&gt;,
+## #   pov_cat_4 &lt;int&gt;, pov_cat_NA &lt;int&gt;, ICE_qt_1 &lt;int&gt;, ICE_qt_2 &lt;int&gt;, ICE_qt_3 &lt;int&gt;, ICE_qt_4 &lt;int&gt;,
+## #   ICE_qt_5 &lt;int&gt;, ICE_qt_NA &lt;int&gt;, SVI_qt_1 &lt;int&gt;, SVI_qt_2 &lt;int&gt;, SVI_qt_3 &lt;int&gt;, SVI_qt_4 &lt;int&gt;, …</code></pre>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">raw_smr_dotplot</span> <span class="op">&lt;-</span> <span class="va">ma_mort_indirect</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
@@ -1272,7 +1274,7 @@ We can see lots of variation here as the mortality rates increase - what is caus
          caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/plotmath.html">atop</a></span><span class="op">(</span><span class="st">"Source: Massachusetts Mortality Data 2013-2017"</span>,
                                    <span class="st">"5-Year ACS files from end-years 2015-2019"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Census Tracts"</span><span class="op">)</span> <span class="op">+</span>
-         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Mortality Rates"</span><span class="op">)</span> <span class="op">+</span>
+         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"IRR"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> 
   
 <span class="va">irr_plot</span></code></pre></div>
@@ -1398,7 +1400,7 @@ We can see lots of variation here as the mortality rates increase - what is caus
          caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/plotmath.html">atop</a></span><span class="op">(</span><span class="st">"Source: Massachusetts Mortality Data 2013-2017"</span>,
                                    <span class="st">"5-Year ACS files from end-years 2015-2019"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Census Tracts"</span><span class="op">)</span> <span class="op">+</span>
-         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Mortality Rates"</span><span class="op">)</span> <span class="op">+</span>
+         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"IRR"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> 
 
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"poisson_irr_plot.png"</span><span class="op">)</span></code></pre></div>
@@ -1439,7 +1441,7 @@ We can see lots of variation here as the mortality rates increase - what is caus
          caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/plotmath.html">atop</a></span><span class="op">(</span><span class="st">"Source: Massachusetts Mortality Data 2013-2017"</span>,
                                    <span class="st">"5-Year ACS files from end-years 2015-2019"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
          <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Census Tracts"</span><span class="op">)</span> <span class="op">+</span>
-         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Mortality Rates"</span><span class="op">)</span> <span class="op">+</span>
+         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"IRR"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> 
 
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"adj_poisson_irr_plot.png"</span><span class="op">)</span></code></pre></div>
@@ -1540,26 +1542,46 @@ We can see lots of variation here as the mortality rates increase - what is caus
 ## -6.8369  -0.5866  -0.1800  -0.0004  10.8734  
 ## 
 ## Coefficients:
-##                                                                       Estimate Std. Error  z value Pr(&gt;|z|)    
-## (Intercept)                                                           -7.39658    0.03134 -235.974  &lt; 2e-16 ***
-## race_groupNon-Hispanic Black                                           0.01658    0.05625    0.295   0.7682    
-## factor(age_cat)10-14                                                  -2.13835    0.08870  -24.108  &lt; 2e-16 ***
-## factor(age_cat)15-19                                                  -1.13248    0.05528  -20.488  &lt; 2e-16 ***
-## factor(age_cat)20-24                                                  -0.30065    0.04145   -7.254 4.05e-13 ***
-## factor(age_cat)25-29                                                   0.15451    0.03766    4.103 4.08e-05 ***
-## factor(age_cat)30-34                                                   0.37691    0.03690   10.216  &lt; 2e-16 ***
-## factor(age_cat)35-44                                                   0.65107    0.03331   19.546  &lt; 2e-16 ***
-## factor(age_cat)45-54                                                   1.36318    0.03159   43.159  &lt; 2e-16 ***
-## factor(age_cat)5-9                                                    -2.35873    0.10221  -23.078  &lt; 2e-16 ***
-## factor(age_cat)55-64                                                   2.07728    0.03100   67.010  &lt; 2e-16 ***
-## factor(pov_cat, exclude = NULL)5-9.9%                                  0.30491    0.01160   26.278  &lt; 2e-16 ***
-## factor(pov_cat, exclude = NULL)10-19.9%                                0.58791    0.01274   46.129  &lt; 2e-16 ***
-## factor(pov_cat, exclude = NULL)20-100%                                 1.01350    0.01482   68.377  &lt; 2e-16 ***
-## factor(pov_cat, exclude = NULL)NA                                     10.68220    1.00004   10.682  &lt; 2e-16 ***
-## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)5-9.9%    -0.13530    0.06805   -1.988   0.0468 *  
-## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)10-19.9%  -0.25783    0.06380   -4.041 5.31e-05 ***
-## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)20-100%   -0.36243    0.06092   -5.949 2.70e-09 ***
-## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)NA       -10.07881   92.86749   -0.109   0.9136    
+##                                                                       Estimate Std. Error  z value Pr(&gt;|z|)
+## (Intercept)                                                           -7.39658    0.03134 -235.974  &lt; 2e-16
+## race_groupNon-Hispanic Black                                           0.01658    0.05625    0.295   0.7682
+## factor(age_cat)10-14                                                  -2.13835    0.08870  -24.108  &lt; 2e-16
+## factor(age_cat)15-19                                                  -1.13248    0.05528  -20.488  &lt; 2e-16
+## factor(age_cat)20-24                                                  -0.30065    0.04145   -7.254 4.05e-13
+## factor(age_cat)25-29                                                   0.15451    0.03766    4.103 4.08e-05
+## factor(age_cat)30-34                                                   0.37691    0.03690   10.216  &lt; 2e-16
+## factor(age_cat)35-44                                                   0.65107    0.03331   19.546  &lt; 2e-16
+## factor(age_cat)45-54                                                   1.36318    0.03159   43.159  &lt; 2e-16
+## factor(age_cat)5-9                                                    -2.35873    0.10221  -23.078  &lt; 2e-16
+## factor(age_cat)55-64                                                   2.07728    0.03100   67.010  &lt; 2e-16
+## factor(pov_cat, exclude = NULL)5-9.9%                                  0.30491    0.01160   26.278  &lt; 2e-16
+## factor(pov_cat, exclude = NULL)10-19.9%                                0.58791    0.01274   46.129  &lt; 2e-16
+## factor(pov_cat, exclude = NULL)20-100%                                 1.01350    0.01482   68.377  &lt; 2e-16
+## factor(pov_cat, exclude = NULL)NA                                     10.68220    1.00004   10.682  &lt; 2e-16
+## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)5-9.9%    -0.13530    0.06805   -1.988   0.0468
+## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)10-19.9%  -0.25783    0.06380   -4.041 5.31e-05
+## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)20-100%   -0.36243    0.06092   -5.949 2.70e-09
+## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)NA       -10.07881   92.86749   -0.109   0.9136
+##                                                                         
+## (Intercept)                                                          ***
+## race_groupNon-Hispanic Black                                            
+## factor(age_cat)10-14                                                 ***
+## factor(age_cat)15-19                                                 ***
+## factor(age_cat)20-24                                                 ***
+## factor(age_cat)25-29                                                 ***
+## factor(age_cat)30-34                                                 ***
+## factor(age_cat)35-44                                                 ***
+## factor(age_cat)45-54                                                 ***
+## factor(age_cat)5-9                                                   ***
+## factor(age_cat)55-64                                                 ***
+## factor(pov_cat, exclude = NULL)5-9.9%                                ***
+## factor(pov_cat, exclude = NULL)10-19.9%                              ***
+## factor(pov_cat, exclude = NULL)20-100%                               ***
+## factor(pov_cat, exclude = NULL)NA                                    ***
+## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)5-9.9%   *  
+## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)10-19.9% ***
+## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)20-100%  ***
+## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)NA          
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
@@ -1655,188 +1677,1829 @@ We can see lots of variation here as the mortality rates increase - what is caus
 <h4>
 <span class="header-section-number">6.4.4.1</span> Null Model<a class="anchor" aria-label="anchor" href="#null-model"><i class="fas fa-link"></i></a>
 </h4>
-<pre><code>## Generalized linear mixed model fit by maximum likelihood (Adaptive Gauss-Hermite Quadrature, nAGQ = 0) ['glmerMod']
-##  Family: poisson  ( log )
-## Formula: num ~ 1 + (1 | super_town) + offset(log(den))
-##    Data: mlm_data
-## Control: glmerControl(optimizer = "Nelder_Mead")
+<pre><code>## $methTitle
+## [1] "Generalized linear mixed model fit by maximum likelihood (Adaptive Gauss-Hermite Quadrature, nAGQ = 0)"
 ## 
-##      AIC      BIC   logLik deviance df.resid 
-## 112631.2 112647.7 -56313.6 112627.2    29098 
+## $objClass
+## [1] "glmerMod"
+## attr(,"package")
+## [1] "lme4"
 ## 
-## Scaled residuals: 
-##    Min     1Q Median     3Q    Max 
-##   -4.8   -1.0   -0.4    0.0 3384.5 
+## $devcomp
+## $devcomp$cmp
+##         ldL2        ldRX2         wrss         ussq        pwrss        drsum         REML          dev 
+## 8.115714e+02 7.688340e+00 1.730407e+08 2.760672e+02 1.730410e+08 8.193608e+04           NA 1.126272e+05 
+##      sigmaML    sigmaREML     tolPwrss 
+##           NA           NA 1.000000e-07 
 ## 
-## Random effects:
-##  Groups     Name        Variance Std.Dev.
-##  super_town (Intercept) 0.1275   0.357   
-## Number of obs: 29100, groups:  super_town, 313
+## $devcomp$dims
+##       N       n       p     nmp       q     nth    nAGQ compDev   useSc  reTrms    spFe    REML    GLMM 
+##   29100   29100       1   29099     313       1       0       1       0       1       0       0       1 
+##    NLMM 
+##       0 
 ## 
-## Fixed effects:
-##             Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)  -6.1372     0.0214  -286.7   &lt;2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+## 
+## $isLmer
+## [1] FALSE
+## 
+## $useScale
+## [1] FALSE
+## 
+## $logLik
+## 'log Lik.' -56313.58 (df=2)
+## 
+## $family
+## [1] "poisson"
+## 
+## $link
+## [1] "log"
+## 
+## $ngrps
+## super_town 
+##        313 
+## 
+## $coefficients
+##              Estimate Std. Error  z value Pr(&gt;|z|)
+## (Intercept) -6.137236 0.02140416 -286.731        0
+## 
+## $sigma
+## [1] 1
+## 
+## $vcov
+## 1 x 1 Matrix of class "dpoMatrix"
+##              (Intercept)
+## (Intercept) 0.0004581381
+## 
+## $varcor
+## $super_town
+##             (Intercept)
+## (Intercept)   0.1274783
+## attr(,"stddev")
+## (Intercept) 
+##    0.357041 
+## attr(,"correlation")
+##             (Intercept)
+## (Intercept)           1
+## 
+## attr(,"sc")
+## [1] 1
+## attr(,"useSc")
+## [1] FALSE
+## attr(,"class")
+## [1] "VarCorr.merMod"
+## 
+## $AICtab
+##       AIC       BIC    logLik  deviance  df.resid 
+## 112631.17 112647.73 -56313.58 112627.17  29098.00 
+## 
+## $call
+## glmer(formula = num ~ 1 + (1 | super_town) + offset(log(den)), 
+##     data = mlm_data, family = poisson(link = log), control = glmerControl(optimizer = "Nelder_Mead"), 
+##     nAGQ = 0)
+## 
+## $residuals
+##             1             2             3             4             5             6             7 
+##  5.200347e+02 -4.342656e-01 -3.439916e-01 -1.489628e-01 -3.545781e-01 -2.016890e-01 -3.987543e-01 
+##             8             9            10            11            12            13            14 
+## -3.439916e-01 -1.824364e-01  1.265385e+00 -9.729420e-01 -4.710265e-01 -6.464088e-01 -1.094559e+00 
+##            15            16            17            18            19            20            21 
+##  3.233152e-01 -1.316901e+00 -2.235084e+00 -4.253400e-02 -6.464088e-01  3.804505e+00 -1.725320e-03 
+##            22            23            24            25            26            27            28 
+## -1.725320e-03 -7.717795e-02 -1.443610e-01 -1.725320e-03 -1.725320e-03 -6.965701e-01 -2.728025e-01 
+##            29            30            31            32            33            34            35 
+## -1.725320e-03 -3.227825e-01 -8.220223e-01 -1.185335e+00 -1.480647e-01 -1.728768e+00  1.952710e+00 
+##            36            37            38            39            40            41            42 
+## -2.117446e-01 -6.704667e-01 -7.346512e-02 -8.797458e-01  2.824626e+00 -1.860390e-03 -1.860390e-03 
+##            43            44            45            46            47            48            49 
+## -1.860390e-03 -1.860390e-03 -1.860390e-03 -1.860390e-03 -1.860390e-03  5.375199e+02 -1.860390e-03 
+##            50            51            52            53            54            55            56 
+## -1.860390e-03 -6.226083e-01 -9.966569e-01 -7.108564e-01  4.009582e-01  9.638523e-01 -4.242382e-01 
+##            57            58            59            60            61            62            63 
+## -1.514820e+00  6.590632e-01 -1.071948e+00  2.682408e+00 -1.959736e-03 -1.959736e-03 -1.959736e-03 
+##            64            65            66            67            68            69            70 
+## -1.959736e-03 -1.959736e-03 -1.959736e-03 -1.959736e-03 -1.959736e-03 -1.959736e-03 -5.185011e-01 
+##            71            72            73            74            75            76            77 
+## -6.928741e-01 -1.044377e+00 -1.113780e+00 -1.676692e+00  2.347907e-01 -1.141033e+00  2.098603e-01 
+##            78            79            80            81            82            83            84 
+## -4.704425e-01 -7.789821e-01  3.513588e+00 -1.959736e-03 -7.436701e-01 -7.358828e-01 -1.959736e-03 
+##            85            86            87            88            89            90            91 
+## -1.959736e-03 -1.959736e-03 -6.040344e-01 -1.959736e-03 -1.959736e-03 -1.959736e-03 -1.115503e+00 
+##            92            93            94            95            96            97            98 
+## -9.934934e-01 -1.581206e+00 -1.586056e+00  4.779683e-01 -4.948712e-01 -1.236841e+00  2.045533e+00 
+##            99           100           101           102           103           104           105 
+## -1.320462e+00  3.845860e+00 -1.618900e-03 -1.618900e-03  6.177017e+02 -8.777978e-01 -1.618900e-03 
+##           106           107           108           109           110           111           112 
+## -1.618900e-03 -1.049169e+00 -1.618900e-03 -1.618900e-03  1.429148e+00 -6.100505e-01 -1.510011e+00 
+##           113           114           115           116           117           118           119 
+## -1.137847e+00 -5.814557e-01 -1.740572e-01  1.609899e+00  5.277597e-01  3.934066e-01 -1.028990e+00 
+##           120           121           122           123           124           125           126 
+##  2.253092e+00 -1.618900e-03 -1.618900e-03 -1.618900e-03 -1.618900e-03 -1.618900e-03 -1.618900e-03 
+##           127           128           129           130           131           132           133 
+## -1.618900e-03 -2.508042e-01 -1.618900e-03 -1.618900e-03 -1.143591e+00 -1.103944e+00 -4.701410e-01 
+##           134           135           136           137           138           139           140 
+## -8.505022e-01 -7.780850e-01 -9.057179e-01 -1.068931e+00  6.964301e-02 -1.012300e+00  2.402248e+00 
+##           141           142           143           144           145           146           147 
+## -4.373292e-01 -4.714042e-01 -1.280434e-01 -1.415559e-01 -1.349621e-03 -3.333345e-01 -4.921973e-01 
+##           148           149           150           151           152           153           154 
+## -5.103655e-01 -4.331442e-01 -3.493433e-01 -6.775056e-01 -8.673359e-01 -9.862405e-01 -1.213909e+00 
+##           155           156           157           158           159           160           161 
+## -6.973780e-01 -8.631255e-01  3.433992e+00  1.096455e-01 -4.203392e-01  1.992424e+00 -1.349621e-03 
+##           162           163           164           165           166           167           168 
+## -1.349621e-03 -1.349621e-03 -1.415559e-01 -1.349621e-03 -1.810757e-01 -2.488614e-01 -6.065806e-01 
+##           169           170           171           172           173           174           175 
+## -1.349621e-03 -1.349621e-03 -1.113745e+00 -1.062693e+00 -8.819140e-01  1.943569e+00  2.059091e-01 
+##           176           177           178           179           180           181           182 
+## -1.212408e+00  5.249651e-02 -8.435896e-01 -7.729464e-01  9.378404e-01 -1.351494e-03 -6.148940e-01 
+##           183           184           185           186           187           188           189 
+## -1.813270e-01 -1.351561e-01 -1.417523e-01 -1.351494e-03 -1.351494e-03 -1.351494e-03 -1.351494e-03 
+##           190           191           192           193           194           195           196 
+## -1.351494e-03 -9.186192e-01 -1.307532e+00 -1.131549e+00 -7.140952e-02  4.875138e-01 -1.140393e+00 
+##           197           198           199           200           201           202           203 
+##  1.687936e-01  5.759508e-01 -1.358907e+00  1.784121e+00 -1.351494e-03 -2.634581e-01 -4.739891e-01 
+##           204           205           206           207           208           209           210 
+## -1.351494e-03 -1.351494e-03 -1.351494e-03 -1.351494e-03 -1.351494e-03 -1.351494e-03 -2.093769e-01 
+##           211           212           213           214           215           216           217 
+##  6.200643e-02 -1.348789e+00 -1.576100e+00 -8.387404e-01 -1.192077e+00 -5.942693e-02 -5.548249e-01 
+##           218           219           220           221           222           223           224 
+## -3.198331e-02 -1.461240e+00  3.227181e+00 -1.758855e-03 -1.758855e-03 -1.758855e-03 -1.758855e-03 
+##           225           226           227           228           229           230           231 
+## -7.399762e-01 -2.359817e-01 -1.758855e-03 -2.608862e-01 -1.758855e-03 -3.096833e-01 -6.730173e-01 
+##           232           233           234           235           236           237           238 
+## -2.164893e+00 -1.639608e+00 -8.594218e-01  1.672601e+00 -1.166223e+00 -1.902641e-01  3.358706e+00 
+##           239           240           241           242           243           244           245 
+## -1.198090e+00  4.750466e+00 -1.758855e-03 -1.758855e-03 -1.758855e-03 -1.758855e-03 -1.758855e-03 
+##           246           247           248           249           250           251           252 
+## -1.758855e-03 -1.758855e-03  5.685501e+02 -1.758855e-03 -1.758855e-03 -7.920154e-01 -2.149117e+00 
+##           253           254           255           256           257           258           259 
+## -1.533335e+00 -2.034502e+00 -6.617990e-01  2.972400e-01 -1.785476e+00  3.454401e-01 -1.398263e+00 
+##           260           261           262           263           264           265           266 
+##  2.461943e+00 -3.604622e-01 -4.124917e-01 -6.462468e-01 -7.035440e-01 -4.449624e-01 -2.995273e-01 
+##           267           268           269           270           271           272           273 
+## -9.002879e-01 -9.088378e-01 -1.758855e-03 -3.383270e-01 -2.670901e-02 -8.212193e-01 -1.471564e+00 
+##           274           275           276           277           278           279           280 
+## -7.095630e-01 -1.698112e-01 -4.538918e-01 -2.057586e-01  2.613072e+00 -1.258535e+00  1.552946e+00 
+##           281           282           283           284           285           286           287 
+## -2.015941e-03 -2.015941e-03 -2.015941e-03 -2.015941e-03 -2.015941e-03 -2.015941e-03 -2.015941e-03 
+##           288           289           290           291           292           293           294 
+## -2.015941e-03 -2.015941e-03 -2.015941e-03 -1.109685e+00 -9.172000e-01 -1.057170e+00 -4.190041e-01 
+##           295           296           297           298           299           300           301 
+## -1.411160e+00  6.043822e-01 -7.303376e-01  2.192581e-01 -9.325792e-01  1.013550e+00 -4.462521e-01 
+##           302           303           304           305           306           307           308 
+## -2.385379e-01 -2.114433e-01 -2.015941e-03 -2.469096e-01 -2.778856e-01 -2.015941e-03 -2.015941e-03 
+##           309           310           311           312           313           314           315 
+## -2.015941e-03 -1.686778e-01 -1.644862e-01 -8.505289e-01 -1.455114e+00 -1.475913e+00 -8.123533e-01 
+##           316           317           318           319           320           321           322 
+## -4.672771e-01 -3.273972e-01  1.164543e+00 -1.224593e+00  8.276184e-01 -2.015941e-03 -1.041680e+00 
+##           323           324           325           326           327           328           329 
+## -9.626008e-01 -2.015941e-03 -4.507826e-01 -7.012491e-01 -3.877792e-01 -1.049454e+00  4.084988e-01 
+##           330           331           332           333           334           335           336 
+## -2.298615e-01 -1.705826e+00 -1.340261e+00 -1.344802e+00 -1.338796e+00 -1.672139e+00 -7.758593e-02 
+##           337           338           339           340           341           342           343 
+## -1.386542e+00 -3.470624e-01 -1.358333e+00  4.169025e+00 -2.015941e-03 -4.370503e-01 -4.228722e-01 
+##           344           345           346           347           348           349           350 
+## -1.011996e+00 -6.983454e-01 -1.055246e+00 -7.240597e-01 -3.877792e-01 -3.057392e-01 -2.851042e-01 
+##           351           352           353           354           355           356           357 
+## -1.570625e+00 -1.295548e+00 -1.087490e+00 -1.748148e-01 -8.242266e-01 -1.147496e+00  2.161290e-01 
+##           358           359           360           361           362           363           364 
+##  1.028421e+00 -1.399593e+00  7.170765e+00 -2.015941e-03 -2.015941e-03 -2.015941e-03 -3.662194e-01 
+##           365           366           367           368           369           370           371 
+## -2.015941e-03 -4.276504e-01 -2.015941e-03 -2.114433e-01 -2.015941e-03 -2.015941e-03 -5.980282e-01 
+##           372           373           374           375           376           377           378 
+## -9.172000e-01 -1.047516e+00 -5.410656e-01  9.844650e-02 -1.713832e-01 -3.365542e-01  1.825506e+00 
+##           379           380           381           382           383           384           385 
+## -9.347556e-01  3.863193e+00 -1.962207e-03 -1.962207e-03 -1.962207e-03 -1.962207e-03 -1.962207e-03 
+##           386           387           388           389           390           391           392 
+## -1.962207e-03 -1.962207e-03 -1.962207e-03 -1.962207e-03 -2.975899e-01 -3.039901e-01 -1.042006e+00 
+##           393           394           395           396           397           398           399 
+## -1.265587e+00 -8.753312e-01 -8.775277e-01 -8.709214e-01 -2.965348e-01 -6.693054e-01 -7.922092e-01 
+##           400           401           402           403           404           405           406 
+##  2.445169e+00 -1.962207e-03 -1.962207e-03 -1.962207e-03 -5.116847e-01 -1.962207e-03 -1.962207e-03 
+##           407           408           409           410           411           412           413 
+##  3.535189e+00 -4.021375e-01 -1.962207e-03 -4.254008e-01 -1.363700e+00 -1.874910e+00 -9.851869e-01 
+##           414           415           416           417           418           419           420 
+## -4.140167e-01 -1.824959e+00 -4.900502e-01 -2.090809e+00 -7.537313e-01 -2.171766e+00  8.090726e-01 
+##           421           422           423           424           425           426           427 
+## -1.962207e-03 -1.962207e-03 -1.962207e-03 -3.102583e-01 -1.962207e-03 -1.074924e-01  6.275172e+00 
+##           428           429           430           431           432           433           434 
+## -1.962207e-03 -1.962207e-03  1.528889e+03 -1.979561e+00 -1.648722e+00 -1.823904e+00 -4.570868e-01 
+##           435           436           437           438           439           440           441 
+## -2.795026e+00  8.733781e-01 -1.468210e+00 -3.693137e-03 -1.989489e+00  3.704818e+00 -1.962207e-03 
+##           442           443           444           445           446           447           448 
+## -1.962207e-03 -1.520045e-01 -6.205074e-01 -1.962207e-03 -1.962207e-03 -4.846333e-01  1.019259e+03 
+##           449           450           451           452           453           454           455 
+## -1.962207e-03 -3.039901e-01  6.897981e-01 -1.445923e+00 -1.575887e+00 -1.204045e+00 -1.686814e+00 
+##           456           457           458           459           460           461           462 
+## -9.991137e-02 -5.822373e-03  1.903797e+00 -8.114170e-01  7.011417e+00  6.245366e-02 -8.905933e-01 
+##           463           464           465           466           467           468           469 
+## -5.983958e-01 -1.962207e-03  1.085022e+00 -6.740430e-01 -9.328245e-01 -1.154206e+00 -7.129078e-01 
+##           470           471           472           473           474           475           476 
+## -1.962207e-03 -2.116093e+00 -1.286706e+00 -1.774687e+00 -1.511795e+00 -2.819385e-01 -1.615805e+00 
+##           477           478           479           480           481           482           483 
+##  3.449838e+00  5.728306e-01 -1.675363e+00  6.504107e+00 -7.824285e-01 -3.723077e-01 -1.962207e-03 
+##           484           485           486           487           488           489           490 
+## -1.962207e-03 -1.962207e-03 -1.962207e-03 -6.111290e-01 -4.431330e-01 -4.254008e-01 -4.846333e-01 
+##           491           492           493           494           495           496           497 
+## -1.118632e+00 -9.889230e-01 -1.072954e+00  5.497026e-01 -1.823904e+00 -1.326980e+00 -1.575201e-01 
+##           498           499           500           501           502           503           504 
+##  1.652461e-01 -1.493085e+00  5.469906e+00 -1.730197e-03 -4.273305e-01 -1.730197e-03 -1.730197e-03 
+##           505           506           507           508           509           510           511 
+## -1.730197e-03 -1.730197e-03 -4.674766e-01 -4.342793e-01 -1.730197e-03 -5.841842e-01 -1.186164e+00 
+##           512           513           514           515           516           517           518 
+## -2.404912e+00 -1.689049e+00 -1.961314e+00 -1.071653e+00  1.695581e+00 -1.637642e+00 -1.879861e-01 
+##           519           520           521           522           523           524           525 
+## -1.770390e+00  2.041125e+00  1.155936e+03 -5.841842e-01 -5.633139e-01 -7.049378e-01 -1.814728e-01 
+##           526           527           528           529           530           531           532 
+##  5.083324e-01  3.381750e+00  4.667512e-01 -1.730197e-03  4.114517e-01 -1.053860e+00 -1.097006e+00 
+##           533           534           535           536           537           538           539 
+## -1.326736e+00 -1.416228e+00 -1.231906e-01 -1.027977e+00 -1.264092e-01  4.922988e+00 -1.038119e+00 
+##           540           541           542           543           544           545           546 
+##  3.732178e+00 -1.730197e-03 -1.730197e-03 -9.106178e-01 -5.552853e-01  2.095442e-01 -1.730197e-03 
+##           547           548           549           550           551           552           553 
+## -1.972803e-01 -8.243456e-01 -4.738370e-01  4.206953e-01 -1.378741e+00 -1.414113e+00 -1.446553e+00 
+##           554           555           556           557           558           559           560 
+## -1.221079e+00 -5.623447e-01 -5.843298e-01 -3.483794e-01  4.259021e-01 -1.541722e+00  1.798920e+00 
+##           561           562           563           564           565           566           567 
+## -5.892863e-01 -1.380910e+00 -1.212220e+00  1.211895e+00 -4.893766e-01 -2.446929e-01 -1.340206e+00 
+##           568           569           570           571           572           573           574 
+##  1.088116e+00 -7.852901e-01  4.000424e+00 -1.403488e+00 -1.892966e+00 -1.376787e+00 -8.652285e-01 
+##           575           576           577           578           579           580           581 
+##  5.357568e-01 -2.037192e-02  1.314355e+00  2.847446e+00 -1.069216e+00  7.495208e+00 -1.730197e-03 
+##           582           583           584           585           586           587           588 
+## -1.730197e-03 -1.730197e-03 -1.730197e-03 -1.730197e-03 -1.730197e-03 -1.730197e-03  1.155936e+03 
+##           589           590           591           592           593           594           595 
+## -1.730197e-03 -2.895224e-01 -1.518242e+00 -1.520213e+00 -1.732791e+00 -2.919741e-01 -1.307416e+00 
+##           596           597           598           599           600           601           602 
+## -1.249534e+00 -1.615791e+00  6.395441e-01 -1.101092e+00  1.500395e+00 -1.730197e-03  5.779673e+02 
+##           603           604           605           606           607           608           609 
+## -1.730197e-03 -1.730197e-03 -1.730197e-03 -1.730197e-03 -1.730197e-03 -5.633139e-01 -1.730197e-03 
+##           610           611           612           613           614           615           616 
+##  1.868386e+00  1.041281e+00 -1.731062e+00 -1.018358e+00 -5.515876e-01 -9.511734e-01 -1.968171e+00 
+##           617           618           619           620           621           622           623 
+## -5.970090e-01 -1.464232e+00 -1.863480e+00  1.732782e+00 -2.507353e-01 -1.730197e-03  5.779673e+02 
+##           624           625           626           627           628           629           630 
+## -1.730197e-03 -1.730197e-03 -1.730197e-03 -1.730197e-03  5.927840e+00 -1.730197e-03 -1.730197e-03 
+##           631           632           633           634           635           636           637 
+## -1.060657e+00 -1.794741e+00 -1.681944e+00  2.115305e-01 -1.330982e+00 -6.379235e-01  6.986962e-01 
+##           638           639           640           641           642           643           644 
+##  5.549321e-01 -1.287807e+00  7.398908e-01 -4.577703e-01 -1.730197e-03  2.428396e+00  2.815394e+00 
+##           645           646           647           648           649           650           651 
+## -1.730197e-03 -1.730197e-03 -3.095118e-01 -1.730197e-03 -1.730197e-03 -3.416908e-01 -1.010353e+00 
+##           652           653           654           655           656           657           658 
+## -1.271431e+00 -1.330116e+00 -9.863653e-01 -1.090163e+00 -1.135886e+00 -1.914196e+00 -4.396819e-01 
+##           659           660           661           662           663           664           665 
+## -8.152164e-01  4.934060e+00 -9.317410e-01 -1.730197e-03 -1.730197e-03 -1.730197e-03 -1.730197e-03 
+##           666           667           668           669           670           671           672 
+##  5.779673e+02  5.772616e-01  1.816526e+01 -1.730197e-03  4.871648e+00 -1.851392e+00 -1.997610e+00 
+##           673           674           675           676           677           678           679 
+## -1.862676e+00 -1.444708e+00 -1.478171e+00 -1.155733e+00 -9.736357e-01 -1.080505e+00 -1.314267e+00 
+##           680           681           682           683           684           685           686 
+##  1.082952e+00 -1.730197e-03 -1.730197e-03 -4.706675e-01 -3.868876e-01 -2.843056e-01 -2.624030e-01 
+##           687           688           689           690           691           692           693 
+## -2.507353e-01 -1.730197e-03 -1.730197e-03 -1.730197e-03 -1.314267e+00 -1.780507e+00 -1.970451e+00 
+##           694           695           696           697           698           699           700 
+##  4.832342e-01  5.625163e-01  1.058144e+00 -1.295743e+00 -3.382001e-01 -1.746557e+00  2.670143e+00 
+##           701           702           703           704           705           706           707 
+## -1.401821e-03 -1.401821e-03 -1.401821e-03 -1.401821e-03 -1.401821e-03 -1.401821e-03 -1.401821e-03 
+##           708           709           710           711           712           713           714 
+## -1.401821e-03 -1.401821e-03 -1.401821e-03 -5.659624e-01 -9.181668e-01 -1.448699e+00 -1.214013e+00 
+##           715           716           717           718           719           720           721 
+## -2.834430e-01  1.274604e+00 -1.629975e+00  2.171748e+00 -6.560176e-01  5.557605e+00 -1.401821e-03 
+##           722           723           724           725           726           727           728 
+## -1.401821e-03 -1.401821e-03 -1.401821e-03 -1.401821e-03 -1.401821e-03 -1.401821e-03 -1.401821e-03 
+##           729           730           731           732           733           734           735 
+## -1.401821e-03 -1.401821e-03 -1.340188e+00 -1.298483e+00 -1.509157e+00 -1.137982e+00 -1.072188e+00 
+##           736           737           738           739           740           741           742 
+## -1.027259e+00 -1.233859e+00  8.344125e-01 -1.311284e+00  3.933186e+00 -2.872912e-01 -3.573983e-01 
+##           743           744           745           746           747           748           749 
+## -1.716930e-01 -1.401821e-03 -1.401821e-03 -1.401821e-03 -3.518570e-01 -8.867000e-02 -1.401821e-03 
+##           750           751           752           753           754           755           756 
+## -1.401821e-03 -8.907781e-01 -1.977015e+00 -2.002692e+00 -1.612399e+00  3.880935e-01 -3.238169e-01 
+##           757           758           759           760           761           762           763 
+## -5.389272e-01 -1.277414e+00 -2.004163e+00  4.058379e+00 -1.401821e-03 -1.401821e-03 -1.401821e-03 
+##           764           765           766           767           768           769           770 
+## -1.401821e-03 -1.401821e-03 -1.401821e-03 -1.401821e-03  7.133566e+02 -1.401821e-03 -1.401821e-03 
+##           771           772           773           774           775           776           777 
+## -1.732256e+00 -2.180722e+00 -1.889601e+00 -1.563827e+00 -6.300118e-01  7.558418e-01 -5.817953e-01 
+##           778           779           780           781           782           783           784 
+##  4.869090e-01 -1.877603e+00  4.082401e+00 -1.774366e-03 -1.774366e-03 -9.720221e-02 -4.627014e-01 
+##           785           786           787           788           789           790           791 
+## -1.774366e-03 -1.774366e-03 -8.977676e-01 -7.052986e-01 -7.075271e-01 -1.774366e-03 -1.043715e+00 
+##           792           793           794           795           796           797           798 
+## -1.797285e+00 -2.354631e+00 -2.242310e+00  5.975145e-01  7.363059e-01 -1.596306e+00  9.664128e-01 
+##           799           800           801           802           803           804           805 
+## -1.989349e+00  6.503384e+00 -1.774366e-03 -7.652455e-01 -1.774366e-03 -1.774366e-03 -1.774366e-03 
+##           806           807           808           809           810           811           812 
+## -3.319582e-01 -3.927766e-01 -7.590491e-01 -1.774366e-03  1.571962e+00 -5.465003e-01 -2.165890e+00 
+##           813           814           815           816           817           818           819 
+## -2.226812e+00 -8.854003e-02 -4.292444e-01 -1.772264e-01 -1.291046e+00  6.514492e-01 -1.548891e+00 
+##           820           821           822           823           824           825           826 
+##  9.945045e-01 -5.938190e-01 -1.774366e-03 -1.774366e-03 -1.774366e-03 -4.346327e-01 -3.073343e-01 
+##           827           828           829           830           831           832           833 
+## -1.774366e-03 -1.774366e-03 -3.271817e-01 -2.099533e-01 -1.566073e+00 -1.712976e+00 -1.964665e+00 
+##           834           835           836           837           838           839           840 
+## -1.976769e+00  8.505400e-01  2.024519e+00 -1.206316e+00 -2.451945e-01 -1.226754e+00  5.662398e+00 
+##           841           842           843           844           845           846           847 
+## -2.691017e-01 -4.273275e-01 -1.774366e-03 -1.774366e-03  5.772002e+00 -7.486078e-01 -2.631869e-01 
+##           848           849           850           851           852           853           854 
+## -1.774366e-03 -1.861055e-01 -8.472498e-01  9.610369e-01 -1.567078e+00 -1.701539e+00 -1.761902e+00 
+##           855           856           857           858           859           860           861 
+##  1.006967e+00 -6.015965e-01  9.696957e-01 -3.910016e-01 -1.083673e+00  7.093069e+00 -1.774366e-03 
+##           862           863           864           865           866           867           868 
+## -2.915634e-01 -9.720221e-02 -2.861134e-01 -1.861055e-01 -2.023166e-01 -1.774366e-03 -2.969135e-01 
+##           869           870           871           872           873           874           875 
+## -1.774366e-03 -1.774366e-03  7.125405e-01 -6.172166e-01 -5.018695e-01 -6.298398e-01 -6.940492e-01 
+##           876           877           878           879           880           881           882 
+## -6.543561e-01 -8.014183e-01 -4.987230e-01 -4.859333e-01  5.458090e+00 -2.243261e-01 -1.831554e-03 
+##           883           884           885           886           887           888           889 
+## -1.831554e-03 -1.831554e-03 -1.831554e-03 -1.831554e-03 -1.921037e-01 -1.831554e-03 -1.831554e-03 
+##           890           891           892           893           894           895           896 
+## -1.831554e-03 -3.941285e-01 -1.495832e+00 -1.946107e+00 -1.837041e+00  2.778653e-01 -1.449129e+00 
+##           897           898           899           900           901           902           903 
+## -5.082076e-01 -1.260673e+00 -1.519197e+00  1.582904e+00  5.459827e+02 -8.413214e-01 -1.831554e-03 
+##           904           905           906           907           908           909           910 
+## -1.831554e-03 -8.531994e-01 -1.831554e-03 -8.551630e-01  1.244507e+00 -8.190978e-01 -1.831554e-03 
+##           911           912           913           914           915           916           917 
+## -1.379158e+00 -2.496564e+00 -1.713179e+00 -4.275938e-01 -7.235827e-01 -1.953358e-01 -1.025261e+00 
+##           918           919           920           921           922           923           924 
+## -8.044987e-01 -2.201678e+00  3.108939e+00 -5.244804e-01 -7.770646e-01 -6.629137e-01 -4.448866e-01 
+##           925           926           927           928           929           930           931 
+##  5.459827e+02 -1.831554e-03 -6.754461e-01 -4.669600e-01 -3.708659e-01 -1.831554e-03 -1.254315e+00 
+##           932           933           934           935           936           937           938 
+## -1.777576e+00 -2.555002e+00 -1.761216e+00  8.637291e-02  8.233518e-01  2.906472e-01  1.465894e+00 
+##           939           940           941           942           943           944           945 
+## -1.997150e+00  1.817713e+00 -8.472812e-01 -6.074604e-01 -6.019128e-01 -3.885355e-01 -1.158521e-01 
+##           946           947           948           949           950           951           952 
+## -5.674891e-01 -1.227279e+00 -5.820798e-01 -9.708980e-01 -2.590273e-01 -6.106350e-01 -1.591452e+00 
+##           953           954           955           956           957           958           959 
+## -7.331737e-01  9.189954e-01  6.396023e-03 -1.037568e+00 -8.672496e-01 -1.535996e+00 -1.094345e+00 
+##           960           961           962           963           964           965           966 
+##  7.319597e+00 -4.669600e-01 -2.457355e-01 -1.831554e-03 -1.831554e-03 -1.831554e-03 -6.291620e-01 
+##           967           968           969           970           971           972           973 
+## -5.991197e-01 -2.457355e-01 -4.669600e-01  4.136434e+00 -1.316174e-01 -1.248954e+00 -1.342169e+00 
+##           974           975           976           977           978           979           980 
+## -7.124847e-02  2.226821e+00  8.150202e-01 -4.413406e-02  2.946258e+00 -1.486835e+00  1.457222e+00 
+##           981           982           983           984           985           986           987 
+## -1.831554e-03 -6.803945e-01 -1.831554e-03 -5.212725e-01 -1.831554e-03 -5.906612e-01 -1.001512e+00 
+##           988           989           990           991           992           993           994 
+## -4.669600e-01 -1.831554e-03  5.459827e+02 -1.111077e+00 -9.777838e-01 -8.087943e-01 -4.878522e-02 
+##           995           996           997           998           999          1000 
+## -5.125857e-01 -3.205327e-02  1.305492e+00  5.041580e+00 -8.991437e-01  7.468892e+00 
+##  [ reached getOption("max.print") -- omitted 28100 entries ]
+## 
+## $fitMsgs
+## character(0)
+## 
+## $optinfo
+## $optinfo$optimizer
+## [1] "Nelder_Mead"
+## 
+## $optinfo$control
+## $optinfo$control$verbose
+## [1] 0
+## 
+## 
+## $optinfo$derivs
+## NULL
+## 
+## $optinfo$conv
+## $optinfo$conv$opt
+## [1] 0
+## 
+## $optinfo$conv$lme4
+## NULL
+## 
+## 
+## $optinfo$feval
+## [1] 42
+## 
+## $optinfo$message
+## [1] "parameter values converged to within tolerance"
+## 
+## $optinfo$warnings
+## list()
+## 
+## $optinfo$val
+## [1] 0.357041
+## 
+## 
+## attr(,"class")
+## [1] "summary.merMod"</code></pre>
 </div>
 <div id="racialized-group-and-age-fixed-effects-model" class="section level4" number="6.4.4.2">
 <h4>
 <span class="header-section-number">6.4.4.2</span> Racialized group and Age Fixed Effects Model<a class="anchor" aria-label="anchor" href="#racialized-group-and-age-fixed-effects-model"><i class="fas fa-link"></i></a>
 </h4>
-<pre><code>## Generalized linear mixed model fit by maximum likelihood (Adaptive Gauss-Hermite Quadrature, nAGQ = 0) ['glmerMod']
-##  Family: poisson  ( log )
-## Formula: num ~ 1 + race_group + factor(age_cat) + (1 | super_town) + offset(log(den))
-##    Data: mlm_data
-## Control: glmerControl(optimizer = "Nelder_Mead")
+<pre><code>## $methTitle
+## [1] "Generalized linear mixed model fit by maximum likelihood (Adaptive Gauss-Hermite Quadrature, nAGQ = 0)"
 ## 
-##      AIC      BIC   logLik deviance df.resid 
-##  65763.9  65863.3 -32870.0  65739.9    29088 
+## $objClass
+## [1] "glmerMod"
+## attr(,"package")
+## [1] "lme4"
 ## 
-## Scaled residuals: 
-##    Min     1Q Median     3Q    Max 
-##   -5.0   -0.4   -0.1    0.0 4332.1 
+## $devcomp
+## $devcomp$cmp
+##         ldL2        ldRX2         wrss         ussq        pwrss        drsum         REML          dev 
+## 7.992144e+02 7.855502e+01 3.392465e+08 2.741616e+02 3.392468e+08 3.506310e+04           NA 6.573993e+04 
+##      sigmaML    sigmaREML     tolPwrss 
+##           NA           NA 1.000000e-07 
 ## 
-## Random effects:
-##  Groups     Name        Variance Std.Dev.
-##  super_town (Intercept) 0.1214   0.3484  
-## Number of obs: 29100, groups:  super_town, 313
+## $devcomp$dims
+##       N       n       p     nmp       q     nth    nAGQ compDev   useSc  reTrms    spFe    REML    GLMM 
+##   29100   29100      11   29089     313       1       0       1       0       1       0       0       1 
+##    NLMM 
+##       0 
 ## 
-## Fixed effects:
-##                              Estimate Std. Error  z value Pr(&gt;|z|)    
-## (Intercept)                  -7.20570    0.03671 -196.268  &lt; 2e-16 ***
-## race_groupNon-Hispanic Black -0.12074    0.01681   -7.183 6.84e-13 ***
-## factor(age_cat)10-14         -2.13560    0.08871  -24.075  &lt; 2e-16 ***
-## factor(age_cat)15-19         -1.08769    0.05529  -19.674  &lt; 2e-16 ***
-## factor(age_cat)20-24         -0.22185    0.04146   -5.351 8.73e-08 ***
-## factor(age_cat)25-29          0.19829    0.03771    5.259 1.45e-07 ***
-## factor(age_cat)30-34          0.40059    0.03692   10.850  &lt; 2e-16 ***
-## factor(age_cat)35-44          0.65204    0.03332   19.571  &lt; 2e-16 ***
-## factor(age_cat)45-54          1.35551    0.03159   42.904  &lt; 2e-16 ***
-## factor(age_cat)5-9           -2.35572    0.10221  -23.047  &lt; 2e-16 ***
-## factor(age_cat)55-64          2.06535    0.03102   66.591  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Correlation of Fixed Effects:
-##             (Intr) r_N-HB f(_)10 f(_)15 f(_)20 f(_)25 f(_)30 f(_)35 f(_)45 f(_)5-
-## rc_grpNn-HB -0.043                                                               
-## fct(_)10-14 -0.285  0.001                                                        
-## fct(_)15-19 -0.456  0.008  0.188                                                 
-## fct(_)20-24 -0.606  0.019  0.251  0.403                                          
-## fct(_)25-29 -0.665  0.030  0.275  0.443  0.593                                   
-## fct(_)30-34 -0.680  0.029  0.281  0.452  0.605  0.666                            
-## fct(_)35-44 -0.756  0.022  0.312  0.501  0.669  0.736  0.751                     
-## fct(_)45-54 -0.799  0.030  0.330  0.529  0.705  0.775  0.792  0.877              
-## fctr(g_)5-9 -0.246  0.000  0.102  0.163  0.218  0.239  0.244  0.271  0.286       
-## fct(_)55-64 -0.815  0.041  0.336  0.539  0.718  0.790  0.807  0.894  0.944  0.291</code></pre>
+## $isLmer
+## [1] FALSE
+## 
+## $useScale
+## [1] FALSE
+## 
+## $logLik
+## 'log Lik.' -32869.97 (df=12)
+## 
+## $family
+## [1] "poisson"
+## 
+## $link
+## [1] "log"
+## 
+## $ngrps
+## super_town 
+##        313 
+## 
+## $coefficients
+##                                Estimate Std. Error     z value      Pr(&gt;|z|)
+## (Intercept)                  -7.2057035 0.03671351 -196.268466  0.000000e+00
+## race_groupNon-Hispanic Black -0.1207399 0.01680983   -7.182695  6.835022e-13
+## factor(age_cat)10-14         -2.1355988 0.08870531  -24.075209 4.546544e-128
+## factor(age_cat)15-19         -1.0876936 0.05528654  -19.673749  3.620004e-86
+## factor(age_cat)20-24         -0.2218476 0.04145663   -5.351317  8.731623e-08
+## factor(age_cat)25-29          0.1982890 0.03770755    5.258603  1.451539e-07
+## factor(age_cat)30-34          0.4005919 0.03692054   10.850110  1.991861e-27
+## factor(age_cat)35-44          0.6520413 0.03331639   19.571185  2.722792e-85
+## factor(age_cat)45-54          1.3555114 0.03159409   42.903957  0.000000e+00
+## factor(age_cat)5-9           -2.3557222 0.10221191  -23.047434 1.560705e-117
+## factor(age_cat)55-64          2.0653460 0.03101536   66.591065  0.000000e+00
+## 
+## $sigma
+## [1] 1
+## 
+## $vcov
+## 11 x 11 Matrix of class "dpoMatrix"
+##                                (Intercept) race_groupNon-Hispanic Black factor(age_cat)10-14
+## (Intercept)                   1.347882e-03                -2.670523e-05        -9.267507e-04
+## race_groupNon-Hispanic Black -2.670523e-05                 2.825704e-04         1.553597e-06
+## factor(age_cat)10-14         -9.267507e-04                 1.553597e-06         7.868632e-03
+## factor(age_cat)15-19         -9.253834e-04                 7.546030e-06         9.234527e-04
+## factor(age_cat)20-24         -9.221760e-04                 1.305861e-05         9.221877e-04
+## factor(age_cat)25-29         -9.203705e-04                 1.918207e-05         9.212420e-04
+## factor(age_cat)30-34         -9.218502e-04                 1.810846e-05         9.217663e-04
+## factor(age_cat)35-44         -9.243253e-04                 1.232923e-05         9.228539e-04
+## factor(age_cat)45-54         -9.269794e-04                 1.618465e-05         9.235252e-04
+## factor(age_cat)5-9           -9.249240e-04                -4.234117e-07         9.235381e-04
+## factor(age_cat)55-64         -9.277494e-04                 2.120355e-05         9.234724e-04
+##                              factor(age_cat)15-19 factor(age_cat)20-24 factor(age_cat)25-29
+## (Intercept)                         -9.253834e-04        -9.221760e-04        -9.203705e-04
+## race_groupNon-Hispanic Black         7.546030e-06         1.305861e-05         1.918207e-05
+## factor(age_cat)10-14                 9.234527e-04         9.221877e-04         9.212420e-04
+## factor(age_cat)15-19                 3.056602e-03         9.241262e-04         9.232447e-04
+## factor(age_cat)20-24                 9.241262e-04         1.718652e-03         9.263968e-04
+## factor(age_cat)25-29                 9.232447e-04         9.263968e-04         1.421860e-03
+## factor(age_cat)30-34                 9.231773e-04         9.252693e-04         9.270520e-04
+## factor(age_cat)35-44                 9.232237e-04         9.236287e-04         9.240282e-04
+## factor(age_cat)45-54                 9.236351e-04         9.232990e-04         9.231243e-04
+## factor(age_cat)5-9                   9.230967e-04         9.222159e-04         9.215764e-04
+## factor(age_cat)55-64                 9.237249e-04         9.236794e-04         9.236035e-04
+##                              factor(age_cat)30-34 factor(age_cat)35-44 factor(age_cat)45-54
+## (Intercept)                         -9.218502e-04        -9.243253e-04        -9.269794e-04
+## race_groupNon-Hispanic Black         1.810846e-05         1.232923e-05         1.618465e-05
+## factor(age_cat)10-14                 9.217663e-04         9.228539e-04         9.235252e-04
+## factor(age_cat)15-19                 9.231773e-04         9.232237e-04         9.236351e-04
+## factor(age_cat)20-24                 9.252693e-04         9.236287e-04         9.232990e-04
+## factor(age_cat)25-29                 9.270520e-04         9.240282e-04         9.231243e-04
+## factor(age_cat)30-34                 1.363126e-03         9.238313e-04         9.233643e-04
+## factor(age_cat)35-44                 9.238313e-04         1.109982e-03         9.236040e-04
+## factor(age_cat)45-54                 9.233643e-04         9.236040e-04         9.981864e-04
+## factor(age_cat)5-9                   9.219235e-04         9.227175e-04         9.230968e-04
+## factor(age_cat)55-64                 9.237796e-04         9.238552e-04         9.246176e-04
+##                              factor(age_cat)5-9 factor(age_cat)55-64
+## (Intercept)                       -9.249240e-04        -9.277494e-04
+## race_groupNon-Hispanic Black      -4.234117e-07         2.120355e-05
+## factor(age_cat)10-14               9.235381e-04         9.234724e-04
+## factor(age_cat)15-19               9.230967e-04         9.237249e-04
+## factor(age_cat)20-24               9.222159e-04         9.236794e-04
+## factor(age_cat)25-29               9.215764e-04         9.236035e-04
+## factor(age_cat)30-34               9.219235e-04         9.237796e-04
+## factor(age_cat)35-44               9.227175e-04         9.238552e-04
+## factor(age_cat)45-54               9.230968e-04         9.246176e-04
+## factor(age_cat)5-9                 1.044727e-02         9.230422e-04
+## factor(age_cat)55-64               9.230422e-04         9.619527e-04
+## 
+## $varcor
+## $super_town
+##             (Intercept)
+## (Intercept)   0.1213611
+## attr(,"stddev")
+## (Intercept) 
+##   0.3483691 
+## attr(,"correlation")
+##             (Intercept)
+## (Intercept)           1
+## 
+## attr(,"sc")
+## [1] 1
+## attr(,"useSc")
+## [1] FALSE
+## attr(,"class")
+## [1] "VarCorr.merMod"
+## 
+## $AICtab
+##       AIC       BIC    logLik  deviance  df.resid 
+##  65763.93  65863.28 -32869.97  65739.93  29088.00 
+## 
+## $call
+## glmer(formula = num ~ 1 + race_group + factor(age_cat) + (1 | 
+##     super_town) + offset(log(den)), data = mlm_data, family = poisson(link = log), 
+##     control = glmerControl(optimizer = "Nelder_Mead"), nAGQ = 0)
+## 
+## $residuals
+##             1             2             3             4             5             6             7 
+##  1.124817e+03 -6.901883e-02 -9.232296e-02 -6.163904e-02 -1.810178e-01 -1.139255e-01 -2.554147e-01 
+##             8             9            10            11            12            13            14 
+## -3.132167e-01 -2.597314e-02  6.835754e-01 -4.778117e-01 -7.951990e-02 -1.842839e-01 -4.811002e-01 
+##            15            16            17            18            19            20            21 
+##  1.704432e+00 -7.901513e-01 -1.520732e+00  1.684229e-01 -9.775490e-02  5.027937e-01 -8.496640e-04 
+##            22            23            24            25            26            27            28 
+## -2.920840e-04 -2.206384e-02 -6.362879e-02 -9.382209e-04 -1.038089e-03 -4.752600e-01 -2.645888e-01 
+##            29            30            31            32            33            34            35 
+## -2.616427e-04 -4.464488e-01 -4.300109e-01 -2.131560e-01  3.967087e+00 -8.093922e-01  4.547845e+00 
+##            36            37            38            39            40            41            42 
+##  6.973817e-01 -1.463158e-02 -2.195187e-01 -1.417146e-01 -4.897944e-01 -9.248368e-04 -3.179258e-04 
+##            43            44            45            46            47            48            49 
+## -5.368778e-04 -8.277354e-04 -1.021229e-03 -1.129933e-03 -1.281310e-03  5.490197e+02 -2.847912e-04 
+##            50            51            52            53            54            55            56 
+## -2.597463e-03 -3.287717e-01 -1.809197e-01 -2.179073e-01  2.194922e+00  2.363997e+00 -2.737012e-01 
+##            57            58            59            60            61            62            63 
+## -1.108229e+00  4.823159e-01 -1.743069e-01 -8.186633e-05 -9.750893e-04 -3.352008e-04 -5.660499e-04 
+##            64            65            66            67            68            69            70 
+## -8.727118e-04 -1.076719e-03 -1.191329e-03 -1.350932e-03 -1.920392e-03 -3.002658e-04 -7.245706e-01 
+##            71            72            73            74            75            76            77 
+## -3.662010e-01 -1.897507e-01 -3.417236e-01 -7.931311e-01  1.407287e+00 -7.368018e-01  1.118401e+00 
+##            78            79            80            81            82            83            84 
+## -6.323280e-01 -1.267810e-01  6.847391e-02 -9.750893e-04 -1.272002e-01 -2.125523e-01 -8.727118e-04 
+##            85            86            87            88            89            90            91 
+## -1.076719e-03 -1.191329e-03 -4.163873e-01 -1.920392e-03 -3.002658e-04 -2.738600e-03 -5.895707e-01 
+##            92            93            94            95            96            97            98 
+## -1.805056e-01 -4.851365e-01 -7.502571e-01  2.169485e+00  3.871625e-01 -3.196827e-01  1.792976e+00 
+##            99           100           101           102           103           104           105 
+## -2.149080e-01  1.208065e-01 -8.028524e-04 -2.759919e-04  2.145625e+03 -3.896157e-01 -8.865303e-04 
+##           106           107           108           109           110           111           112 
+## -9.808963e-04 -7.208581e-01 -1.581180e-03 -2.472277e-04  6.788499e-01 -3.213658e-01 -2.734478e-01 
+##           113           114           115           116           117           118           119 
+## -3.479592e-01 -2.741429e-01  9.414998e-01  3.249769e+00  1.676061e+00  2.127981e-01 -1.669193e-01 
+##           120           121           122           123           124           125           126 
+## -7.120001e-01 -8.028524e-04 -2.759919e-04 -4.660645e-04 -7.185584e-04 -8.865303e-04 -9.808963e-04 
+##           127           128           129           130           131           132           133 
+## -1.112307e-03 -2.449604e-01 -2.472277e-04 -2.254862e-03 -6.024274e-01 -1.999132e-01  2.204473e+00 
+##           134           135           136           137           138           139           140 
+## -4.009920e-01 -4.526045e-01 -5.829272e-01 -3.963160e-01 -7.754188e-02 -1.642118e-01 -3.574696e-01 
+##           141           142           143           144           145           146           147 
+## -2.205574e-01 -8.172731e-02 -3.748699e-02 -6.389507e-02 -7.515931e-04 -2.053907e-01 -3.439072e-01 
+##           148           149           150           151           152           153           154 
+## -5.069206e-01 -6.726777e-02 -4.948228e-01 -3.629479e-01 -1.597274e-01 -3.067076e-01 -5.820284e-01 
+##           155           156           157           158           159           160           161 
+## -4.125319e-01 -5.649276e-01  5.293797e+00 -7.604524e-02 -6.934142e-02 -4.941314e-01 -6.806516e-04 
+##           162           163           164           165           166           167           168 
+## -2.339836e-04 -3.951256e-04 -6.389507e-02 -7.515931e-04 -1.115734e-01 -1.738840e-01 -6.024863e-01 
+##           169           170           171           172           173           174           175 
+## -2.095976e-04 -1.911653e-03 -5.966465e-01 -1.957041e-01 -2.742635e-01  5.248824e+00  1.339689e+00 
+##           176           177           178           179           180           181           182 
+## -7.935379e-01  9.108034e-01 -9.611972e-01 -1.275094e-01 -1.239727e+00 -6.792679e-04 -1.062400e-01 
+##           183           184           185           186           187           188           189 
+## -5.290537e-02 -6.079799e-02 -7.867108e-02 -8.299053e-04 -9.410876e-04 -1.337786e-03 -2.091715e-04 
+##           190           191           192           193           194           195           196 
+## -1.907767e-03 -4.904344e-01 -2.399707e-01 -3.506946e-01  1.524219e+00  2.145441e+00 -7.438531e-01 
+##           197           198           199           200           201           202           203 
+##  1.238323e+00  3.094921e-01 -2.234069e-01 -1.479393e+00 -6.792679e-04 -4.551968e-02 -1.382948e-01 
+##           204           205           206           207           208           209           210 
+## -6.079495e-04 -7.500652e-04 -8.299053e-04 -9.410876e-04 -1.337786e-03 -2.091715e-04 -2.955561e-01 
+##           211           212           213           214           215           216           217 
+##  1.968980e+00 -2.475426e-01 -4.884717e-01  6.731934e-01 -7.027606e-01  8.162643e-01  3.021843e-01 
+##           218           219           220           221           222           223           224 
+## -2.976435e-01 -2.402306e-01 -9.523949e-02 -9.114526e-04 -3.133248e-04 -5.291081e-04 -8.157564e-04 
+##           225           226           227           228           229           230           231 
+## -4.234283e-01 -1.494066e-01 -1.262767e-03 -2.662569e-01 -2.806697e-04 -4.507193e-01  5.394297e-01 
+##           232           233           234           235           236           237           238 
+## -4.096562e-01 -5.239296e-01  5.891112e-01  3.879480e+00 -1.340434e-02  9.012144e-01  2.649908e+00 
+##           239           240           241           242           243           244           245 
+## -2.030829e-01  3.130883e-01 -9.114526e-04 -3.133248e-04 -5.291081e-04 -8.157564e-04 -1.006450e-03 
+##           246           247           248           249           250           251           252 
+## -1.113580e-03 -1.262767e-03  5.570818e+02 -2.806697e-04 -2.559872e-03  4.244891e-01 -4.066709e-01 
+##           253           254           255           256           257           258           259 
+## -4.899704e-01 -1.002322e+00  7.611679e-01  1.736706e+00 -9.338919e-01 -1.392464e-01 -2.370133e-01 
+##           260           261           262           263           264           265           266 
+## -1.660931e+00 -1.867944e-01 -7.348184e-02 -1.944075e-01 -3.263036e-01 -2.546158e-01 -1.896392e-01 
+##           267           268           269           270           271           272           273 
+## -6.463601e-01 -9.275474e-01 -2.806697e-04 -4.924079e-01  1.234721e+00 -1.553969e-01 -4.702319e-01 
+##           274           275           276           277           278           279           280 
+##  7.360815e-01  8.498132e-01  3.450308e-01  7.385758e-01  2.068432e+00 -2.133287e-01 -1.733341e+00 
+##           281           282           283           284           285           286           287 
+## -1.006894e-03 -3.461342e-04 -5.845130e-04 -9.011774e-04 -1.111839e-03 -1.230187e-03 -1.394996e-03 
+##           288           289           290           291           292           293           294 
+## -1.983031e-03 -3.100597e-04 -2.827926e-03 -5.887409e-01 -1.672819e-01 -3.255965e-01  1.125840e+00 
+##           295           296           297           298           299           300           301 
+## -8.267203e-01  1.955679e+00 -9.940011e-02  4.070196e-03 -1.523602e-01 -1.771959e+00 -2.228878e-01 
+##           302           303           304           305           306           307           308 
+## -4.095661e-02 -6.130703e-02 -9.011774e-04 -1.361764e-01 -1.695741e-01 -1.394996e-03 -1.983031e-03 
+##           309           310           311           312           313           314           315 
+## -3.100597e-04 -2.366182e-01  1.160220e+00 -1.551222e-01 -4.481587e-01 -7.008279e-01  2.787688e-01 
+##           316           317           318           319           320           321           322 
+##  4.067247e-01  5.473500e-01  9.276782e-01 -2.000679e-01 -2.077905e+00 -1.006894e-03 -1.788549e-01 
+##           323           324           325           326           327           328           329 
+## -2.791018e-01 -9.011774e-04 -2.486172e-01 -4.279231e-01 -2.683364e-01 -1.032321e+00  7.838439e+00 
+##           330           331           332           333           334           335           336 
+## -3.224456e-01 -9.050217e-01 -2.444412e-01 -4.141837e-01  2.352450e-01 -9.796132e-01  1.464750e+00 
+##           337           338           339           340           341           342           343 
+## -4.677191e-01 -6.113830e-01 -2.219177e-01 -6.403319e-03 -1.006894e-03 -7.504090e-02 -1.226099e-01 
+##           344           345           346           347           348           349           350 
+## -4.523883e-01 -3.851538e-01 -6.439429e-01 -5.010365e-01 -3.814487e-01 -4.702390e-02 -3.999391e-01 
+##           351           352           353           354           355           356           357 
+## -8.332914e-01 -2.362862e-01 -3.349344e-01  1.411750e+00  2.676777e-01 -7.438113e-01  1.626561e+00 
+##           358           359           360           361           362           363           364 
+##  7.479628e-01 -2.286586e-01  2.263711e+00 -1.006894e-03 -3.461342e-04 -5.845130e-04 -1.637095e-01 
+##           365           366           367           368           369           370           371 
+## -1.111839e-03 -2.609651e-01 -1.394996e-03 -2.079915e-01 -3.100597e-04 -2.827926e-03 -3.172824e-01 
+##           372           373           374           375           376           377           378 
+## -1.672819e-01 -3.226229e-01  9.915559e-01  1.235309e+00  7.100539e-01  5.380894e-01  1.551793e+00 
+##           379           380           381           382           383           384           385 
+## -1.527158e-01  6.300809e-01 -1.031080e-03 -3.544483e-04 -5.985529e-04 -9.228235e-04 -1.138545e-03 
+##           386           387           388           389           390           391           392 
+## -1.259736e-03 -1.428503e-03 -2.030663e-03 -3.175073e-04 -4.391873e-01 -1.696779e-01 -1.999385e-01 
+##           393           394           395           396           397           398           399 
+## -4.100795e-01 -4.372850e-01 -5.408596e-01 -5.939258e-01  2.191224e-01 -1.006790e+00 -1.361655e-01 
+##           400           401           402           403           404           405           406 
+## -8.432929e-01 -1.031080e-03 -3.544483e-04 -5.985529e-04 -2.406447e-01 -1.138545e-03 -1.259736e-03 
+##           407           408           409           410           411           412           413 
+##  5.025937e+00 -4.161670e-01 -3.175073e-04 -6.278125e-01 -7.611751e-01 -3.597550e-01  1.399258e+00 
+##           414           415           416           417           418           419           420 
+##  2.102569e+00 -1.124804e+00  8.458048e-01 -1.408257e+00 -1.263829e+00 -3.732847e-01 -2.481096e+00 
+##           421           422           423           424           425           426           427 
+## -1.031080e-03 -3.544483e-04 -5.985529e-04 -1.459141e-01 -1.138545e-03 -6.901010e-02  8.815898e+00 
+##           428           429           430           431           432           433           434 
+## -2.030663e-03 -3.175073e-04  1.035962e+03 -5.903230e-01 -3.163544e-01 -5.909871e-01  2.452246e+00 
+##           435           436           437           438           439           440           441 
+## -1.722700e+00  2.889901e+00 -2.935848e-01 -6.605302e-01 -3.419548e-01 -1.602788e+00 -1.031080e-03 
+##           442           443           444           445           446           447           448 
+## -3.544483e-04 -4.636757e-02 -2.918239e-01 -1.138545e-03 -1.259736e-03 -3.528171e-01  9.848981e+02 
+##           449           450           451           452           453           454           455 
+## -3.175073e-04 -4.486329e-01  2.115125e+00 -2.774415e-01 -5.106239e-01  2.475454e-01 -1.039659e+00 
+##           456           457           458           459           460           461           462 
+##  6.780865e-01  1.156354e+00  1.231166e+00 -1.394670e-01  1.904136e+00  1.454098e+00 -1.608746e-01 
+##           463           464           465           466           467           468           469 
+## -1.825351e-01 -9.228235e-04  2.550360e+00 -4.327355e-01 -6.791041e-01 -1.194473e+00 -1.153566e-01 
+##           470           471           472           473           474           475           476 
+## -2.895852e-03 -1.181138e+00 -2.468914e-01 -5.750397e-01  9.480946e-01  1.938624e+00 -4.580321e-01 
+##           477           478           479           480           481           482           483 
+##  6.001299e+00 -2.082576e-01 -2.879626e-01  5.604391e-01 -4.111423e-01 -6.725276e-02 -5.985529e-04 
+##           484           485           486           487           488           489           490 
+## -9.228235e-04 -1.138545e-03 -1.259736e-03 -4.449071e-01 -4.585927e-01 -6.883467e-02 -7.152286e-01 
+##           491           492           493           494           495           496           497 
+## -6.243857e-01 -1.897531e-01 -3.476620e-01  2.851633e+00 -1.124153e+00 -4.840092e-01  8.777061e-01 
+##           498           499           500           501           502           503           504 
+## -3.359124e-01 -2.566325e-01  7.332768e-01 -9.113546e-04 -7.737782e-02 -5.290512e-04 -8.156687e-04 
+##           505           506           507           508           509           510           511 
+## -1.006341e-03 -1.113460e-03 -3.411464e-01 -4.505123e-01 -2.806395e-04 -8.642231e-01 -6.636744e-01 
+##           512           513           514           515           516           517           518 
+## -4.625620e-01 -5.486087e-01 -9.821636e-01 -6.297144e-02  3.512515e+00 -8.496748e-01 -7.391347e-01 
+##           519           520           521           522           523           524           525 
+## -3.050287e-01 -2.235268e+00  2.194535e+03 -1.057797e-01 -1.722474e-01 -3.323297e-01 -1.055508e-01 
+##           526           527           528           529           530           531           532 
+##  1.497804e+00  4.809287e+00  3.618421e-01 -2.806395e-04 -3.768207e-01 -5.896486e-01 -2.109988e-01 
+##           533           534           535           536           537           538           539 
+## -4.309284e-01 -7.092018e-01  1.596681e+00 -7.027180e-01  7.618247e-01  4.053914e+00 -1.788624e-01 
+##           540           541           542           543           544           545           546 
+## -3.137159e-01 -9.113546e-04 -3.132911e-04 -2.784443e-01 -2.617788e-01  1.384960e+00 -1.113460e-03 
+##           547           548           549           550           551           552           553 
+## -1.439676e-01 -8.551589e-01 -7.685681e-02 -3.676155e-01 -7.714236e-01 -2.719912e-01 -4.698454e-01 
+##           554           555           556           557           558           559           560 
+##  2.280326e-01  4.107344e-01  4.982019e-01  5.365222e-01 -8.819272e-02 -2.656303e-01 -1.227458e+00 
+##           561           562           563           564           565           566           567 
+## -3.103975e-01 -2.500449e-01  1.299102e+00  3.500011e+00 -2.846381e-01 -1.574710e-01 -9.780303e-01 
+##           568           569           570           571           572           573           574 
+##  9.555710e-01 -1.273748e-01  1.900798e+00 -7.852700e-01 -3.640940e-01  1.000427e+00  5.496295e-01 
+##           575           576           577           578           579           580           581 
+##  2.618441e+00  1.327887e+00  2.852239e+00  2.058539e+00  3.191012e+00  2.506431e+00 -9.113546e-04 
+##           582           583           584           585           586           587           588 
+## -3.132911e-04 -5.290512e-04 -8.156687e-04 -1.006341e-03 -1.113460e-03 -1.262631e-03  1.114285e+03 
+##           589           590           591           592           593           594           595 
+## -2.806395e-04 -4.283101e-01 -8.494765e-01 -2.923986e-01 -5.628164e-01  1.762507e+00 -8.077595e-01 
+##           596           597           598           599           600           601           602 
+## -4.221819e-01 -1.006583e+00 -5.314719e-03 -1.897122e-01 -2.149188e+00 -9.113546e-04  3.191920e+03 
+##           603           604           605           606           607           608           609 
+## -5.290512e-04 -8.156687e-04 -1.006341e-03 -1.113460e-03 -1.262631e-03 -5.843700e-01 -2.806395e-04 
+##           610           611           612           613           614           615           616 
+##  9.140612e-01  3.072064e+00 -3.329535e-01  1.357397e+00  8.631719e-01  4.455126e-02 -1.345428e+00 
+##           617           618           619           620           621           622           623 
+##  4.246500e-01 -1.836765e+00 -3.210675e-01 -1.798184e+00 -1.320710e-01 -3.132911e-04  1.890176e+03 
+##           624           625           626           627           628           629           630 
+## -8.156687e-04 -1.006341e-03 -1.113460e-03 -1.262631e-03  5.702196e+00 -2.806395e-04 -2.559597e-03 
+##           631           632           633           634           635           636           637 
+##  1.451587e-01 -3.452015e-01 -5.463012e-01  2.860429e+00 -2.862137e-01  4.450937e-01  2.095488e+00 
+##           638           639           640           641           642           643           644 
+## -8.958798e-02 -2.218822e-01 -2.160335e+00 -2.411235e-01 -3.132911e-04  9.005425e+00  6.498352e+00 
+##           645           646           647           648           649           650           651 
+## -1.006341e-03 -1.113460e-03 -2.258698e-01 -1.794870e-03 -2.806395e-04 -5.054863e-01 -5.653059e-01 
+##           652           653           654           655           656           657           658 
+## -2.445477e-01 -4.320263e-01 -4.939403e-01 -6.735339e-01 -7.764836e-01 -1.483835e+00 -8.329766e-01 
+##           659           660           661           662           663           664           665 
+## -1.404574e-01  8.576065e-01 -4.907803e-01 -3.132911e-04 -5.290512e-04 -8.156687e-04 -1.006341e-03 
+##           666           667           668           669           670           671           672 
+##  8.980999e+02  1.272843e+00  1.750269e+01 -2.806395e-04  3.134566e+00 -1.035878e+00 -3.842214e-01 
+##           673           674           675           676           677           678           679 
+## -6.050036e-01  4.146002e-02 -4.084858e-01 -4.986253e-02  5.440344e-02 -1.610654e+00 -2.264412e-01 
+##           680           681           682           683           684           685           686 
+## -3.413289e+00 -9.113546e-04 -3.132911e-04 -1.439185e-01 -1.823909e-01 -1.653618e-01 -1.688683e-01 
+##           687           688           689           690           691           692           693 
+## -1.829769e-01 -1.794870e-03 -2.806395e-04 -2.559597e-03 -7.353498e-01 -3.424637e-01 -6.400092e-01 
+##           694           695           696           697           698           699           700 
+##  3.617572e+00  2.071987e+00  2.546919e+00 -3.858840e-01 -9.240397e-01 -3.009223e-01 -1.891557e+00 
+##           701           702           703           704           705           706           707 
+## -7.424503e-04 -2.552278e-04 -4.310005e-04 -6.644982e-04 -8.198329e-04 -9.070993e-04 -1.028623e-03 
+##           708           709           710           711           712           713           714 
+## -1.462221e-03 -2.286277e-04 -2.085219e-03 -3.184057e-01 -1.775724e-01 -4.731315e-01 -6.112841e-01 
+##           715           716           717           718           719           720           721 
+##  6.821911e-01  2.555761e+00 -1.270466e+00  1.527636e+00 -1.136502e-01  1.253038e+00 -7.424503e-04 
+##           722           723           724           725           726           727           728 
+## -2.552278e-04 -4.310005e-04 -6.644982e-04 -8.198329e-04 -9.070993e-04 -1.028623e-03 -1.462221e-03 
+##           729           730           731           732           733           734           735 
+## -2.286277e-04 -2.085219e-03 -7.539787e-01 -2.511252e-01 -4.928763e-01 -5.730007e-01 -6.660732e-01 
+##           736           737           738           739           740           741           742 
+## -7.060910e-01 -6.807156e-01  2.884680e-01 -2.271702e-01  2.511881e-02 -1.521588e-01 -6.507108e-02 
+##           743           744           745           746           747           748           749 
+## -5.278832e-02 -6.644982e-04 -8.198329e-04 -9.070993e-04 -2.581845e-01 -9.249052e-02 -2.286277e-04 
+##           750           751           752           753           754           755           756 
+## -2.085219e-03  2.877031e-01 -3.823524e-01 -6.540601e-01 -8.118807e-01  2.419163e+00  7.456564e-01 
+##           757           758           759           760           761           762           763 
+##  6.850981e-01 -1.804259e+00 -3.472064e-01 -7.932326e-01 -7.424503e-04 -2.552278e-04 -4.310005e-04 
+##           764           765           766           767           768           769           770 
+## -6.644982e-04 -8.198329e-04 -9.070993e-04 -1.028623e-03  6.838898e+02 -2.286277e-04 -2.085219e-03 
+##           771           772           773           774           775           776           777 
+## -9.745528e-01 -4.217491e-01 -6.171257e-01  4.490637e-01  3.336093e-01  2.371748e+00  4.177147e-01 
+##           778           779           780           781           782           783           784 
+## -1.938242e-01 -3.252809e-01 -5.983231e-01 -9.535437e-04 -3.277942e-04 -3.032382e-02 -2.225485e-01 
+##           785           786           787           788           789           790           791 
+## -1.052928e-03 -1.165006e-03 -6.684215e-01 -7.464764e-01 -1.170852e-01 -2.678088e-03 -5.957961e-01 
+##           792           793           794           795           796           797           798 
+## -3.526902e-01 -7.802775e-01 -1.145613e+00  2.342769e+00  2.282160e+00 -6.206860e-01  8.735748e-02 
+##           799           800           801           802           803           804           805 
+## -3.496940e-01  1.002233e+00 -9.535437e-04 -1.413705e-01 -5.535425e-04 -8.534283e-04 -1.052928e-03 
+##           806           807           808           809           810           811           812 
+## -2.179557e-01 -2.924368e-01 -8.033650e-01 -2.936311e-04  6.300283e-01  5.895897e-01 -4.250234e-01 
+##           813           814           815           816           817           818           819 
+## -7.379207e-01  2.784229e+00  1.447429e+00  8.546012e-01 -3.315087e-01 -2.257961e-01 -2.722690e-01 
+##           820           821           822           823           824           825           826 
+## -2.717397e+00 -3.191182e-01 -3.277942e-04 -5.535425e-04 -8.534283e-04 -2.579157e-01 -2.017883e-01 
+##           827           828           829           830           831           832           833 
+## -1.321081e-03 -1.877959e-03 -5.414369e-02 -3.168869e-01 -8.939803e-01 -3.361458e-01 -6.510505e-01 
+##           834           835           836           837           838           839           840 
+## -4.058742e-01  2.897707e+00  3.808071e+00 -2.504144e-01 -9.517491e-01 -2.156427e-01 -1.192276e-01 
+##           841           842           843           844           845           846           847 
+## -1.446152e-01 -7.894397e-02 -5.535425e-04 -8.534283e-04  9.910612e+00 -4.915178e-01 -1.959525e-01 
+##           848           849           850           851           852           853           854 
+## -1.877959e-03 -3.079769e-02 -1.278772e+00  2.879971e+00 -3.075156e-01  6.776721e-01 -9.001690e-01 
+##           855           856           857           858           859           860           861 
+##  2.840697e+00  4.236331e-01  2.178998e+00 -1.137483e+00 -1.904914e-01  1.358194e+00 -9.535437e-04 
+##           862           863           864           865           866           867           868 
+## -5.386308e-02 -3.032382e-02 -1.376138e-01 -1.104370e-01 -1.328362e-01 -1.321081e-03 -3.142483e-01 
+##           869           870           871           872           873           874           875 
+## -2.936311e-04 -2.678088e-03  2.081155e+00 -1.211195e-01 -1.663095e-01 -3.217899e-01 -4.374858e-01 
+##           876           877           878           879           880           881           882 
+## -4.563704e-01 -6.338173e-01 -5.606874e-01 -8.541889e-02  3.230591e+00 -1.165472e-01 -3.271164e-04 
+##           883           884           885           886           887           888           889 
+## -5.523979e-04 -8.516636e-04 -1.050750e-03 -1.162597e-03 -1.382760e-01 -1.874076e-03 -2.930239e-04 
+##           890           891           892           893           894           895           896 
+## -2.672550e-03  8.185303e-01 -2.837814e-01 -6.234728e-01 -9.073725e-01  1.778547e+00 -9.770908e-01 
+##           897           898           899           900           901           902           903 
+##  4.244663e-01 -1.687027e+00 -2.581761e-01 -1.952022e+00  1.050892e+03 -1.502604e-01 -5.523979e-04 
+##           904           905           906           907           908           909           910 
+## -8.516636e-04 -4.894749e-01 -1.162597e-03 -6.155451e-01  1.190767e+00 -1.310446e-01 -2.672550e-03 
+##           911           912           913           914           915           916           917 
+## -9.938844e-02 -4.736348e-01  7.399832e-01  2.132820e+00  1.011148e+00  1.192482e+00  4.992958e-01 
+##           918           919           920           921           922           923           924 
+## -1.389110e+00 -3.741584e-01 -1.739240e+00 -2.724904e-01 -1.387841e-01 -1.999352e-01 -2.068701e-01 
+##           925           926           927           928           929           930           931 
+##  9.516997e+02 -1.162597e-03 -4.861851e-01 -4.778012e-01 -5.933355e-02 -2.672550e-03 -6.922244e-01 
+##           932           933           934           935           936           937           938 
+##  1.944805e+00 -8.185437e-01 -1.782849e-01  2.160826e+00  2.897181e+00  1.839884e+00  7.723225e-01 
+##           939           940           941           942           943           944           945 
+## -3.394006e-01 -2.513170e+00 -4.401995e-01 -1.084927e-01 -1.815373e-01 -1.806671e-01 -6.646360e-02 
+##           946           947           948           949           950           951           952 
+## -3.602193e-01 -8.833937e-01 -5.955937e-01 -1.553306e-01 -3.779651e-01  5.958230e-01 -3.019217e-01 
+##           953           954           955           956           957           958           959 
+##  1.721602e+00  4.651380e+00  1.793949e+00 -2.079947e-01  7.138163e-02 -1.898757e+00 -1.859757e-01 
+##           960           961           962           963           964           965           966 
+##  2.073477e+00 -2.426061e-01 -4.388849e-02 -5.523979e-04 -8.516636e-04 -1.050750e-03 -3.993668e-01 
+##           967           968           969           970           971           972           973 
+## -4.312455e-01 -2.514407e-01 -7.470731e-02  2.496393e+00  1.107293e+00 -2.369450e-01 -4.299895e-01 
+##           974           975           976           977           978           979           980 
+##  2.075620e+00  4.866906e+00  2.318363e+00  1.040927e+00  2.265179e+00 -2.526763e-01 -1.849644e+00 
+##           981           982           983           984           985           986           987 
+## -9.515720e-04 -1.215188e-01 -5.523979e-04 -2.423892e-01 -1.050750e-03 -3.749280e-01 -7.208866e-01 
+##           988           989           990           991           992           993           994 
+## -4.778012e-01 -2.930239e-04  3.741718e+02 -6.131751e-01 -1.855000e-01 -2.591127e-01  1.469663e+00 
+##           995           996           997           998           999          1000 
+##  4.881681e-01  1.366446e+00  2.618356e+00  4.325123e+00 -1.528026e-01  2.064583e+00 
+##  [ reached getOption("max.print") -- omitted 28100 entries ]
+## 
+## $fitMsgs
+## character(0)
+## 
+## $optinfo
+## $optinfo$optimizer
+## [1] "Nelder_Mead"
+## 
+## $optinfo$control
+## $optinfo$control$verbose
+## [1] 0
+## 
+## 
+## $optinfo$derivs
+## NULL
+## 
+## $optinfo$conv
+## $optinfo$conv$opt
+## [1] 0
+## 
+## $optinfo$conv$lme4
+## NULL
+## 
+## 
+## $optinfo$feval
+## [1] 41
+## 
+## $optinfo$message
+## [1] "parameter values converged to within tolerance"
+## 
+## $optinfo$warnings
+## list()
+## 
+## $optinfo$val
+## [1] 0.3483691
+## 
+## 
+## attr(,"class")
+## [1] "summary.merMod"</code></pre>
 </div>
 <div id="racialized-group-random-effect-at-the-town-level" class="section level4" number="6.4.4.3">
 <h4>
 <span class="header-section-number">6.4.4.3</span> Racialized group Random Effect at the Town Level<a class="anchor" aria-label="anchor" href="#racialized-group-random-effect-at-the-town-level"><i class="fas fa-link"></i></a>
 </h4>
-<pre><code>## Generalized linear mixed model fit by maximum likelihood (Adaptive Gauss-Hermite Quadrature, nAGQ = 0) ['glmerMod']
-##  Family: poisson  ( log )
-## Formula: num ~ 1 + race_group + factor(age_cat) + (race_group | super_town) +      offset(log(den))
-##    Data: mlm_data
-## Control: glmerControl(optimizer = "Nelder_Mead")
+<pre><code>## $methTitle
+## [1] "Generalized linear mixed model fit by maximum likelihood (Adaptive Gauss-Hermite Quadrature, nAGQ = 0)"
 ## 
-##      AIC      BIC   logLik deviance df.resid 
-##  65180.8  65296.7 -32576.4  65152.8    29086 
+## $objClass
+## [1] "glmerMod"
+## attr(,"package")
+## [1] "lme4"
 ## 
-## Scaled residuals: 
-##    Min     1Q Median     3Q    Max 
-##   -5.4   -0.4   -0.1    0.0 3519.2 
+## $devcomp
+## $devcomp$cmp
+##         ldL2        ldRX2         wrss         ussq        pwrss        drsum         REML          dev 
+## 9.697196e+02 7.650805e+01 2.694257e+08 3.662796e+02 2.694261e+08 3.421339e+04           NA 6.515284e+04 
+##      sigmaML    sigmaREML     tolPwrss 
+##           NA           NA 1.000000e-07 
 ## 
-## Random effects:
-##  Groups     Name                         Variance Std.Dev. Corr 
-##  super_town (Intercept)                  0.1293   0.3596        
-##             race_groupNon-Hispanic Black 0.2394   0.4893   -0.47
-## Number of obs: 29100, groups:  super_town, 313
+## $devcomp$dims
+##       N       n       p     nmp       q     nth    nAGQ compDev   useSc  reTrms    spFe    REML    GLMM 
+##   29100   29100      11   29089     626       3       0       1       0       1       0       0       1 
+##    NLMM 
+##       0 
 ## 
-## Fixed effects:
-##                              Estimate Std. Error  z value Pr(&gt;|z|)    
-## (Intercept)                  -7.19990    0.03707 -194.213  &lt; 2e-16 ***
-## race_groupNon-Hispanic Black  0.05925    0.04739    1.250    0.211    
-## factor(age_cat)10-14         -2.14283    0.08871  -24.156  &lt; 2e-16 ***
-## factor(age_cat)15-19         -1.09326    0.05529  -19.773  &lt; 2e-16 ***
-## factor(age_cat)20-24         -0.22183    0.04146   -5.351 8.77e-08 ***
-## factor(age_cat)25-29          0.20437    0.03771    5.419 5.99e-08 ***
-## factor(age_cat)30-34          0.40271    0.03693   10.906  &lt; 2e-16 ***
-## factor(age_cat)35-44          0.64883    0.03332   19.472  &lt; 2e-16 ***
-## factor(age_cat)45-54          1.34784    0.03160   42.653  &lt; 2e-16 ***
-## factor(age_cat)5-9           -2.36179    0.10221  -23.106  &lt; 2e-16 ***
-## factor(age_cat)55-64          2.05635    0.03102   66.284  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Correlation of Fixed Effects:
-##             (Intr) r_N-HB f(_)10 f(_)15 f(_)20 f(_)25 f(_)30 f(_)35 f(_)45 f(_)5-
-## rc_grpNn-HB -0.183                                                               
-## fct(_)10-14 -0.282  0.000                                                        
-## fct(_)15-19 -0.451  0.001  0.188                                                 
-## fct(_)20-24 -0.600  0.001  0.251  0.403                                          
-## fct(_)25-29 -0.658  0.003  0.275  0.443  0.593                                   
-## fct(_)30-34 -0.673  0.002  0.281  0.452  0.604  0.666                            
-## fct(_)35-44 -0.748  0.004  0.312  0.501  0.669  0.735  0.751                     
-## fct(_)45-54 -0.791  0.011  0.330  0.529  0.705  0.775  0.791  0.877              
-## fctr(g_)5-9 -0.244  0.001  0.102  0.163  0.218  0.239  0.244  0.271  0.286       
-## fct(_)55-64 -0.807  0.015  0.336  0.539  0.718  0.789  0.806  0.894  0.944  0.291</code></pre>
+## $isLmer
+## [1] FALSE
+## 
+## $useScale
+## [1] FALSE
+## 
+## $logLik
+## 'log Lik.' -32576.42 (df=14)
+## 
+## $family
+## [1] "poisson"
+## 
+## $link
+## [1] "log"
+## 
+## $ngrps
+## super_town 
+##        313 
+## 
+## $coefficients
+##                                 Estimate Std. Error     z value      Pr(&gt;|z|)
+## (Intercept)                  -7.19989947 0.03707210 -194.213427  0.000000e+00
+## race_groupNon-Hispanic Black  0.05924929 0.04739101    1.250222  2.112184e-01
+## factor(age_cat)10-14         -2.14282959 0.08870796  -24.156000 6.457745e-129
+## factor(age_cat)15-19         -1.09326142 0.05529126  -19.772772  5.109026e-87
+## factor(age_cat)20-24         -0.22183450 0.04146038   -5.350518  8.770306e-08
+## factor(age_cat)25-29          0.20436720 0.03771313    5.418993  5.993557e-08
+## factor(age_cat)30-34          0.40271495 0.03692554   10.906135  1.077404e-27
+## factor(age_cat)35-44          0.64882731 0.03332041   19.472369  1.883559e-84
+## factor(age_cat)45-54          1.34784026 0.03160026   42.652827  0.000000e+00
+## factor(age_cat)5-9           -2.36178565 0.10221400  -23.106283 4.003340e-118
+## factor(age_cat)55-64          2.05634804 0.03102318   66.284234  0.000000e+00
+## 
+## $sigma
+## [1] 1
+## 
+## $vcov
+## 11 x 11 Matrix of class "dpoMatrix"
+##                                (Intercept) race_groupNon-Hispanic Black factor(age_cat)10-14
+## (Intercept)                   0.0013743406                -3.219713e-04        -9.269305e-04
+## race_groupNon-Hispanic Black -0.0003219713                 2.245908e-03         2.013845e-06
+## factor(age_cat)10-14         -0.0009269305                 2.013845e-06         7.869103e-03
+## factor(age_cat)15-19         -0.0009254557                 3.154780e-06         9.237945e-04
+## factor(age_cat)20-24         -0.0009220174                 2.511404e-06         9.223439e-04
+## factor(age_cat)25-29         -0.0009200719                 5.541245e-06         9.212596e-04
+## factor(age_cat)30-34         -0.0009216297                 3.762047e-06         9.218691e-04
+## factor(age_cat)35-44         -0.0009243519                 6.111201e-06         9.230848e-04
+## factor(age_cat)45-54         -0.0009271558                 1.581595e-05         9.238553e-04
+## factor(age_cat)5-9           -0.0009251478                 3.121900e-06         9.238572e-04
+## factor(age_cat)55-64         -0.0009279643                 2.193767e-05         9.238316e-04
+##                              factor(age_cat)15-19 factor(age_cat)20-24 factor(age_cat)25-29
+## (Intercept)                         -9.254557e-04        -9.220174e-04        -9.200719e-04
+## race_groupNon-Hispanic Black         3.154780e-06         2.511404e-06         5.541245e-06
+## factor(age_cat)10-14                 9.237945e-04         9.223439e-04         9.212596e-04
+## factor(age_cat)15-19                 3.057123e-03         9.243778e-04         9.233222e-04
+## factor(age_cat)20-24                 9.243778e-04         1.718963e-03         9.265079e-04
+## factor(age_cat)25-29                 9.233222e-04         9.265079e-04         1.422280e-03
+## factor(age_cat)30-34                 9.232695e-04         9.253829e-04         9.272888e-04
+## factor(age_cat)35-44                 9.234272e-04         9.237518e-04         9.241219e-04
+## factor(age_cat)45-54                 9.239441e-04         9.234117e-04         9.231146e-04
+## factor(age_cat)5-9                   9.233578e-04         9.223509e-04         9.215951e-04
+## factor(age_cat)55-64                 9.240146e-04         9.237425e-04         9.235039e-04
+##                              factor(age_cat)30-34 factor(age_cat)35-44 factor(age_cat)45-54
+## (Intercept)                         -9.216297e-04        -9.243519e-04        -9.271558e-04
+## race_groupNon-Hispanic Black         3.762047e-06         6.111201e-06         1.581595e-05
+## factor(age_cat)10-14                 9.218691e-04         9.230848e-04         9.238553e-04
+## factor(age_cat)15-19                 9.232695e-04         9.234272e-04         9.239441e-04
+## factor(age_cat)20-24                 9.253829e-04         9.237518e-04         9.234117e-04
+## factor(age_cat)25-29                 9.272888e-04         9.241219e-04         9.231146e-04
+## factor(age_cat)30-34                 1.363496e-03         9.240008e-04         9.234403e-04
+## factor(age_cat)35-44                 9.240008e-04         1.110250e-03         9.238301e-04
+## factor(age_cat)45-54                 9.234403e-04         9.238301e-04         9.985762e-04
+## factor(age_cat)5-9                   9.220237e-04         9.229230e-04         9.233885e-04
+## factor(age_cat)55-64                 9.238135e-04         9.240960e-04         9.250094e-04
+##                              factor(age_cat)5-9 factor(age_cat)55-64
+## (Intercept)                       -0.0009251478        -9.279643e-04
+## race_groupNon-Hispanic Black       0.0000031219         2.193767e-05
+## factor(age_cat)10-14               0.0009238572         9.238316e-04
+## factor(age_cat)15-19               0.0009233578         9.240146e-04
+## factor(age_cat)20-24               0.0009223509         9.237425e-04
+## factor(age_cat)25-29               0.0009215951         9.235039e-04
+## factor(age_cat)30-34               0.0009220237         9.238135e-04
+## factor(age_cat)35-44               0.0009229230         9.240960e-04
+## factor(age_cat)45-54               0.0009233885         9.250094e-04
+## factor(age_cat)5-9                 0.0104477024         9.233602e-04
+## factor(age_cat)55-64               0.0009233602         9.624380e-04
+## 
+## $varcor
+## $super_town
+##                              (Intercept) race_groupNon-Hispanic Black
+## (Intercept)                   0.12932914                  -0.08247578
+## race_groupNon-Hispanic Black -0.08247578                   0.23944221
+## attr(,"stddev")
+##                  (Intercept) race_groupNon-Hispanic Black 
+##                    0.3596236                    0.4893283 
+## attr(,"correlation")
+##                              (Intercept) race_groupNon-Hispanic Black
+## (Intercept)                    1.0000000                   -0.4686816
+## race_groupNon-Hispanic Black  -0.4686816                    1.0000000
+## 
+## attr(,"sc")
+## [1] 1
+## attr(,"useSc")
+## [1] FALSE
+## attr(,"class")
+## [1] "VarCorr.merMod"
+## 
+## $AICtab
+##       AIC       BIC    logLik  deviance  df.resid 
+##  65180.84  65296.74 -32576.42  65152.84  29086.00 
+## 
+## $call
+## glmer(formula = num ~ 1 + race_group + factor(age_cat) + (race_group | 
+##     super_town) + offset(log(den)), data = mlm_data, family = poisson(link = log), 
+##     control = glmerControl(optimizer = "Nelder_Mead"), nAGQ = 0)
+## 
+## $residuals
+##             1             2             3             4             5             6             7 
+##  9.881399e+02 -7.828183e-02 -1.048007e-01 -7.016527e-02 -2.066830e-01 -1.298212e-01 -2.902762e-01 
+##             8             9            10            11            12            13            14 
+## -3.551753e-01 -2.947619e-02  4.239277e-01 -4.752457e-01 -7.880741e-02 -1.827847e-01 -4.785196e-01 
+##            15            16            17            18            19            20            21 
+##  1.710601e+00 -7.867426e-01 -1.510137e+00  2.267667e-01 -9.693558e-02  6.017833e-01 -8.644790e-04 
+##            22            23            24            25            26            27            28 
+## -2.961044e-04 -2.238614e-02 -6.473867e-02 -9.574856e-04 -1.057311e-03 -4.827704e-01 -2.681717e-01 
+##            29            30            31            32            33            34            35 
+## -2.653990e-04 -4.521942e-01 -4.336872e-01 -2.142026e-01  3.939238e+00 -8.163174e-01  4.482104e+00 
+##            36            37            38            39            40            41            42 
+##  6.771332e-01 -2.844473e-02 -2.424595e-01 -1.424935e-01 -5.239165e-01 -1.021246e-03 -3.498008e-04 
+##            43            44            45            46            47            48            49 
+## -5.911962e-04 -9.140282e-04 -1.131118e-03 -1.249047e-03 -1.412607e-03  4.991006e+02 -3.135271e-04 
+##            50            51            52            53            54            55            56 
+## -2.855358e-03 -3.265718e-01 -1.790605e-01 -2.158475e-01  2.214888e+00  2.375391e+00 -2.721586e-01 
+##            57            58            59            60            61            62            63 
+## -1.099046e+00  5.297950e-01 -1.726164e-01  7.429624e-02 -8.983176e-04 -3.076950e-04 -5.200334e-04 
+##            64            65            66            67            68            69            70 
+## -8.040058e-04 -9.949647e-04 -1.098698e-03 -1.242570e-03 -1.762421e-03 -2.757876e-04 -6.645266e-01 
+##            71            72            73            74            75            76            77 
+## -3.696146e-01 -1.908283e-01 -3.439502e-01 -8.005297e-01  1.377270e+00 -7.444599e-01  1.095100e+00 
+##            78            79            80            81            82            83            84 
+## -6.543798e-01 -1.275754e-01  2.791723e-02 -8.983176e-04 -1.167624e-01 -1.952731e-01 -8.040058e-04 
+##            85            86            87            88            89            90            91 
+## -9.949647e-04 -1.098698e-03 -3.829879e-01 -1.762421e-03 -2.757876e-04 -2.511656e-03 -5.950666e-01 
+##            92            93            94            95            96            97            98 
+## -1.815308e-01 -4.882975e-01 -7.572558e-01  2.125741e+00  3.661187e-01 -3.415290e-01  1.758918e+00 
+##            99           100           101           102           103           104           105 
+## -2.162547e-01  7.699839e-02 -9.174004e-04 -3.142313e-04  1.882954e+03 -4.452076e-01 -1.016101e-03 
+##           106           107           108           109           110           111           112 
+## -1.122038e-03 -8.223850e-01 -1.799860e-03 -2.816461e-04  4.115497e-01 -3.206560e-01 -2.718591e-01 
+##           113           114           115           116           117           118           119 
+## -3.462253e-01 -2.735391e-01  9.396706e-01  3.254725e+00  1.690767e+00  2.424543e-01 -1.660464e-01 
+##           120           121           122           123           124           125           126 
+## -6.615729e-01 -9.174004e-04 -3.142313e-04 -5.310804e-04 -8.210851e-04 -1.016101e-03 -1.122038e-03 
+##           127           128           129           130           131           132           133 
+## -1.268966e-03 -2.788389e-01 -2.816461e-04 -2.565011e-03 -6.010967e-01 -1.987518e-01  2.219370e+00 
+##           134           135           136           137           138           139           140 
+## -4.001089e-01 -4.529793e-01 -5.822573e-01 -3.885335e-01 -5.335058e-02 -1.633531e-01 -3.109243e-01 
+##           141           142           143           144           145           146           147 
+## -2.395554e-01 -8.844666e-02 -4.060280e-02 -6.939922e-02 -8.188174e-04 -2.233193e-01 -3.729304e-01 
+##           148           149           150           151           152           153           154 
+## -5.484772e-01 -7.284081e-02 -5.350326e-01 -3.664595e-01 -1.606908e-01 -3.088142e-01 -5.876634e-01 
+##           155           156           157           158           159           160           161 
+## -4.177910e-01 -5.709992e-01  5.238377e+00 -9.611940e-02 -6.980038e-02 -5.250205e-01 -7.392805e-04 
+##           162           163           164           165           166           167           168 
+## -2.532210e-04 -4.279673e-04 -6.939922e-02 -8.188174e-04 -1.213126e-01 -1.885585e-01 -6.518772e-01 
+##           169           170           171           172           173           174           175 
+## -2.269625e-04 -2.066996e-03 -6.024191e-01 -1.968845e-01 -2.761472e-01  5.191618e+00  1.309302e+00 
+##           176           177           178           179           180           181           182 
+## -8.020665e-01  8.869963e-01 -9.740682e-01 -1.283534e-01 -1.267623e+00 -8.198572e-04 -1.277659e-01 
+##           183           184           185           186           187           188           189 
+## -6.367777e-02 -7.338194e-02 -9.524279e-02 -1.002736e-03 -1.134042e-03 -1.608489e-03 -2.516999e-04 
+##           190           191           192           193           194           195           196 
+## -2.292285e-03 -4.918539e-01 -2.397968e-01 -3.507319e-01  1.516941e+00  2.124429e+00 -7.467985e-01 
+##           197           198           199           200           201           202           203 
+##  1.233603e+00  3.145023e-01 -2.233754e-01 -1.466308e+00 -8.198572e-04 -5.474270e-02 -1.664539e-01 
+##           204           205           206           207           208           209           210 
+## -7.337827e-04 -9.080631e-04 -1.002736e-03 -1.134042e-03 -1.608489e-03 -2.516999e-04 -3.551266e-01 
+##           211           212           213           214           215           216           217 
+##  1.959027e+00 -2.473632e-01 -4.885237e-01  6.670830e-01 -7.069400e-01  8.077339e-01  2.985340e-01 
+##           218           219           220           221           222           223           224 
+## -2.926342e-01 -2.401966e-01 -8.236974e-02 -8.493985e-04 -2.909390e-04 -4.917142e-04 -7.602225e-04 
+##           225           226           227           228           229           230           231 
+## -3.958012e-01 -1.393825e-01 -1.174904e-03 -2.471795e-01 -2.607692e-04 -4.181476e-01  5.233412e-01 
+##           232           233           234           235           236           237           238 
+## -4.113635e-01 -5.265508e-01  5.729057e-01  3.823464e+00 -3.839749e-02  8.759430e-01  2.615812e+00 
+##           239           240           241           242           243           244           245 
+## -2.040483e-01  2.809803e-01 -8.493985e-04 -2.909390e-04 -4.917142e-04 -7.602225e-04 -9.407826e-04 
+##           246           247           248           249           250           251           252 
+## -1.038867e-03 -1.174904e-03  6.000777e+02 -2.607692e-04 -2.374881e-03  4.086064e-01 -4.083658e-01 
+##           253           254           255           256           257           258           259 
+## -4.924218e-01 -1.010151e+00  7.295382e-01  1.702533e+00 -9.522804e-01 -1.628874e-01 -2.381401e-01 
+##           260           261           262           263           264           265           266 
+## -1.692144e+00 -1.740770e-01 -6.823187e-02 -1.806680e-01 -3.040900e-01 -2.380031e-01 -1.769157e-01 
+##           267           268           269           270           271           272           273 
+## -6.013870e-01 -8.610884e-01 -2.607692e-04 -4.568236e-01  1.216485e+00 -1.560445e-01 -4.725845e-01 
+##           274           275           276           277           278           279           280 
+##  7.195210e-01  8.263639e-01  3.271109e-01  7.167447e-01  2.042238e+00 -2.143429e-01 -1.758511e+00 
+##           281           282           283           284           285           286           287 
+## -8.525322e-04 -2.920124e-04 -4.935283e-04 -7.630273e-04 -9.442534e-04 -1.042700e-03 -1.179239e-03 
+##           288           289           290           291           292           293           294 
+## -1.672594e-03 -2.617312e-04 -2.383642e-03 -5.944368e-01 -1.682908e-01 -3.278326e-01  1.103780e+00 
+##           295           296           297           298           299           300           301 
+## -8.372592e-01  1.919032e+00 -1.154657e-01 -2.430778e-02 -1.533686e-01 -1.808662e+00 -1.887180e-01 
+##           302           303           304           305           306           307           308 
+## -3.455260e-02 -5.176404e-02 -7.630273e-04 -1.156508e-01 -1.437300e-01 -1.179239e-03 -1.672594e-03 
+##           309           310           311           312           313           314           315 
+## -2.617312e-04 -1.994441e-01  1.138012e+00 -1.560578e-01 -4.512365e-01 -7.076129e-01  2.532111e-01 
+##           316           317           318           319           320           321           322 
+##  3.849305e-01  5.242590e-01  8.965745e-01 -2.013920e-01 -2.116424e+00 -8.525322e-04 -1.508890e-01 
+##           323           324           325           326           327           328           329 
+## -2.356571e-01 -7.630273e-04 -2.111436e-01 -3.627051e-01 -2.268342e-01 -8.707150e-01  9.328557e+00 
+##           330           331           332           333           334           335           336 
+## -2.717875e-01 -9.137775e-01 -2.459154e-01 -4.170282e-01  2.158534e-01 -9.921012e-01  1.424628e+00 
+##           337           338           339           340           341           342           343 
+## -4.907298e-01 -6.463291e-01 -2.233865e-01 -5.871140e-02 -8.525322e-04 -6.330745e-02 -1.035246e-01 
+##           344           345           346           347           348           349           350 
+## -3.830374e-01 -3.271003e-01 -5.458022e-01 -4.235439e-01 -3.217343e-01 -3.969437e-02 -3.371064e-01 
+##           351           352           353           354           355           356           357 
+## -8.413532e-01 -2.377112e-01 -3.372347e-01  1.388229e+00  2.421380e-01 -7.518051e-01  1.588442e+00 
+##           358           359           360           361           362           363           364 
+##  7.110841e-01 -2.301719e-01  2.204560e+00 -8.525322e-04 -2.920124e-04 -4.935283e-04 -1.386129e-01 
+##           365           366           367           368           369           370           371 
+## -9.442534e-04 -2.211925e-01 -1.179239e-03 -1.754311e-01 -2.617312e-04 -2.383642e-03 -3.203520e-01 
+##           372           373           374           375           376           377           378 
+## -1.682908e-01 -3.248386e-01  9.700940e-01  1.205630e+00  6.874072e-01  5.150122e-01  1.515919e+00 
+##           379           380           381           382           383           384           385 
+## -1.537265e-01  5.902272e-01 -1.250591e-03 -4.283569e-04 -7.239634e-04 -1.119295e-03 -1.385138e-03 
+##           386           387           388           389           390           391           392 
+## -1.529550e-03 -1.729842e-03 -2.453551e-03 -3.839371e-04 -5.302968e-01 -1.691483e-01 -1.985952e-01 
+##           393           394           395           396           397           398           399 
+## -4.076632e-01 -4.359232e-01 -5.408127e-01 -5.927011e-01  2.286470e-01 -9.817020e-01 -1.353296e-01 
+##           400           401           402           403           404           405           406 
+## -7.879593e-01 -1.250591e-03 -4.283569e-04 -7.239634e-04 -2.918786e-01 -1.385138e-03 -1.529550e-03 
+##           407           408           409           410           411           412           413 
+##  4.076601e+00 -5.028344e-01 -3.839371e-04 -7.580523e-01 -7.587996e-01 -3.573380e-01  1.413708e+00 
+##           414           415           416           417           418           419           420 
+##  2.115220e+00 -1.124706e+00  8.531674e-01 -1.396696e+00 -1.225988e+00 -3.709933e-01 -2.423021e+00 
+##           421           422           423           424           425           426           427 
+## -1.250591e-03 -4.283569e-04 -7.239634e-04 -1.769796e-01 -1.385138e-03 -8.379088e-02  7.194931e+00 
+##           428           429           430           431           432           433           434 
+## -2.453551e-03 -3.839371e-04  8.579735e+02 -5.838077e-01 -3.142289e-01 -5.875049e-01  2.466892e+00 
+##           435           436           437           438           439           440           441 
+## -1.722551e+00  2.901649e+00 -2.723769e-01 -6.120975e-01 -3.398557e-01 -1.513078e+00 -1.250591e-03 
+##           442           443           444           445           446           447           448 
+## -4.283569e-04 -5.608264e-02 -3.539539e-01 -1.385138e-03 -1.529550e-03 -4.272429e-01  8.151425e+02 
+##           449           450           451           452           453           454           455 
+## -3.839371e-04 -5.417018e-01  2.124234e+00 -2.755776e-01 -5.076151e-01  2.538327e-01 -1.039569e+00 
+##           456           457           458           459           460           461           462 
+##  6.824473e-01  1.178228e+00  1.280182e+00 -1.386108e-01  1.984750e+00  1.001036e+00 -1.944198e-01 
+##           463           464           465           466           467           468           469 
+## -2.207804e-01 -1.119295e-03  1.960049e+00 -5.254200e-01 -8.223592e-01 -1.443224e+00 -1.394918e-01 
+##           470           471           472           473           474           475           476 
+## -3.496597e-03 -1.177452e+00 -2.452326e-01 -5.716514e-01  9.593019e-01  1.939046e+00 -4.521185e-01 
+##           477           478           479           480           481           482           483 
+##  6.051457e+00 -1.508391e-01 -2.861949e-01  6.569973e-01 -4.986723e-01 -8.127614e-02 -7.239634e-04 
+##           484           485           486           487           488           489           490 
+## -1.119295e-03 -1.385138e-03 -1.529550e-03 -5.387589e-01 -5.540953e-01 -8.323647e-02 -8.636029e-01 
+##           491           492           493           494           495           496           497 
+## -6.224370e-01 -1.884782e-01 -3.456135e-01  2.864175e+00 -1.124056e+00 -4.797626e-01  8.970974e-01 
+##           498           499           500           501           502           503           504 
+## -2.990101e-01 -2.550571e-01  8.097511e-01 -1.294371e-03 -1.095009e-01 -7.493076e-04 -1.158479e-03 
+##           505           506           507           508           509           510           511 
+## -1.433629e-03 -1.583096e-03 -4.837426e-01 -6.374005e-01 -3.973778e-04 -1.221922e+00 -6.504643e-01 
+##           512           513           514           515           516           517           518 
+## -4.517188e-01 -5.361941e-01 -9.626204e-01 -2.882946e-02  3.614534e+00 -7.857471e-01 -6.027519e-01 
+##           519           520           521           522           523           524           525 
+## -2.980522e-01 -1.998650e+00  1.545150e+03 -1.496937e-01 -2.439580e-01 -4.720016e-01 -1.503671e-01 
+##           526           527           528           529           530           531           532 
+##  6.939367e-01  3.249320e+00 -6.256305e-01 -3.973778e-04 -1.118713e+00 -5.779118e-01 -2.060526e-01 
+##           533           534           535           536           537           538           539 
+## -4.211767e-01 -6.950900e-01  1.662013e+00 -6.894622e-01  8.390215e-01  4.264404e+00 -1.747715e-01 
+##           540           541           542           543           544           545           546 
+## -9.915455e-02 -1.294371e-03 -4.433527e-04 -3.943672e-01 -3.717995e-01  5.936022e-01 -1.583096e-03 
+##           547           548           549           550           551           552           553 
+## -2.041448e-01 -1.209909e+00 -1.088271e-01 -1.108355e+00 -7.560687e-01 -2.656153e-01 -4.592131e-01 
+##           554           555           556           557           558           559           560 
+##  2.685395e-01  4.456408e-01  5.529889e-01  6.127652e-01  3.849526e-02 -2.595550e-01 -1.061836e+00 
+##           561           562           563           564           565           566           567 
+## -4.408489e-01 -3.538502e-01  5.316369e-01  2.274113e+00 -4.054939e-01 -2.238892e-01 -1.386839e+00 
+##           568           569           570           571           572           573           574 
+## -2.584774e-01 -1.803592e-01  2.990752e-01 -7.696395e-01 -3.555591e-01  1.051880e+00  5.914313e-01 
+##           575           576           577           578           579           580           581 
+##  2.700417e+00  1.398783e+00  2.990476e+00  2.251030e+00  3.279008e+00  2.756050e+00 -1.294371e-03 
+##           582           583           584           585           586           587           588 
+## -4.433527e-04 -7.493076e-04 -1.158479e-03 -1.433629e-03 -1.583096e-03 -1.790399e-03  7.875714e+02 
+##           589           590           591           592           593           594           595 
+## -3.973778e-04 -6.055862e-01 -8.325680e-01 -2.855443e-01 -5.500802e-01  1.829850e+00 -7.940910e-01 
+##           596           597           598           599           600           601           602 
+## -3.833291e-01 -9.582020e-01  1.535052e-01 -1.853732e-01 -1.946004e+00 -1.294371e-03  2.255540e+03 
+##           603           604           605           606           607           608           609 
+## -7.493076e-04 -1.158479e-03 -1.433629e-03 -1.583096e-03 -1.790399e-03 -8.267870e-01 -3.973778e-04 
+##           610           611           612           613           614           615           616 
+##  1.925025e-01  3.156647e+00 -3.251485e-01  1.413084e+00  9.071308e-01  7.870046e-02 -1.320048e+00 
+##           617           618           619           620           621           622           623 
+##  5.120945e-01 -1.743412e+00 -3.137242e-01 -1.603056e+00 -1.875767e-01 -4.433527e-04  1.334565e+03 
+##           624           625           626           627           628           629           630 
+## -1.158479e-03 -1.433629e-03 -1.583096e-03 -1.790399e-03  3.909722e+00 -3.973778e-04 -3.619005e-03 
+##           631           632           633           634           635           636           637 
+##  1.855073e-01 -3.371094e-01 -5.339388e-01  2.951306e+00 -2.517734e-01  4.997047e-01  2.219564e+00 
+##           638           639           640           641           642           643           644 
+##  6.922224e-02 -2.168074e-01 -1.996533e+00 -3.424609e-01 -4.433527e-04  6.280389e+00  4.467679e+00 
+##           645           646           647           648           649           650           651 
+## -1.433629e-03 -1.583096e-03 -3.202814e-01 -2.539444e-03 -3.973778e-04 -7.147054e-01 -5.540537e-01 
+##           652           653           654           655           656           657           658 
+## -2.388151e-01 -4.222498e-01 -4.841118e-01 -6.621367e-01 -7.618363e-01 -1.451965e+00 -7.353879e-01 
+##           659           660           661           662           663           664           665 
+## -1.372449e-01  1.067726e+00 -6.970415e-01 -4.433527e-04 -7.493076e-04 -1.158479e-03 -1.433629e-03 
+##           666           667           668           669           670           671           672 
+##  6.316720e+02  5.063856e-01  1.229045e+01 -3.973778e-04  2.010739e+00 -1.015259e+00 -3.752146e-01 
+##           673           674           675           676           677           678           679 
+## -5.913128e-01  8.167740e-02 -3.737063e-01  4.004172e-03  1.412805e-01 -1.478680e+00 -2.212621e-01 
+##           680           681           682           683           684           685           686 
+## -3.159014e+00 -1.294371e-03 -4.433527e-04 -2.038351e-01 -2.590463e-01 -2.355736e-01 -2.400936e-01 
+##           687           688           689           690           691           692           693 
+## -2.594597e-01 -2.539444e-03 -3.973778e-04 -3.619005e-03 -7.207130e-01 -3.344358e-01 -6.255262e-01 
+##           694           695           696           697           698           699           700 
+##  3.726708e+00  2.132129e+00  2.629267e+00 -3.102900e-01 -7.789515e-01 -2.940398e-01 -1.641698e+00 
+##           701           702           703           704           705           706           707 
+## -9.314302e-04 -3.190368e-04 -5.392021e-04 -8.336420e-04 -1.031640e-03 -1.139197e-03 -1.288372e-03 
+##           708           709           710           711           712           713           714 
+## -1.827385e-03 -2.859533e-04 -2.604238e-03 -3.188812e-01 -1.771958e-01 -4.725208e-01 -6.122009e-01 
+##           715           716           717           718           719           720           721 
+##  6.726228e-01  2.546034e+00 -1.270321e+00  1.542149e+00 -1.134754e-01  1.279525e+00 -9.314302e-04 
+##           722           723           724           725           726           727           728 
+## -3.190368e-04 -5.392021e-04 -8.336420e-04 -1.031640e-03 -1.139197e-03 -1.288372e-03 -1.827385e-03 
+##           729           730           731           732           733           734           735 
+## -2.859533e-04 -2.604238e-03 -7.551046e-01 -2.505925e-01 -4.922401e-01 -5.738601e-01 -6.690982e-01 
+##           736           737           738           739           740           741           742 
+## -7.078965e-01 -6.804730e-01  3.008873e-01 -2.268208e-01  4.991383e-02 -1.908887e-01 -8.133937e-02 
+##           743           744           745           746           747           748           749 
+## -6.604071e-02 -8.336420e-04 -1.031640e-03 -1.139197e-03 -3.233814e-01 -1.155884e-01 -2.859533e-04 
+##           750           751           752           753           754           755           756 
+## -2.604238e-03  2.846883e-01 -3.815415e-01 -6.532158e-01 -8.130984e-01  2.398005e+00  7.381891e-01 
+##           757           758           759           760           761           762           763 
+##  6.856660e-01 -1.792030e+00 -3.466723e-01 -7.618976e-01 -9.314302e-04 -3.190368e-04 -5.392021e-04 
+##           764           765           766           767           768           769           770 
+## -8.336420e-04 -1.031640e-03 -1.139197e-03 -1.288372e-03  5.472282e+02 -2.859533e-04 -2.604238e-03 
+##           771           772           773           774           775           776           777 
+## -9.760081e-01 -4.208545e-01 -6.163291e-01  4.447721e-01  3.244250e-01  2.359880e+00  4.181764e-01 
+##           778           779           780           781           782           783           784 
+## -1.782738e-01 -3.247805e-01 -5.682040e-01 -8.193908e-04 -2.806607e-04 -2.598516e-02 -1.912397e-01 
+##           785           786           787           788           789           790           791 
+## -9.075465e-04 -1.002166e-03 -5.734598e-01 -6.389999e-01 -1.003081e-01 -2.290981e-03 -6.012799e-01 
+##           792           793           794           795           796           797           798 
+## -3.546520e-01 -7.852702e-01 -1.156165e+00  2.291918e+00  2.235196e+00 -6.512862e-01  4.749548e-02 
+##           799           800           801           802           803           804           805 
+## -3.518444e-01  9.509480e-01 -8.193908e-04 -1.210429e-01 -4.743429e-04 -7.333653e-04 -9.075465e-04 
+##           806           807           808           809           810           811           812 
+## -1.874907e-01 -2.508907e-01 -6.876978e-01 -2.515567e-04  9.664262e-01  5.705103e-01 -4.273874e-01 
+##           813           814           815           816           817           818           819 
+## -7.426424e-01  2.739661e+00  1.395634e+00  8.244373e-01 -3.618426e-01 -2.656780e-01 -2.739432e-01 
+##           820           821           822           823           824           825           826 
+## -2.755705e+00 -2.742218e-01 -2.806607e-04 -4.743429e-04 -7.333653e-04 -2.223044e-01 -1.735831e-01 
+##           827           828           829           830           831           832           833 
+## -1.133397e-03 -1.607574e-03 -4.638544e-02 -2.710822e-01 -9.022087e-01 -3.380155e-01 -6.552163e-01 
+##           834           835           836           837           838           839           840 
+## -4.246026e-01  2.837656e+00  3.751806e+00 -2.807016e-01 -9.841217e-01 -2.169687e-01 -1.744070e-01 
+##           841           842           843           844           845           846           847 
+## -1.242695e-01 -6.759262e-02 -4.743429e-04 -7.333653e-04  1.152800e+01 -4.228154e-01 -1.681138e-01 
+##           848           849           850           851           852           853           854 
+## -1.607574e-03 -2.638469e-02 -1.093931e+00  2.843108e+00 -3.092260e-01  6.642170e-01 -9.084603e-01 
+##           855           856           857           858           859           860           861 
+##  2.786247e+00  3.944153e-01  2.138552e+00 -1.171728e+00 -1.916628e-01  1.305072e+00 -8.193908e-04 
+##           862           863           864           865           866           867           868 
+## -4.611811e-02 -2.598516e-02 -1.182539e-01 -9.518860e-02 -1.142689e-01 -1.133397e-03 -2.690033e-01 
+##           869           870           871           872           873           874           875 
+## -2.515567e-04 -2.290981e-03  2.054796e+00 -1.217932e-01 -1.673736e-01 -3.247538e-01 -4.428564e-01 
+##           876           877           878           879           880           881           882 
+## -4.610601e-01 -6.386240e-01 -5.636819e-01 -8.594415e-02  3.212908e+00 -1.208702e-01 -3.380255e-04 
+##           883           884           885           886           887           888           889 
+## -5.712948e-04 -8.832593e-04 -1.093042e-03 -1.207000e-03 -1.431746e-01 -1.936149e-03 -3.029729e-04 
+##           890           891           892           893           894           895           896 
+## -2.759239e-03  8.124750e-01 -2.835511e-01 -6.234851e-01 -9.099259e-01  1.759056e+00 -9.808747e-01 
+##           897           898           899           900           901           902           903 
+##  4.202904e-01 -1.681681e+00 -2.581172e-01 -1.938064e+00  1.013306e+03 -1.552715e-01 -5.712948e-04 
+##           904           905           906           907           908           909           910 
+## -8.832593e-04 -5.091757e-01 -1.207000e-03 -6.373519e-01  1.115539e+00 -1.354939e-01 -2.759239e-03 
+##           911           912           913           914           915           916           917 
+## -1.050029e-01 -4.732504e-01  7.399413e-01  2.121396e+00  9.900809e-01  1.178330e+00  4.925008e-01 
+##           918           919           920           921           922           923           924 
+## -1.381819e+00 -3.740730e-01 -1.720437e+00 -2.825977e-01 -1.434125e-01 -2.067748e-01 -2.145448e-01 
+##           925           926           927           928           929           930           931 
+##  9.148770e+02 -1.207000e-03 -5.034091e-01 -4.936269e-01 -6.134808e-02 -2.759239e-03 -6.941678e-01 
+##           932           933           934           935           936           937           938 
+##  1.947071e+00 -8.185598e-01 -1.839282e-01  2.134300e+00  2.875205e+00  1.832767e+00  7.808702e-01 
+##           939           940           941           942           943           944           945 
+## -3.393231e-01 -2.496025e+00 -4.565274e-01 -1.121109e-01 -1.877475e-01 -1.873697e-01 -6.913867e-02 
+##           946           947           948           949           950           951           952 
+## -3.739774e-01 -9.146895e-01 -6.153208e-01 -1.606045e-01 -3.902250e-01  5.899746e-01 -3.016767e-01 
+##           953           954           955           956           957           958           959 
+##  1.721550e+00  4.633266e+00  1.771187e+00 -2.157682e-01  6.723567e-02 -1.894188e+00 -1.859333e-01 
+##           960           961           962           963           964           965           966 
+##  2.092382e+00 -2.516048e-01 -4.535214e-02 -5.712948e-04 -8.832593e-04 -1.093042e-03 -4.146200e-01 
+##           967           968           969           970           971           972           973 
+## -4.465231e-01 -2.597689e-01 -7.724382e-02  2.377219e+00  1.100889e+00 -2.367527e-01 -4.299980e-01 
+##           974           975           976           977           978           979           980 
+##  2.065769e+00  4.830182e+00  2.302269e+00  1.035982e+00  2.273508e+00 -2.526186e-01 -1.836578e+00 
+##           981           982           983           984           985           986           987 
+## -9.868678e-04 -1.255714e-01 -5.712948e-04 -2.513816e-01 -1.093042e-03 -3.892478e-01 -7.464253e-01 
+##           988           989           990           991           992           993           994 
+## -4.936269e-01 -3.029729e-04  3.624160e+02 -6.148966e-01 -1.853494e-01 -2.591178e-01  1.462694e+00 
+##           995           996           997           998           999          1000 
+##  4.761480e-01  1.352063e+00  2.612157e+00  4.333803e+00 -1.527678e-01  2.084084e+00 
+##  [ reached getOption("max.print") -- omitted 28100 entries ]
+## 
+## $fitMsgs
+## character(0)
+## 
+## $optinfo
+## $optinfo$optimizer
+## [1] "Nelder_Mead"
+## 
+## $optinfo$control
+## $optinfo$control$verbose
+## [1] 0
+## 
+## 
+## $optinfo$derivs
+## NULL
+## 
+## $optinfo$conv
+## $optinfo$conv$opt
+## [1] 0
+## 
+## $optinfo$conv$lme4
+## NULL
+## 
+## 
+## $optinfo$feval
+## [1] 191
+## 
+## $optinfo$message
+## [1] "parameter values converged to within tolerance"
+## 
+## $optinfo$warnings
+## list()
+## 
+## $optinfo$val
+## [1]  0.3596236 -0.2293392  0.4322566
+## 
+## 
+## attr(,"class")
+## [1] "summary.merMod"</code></pre>
 </div>
 <div id="town-level-spending-random-effect" class="section level4" number="6.4.4.4">
 <h4>
 <span class="header-section-number">6.4.4.4</span> Town Level Spending Random Effect<a class="anchor" aria-label="anchor" href="#town-level-spending-random-effect"><i class="fas fa-link"></i></a>
 </h4>
-<pre><code>## Generalized linear mixed model fit by maximum likelihood (Adaptive Gauss-Hermite Quadrature, nAGQ = 0) ['glmerMod']
-##  Family: poisson  ( log )
-## Formula: num ~ 1 + race_group + factor(age_cat) + social_exp_perc + (race_group +  
-##     social_exp_perc | super_town) + offset(log(den))
-##    Data: mlm_data
-## Control: glmerControl(optimizer = "Nelder_Mead")
+<pre><code>## $methTitle
+## [1] "Generalized linear mixed model fit by maximum likelihood (Adaptive Gauss-Hermite Quadrature, nAGQ = 0)"
 ## 
-##      AIC      BIC   logLik deviance df.resid 
-##  65174.1  65323.1 -32569.0  65138.1    29082 
+## $objClass
+## [1] "glmerMod"
+## attr(,"package")
+## [1] "lme4"
 ## 
-## Scaled residuals: 
-##    Min     1Q Median     3Q    Max 
-##   -5.4   -0.4   -0.1    0.0 3526.7 
+## $devcomp
+## $devcomp$cmp
+##         ldL2        ldRX2         wrss         ussq        pwrss        drsum         REML          dev 
+## 9.574984e+02 7.447156e+01 2.687755e+08 3.655692e+02 2.687759e+08 3.421157e+04           NA 6.513809e+04 
+##      sigmaML    sigmaREML     tolPwrss 
+##           NA           NA 1.000000e-07 
 ## 
-## Random effects:
-##  Groups     Name                         Variance Std.Dev. Corr       
-##  super_town (Intercept)                    0.1910  0.4371             
-##             race_groupNon-Hispanic Black   0.2404  0.4903  -0.47      
-##             social_exp_perc              125.4878 11.2021  -0.76  0.32
-## Number of obs: 29100, groups:  super_town, 313
+## $devcomp$dims
+##       N       n       p     nmp       q     nth    nAGQ compDev   useSc  reTrms    spFe    REML    GLMM 
+##   29100   29100      12   29088     939       6       0       1       0       1       0       0       1 
+##    NLMM 
+##       0 
 ## 
-## Fixed effects:
-##                              Estimate Std. Error  z value Pr(&gt;|z|)    
-## (Intercept)                  -7.31562    0.05260 -139.082  &lt; 2e-16 ***
-## race_groupNon-Hispanic Black  0.05925    0.04755    1.246 0.212728    
-## factor(age_cat)10-14         -2.14278    0.08871  -24.155  &lt; 2e-16 ***
-## factor(age_cat)15-19         -1.09332    0.05529  -19.774  &lt; 2e-16 ***
-## factor(age_cat)20-24         -0.22214    0.04146   -5.358 8.42e-08 ***
-## factor(age_cat)25-29          0.20407    0.03771    5.411 6.27e-08 ***
-## factor(age_cat)30-34          0.40247    0.03693   10.899  &lt; 2e-16 ***
-## factor(age_cat)35-44          0.64873    0.03332   19.469  &lt; 2e-16 ***
-## factor(age_cat)45-54          1.34776    0.03160   42.650  &lt; 2e-16 ***
-## factor(age_cat)5-9           -2.36172    0.10221  -23.106  &lt; 2e-16 ***
-## factor(age_cat)55-64          2.05622    0.03102   66.280  &lt; 2e-16 ***
-## social_exp_perc               9.85832    2.83885    3.473 0.000515 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Correlation of Fixed Effects:
-##             (Intr) r_N-HB f(_)10 f(_)15 f(_)20 f(_)25 f(_)30 f(_)35 f(_)45 f(_)5- f(_)55
-## rc_grpNn-HB -0.156                                                                      
-## fct(_)10-14 -0.199  0.000                                                               
-## fct(_)15-19 -0.318  0.001  0.188                                                        
-## fct(_)20-24 -0.422  0.001  0.251  0.403                                                 
-## fct(_)25-29 -0.463  0.003  0.275  0.443  0.593                                          
-## fct(_)30-34 -0.473  0.002  0.281  0.452  0.604  0.666                                   
-## fct(_)35-44 -0.527  0.004  0.312  0.501  0.669  0.735  0.751                            
-## fct(_)45-54 -0.557  0.010  0.330  0.529  0.705  0.775  0.791  0.877                     
-## fctr(g_)5-9 -0.172  0.001  0.102  0.163  0.218  0.239  0.244  0.271  0.286              
-## fct(_)55-64 -0.568  0.015  0.336  0.539  0.718  0.789  0.806  0.894  0.944  0.291       
-## socl_xp_prc -0.716  0.049  0.000  0.000 -0.001 -0.002 -0.002 -0.001  0.000  0.000 -0.001</code></pre>
+## $isLmer
+## [1] FALSE
+## 
+## $useScale
+## [1] FALSE
+## 
+## $logLik
+## 'log Lik.' -32569.05 (df=18)
+## 
+## $family
+## [1] "poisson"
+## 
+## $link
+## [1] "log"
+## 
+## $ngrps
+## super_town 
+##        313 
+## 
+## $coefficients
+##                                 Estimate Std. Error     z value      Pr(&gt;|z|)
+## (Intercept)                  -7.31561520 0.05259941 -139.081694  0.000000e+00
+## race_groupNon-Hispanic Black  0.05924842 0.04754716    1.246098  2.127284e-01
+## factor(age_cat)10-14         -2.14277858 0.08870798  -24.155420 6.549021e-129
+## factor(age_cat)15-19         -1.09331896 0.05529123  -19.773824  5.003621e-87
+## factor(age_cat)20-24         -0.22214176 0.04146028   -5.357941  8.417549e-08
+## factor(age_cat)25-29          0.20406592 0.03771302    5.411020  6.266665e-08
+## factor(age_cat)30-34          0.40246754 0.03692554   10.899436  1.159744e-27
+## factor(age_cat)35-44          0.64872996 0.03332042   19.469443  1.994282e-84
+## factor(age_cat)45-54          1.34776108 0.03160021   42.650388  0.000000e+00
+## factor(age_cat)5-9           -2.36172313 0.10221402  -23.105668 4.060751e-118
+## factor(age_cat)55-64          2.05621741 0.03102311   66.280174  0.000000e+00
+## social_exp_perc               9.85831717 2.83885275    3.472641  5.153637e-04
+## 
+## $sigma
+## [1] 1
+## 
+## $vcov
+## 12 x 12 Matrix of class "dpoMatrix"
+##                                (Intercept) race_groupNon-Hispanic Black factor(age_cat)10-14
+## (Intercept)                   0.0027666980                -3.906578e-04        -9.278131e-04
+## race_groupNon-Hispanic Black -0.0003906578                 2.260732e-03         1.924489e-06
+## factor(age_cat)10-14         -0.0009278131                 1.924489e-06         7.869106e-03
+## factor(age_cat)15-19         -0.0009257135                 3.118907e-06         9.237922e-04
+## factor(age_cat)20-24         -0.0009201092                 2.462374e-06         9.223422e-04
+## factor(age_cat)25-29         -0.0009177436                 5.594882e-06         9.212595e-04
+## factor(age_cat)30-34         -0.0009195698                 3.715952e-06         9.218694e-04
+## factor(age_cat)35-44         -0.0009236011                 6.034787e-06         9.230844e-04
+## factor(age_cat)45-54         -0.0009266440                 1.576057e-05         9.238524e-04
+## factor(age_cat)5-9           -0.0009259598                 3.099883e-06         9.238549e-04
+## factor(age_cat)55-64         -0.0009267957                 2.186977e-05         9.238290e-04
+## social_exp_perc              -0.1069686408                 6.610288e-03         7.878601e-05
+##                              factor(age_cat)15-19 factor(age_cat)20-24 factor(age_cat)25-29
+## (Intercept)                         -9.257135e-04        -9.201092e-04        -9.177436e-04
+## race_groupNon-Hispanic Black         3.118907e-06         2.462374e-06         5.594882e-06
+## factor(age_cat)10-14                 9.237922e-04         9.223422e-04         9.212595e-04
+## factor(age_cat)15-19                 3.057120e-03         9.243733e-04         9.233209e-04
+## factor(age_cat)20-24                 9.243733e-04         1.718955e-03         9.265027e-04
+## factor(age_cat)25-29                 9.233209e-04         9.265027e-04         1.422272e-03
+## factor(age_cat)30-34                 9.232692e-04         9.253803e-04         9.272836e-04
+## factor(age_cat)35-44                 9.234261e-04         9.237510e-04         9.241202e-04
+## factor(age_cat)45-54                 9.239419e-04         9.234098e-04         9.231147e-04
+## factor(age_cat)5-9                   9.233551e-04         9.223482e-04         9.215937e-04
+## factor(age_cat)55-64                 9.240127e-04         9.237414e-04         9.235050e-04
+## social_exp_perc                      2.319089e-05        -1.587693e-04        -1.897437e-04
+##                              factor(age_cat)30-34 factor(age_cat)35-44 factor(age_cat)45-54
+## (Intercept)                         -9.195698e-04        -9.236011e-04        -9.266440e-04
+## race_groupNon-Hispanic Black         3.715952e-06         6.034787e-06         1.576057e-05
+## factor(age_cat)10-14                 9.218694e-04         9.230844e-04         9.238524e-04
+## factor(age_cat)15-19                 9.232692e-04         9.234261e-04         9.239419e-04
+## factor(age_cat)20-24                 9.253803e-04         9.237510e-04         9.234098e-04
+## factor(age_cat)25-29                 9.272836e-04         9.241202e-04         9.231147e-04
+## factor(age_cat)30-34                 1.363495e-03         9.240012e-04         9.234408e-04
+## factor(age_cat)35-44                 9.240012e-04         1.110250e-03         9.238288e-04
+## factor(age_cat)45-54                 9.234408e-04         9.238288e-04         9.985731e-04
+## factor(age_cat)5-9                   9.220246e-04         9.229218e-04         9.233863e-04
+## factor(age_cat)55-64                 9.238148e-04         9.240951e-04         9.250069e-04
+## social_exp_perc                     -1.667989e-04        -5.757357e-05        -3.882967e-05
+##                              factor(age_cat)5-9 factor(age_cat)55-64 social_exp_perc
+## (Intercept)                       -9.259598e-04        -9.267957e-04   -1.069686e-01
+## race_groupNon-Hispanic Black       3.099883e-06         2.186977e-05    6.610288e-03
+## factor(age_cat)10-14               9.238549e-04         9.238290e-04    7.878601e-05
+## factor(age_cat)15-19               9.233551e-04         9.240127e-04    2.319089e-05
+## factor(age_cat)20-24               9.223482e-04         9.237414e-04   -1.587693e-04
+## factor(age_cat)25-29               9.215937e-04         9.235050e-04   -1.897437e-04
+## factor(age_cat)30-34               9.220246e-04         9.238148e-04   -1.667989e-04
+## factor(age_cat)35-44               9.229218e-04         9.240951e-04   -5.757357e-05
+## factor(age_cat)45-54               9.233863e-04         9.250069e-04   -3.882967e-05
+## factor(age_cat)5-9                 1.044771e-02         9.233576e-04    6.848566e-05
+## factor(age_cat)55-64               9.233576e-04         9.624336e-04   -9.488951e-05
+## social_exp_perc                    6.848566e-05        -9.488951e-05    8.059085e+00
+## 
+## $varcor
+## $super_town
+##                              (Intercept) race_groupNon-Hispanic Black social_exp_perc
+## (Intercept)                    0.1910264                   -0.1002906       -3.705593
+## race_groupNon-Hispanic Black  -0.1002906                    0.2404011        1.735575
+## social_exp_perc               -3.7055925                    1.7355746      125.487847
+## attr(,"stddev")
+##                  (Intercept) race_groupNon-Hispanic Black              social_exp_perc 
+##                    0.4370657                    0.4903072                   11.2021358 
+## attr(,"correlation")
+##                              (Intercept) race_groupNon-Hispanic Black social_exp_perc
+## (Intercept)                    1.0000000                   -0.4679996      -0.7568505
+## race_groupNon-Hispanic Black  -0.4679996                    1.0000000       0.3159906
+## social_exp_perc               -0.7568505                    0.3159906       1.0000000
+## 
+## attr(,"sc")
+## [1] 1
+## attr(,"useSc")
+## [1] FALSE
+## attr(,"class")
+## [1] "VarCorr.merMod"
+## 
+## $AICtab
+##       AIC       BIC    logLik  deviance  df.resid 
+##  65174.09  65323.11 -32569.05  65138.09  29082.00 
+## 
+## $call
+## glmer(formula = num ~ 1 + race_group + factor(age_cat) + social_exp_perc + 
+##     (race_group + social_exp_perc | super_town) + offset(log(den)), 
+##     data = mlm_data, family = poisson(link = log), control = glmerControl(optimizer = "Nelder_Mead"), 
+##     nAGQ = 0)
+## 
+## $residuals
+##             1             2             3             4             5             6             7 
+##  9.602297e+02 -8.055922e-02 -1.078437e-01 -7.219360e-02 -2.126584e-01 -1.335781e-01 -2.986989e-01 
+##             8             9            10            11            12            13            14 
+## -3.654843e-01 -3.033389e-02  3.656501e-01 -4.773590e-01 -7.915987e-02 -1.835922e-01 -4.805737e-01 
+##            15            16            17            18            19            20            21 
+##  1.699335e+00 -7.901434e-01 -1.516778e+00  1.989392e-01 -9.736969e-02  5.579928e-01 -9.034468e-04 
+##            22            23            24            25            26            27            28 
+## -3.094597e-04 -2.339456e-02 -6.764648e-02 -1.000495e-03 -1.104835e-03 -5.045075e-01 -2.802489e-01 
+##            29            30            31            32            33            34            35 
+## -2.773709e-04 -4.725467e-01 -4.406603e-01 -2.176522e-01  3.862521e+00 -8.293152e-01  4.393157e+00 
+##            36            37            38            39            40            41            42 
+##  6.437978e-01 -6.025679e-02 -3.205367e-01 -1.447891e-01 -6.590362e-01 -1.079302e-03 -3.696958e-04 
+##            43            44            45            46            47            48            49 
+## -6.247867e-04 -9.658408e-04 -1.195241e-03 -1.319890e-03 -1.492839e-03  4.722723e+02 -3.313610e-04 
+##            50            51            52            53            54            55            56 
+## -3.017484e-03 -3.300966e-01 -1.809978e-01 -2.181709e-01  2.183432e+00  2.342655e+00 -2.750620e-01 
+##            57            58            59            60            61            62            63 
+## -1.110854e+00  4.816562e-01 -1.744850e-01  3.516563e-03 -9.338086e-04 -3.198596e-04 -5.405635e-04 
+##            64            65            66            67            68            69            70 
+## -8.356423e-04 -1.034118e-03 -1.141964e-03 -1.291599e-03 -1.831979e-03 -2.866924e-04 -6.907358e-01 
+##            71            72            73            74            75            76            77 
+## -3.701552e-01 -1.911123e-01 -3.444434e-01 -8.015775e-01  1.374088e+00 -7.454566e-01  1.090816e+00 
+##            78            79            80            81            82            83            84 
+## -6.601441e-01 -1.277660e-01  1.606926e-02 -9.338086e-04 -1.213786e-01 -2.029821e-01 -8.356423e-04 
+##            85            86            87            88            89            90            91 
+## -1.034118e-03 -1.141964e-03 -3.980997e-01 -1.831979e-03 -2.866924e-04 -2.610717e-03 -5.959370e-01 
+##            92            93            94            95            96            97            98 
+## -1.818009e-01 -4.889977e-01 -7.582469e-01  2.121104e+00  3.633988e-01 -3.455547e-01  1.750028e+00 
+##            99           100           101           102           103           104           105 
+## -2.165778e-01  6.420078e-02 -9.645920e-04 -3.304039e-04  1.790884e+03 -4.680374e-01 -1.068208e-03 
+##           106           107           108           109           110           111           112 
+## -1.179610e-03 -8.646468e-01 -1.892371e-03 -2.961434e-04  3.097324e-01 -3.278127e-01 -2.779339e-01 
+##           113           114           115           116           117           118           119 
+## -3.539426e-01 -2.796013e-01  8.914482e-01  3.160854e+00  1.606271e+00  1.344280e-01 -1.697578e-01 
+##           120           121           122           123           124           125           126 
+## -8.270840e-01 -9.645920e-04 -3.304039e-04 -5.583834e-04 -8.631896e-04 -1.068208e-03 -1.179610e-03 
+##           127           128           129           130           131           132           133 
+## -1.334177e-03 -2.931709e-01 -2.961434e-04 -2.696781e-03 -6.145126e-01 -2.031929e-01  2.154043e+00 
+##           134           135           136           137           138           139           140 
+## -4.089761e-01 -4.630196e-01 -5.951791e-01 -4.335049e-01 -1.415147e-01 -1.670042e-01 -4.636435e-01 
+##           141           142           143           144           145           146           147 
+## -2.486583e-01 -9.180989e-02 -4.214445e-02 -7.202526e-02 -8.498036e-04 -2.317765e-01 -3.870825e-01 
+##           148           149           150           151           152           153           154 
+## -5.692963e-01 -7.561105e-02 -5.553270e-01 -3.808186e-01 -1.669914e-01 -3.209053e-01 -6.105961e-01 
+##           155           156           157           158           159           160           161 
+## -4.340960e-01 -5.932994e-01  4.977778e+00 -2.292796e-01 -7.253764e-02 -7.565613e-01 -7.673725e-04 
+##           162           163           164           165           166           167           168 
+## -2.628499e-04 -4.442168e-04 -7.202526e-02 -8.498036e-04 -1.259068e-01 -1.957140e-01 -6.766212e-01 
+##           169           170           171           172           173           174           175 
+## -2.355942e-04 -2.145399e-03 -6.260238e-01 -2.046043e-01 -2.869593e-01  4.969044e+00  1.218722e+00 
+##           176           177           178           179           180           181           182 
+## -8.333909e-01  7.738355e-01 -1.060221e+00 -1.333868e-01 -1.477385e+00 -8.219660e-04 -1.280978e-01 
+##           183           184           185           186           187           188           189 
+## -6.383972e-02 -7.355939e-02 -9.547338e-02 -1.005191e-03 -1.136904e-03 -1.612562e-03 -2.523552e-04 
+##           190           191           192           193           194           195           196 
+## -2.298031e-03 -4.923587e-01 -2.400490e-01 -3.510818e-01  1.514753e+00  2.121334e+00 -7.474725e-01 
+##           197           198           199           200           201           202           203 
+##  1.230011e+00  3.092750e-01 -2.236116e-01 -1.474120e+00 -8.219660e-04 -5.488490e-02 -1.668772e-01 
+##           204           205           206           207           208           209           210 
+## -7.355571e-04 -9.102616e-04 -1.005191e-03 -1.136904e-03 -1.612562e-03 -2.523552e-04 -3.560168e-01 
+##           211           212           213           214           215           216           217 
+##  1.955499e+00 -2.476234e-01 -4.890110e-01  6.652445e-01 -7.075589e-01  8.057885e-01  2.957552e-01 
+##           218           219           220           221           222           223           224 
+## -2.978606e-01 -2.404507e-01 -9.005370e-02 -8.592921e-04 -2.943353e-04 -4.974273e-04 -7.689593e-04 
+##           225           226           227           228           229           230           231 
+## -4.003511e-01 -1.409885e-01 -1.188532e-03 -2.500487e-01 -2.638148e-04 -4.229905e-01  5.218756e-01 
+##           232           233           234           235           236           237           238 
+## -4.116658e-01 -5.269091e-01  5.717503e-01  3.820584e+00 -4.005321e-02  8.732391e-01  2.610021e+00 
+##           239           240           241           242           243           244           245 
+## -2.041995e-01  2.746707e-01 -8.592921e-04 -2.943353e-04 -4.974273e-04 -7.689593e-04 -9.515972e-04 
+##           246           247           248           249           250           251           252 
+## -1.050837e-03 -1.188532e-03  5.931921e+02 -2.638148e-04 -2.402386e-03  4.071591e-01 -4.086659e-01 
+##           253           254           255           256           257           258           259 
+## -4.927568e-01 -1.010712e+00  7.279073e-01  1.700274e+00 -9.542514e-01 -1.669055e-01 -2.383164e-01 
+##           260           261           262           263           264           265           266 
+## -1.698281e+00 -1.761046e-01 -6.902837e-02 -1.827671e-01 -3.075847e-01 -2.407390e-01 -1.789542e-01 
+##           267           268           269           270           271           272           273 
+## -6.083622e-01 -8.710836e-01 -2.638148e-04 -4.621144e-01  1.214825e+00 -1.561592e-01 -4.729061e-01 
+##           274           275           276           277           278           279           280 
+##  7.183406e-01  8.251557e-01  3.259248e-01  7.144088e-01  2.037789e+00 -2.145016e-01 -1.763459e+00 
+##           281           282           283           284           285           286           287 
+## -8.515005e-04 -2.916664e-04 -4.929169e-04 -7.619868e-04 -9.429687e-04 -1.041309e-03 -1.177755e-03 
+##           288           289           290           291           292           293           294 
+## -1.670504e-03 -2.614227e-04 -2.380602e-03 -5.939253e-01 -1.681503e-01 -3.275410e-01  1.106098e+00 
+##           295           296           297           298           299           300           301 
+## -8.364127e-01  1.922398e+00 -1.136436e-01 -1.989643e-02 -1.532414e-01 -1.802031e+00 -1.884896e-01 
+##           302           303           304           305           306           307           308 
+## -3.451167e-02 -5.169991e-02 -7.619868e-04 -1.154935e-01 -1.435383e-01 -1.177755e-03 -1.670504e-03 
+##           309           310           311           312           313           314           315 
+## -2.614227e-04 -1.991897e-01  1.139993e+00 -1.559274e-01 -4.508353e-01 -7.068953e-01  2.552504e-01 
+##           316           317           318           319           320           321           322 
+##  3.869360e-01  5.268756e-01  9.014076e-01 -2.012250e-01 -2.109465e+00 -8.515005e-04 -1.507103e-01 
+##           323           324           325           326           327           328           329 
+## -2.353651e-01 -7.619868e-04 -2.108563e-01 -3.622214e-01 -2.265487e-01 -8.696269e-01  9.339818e+00 
+##           330           331           332           333           334           335           336 
+## -2.714409e-01 -9.129912e-01 -2.457101e-01 -4.166574e-01  2.178942e-01 -9.910982e-01  1.428317e+00 
+##           337           338           339           340           341           342           343 
+## -4.881191e-01 -6.408954e-01 -2.232012e-01 -4.926606e-02 -8.515005e-04 -6.323245e-02 -1.033963e-01 
+##           344           345           346           347           348           349           350 
+## -3.825151e-01 -3.266553e-01 -5.450743e-01 -4.230107e-01 -3.213322e-01 -3.964757e-02 -3.366764e-01 
+##           351           352           353           354           355           356           357 
+## -8.406292e-01 -2.375127e-01 -3.369348e-01  1.390699e+00  2.441759e-01 -7.510653e-01  1.592759e+00 
+##           358           359           360           361           362           363           364 
+##  7.168153e-01 -2.299811e-01  2.215236e+00 -8.515005e-04 -2.916664e-04 -4.929169e-04 -1.384239e-01 
+##           365           366           367           368           369           370           371 
+## -9.429687e-04 -2.208975e-01 -1.177755e-03 -1.752119e-01 -2.614227e-04 -2.380602e-03 -3.200764e-01 
+##           372           373           374           375           376           377           378 
+## -1.681503e-01 -3.245498e-01  9.723496e-01  1.207993e+00  6.894897e-01  5.176273e-01  1.521492e+00 
+##           379           380           381           382           383           384           385 
+## -1.535990e-01  5.974224e-01 -1.255166e-03 -4.299350e-04 -7.265911e-04 -1.123217e-03 -1.389996e-03 
+##           386           387           388           389           390           391           392 
+## -1.534956e-03 -1.736086e-03 -2.462430e-03 -3.853538e-04 -5.322021e-01 -1.689616e-01 -1.983811e-01 
+##           393           394           395           396           397           398           399 
+## -4.072016e-01 -4.353751e-01 -5.401345e-01 -5.919737e-01  2.309682e-01 -9.775839e-01 -1.351845e-01 
+##           400           401           402           403           404           405           406 
+## -7.794751e-01 -1.255166e-03 -4.299350e-04 -7.265911e-04 -2.929014e-01 -1.389996e-03 -1.534956e-03 
+##           407           408           409           410           411           412           413 
+##  4.060267e+00 -5.046540e-01 -3.853538e-04 -7.607760e-01 -7.579621e-01 -3.569527e-01  1.416484e+00 
+##           414           415           416           417           418           419           420 
+##  2.120327e+00 -1.123296e+00  8.575492e-01 -1.393884e+00 -1.219775e+00 -3.705954e-01 -2.414125e+00 
+##           421           422           423           424           425           426           427 
+## -1.255166e-03 -4.299350e-04 -7.265911e-04 -1.775998e-01 -1.389996e-03 -8.408703e-02  7.167122e+00 
+##           428           429           430           431           432           433           434 
+## -2.462430e-03 -3.853538e-04  8.549018e+02 -5.815072e-01 -3.138901e-01 -5.868396e-01  2.472806e+00 
+##           435           436           437           438           439           440           441 
+## -1.720390e+00  2.908643e+00 -2.672111e-01 -6.041417e-01 -3.394912e-01 -1.499325e+00 -1.255166e-03 
+##           442           443           444           445           446           447           448 
+## -4.299350e-04 -5.628620e-02 -3.551943e-01 -1.389996e-03 -1.534956e-03 -4.287851e-01  8.122034e+02 
+##           449           450           451           452           453           454           455 
+## -3.853538e-04 -5.436481e-01  2.127458e+00 -2.752804e-01 -5.070403e-01  2.563690e-01 -1.038265e+00 
+##           456           457           458           459           460           461           462 
+##  6.850429e-01  1.183562e+00  1.288242e+00 -1.384622e-01  1.997126e+00  9.928754e-01 -1.951360e-01 
+##           463           464           465           466           467           468           469 
+## -2.215817e-01 -1.123217e-03  1.950257e+00 -5.272770e-01 -8.253276e-01 -1.448447e+00 -1.400065e-01 
+##           470           471           472           473           474           475           476 
+## -3.509160e-03 -1.176152e+00 -2.449682e-01 -5.710040e-01  9.638244e-01  1.945165e+00 -4.486013e-01 
+##           477           478           479           480           481           482           483 
+##  6.063697e+00 -1.414046e-01 -2.858880e-01  6.718128e-01 -5.004967e-01 -8.157557e-02 -7.265911e-04 
+##           484           485           486           487           488           489           490 
+## -1.123217e-03 -1.389996e-03 -1.534956e-03 -5.407037e-01 -5.561004e-01 -8.354360e-02 -8.667058e-01 
+##           491           492           493           494           495           496           497 
+## -6.217500e-01 -1.882750e-01 -3.452221e-01  2.869241e+00 -1.122646e+00 -4.772372e-01  9.018246e-01 
+##           498           499           500           501           502           503           504 
+## -2.929475e-01 -2.547836e-01  8.214865e-01 -1.294801e-03 -1.095401e-01 -7.495347e-04 -1.158685e-03 
+##           505           506           507           508           509           510           511 
+## -1.433888e-03 -1.583426e-03 -4.838795e-01 -6.375867e-01 -3.975221e-04 -1.222248e+00 -6.503636e-01 
+##           512           513           514           515           516           517           518 
+## -4.516604e-01 -5.360957e-01 -9.623235e-01 -2.821854e-02  3.616036e+00 -7.851499e-01 -6.016461e-01 
+##           519           520           521           522           523           524           525 
+## -2.980154e-01 -1.996539e+00  1.544638e+03 -1.497472e-01 -2.440320e-01 -4.720857e-01 -1.503943e-01 
+##           526           527           528           529           530           531           532 
+##  6.934963e-01  3.248240e+00 -6.264768e-01 -3.975221e-04 -1.119323e+00 -5.778224e-01 -2.060260e-01 
+##           533           534           535           536           537           538           539 
+## -4.210994e-01 -6.948756e-01  1.663187e+00 -6.892702e-01  8.397467e-01  4.266123e+00 -1.747499e-01 
+##           540           541           542           543           544           545           546 
+## -9.723561e-02 -1.294801e-03 -4.435111e-04 -3.944867e-01 -3.718658e-01  5.932244e-01 -1.583426e-03 
+##           547           548           549           550           551           552           553 
+## -2.042026e-01 -1.210262e+00 -1.088666e-01 -1.108964e+00 -7.559517e-01 -2.655810e-01 -4.591288e-01 
+##           554           555           556           557           558           559           560 
+##  2.691619e-01  4.462667e-01  5.537915e-01  6.134809e-01  3.952385e-02 -2.595229e-01 -1.060357e+00 
+##           561           562           563           564           565           566           567 
+## -4.409951e-01 -3.539766e-01  5.310099e-01  2.273573e+00 -4.055674e-01 -2.239358e-01 -1.387231e+00 
+##           568           569           570           571           572           573           574 
+## -2.594922e-01 -1.804247e-01  2.978811e-01 -7.695204e-01 -3.555131e-01  1.052295e+00  5.920746e-01 
+##           575           576           577           578           579           580           581 
+##  2.701892e+00  1.399823e+00  2.991778e+00  2.252598e+00  3.279483e+00  2.758291e+00 -1.294801e-03 
+##           582           583           584           585           586           587           588 
+## -4.435111e-04 -7.495347e-04 -1.158685e-03 -1.433888e-03 -1.583426e-03 -1.790906e-03  7.873413e+02 
+##           589           590           591           592           593           594           595 
+## -3.975221e-04 -6.057475e-01 -8.324391e-01 -2.855074e-01 -5.499793e-01  1.830889e+00 -7.938485e-01 
+##           596           597           598           599           600           601           602 
+## -3.827620e-01 -9.577508e-01  1.547949e-01 -1.853503e-01 -1.944192e+00 -1.294801e-03  2.254735e+03 
+##           603           604           605           606           607           608           609 
+## -7.495347e-04 -1.158685e-03 -1.433888e-03 -1.583426e-03 -1.790906e-03 -8.270286e-01 -3.975221e-04 
+##           610           611           612           613           614           615           616 
+##  1.919672e-01  3.157303e+00 -3.251065e-01  1.413534e+00  9.078082e-01  7.931179e-02 -1.319681e+00 
+##           617           618           619           620           621           622           623 
+##  5.129149e-01 -1.742658e+00 -3.136854e-01 -1.601315e+00 -1.876389e-01 -4.435111e-04  1.334160e+03 
+##           624           625           626           627           628           629           630 
+## -1.158685e-03 -1.433888e-03 -1.583426e-03 -1.790906e-03  3.908440e+00 -3.975221e-04 -3.619969e-03 
+##           631           632           633           634           635           636           637 
+##  1.858182e-01 -3.370658e-01 -5.338408e-01  2.952710e+00 -2.511577e-01  5.005046e-01  2.220731e+00 
+##           638           639           640           641           642           643           644 
+##  7.051167e-02 -2.167806e-01 -1.995073e+00 -3.425745e-01 -4.435111e-04  6.278393e+00  4.466808e+00 
+##           645           646           647           648           649           650           651 
+## -1.433888e-03 -1.583426e-03 -3.203721e-01 -2.540186e-03 -3.975221e-04 -7.148958e-01 -5.539680e-01 
+##           652           653           654           655           656           657           658 
+## -2.387842e-01 -4.221723e-01 -4.839625e-01 -6.619345e-01 -7.616241e-01 -1.451669e+00 -7.345973e-01 
+##           659           660           661           662           663           664           665 
+## -1.372280e-01  1.069608e+00 -6.972727e-01 -4.435111e-04 -7.495347e-04 -1.158685e-03 -1.433888e-03 
+##           666           667           668           669           670           671           672 
+##  6.315406e+02  5.058016e-01  1.228677e+01 -3.975221e-04  2.009984e+00 -1.015102e+00 -3.751661e-01 
+##           673           674           675           676           677           678           679 
+## -5.912042e-01  8.229476e-02 -3.730849e-01  4.791859e-03  1.420949e-01 -1.477612e+00 -2.212348e-01 
+##           680           681           682           683           684           685           686 
+## -3.156748e+00 -1.294801e-03 -4.435111e-04 -2.038969e-01 -2.590925e-01 -2.356162e-01 -2.401436e-01 
+##           687           688           689           690           691           692           693 
+## -2.595332e-01 -2.540186e-03 -3.975221e-04 -3.619969e-03 -7.206014e-01 -3.343925e-01 -6.254114e-01 
+##           694           695           696           697           698           699           700 
+##  3.728394e+00  2.133210e+00  2.630478e+00 -3.095824e-01 -7.777754e-01 -2.940035e-01 -1.639468e+00 
+##           701           702           703           704           705           706           707 
+## -9.173472e-04 -3.142210e-04 -5.310342e-04 -8.209113e-04 -1.015889e-03 -1.121834e-03 -1.268831e-03 
+##           708           709           710           711           712           713           714 
+## -1.799684e-03 -2.816385e-04 -2.564695e-03 -3.184913e-01 -1.769836e-01 -4.719294e-01 -6.113583e-01 
+##           715           716           717           718           719           720           721 
+##  6.755232e-01  2.551164e+00 -1.268705e+00  1.549976e+00 -1.133401e-01  1.290883e+00 -9.173472e-04 
+##           722           723           724           725           726           727           728 
+## -3.142210e-04 -5.310342e-04 -8.209113e-04 -1.015889e-03 -1.121834e-03 -1.268831e-03 -1.799684e-03 
+##           729           730           731           732           733           734           735 
+## -2.816385e-04 -2.564695e-03 -7.541812e-01 -2.502925e-01 -4.916240e-01 -5.730704e-01 -6.681793e-01 
+##           736           737           738           739           740           741           742 
+## -7.069434e-01 -6.777858e-01  3.075824e-01 -2.265505e-01  6.054264e-02 -1.880025e-01 -8.011158e-02 
+##           743           744           745           746           747           748           749 
+## -6.504032e-02 -8.209113e-04 -1.015889e-03 -1.121834e-03 -3.184765e-01 -1.138363e-01 -2.816385e-04 
+##           750           751           752           753           754           755           756 
+## -2.564695e-03  2.871604e-01 -3.810846e-01 -6.523983e-01 -8.119794e-01  2.404417e+00  7.421281e-01 
+##           757           758           759           760           761           762           763 
+##  6.919601e-01 -1.785442e+00 -3.462592e-01 -7.484676e-01 -9.173472e-04 -3.142210e-04 -5.310342e-04 
+##           764           765           766           767           768           769           770 
+## -8.209113e-04 -1.015889e-03 -1.121834e-03 -1.268831e-03  5.556512e+02 -2.816385e-04 -2.564695e-03 
+##           771           772           773           774           775           776           777 
+## -9.748146e-01 -4.203506e-01 -6.155577e-01  4.487157e-01  3.272097e-01  2.366139e+00  4.232935e-01 
+##           778           779           780           781           782           783           784 
+## -1.698919e-01 -3.243934e-01 -5.552946e-01 -8.231125e-04 -2.819426e-04 -2.610243e-02 -1.920788e-01 
+##           785           786           787           788           789           790           791 
+## -9.115312e-04 -1.006593e-03 -5.760364e-01 -6.418769e-01 -1.007668e-01 -2.301236e-03 -6.011856e-01 
+##           792           793           794           795           796           797           798 
+## -3.546054e-01 -7.851245e-01 -1.155806e+00  2.293195e+00  2.236481e+00 -6.504536e-01  4.896498e-02 
+##           799           800           801           802           803           804           805 
+## -3.518002e-01  9.533900e-01 -8.231125e-04 -1.215957e-01 -4.764836e-04 -7.365831e-04 -9.115312e-04 
+##           806           807           808           809           810           811           812 
+## -1.883190e-01 -2.520180e-01 -6.907940e-01 -2.527072e-04  9.565148e-01  5.708364e-01 -4.273313e-01 
+##           813           814           815           816           817           818           819 
+## -7.425046e-01  2.741166e+00  1.396936e+00  8.252637e-01 -3.610175e-01 -2.642076e-01 -2.739088e-01 
+##           820           821           822           823           824           825           826 
+## -2.753879e+00 -2.754674e-01 -2.819426e-04 -4.764836e-04 -7.365831e-04 -2.232805e-01 -1.743499e-01 
+##           827           828           829           830           831           832           833 
+## -1.138490e-03 -1.614811e-03 -4.659758e-02 -2.722956e-01 -9.020673e-01 -3.379712e-01 -6.550948e-01 
+##           834           835           836           837           838           839           840 
+## -4.239680e-01  2.839164e+00  3.753344e+00 -2.798778e-01 -9.829278e-01 -2.169415e-01 -1.717789e-01 
+##           841           842           843           844           845           846           847 
+## -1.248339e-01 -6.790136e-02 -4.764836e-04 -7.365831e-04  1.147685e+01 -4.246833e-01 -1.688692e-01 
+##           848           849           850           851           852           853           854 
+## -1.614811e-03 -2.650535e-02 -1.098827e+00  2.843736e+00 -3.091854e-01  6.646080e-01 -9.081783e-01 
+##           855           856           857           858           859           860           861 
+##  2.787613e+00  3.952163e-01  2.139650e+00 -1.170465e+00 -1.916387e-01  1.307602e+00 -8.231125e-04 
+##           862           863           864           865           866           867           868 
+## -4.632876e-02 -2.610243e-02 -1.187727e-01 -9.560655e-02 -1.147737e-01 -1.138490e-03 -2.702144e-01 
+##           869           870           871           872           873           874           875 
+## -2.527072e-04 -2.301236e-03  2.055246e+00 -1.217772e-01 -1.673426e-01 -3.246530e-01 -4.427203e-01 
+##           876           877           878           879           880           881           882 
+## -4.609308e-01 -6.384928e-01 -5.635712e-01 -8.593336e-02  3.213749e+00 -1.207664e-01 -3.377440e-04 
+##           883           884           885           886           887           888           889 
+## -5.707881e-04 -8.823657e-04 -1.091939e-03 -1.205815e-03 -1.430448e-01 -1.934411e-03 -3.027223e-04 
+##           890           891           892           893           894           895           896 
+## -2.756691e-03  8.129433e-01 -2.834968e-01 -6.233319e-01 -9.095888e-01  1.760281e+00 -9.805406e-01 
+##           897           898           899           900           901           902           903 
+##  4.212174e-01 -1.680352e+00 -2.580692e-01 -1.935740e+00  1.014176e+03 -1.551422e-01 -5.707881e-04 
+##           904           905           906           907           908           909           910 
+## -8.823657e-04 -5.086620e-01 -1.205815e-03 -6.367739e-01  1.117596e+00 -1.353819e-01 -2.756691e-03 
+##           911           912           913           914           915           916           917 
+## -1.045684e-01 -4.731598e-01  7.404653e-01  2.122902e+00  9.914054e-01  1.179577e+00  4.940092e-01 
+##           918           919           920           921           922           923           924 
+## -1.380006e+00 -3.740036e-01 -1.717307e+00 -2.823551e-01 -1.432930e-01 -2.065914e-01 -2.143277e-01 
+##           925           926           927           928           929           930           931 
+##  9.158008e+02 -1.205815e-03 -5.029526e-01 -4.931837e-01 -6.129734e-02 -2.756691e-03 -6.940172e-01 
+##           932           933           934           935           936           937           938 
+##  1.947605e+00 -8.183587e-01 -1.831839e-01  2.135967e+00  2.877140e+00  1.834347e+00  7.829953e-01 
+##           939           940           941           942           943           944           945 
+## -3.392601e-01 -2.493171e+00 -4.561356e-01 -1.120175e-01 -1.875810e-01 -1.871801e-01 -6.906893e-02 
+##           946           947           948           949           950           951           952 
+## -3.736102e-01 -9.138600e-01 -6.147684e-01 -1.604717e-01 -3.898647e-01  5.904270e-01 -3.016190e-01 
+##           953           954           955           956           957           958           959 
+##  1.722198e+00  4.635653e+00  1.772617e+00 -2.150830e-01  6.815602e-02 -1.893053e+00 -1.858987e-01 
+##           960           961           962           963           964           965           966 
+##  2.095531e+00 -2.513889e-01 -4.531437e-02 -5.707881e-04 -8.823657e-04 -1.091939e-03 -4.142129e-01 
+##           967           968           969           970           971           972           973 
+## -4.461182e-01 -2.595356e-01 -7.717994e-02  2.380634e+00  1.101384e+00 -2.367074e-01 -4.298923e-01 
+##           974           975           976           977           978           979           980 
+##  2.067067e+00  4.832488e+00  2.303686e+00  1.037080e+00  2.275580e+00 -2.525717e-01 -1.834403e+00 
+##           981           982           983           984           985           986           987 
+## -9.860208e-04 -1.254668e-01 -5.707881e-04 -2.511272e-01 -1.091939e-03 -3.888656e-01 -7.457484e-01 
+##           988           989           990           991           992           993           994 
+## -4.931837e-01 -3.027223e-04  3.627510e+02 -6.147632e-01 -1.853139e-01 -2.590542e-01  1.463613e+00 
+##           995           996           997           998           999          1000 
+##  4.769037e-01  1.353330e+00  2.613533e+00  4.335961e+00 -1.527394e-01  2.087332e+00 
+##  [ reached getOption("max.print") -- omitted 28100 entries ]
+## 
+## $fitMsgs
+## character(0)
+## 
+## $optinfo
+## $optinfo$optimizer
+## [1] "Nelder_Mead"
+## 
+## $optinfo$control
+## $optinfo$control$verbose
+## [1] 0
+## 
+## 
+## $optinfo$derivs
+## NULL
+## 
+## $optinfo$conv
+## $optinfo$conv$opt
+## [1] 0
+## 
+## $optinfo$conv$lme4
+## NULL
+## 
+## 
+## $optinfo$feval
+## [1] 1413
+## 
+## $optinfo$message
+## [1] "parameter values converged to within tolerance"
+## 
+## $optinfo$warnings
+## list()
+## 
+## $optinfo$val
+## [1]  0.4370657 -0.2294635 -8.4783423  0.4332985 -0.4844138  7.3055391
+## 
+## 
+## attr(,"class")
+## [1] "summary.merMod"</code></pre>
 </div>
 </div>
 </div>
