@@ -20,11 +20,9 @@
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script><link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
 <script src="libs/leaflet-1.3.1/leaflet.js"></script><link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
 <script src="libs/proj4-2.6.2/proj4.min.js"></script><script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script><link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
-<script src="libs/leaflet-binding-2.1.1/leaflet.js"></script><script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script><script src="libs/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script><script src="libs/FlatGeoBuf-3.21.3/fgb.js"></script><script src="libs/FlatGeoBuf-3.21.3/flatgeobuf-geojson.min.js"></script><script src="libs/chromajs-2.1.0/chroma.min.js"></script><link id="poverty-percent_in_poverty-1-attachment" rel="attachment" href="libs/poverty-percent_in_poverty-0.0.1/poverty-percent_in_poverty_layer.fgb">
-<link href="libs/HomeButton-0.0.1/home-button.css" rel="stylesheet">
+<script src="libs/leaflet-binding-2.1.1/leaflet.js"></script><script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script><script src="libs/leaflet-providers-plugin-2.1.1/leaflet-providers-plugin.js"></script><link href="libs/HomeButton-0.0.1/home-button.css" rel="stylesheet">
 <script src="libs/HomeButton-0.0.1/home-button.js"></script><script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script><script src="libs/clipboard-0.0.1/setClipboardText.js"></script><link href="libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet">
 <link href="libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet">
-<link id="ICEraceinc-ICEraceinc-1-attachment" rel="attachment" href="libs/ICEraceinc-ICEraceinc-0.0.1/ICEraceinc-ICEraceinc_layer.fgb">
 <script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
     
@@ -120,7 +118,7 @@
 <span class="header-section-number">6.3.1</span> Dependencies<a class="anchor" aria-label="anchor" href="#dependencies"><i class="fas fa-link"></i></a>
 </h3>
 <p>You will need these packages throughout our case study</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Libraries - if this code does not run for you, you may need to run install.package("package_name")</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/">knitr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
@@ -144,7 +142,7 @@
 <span class="header-section-number">6.3.2</span> Your Health Outcome Data - Premature Mortality<a class="anchor" aria-label="anchor" href="#your-health-outcome-data---premature-mortality"><i class="fas fa-link"></i></a>
 </h3>
 <p>Your data have been aggregated from individual observations into death counts by age, racialized group, census tract, and town. When you get unrestricted mortality files from government sources for research, you will likely receive files with one observation per death. After you have geocoded these observations, you will need to aggregate them up to the level of interest for your analysis. This requires aggregation not only up to the census tract level, but also age groups so we can do an appropriate age standardization, racialized groups so we can stratify our analyses by these groups, and towns so we can explore a second areal level of analysis. Below is some code (for example) to turn a raw mortality file into what has been provided to you, by merging census tracts and towns to the data, and then aggregating into groups that align with the age and racialized groups that match your denominator data. The vast majority of our area-based social metrics come from the U.S. Census, so the most detailed level for analysis available will be the census tract (for which all the ABSMs are available, which is not the case for the census block group or census block). We can use the <code>tigris</code> package to download census tract geometries and the <code>sf</code> package to link our geocoded observations to the appropriate census tracts. Ideally when performing an analysis that might include two or more levels, the smaller level (here, census tracts) would be nested entirely within the larger level (towns). In Massachusetts though, there are several towns that have such small populations that they are smaller than census tracts. For these towns, we have created a crosswalk wherein small towns have been combined to create larger super towns. These super towns each make up one census tract, so that each super town in the analysis will now have at least one census tract nested within it for an eventual multilevel analysis</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># the raw mortality data, with the geocoded coordinates converted into spatial feature (sf) data</span>
 <span class="va">ma_mort</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html">read_rds</a></span><span class="op">(</span><span class="st">"ma_mort_geo.RDS"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span>coords<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"lon"</span>,<span class="st">"lat"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4269</span><span class="op">)</span>
@@ -327,7 +325,7 @@
 <span class="header-section-number">6.3.3</span> Your Denominator Data and ABSM’s<a class="anchor" aria-label="anchor" href="#your-denominator-data-and-absms"><i class="fas fa-link"></i></a>
 </h3>
 <p>We download population data to use as denominators in our rates and ABSMs from the U.S. Census Bureau using the tidycensus package. This requires registering with the U.S. Census for an API key. The key is redacted here, but you can get your own from <a href="https://api.census.gov/data/key_signup.html" class="uri">https://api.census.gov/data/key_signup.html</a>. The ABSMs we will use for this analysis are percentage of the population in poverty, the Index of Concentration at the Extremes (ICE) which quantifies how persons in a specified area are concentrated into the top vs bottom of a specified societal distribution, and the ATSDR/CDC Social Vulnerability Index, which employs data on poverty, transportation access, crowded housing and other social variables to generate a measure of vulnerability for communities.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Population Denominators</span>
 <span class="va">ma_demo_acs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">vector</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"list"</span>, length <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">ma_demo_acs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2013</span>,<span class="fl">2014</span>,<span class="fl">2015</span>,<span class="fl">2016</span>,<span class="fl">2017</span><span class="op">)</span>
@@ -584,7 +582,7 @@
 ## 4  2013 25005646101 Total      Male  15-19          141
 ## 5  2013 25005646101 Total      Male  20-24          235
 ## 6  2013 25005646101 Total      Male  25-29          145</code></pre>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Area Based Social Metrics</span>
 <span class="va">ma_absm_acs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">vector</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"list"</span>, length <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">ma_absm_acs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2013</span>,<span class="fl">2014</span>,<span class="fl">2015</span>,<span class="fl">2016</span>,<span class="fl">2017</span><span class="op">)</span>
@@ -598,7 +596,6 @@
                                output <span class="op">=</span> <span class="st">"wide"</span>,
                                state <span class="op">=</span> <span class="st">"MA"</span>,
                                geometry <span class="op">=</span> <span class="cn">FALSE</span>,
-                               key <span class="op">=</span> <span class="st">"4407a63721e192545e1e2a2fc7f6920477b10108"</span>,
                                moe_level <span class="op">=</span> <span class="fl">95</span>,
                                survey <span class="op">=</span> <span class="st">"acs5"</span>,
                                cache_table <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span>
@@ -767,7 +764,7 @@
 <div class="inline-figure"><img src="images/07-premature-mortality/adj_smr_map.png" width="100%"></div>
 <p>How exactly do we get from our data to this map visualizing how the standard mortality ratio for premature mortality varies across space?
 We can visualize how premature mortality varies across space using spatial models. For our spatial models, we first need to utilize the indirect method to age-standardize our data and create reference rates for the population groups.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ref_pop</span> <span class="op">&lt;-</span> <span class="va">ma_demo_acs</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">race_group</span> <span class="op">==</span><span class="st">"Total"</span>,
          <span class="va">sex</span> <span class="op">!=</span> <span class="st">"Total"</span>,
@@ -803,7 +800,7 @@ We can visualize how premature mortality varies across space using spatial model
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>ref_rate <span class="op">=</span> <span class="va">num</span><span class="op">/</span><span class="va">den</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">age_cat</span>, <span class="va">ref_rate</span><span class="op">)</span></code></pre></div>
 <p>Once we have the data age standardized we can calculate raw standardized mortality ratios. These ratios are susceptible to much of what is discussed in previous chapters with regards to infinity rates and small sample sizes leading to extreme results. But as we are going to eventually smooth this data with our model, we are not as concerned here about the state of the raw data. Here we can see our raw standardized mortality ratios extend from zero to infinity.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ma_mort_indirect</span> <span class="op">&lt;-</span> <span class="va">ma_mort_agg</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">ma_demo_acs</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"year"</span>,<span class="st">"GEOID10"</span>,<span class="st">"race_group"</span>,<span class="st">"sex"</span>,<span class="st">"age_cat"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">race_group</span> <span class="op">==</span> <span class="st">"Total"</span>,
@@ -851,7 +848,7 @@ We can visualize how premature mortality varies across space using spatial model
 ## #   perc_BLACK_qt &lt;fct&gt;, SVI_qt &lt;fct&gt;, id &lt;int&gt;, pov_cat_1 &lt;int&gt;, pov_cat_2 &lt;int&gt;, pov_cat_3 &lt;int&gt;,
 ## #   pov_cat_4 &lt;int&gt;, pov_cat_NA &lt;int&gt;, ICE_qt_1 &lt;int&gt;, ICE_qt_2 &lt;int&gt;, ICE_qt_3 &lt;int&gt;, ICE_qt_4 &lt;int&gt;,
 ## #   ICE_qt_5 &lt;int&gt;, ICE_qt_NA &lt;int&gt;, SVI_qt_1 &lt;int&gt;, SVI_qt_2 &lt;int&gt;, SVI_qt_3 &lt;int&gt;, SVI_qt_4 &lt;int&gt;, …</code></pre>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">raw_smr_dotplot</span> <span class="op">&lt;-</span> <span class="va">ma_mort_indirect</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">raw_smr</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
@@ -871,7 +868,7 @@ We can visualize how premature mortality varies across space using spatial model
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"raw_smr_dotplot.png"</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="images/07-premature-mortality/raw_smr_dotplot.png" width="100%"></div>
 <p>We can also produce a map of these relationships. To do so, we will import a map file produced by the State of Massachusetts [<a href="https://www.mass.gov/info-details/massgis-data-municipalities" class="uri">https://www.mass.gov/info-details/massgis-data-municipalities</a>].</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tract_geometry</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"CENSUS2010_BLK_BG_TRCT_SHP"</span>,
                        layer <span class="op">=</span> <span class="st">"CENSUS2010TRACTS_POLY"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>id_order <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/ranking.html">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
@@ -889,7 +886,7 @@ We can visualize how premature mortality varies across space using spatial model
 ## 5 25021418004        5 MULTIPOLYGON (((240687.3 88...
 ## 6 25021412300        6 MULTIPOLYGON (((226244 8863...</code></pre>
 <p>We will include a cut-out of Boston so we can see some census tracts in more detail:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">raw_smr_map.state</span> <span class="op">&lt;-</span> <span class="va">ma_mort_indirect</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">tract_geometry</span>, by<span class="op">=</span> <span class="st">"GEOID10"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
@@ -936,7 +933,7 @@ We can visualize how premature mortality varies across space using spatial model
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"raw_smr_map.png"</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="images/07-premature-mortality/raw_smr_map.png" width="100%"></div>
 <p>We can fit a spatial model using the INLA package which will “smooth” our results by fitting our data to a BYM model that will adjust estimates based on the surrounding areas. We first need to be able to create an adjacency matrix, so that the package knows which census tracts are neighbors</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Make sure that the data file has areas in the same order as the shape file</span>
 <span class="va">ma_mort_indirect_ordered</span> <span class="op">&lt;-</span> <span class="va">ma_mort_indirect</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>intercept <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span>
@@ -998,7 +995,7 @@ We can visualize how premature mortality varies across space using spatial model
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>raw_smr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">O</span><span class="op">/</span><span class="va">E</span><span class="op">)</span><span class="op">+</span><span class="fl">0.046</span><span class="op">)</span></code></pre></div>
 <p>Note the code above provides code to calculate the percentage of the variance in the data that is spatially correlated - in this case, about 80%.</p>
 <p>We can now visualize our smoothed SMR. First, let’s look at a similar dot plot to what we did with the raw SMR:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">smooth_smr_dotplot</span> <span class="op">&lt;-</span> <span class="va">ma_mort_indirect_ordered</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">smooth_smr</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
@@ -1019,7 +1016,7 @@ We can visualize how premature mortality varies across space using spatial model
 <div class="inline-figure"><img src="images/07-premature-mortality/smooth_smr_map.png" width="100%"></div>
 <p>We can see from the plot and the map that while there is still variation in the SMR - it is much less extreme than the raw SMR.
 But to get a true sense of how premature mortality varies across the socioeconomic gradient, we should look at a model that adjusts for our ABSMs and see if there are any changes in variation. Let’s look at the SMR after we adjust for poverty, giving us the map we introduced this section with.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#Code to include our ABSM</span>
 <span class="va">these_variables</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"pov_cat_2 + pov_cat_3 + pov_cat_4 + pov_cat_NA"</span>,
                      <span class="st">"ICE_qt_1 + ICE_qt_2 + ICE_qt_3 + ICE_qt_4 + ICE_qt_NA"</span>,
@@ -1111,7 +1108,7 @@ But to get a true sense of how premature mortality varies across the socioeconom
 <h3>
 <span class="header-section-number">6.4.2</span> What is the racialized disparity in premature mortality overall?<a class="anchor" aria-label="anchor" href="#what-is-the-racialized-disparity-in-premature-mortality-overall"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="st">"images/07-premature-mortality/map.irr.png"</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="images/07-premature-mortality/map.irr.png" width="100%"></div>
 <p>We can describe inequities by racialized groups much the same way we describe inequities in ABSM - by aggregating death and population data. We already have these aggregated - we can stratify our analysis to compare the White Non-Hispanic and Black Non-Hispanic populations. Throughout the example we may refer to these groups as White and Black as a shorthand.</p>
@@ -1135,7 +1132,7 @@ But to get a true sense of how premature mortality varies across the socioeconom
 ## 12 75-84    44841 0.0448
 ## 13 85+      15508 0.0155</code></pre>
 <p>Let’s now age adjust our aggregated data by racialized group so we can compare standardized mortality rates.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ma_mort_direct</span> <span class="op">&lt;-</span> <span class="va">ma_mort_agg</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">ma_demo_acs</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"year"</span>,<span class="st">"GEOID10"</span>,<span class="st">"race_group"</span>,<span class="st">"sex"</span>,<span class="st">"age_cat"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">race_group</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Non-Hispanic White"</span>,<span class="st">"Non-Hispanic Black"</span><span class="op">)</span>,
@@ -1186,7 +1183,7 @@ But to get a true sense of how premature mortality varies across the socioeconom
 We can see lots of variation here as the mortality rates increase - what is causing that?</div>
 <div class="inline-figure"><img src="images/07-premature-mortality/ordered.agg_rates.png" width="100%"></div>
 <p>As we might expect, these extremely variable mortality rates are occurring in small populations. What do these maps look like?</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">plotlist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">vector</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"list"</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">plotlist</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Non-Hispanic White"</span>,<span class="st">"Non-Hispanic Black"</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">plt</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">plotlist</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
@@ -1251,7 +1248,7 @@ We can see lots of variation here as the mortality rates increase - what is caus
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"byrace_std_rates.png"</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="images/07-premature-mortality/byrace_std_rates.png" width="100%"></div>
 <p>We are seeing some really extreme rates in the Black population, where we have smaller overall sample sizes. We are also seeing many census tracts with no black population. We can also display these two maps as one, by calculating the Rate Difference, or the Rate Ratio. Here we will show the Rate Ratio of the Age Standardized rates, as we visualized at the start of this section. Key is understanding that these rates are influenced by the small sample sizes and large potential errors we have previously visualized. It’s for researchers and communities to interpret how “real” the effects we see are</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">irr_data</span> <span class="op">&lt;-</span> <span class="va">ma_mort_direct</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">GEOID10</span>,<span class="va">super_town</span>,<span class="va">race_group</span>, <span class="va">std_rate</span>, <span class="va">var_std_rate</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>id_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">GEOID10</span>,<span class="va">super_town</span><span class="op">)</span>,
@@ -1279,7 +1276,7 @@ We can see lots of variation here as the mortality rates increase - what is caus
   
 <span class="va">irr_plot</span></code></pre></div>
 <p>When we map the IRR, we can see the crude rate ratio between Non-Hispanic Black and Non-Hispanic White populations:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">map.state.irr</span> <span class="op">&lt;-</span> <span class="va">irr_data</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>irr <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span><span class="va">irr</span> <span class="op">&gt;</span> <span class="fl">4</span>  <span class="op">~</span> <span class="fl">4</span>,
                          <span class="cn">TRUE</span>     <span class="op">~</span> <span class="va">irr</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
@@ -1339,7 +1336,7 @@ We can see lots of variation here as the mortality rates increase - what is caus
 <div class="inline-figure"><img src="images/07-premature-mortality/adj_map.p.irr.png" width="100%"></div>
 <p>In order to visualize differences in how an ABSM - we will use poverty - interacts with racialized group, we can use a poisson model for the mortality rates, and include an interaction term between racialized group and poverty.</p>
 <p>Let’s first plot the IRR produced by a poisson model for the rates.</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">poisson_data</span> <span class="op">&lt;-</span> <span class="va">ma_mort_agg</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">ma_demo_acs</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"year"</span>,<span class="st">"GEOID10"</span>,<span class="st">"race_group"</span>,<span class="st">"sex"</span>,<span class="st">"age_cat"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">race_group</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Non-Hispanic White"</span>,<span class="st">"Non-Hispanic Black"</span><span class="op">)</span>,
@@ -1408,7 +1405,7 @@ We can see lots of variation here as the mortality rates increase - what is caus
 <p>And of course, now we can map that value as well.</p>
 <div class="inline-figure"><img src="images/07-premature-mortality/map.p.irr.png" width="100%"></div>
 <p>An adjusted model would allow for us to see how poverty rates are impacting the IRR.</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Adjusted Poisson Model</span>
 <span class="va">model1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">num</span> <span class="op">~</span> <span class="va">race_group</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">age_cat</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">race_group</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">pov_cat</span>, exclude <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/offset.html">offset</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">den</span><span class="op">)</span><span class="op">)</span>,
                         family<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span>link<span class="op">=</span><span class="va">log</span><span class="op">)</span>,
@@ -1447,7 +1444,7 @@ We can see lots of variation here as the mortality rates increase - what is caus
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"adj_poisson_irr_plot.png"</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="images/07-premature-mortality/adj_poisson_irr_plot.png" width="100%"></div>
 <p>And now the map:</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">adj_map.state.p.irr</span> <span class="op">&lt;-</span> <span class="va">adj_poisson_irr</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>adj_fit_irr <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span><span class="va">adj_fit_irr</span> <span class="op">&gt;</span> <span class="fl">4</span>  <span class="op">~</span> <span class="fl">4</span>,
                          <span class="cn">TRUE</span>     <span class="op">~</span> <span class="va">adj_fit_irr</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
@@ -1599,7 +1596,7 @@ We can see lots of variation here as the mortality rates increase - what is caus
 <span class="header-section-number">6.4.4</span> How does the racialized disparity vary across space?<a class="anchor" aria-label="anchor" href="#how-does-the-racialized-disparity-vary-across-space"><i class="fas fa-link"></i></a>
 </h3>
 <p>Although much of our data are at the census tract level, census tracts are not areas of political decision making. Political decisions in Massachusetts are made at the level of cities and towns. We would expect that cities and towns might be more important than census tracts in determining premature mortality, because it is at those boundaries that resources are distributed. We can fit a multilevel model to test this hypothesis.</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Bringing in city expenditure data</span>
 <span class="va">expenditures</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="st">"expenditures.RDS"</span><span class="op">)</span>
 
