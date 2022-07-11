@@ -509,7 +509,6 @@ for (nm in names(ma_absm_acs)) {
                                output = "wide",
                                state = "MA",
                                geometry = FALSE,
-                               key = "4407a63721e192545e1e2a2fc7f6920477b10108",
                                moe_level = 95,
                                survey = "acs5",
                                cache_table = TRUE) %>%

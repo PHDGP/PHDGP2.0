@@ -591,6 +591,17 @@ uninsurance %<>% mutate(
 )
 ```
 
+```{r}
+#| echo=FALSE,
+#| eval=FALSE
+saveRDS(uninsurance, here('data/11-health-insurance-comparison/county_uninsurance_w_absms.rds'))
+```
+
+```{r}
+#| echo=FALSE,
+#| eval=TRUE
+uninsurance <- readRDS(here('data/11-health-insurance-comparison/county_uninsurance_w_absms.rds'))
+```
 
 ```{r}
 # relationship between ICE and percent without insurance in PLACES
