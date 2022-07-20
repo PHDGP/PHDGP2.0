@@ -131,6 +131,7 @@ places <- readr::read_csv("data/11-health-insurance-comparison/places_2021_relea
 library(tidyverse)
 library(magrittr)
 library(tidycensus)
+library(patchwork)
 
 # get our data from PLACES 
 # download the county level data from https://chronicdata.cdc.gov/500-Cities-Places/PLACES-Local-Data-for-Better-Health-County-Data-20/swc5-untb 
@@ -347,6 +348,7 @@ ggsave(
 knitr::include_graphics("images/11-health-insurance-comparison/scatter.png")
 ```
 
+
 ```{r}
 #| eval=FALSE
 ggplot(uninsurance,
@@ -376,6 +378,14 @@ ggsave(
 #| echo=FALSE
 knitr::include_graphics("images/11-health-insurance-comparison/population_size_vs_difference_scatter.png")
 ```
+
+:::: {.infobox .interpretation}
+The last three figures help us to see the on-average differences between ACS and PLACES 
+estimates of health uninsurance rates.  In the histogram figure, we can see that the 
+PLACES estimates of uninsurance are often higher than those in ACS, while the scatter-plot
+figures show us how this relationship changes with population size.
+::::
+
 
 ## Adding ABSMs
 
@@ -633,6 +643,10 @@ broom::tidy(model)
 
 ```{r}
 #| eval=FALSE
+
+# create a data frame with the names for each combination of the percent
+# uninsured in PLACES or ACS variables in one column and each of the categorical
+# exposure variables in another column
 model_formulae <- 
   tidyr::expand_grid(
     exposure = c('ICEraceinc_cut',
@@ -644,8 +658,12 @@ model_formulae <-
       'prop_white_nh_cut'),
     outcome = c('pct_uninsured_19_64_acs', 'pct_uninsured_18_64_places'))
 
+# create a column that puts the uninsurance variables on the left-hand-side
+# and the exposure variables on the right hand side
 model_formulae %<>% mutate(formula = paste0(outcome, " ~ ", exposure))
 
+# fit regression models using the robust linear model rlm method from 
+# the MASS package
 model_formulae %<>% rowwise() %>% mutate(
   model = list(
     # note that you do need to have the MASS package installed;
@@ -660,15 +678,26 @@ model_formulae %<>% rowwise() %>% mutate(
   model_coefs = list(broom::tidy(model, conf.int=TRUE))
 )
 
+# extract the coefficient estimates on the exposure terms
 model_formulae %<>% mutate(model_coefs = list(filter(model_coefs, term != '(Intercept)')))
 
+# unnest the model coefficients data
 model_formulae %<>% unnest(cols = model_coefs)
 
+# create a plot showing the coefficient estimates from each model  - 
+# 
+# the visualization here is what's typically called a "forest plot" and shows
+# the point-estimates for the coefficients and their 95% confidence intervals
+# along with a dashed line at zero so we can see if the coefficients are
+# significantly different from the null hypothesis (the null hypothesis being
+# that the coefficient is zero).
 model_formulae %>% 
   mutate(
-    term = stringr::str_remove(term, exposure),
-    term_size = as.numeric(stringr::str_extract(term, "[0-9\\-\\.e\\+]+")),
+    term = stringr::str_remove(term, exposure), # remove the exposure string repeated in each term
+    term_size = as.numeric(stringr::str_extract(term, "[0-9\\-\\.e\\+]+")), # get the numeric value of each term;
+    # e.g. if the term was originally poverty_cut[0,0.05) then this regular expression extracts the 0
     term = forcats::fct_reorder(term, -term_size)
+    # using the term size, we order the terms so they appear in the correct order
   ) %>% 
   ggplot(aes(x = estimate, xmin = conf.low, xmax = conf.high, y = term,
              shape = outcome, color = outcome)) + 
@@ -701,14 +730,18 @@ knitr::include_graphics("images/11-health-insurance-comparison/modeled_effects_f
 #| echo = TRUE,
 #| eval = FALSE
 
-# let's take a look at massachusetts
+# let's take a look at some specific states
 
+# extract the maximum uninsurance rate across both ACS and PLACES so that we can
+# use it in making the color palettes consistent between the two maps for ACS
+# and PLACES
 max_uninsurance_rate <- 
   pmax(max(uninsurance %>% 
     filter(state_abbr == 'TX') %>% pull(pct_uninsured_19_64_acs)),
   max(uninsurance %>% 
     filter(state_abbr == 'TX') %>% pull(pct_uninsured_18_64_places)))
 
+# create a map showing the ACS direct estimates of uninsurance rates
 acs_figure <- uninsurance %>% 
   filter(state_abbr == 'TX') %>% 
   ggplot(aes(fill = pct_uninsured_19_64_acs)) + 
@@ -718,6 +751,7 @@ acs_figure <- uninsurance %>%
   labs(fill = "Percent Uninsured (19-64)") + 
   ggtitle("ACS Percent Uninsurance Estimates")
 
+# create a map showing the PLACES estimates of uninsurance rates
 places_figure <- uninsurance %>% 
   filter(state_abbr == 'TX') %>% 
   ggplot(aes(fill = pct_uninsured_18_64_places)) + 
@@ -727,13 +761,14 @@ places_figure <- uninsurance %>%
   labs(fill = "Percent Uninsured (18-64)") + 
   ggtitle("Places Percent Uninsurance Estimates")
 
-
-library(patchwork)
+# combine the two figures into one side-by-side figure
 acs_figure + places_figure
 
+# save the figure
 ggsave("images/11-health-insurance-comparison/texas_comparison.png",
        height = 6, width = 12)
 
+# create a scatter plot showing the ACS vs. PLACES relationship in Texas
 uninsurance %>% 
   filter(state_abbr == 'TX') %>% 
   ggplot(aes(x = pct_uninsured_19_64_acs, y = pct_uninsured_18_64_places)) + 
@@ -742,17 +777,23 @@ uninsurance %>%
   ylim(c(0, max_uninsurance_rate)) + 
   geom_abline(slope = 1, intercept = 0)
 
+# save the figure
 ggsave("images/11-health-insurance-comparison/texas_comparison_scatter.png",
        height = 6, width = 6)
 
 
+# florida --- 
 
+# extract the maximum uninsurance rate across both ACS and PLACES so that we can
+# use it in making the color palettes consistent between the two maps for ACS
+# and PLACES
 max_uninsurance_rate <- 
   pmax(max(uninsurance %>% 
     filter(state_abbr == 'FL') %>% pull(pct_uninsured_19_64_acs)),
   max(uninsurance %>% 
     filter(state_abbr == 'FL') %>% pull(pct_uninsured_18_64_places)))
 
+# create a map showing the ACS direct estimates of uninsurance rates
 acs_figure <- uninsurance %>% 
   filter(state_abbr == 'FL') %>% 
   ggplot(aes(fill = pct_uninsured_19_64_acs)) + 
@@ -762,6 +803,7 @@ acs_figure <- uninsurance %>%
   labs(fill = "Percent Uninsured (19-64)") + 
   ggtitle("ACS Percent Uninsurance Estimates")
 
+# create a map showing the PLACES estimates of uninsurance rates
 places_figure <- uninsurance %>% 
   filter(state_abbr == 'FL') %>% 
   ggplot(aes(fill = pct_uninsured_18_64_places)) + 
@@ -771,12 +813,14 @@ places_figure <- uninsurance %>%
   labs(fill = "Percent Uninsured (18-64)") + 
   ggtitle("Places Percent Uninsurance Estimates")
 
+# combine the two figures into one side-by-side figure
 acs_figure + places_figure
 
+# save the figure
 ggsave("images/11-health-insurance-comparison/florida_comparison.png",
        height = 6, width = 12)
 
-
+# create a scatter plot showing the ACS vs. PLACES relationship in Florida
 uninsurance %>% 
   filter(state_abbr == 'FL') %>% 
   ggplot(aes(x = pct_uninsured_19_64_acs, y = pct_uninsured_18_64_places)) + 
@@ -790,6 +834,9 @@ ggsave("images/11-health-insurance-comparison/florida_comparison_scatter.png",
 
 
 # minnesota --- 
+
+# follows the same approach as shown above for Texas and Florida 
+
 max_uninsurance_rate <- 
   pmax(max(uninsurance %>% 
     filter(state_abbr == 'MN') %>% pull(pct_uninsured_19_64_acs)),
@@ -819,8 +866,12 @@ acs_figure + places_figure
 ggsave("images/11-health-insurance-comparison/minnesota_comparison.png",
        height = 6, width = 12)
 
+# wisconsin --- 
+
+# follows the same approach as shown above for Texas and Florida 
+
 uninsurance %>% 
-  filter(state_abbr == 'WI') %>% 
+  filter(state_abbr == 'MN') %>% 
   ggplot(
     aes(x = pct_uninsured_19_64_acs, 
         xmin = pct_uninsured_18_64_acs_ci_low, 
@@ -846,6 +897,9 @@ ggsave("images/11-health-insurance-comparison/minnesota_comparison_scatter.png",
 
 
 # wisconsin --- 
+
+# follows the same approach as above for Texas, Florida, Minnesota
+
 max_uninsurance_rate <- 
   pmax(max(uninsurance %>% 
     filter(state_abbr == 'WI') %>% pull(pct_uninsured_19_64_acs)),
@@ -875,9 +929,10 @@ places_figure <- uninsurance %>%
 
 acs_figure + places_figure
 
-ggsave("images/11-health-insurance-comparison/wisconson_comparison.png",
+ggsave("images/11-health-insurance-comparison/wisconsin_comparison.png",
        height = 6, width = 12)
 
+# this figure slightly differs from the above approach in that it includes error-bars
 uninsurance %>% 
   filter(state_abbr == 'WI') %>% 
   ggplot(
@@ -904,30 +959,17 @@ ggsave("images/11-health-insurance-comparison/wisconsin_comparison_scatter.png",
        height = 6, width = 9)
 ```
 
-<!-- ## Using CDC’s PLACES -->
+```{r}
+#| echo=FALSE,
+#| eval=TRUE
 
-<!-- _**What are the strengths and limitations of CDC’s PLACES SAEs?**_ -->
-
-<!-- STRENGTHS:  -->
-
-<!--   -	unique source of CT-level health relevant data -->
-<!--   -	can be linked to other CT and other area-based measures of structural and social determinants of health -->
-<!--   -	Good starting point for understanding baseline health-related disparities  -->
-<!--   -	Can be used to assess general trends across areas in order to inform outreach and further contextualized research and program planning -->
-
-<!-- WEAKNESSES:  -->
-
-<!--   -	Data not meant for longitudinal research (studies have tried to use PLACES -->
-<!--   estimates as outcomes and applied regressions on exposure data extracted -->
-<!--   elsewhere, despite warning at the PLACES website that the data should not be -->
-<!--   used in this way) -->
-<!--   -	Post-stratification done using 2010 census estimates (cannot disentangle -->
-<!--   predictors) -->
-<!--   -	Environmental exposures are not captured (as the assumption is that -->
-<!--   confounding by these are accounted for by looking at census tract level), so -->
-<!--   estimates cannot be used to evaluate local policies or programs -->
-<!--   -	Stratification by racialized group, age, or socioeconomic position not -->
-<!--   available (hence cannot do sub-analyses for specific age/racialized/income -->
-<!--   groups) -->
-<!--   -	Paucity of validation studies  -->
+knitr::include_graphics("images/11-health-insurance-comparison/texas_comparison.png")
+knitr::include_graphics("images/11-health-insurance-comparison/texas_comparison_scatter.png")
+knitr::include_graphics("images/11-health-insurance-comparison/florida_comparison.png")
+knitr::include_graphics("images/11-health-insurance-comparison/florida_comparison_scatter.png")
+knitr::include_graphics("images/11-health-insurance-comparison/minnesota_comparison.png")
+knitr::include_graphics("images/11-health-insurance-comparison/minnesota_comparison_scatter.png")
+knitr::include_graphics("images/11-health-insurance-comparison/wisconsin_comparison.png")
+knitr::include_graphics("images/11-health-insurance-comparison/wisconsin_comparison_scatter.png")
+```
 

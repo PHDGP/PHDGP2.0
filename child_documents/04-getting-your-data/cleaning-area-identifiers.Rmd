@@ -14,7 +14,7 @@ codes `01` and `02`, if these are mistakenly stored as numeric values, they will
 be truncated to as `1` and `2` which can introduce errors when trying to merge
 multiple datasets using FIPS codes.
 
-:::: {.infobox .note}
+:::: {.infobox .dataWrangling}
 For county FIPS codes, the `tigris` package has a handy built-in reference. 
 
 Once you've installed `tigris` (e.g. run `install.packages('tigris')`) and
