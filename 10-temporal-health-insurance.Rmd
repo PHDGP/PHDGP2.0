@@ -714,7 +714,7 @@ map <-
   )
 
 library(htmlwidgets)
-saveWidget(map, "data/10-temporal-health-insurance/map.html")
+saveWidget(map, "/Users/tamararushovich/map.html")
 
 health_insurance_sf %>% 
   filter(year == min(year)) %>% 
@@ -722,9 +722,9 @@ health_insurance_sf %>%
   filter(state == 'Texas') %>% 
   ggplot(aes(fill = change_over_time)) + 
   geom_sf(color = 'white', size = .05) + 
-  scale_fill_manual(values = c('increasing' = '#91CF60', 
+  scale_fill_manual(values = c('increasing' = '#67A9CF', 
                                 'uncertain/stable' = '#FFFFBF', 
-                                'decreasing' = '#FC8D59'
+                                'decreasing' = '#EF8A62'
                                )) 
   
 health_insurance_sf %>% 
@@ -733,9 +733,9 @@ health_insurance_sf %>%
   filter(state == 'Florida') %>% 
   ggplot(aes(fill = change_over_time)) + 
   geom_sf(color = 'white', size = .05) + 
-  scale_fill_manual(values = c('increasing' = '#91CF60', 
+  scale_fill_manual(values = c('increasing' = '#67A9CF', 
                                 'uncertain/stable' = '#FFFFBF', 
-                                'decreasing' = '#FC8D59'
+                                'decreasing' = '#EF8A62'
                                )) 
 
 health_insurance_sf %>% 
@@ -744,9 +744,9 @@ health_insurance_sf %>%
   filter(state == 'California') %>% 
   ggplot(aes(fill = change_over_time)) + 
   geom_sf(color = 'white', size = .05) + 
-  scale_fill_manual(values = c('increasing' = '#91CF60', 
+  scale_fill_manual(values = c('increasing' = '#67A9CF', 
                                 'uncertain/stable' = '#FFFFBF', 
-                                'decreasing' = '#FC8D59'
+                                'decreasing' = '#EF8A62'
                                ))
 
 ```
@@ -766,7 +766,7 @@ ggsave("images/10-temporal-health-insurance/health_insurance_county_temporal.png
 
 knitr::include_graphics("images/10-temporal-health-insurance/health_insurance_county_temporal.png")
 
-# TODO: add figure caption explaining the jitter and transparency mapping to quantile ranges
+
 ```
 
 
