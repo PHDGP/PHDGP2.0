@@ -25,7 +25,7 @@ This case study focuses on the following research questions:
 
   - What are the gradients in COVID-19 mortality by racialized group in relation to the ABSMs
   
-  - What is the spatial variation in COVID-19 mortality by racialized group, and how is this related to ABSMs?
+  - What is the spatial variation in COVID-19 mortality by racialized group?
   
 
 In today's case example using these data, we'll show you how you can use the `tidycensus` package to download relevant area based population estimates and sociodemographic measures from the ACS. 
@@ -1252,13 +1252,21 @@ ggplot() +
 # ggsave("./images/09-cook-county-covid/crude_rates_by_raceethnicity.png", width = 8, height = 6)
 ```
 
+:::: {.infobox .interpretation}
+There are racialized disparities in mortality across all age groups. How would you interpret this, and is this what you expected to see? Why or why not?
+::::
+
 ```{r image crude rates by racialized group}
 #| echo = FALSE,
 #| eval = TRUE
 knitr::include_graphics(here("images/09-cook-county-covid/crude_rates_by_raceethnicity.png"))
 ```
 
-We can fit models to the aggregate data to adjust for age and obtain relative risk estimates.
+We can fit models to the aggregate data to adjust for age and obtain relative risk estimates. 
+
+:::: {.infobox .dataWrangling}
+We can fit Poisson, Quasi-Poisson, and Negative Binomial models here, depending on our assumptions about overdispersion. The code below fits the different models and plots them together to demonstrate how modeling assumptions may affect the results. Doing this repeatedly for various analysis can be tedious. One idea could be to write a function that fits all three models given a dataset and model specifications.
+::::
 
 ```{r crude models}
 #| echo = TRUE,
@@ -1274,7 +1282,7 @@ crude_quasipoisson_model <- glm(deaths ~ race_ethnicity + age_group + offset(log
 
 #Negative binomial model from MASS package
 crude_negbin_model <- MASS::glm.nb(deaths ~ race_ethnicity + age_group + offset(log(person_time / 1e5)),
-                           data = crude_mortality)
+                           data = crude_mortality) ##The MASS package is used to fit the negative binomial model
 
 # extract the model coefficients
 crude_results <- bind_rows(
@@ -1284,25 +1292,25 @@ crude_results <- bind_rows(
   broom::tidy(crude_negbin_model, exponentiate = TRUE, conf.int = TRUE) %>% mutate(Model = "Negative Binomial")
 ) %>%
   dplyr::select(term, estimate, conf.low, conf.high, Model) %>%
-  filter(term != '(Intercept)') %>%
+  filter(term != '(Intercept)') %>% # Remove the intercept term
   filter(! stringr::str_detect(term, "age_group")) %>% #Clean up the names of variables
-  mutate(term = str_replace(term, "race_ethnicity", ""))
+  mutate(term = str_replace(term, "race_ethnicity", "")) #Clean up names of variables
 
 #Plot model results on same plot to compare
 ggplot(crude_results,
        aes(
          x = estimate,
-         xmax = conf.high,
+         xmax = conf.high, #for confidence interval error bars
          xmin = conf.low,
          y = term,
-         color = Model,
+         color = Model, #Color, fill, shape grouped by model type.
          fill = Model,
          shape = Model,
          group = Model
        )
 ) +
-  geom_vline(xintercept = 1, linetype = 'dashed') +
-  geom_pointrange(position = position_dodge(width = .45)) +
+  geom_vline(xintercept = 1, linetype = 'dashed') + #Line to represent RR Of 1
+  geom_pointrange(position = position_dodge(width = .45)) + #pointrange plots confidence interval and estimate
   scale_x_continuous(
     limits = c(0, NA),
     n.breaks = 4,
@@ -1313,7 +1321,7 @@ ggplot(crude_results,
   ggtitle("Modeled Incident Rate Ratios",
           subtitle = "White, Non-Hispanic is the reference racialized group")
 
-# ggsave(here("images/09-cook-county-covid/modeled_IRR_by_raceethnicity.png"), width = 6, height = 4)
+# ggsave("./images/09-cook-county-covid/modeled_IRR_by_raceethnicity.png", width = 6, height = 4)
 ```
 
 ```{r image crude models results}
@@ -1322,7 +1330,18 @@ ggplot(crude_results,
 knitr::include_graphics(here("images/09-cook-county-covid/modeled_IRR_by_raceethnicity.png"))
 ```
 
+:::: {.infobox .interpretation}
+The Poisson and Quasi-Poisson models have the same point estimate but the confidence interval from the Quasi-Poisson model is much greater. The Negative Binomial models have different point estimates and confidence intervals. Is this what you expected? Why or why not?
+::::
+
+:::: {.infobox .communication}
+When presenting, it would likely be easier to communicate these results by showing results from one type of model.
+::::
+
 ### Gradients in COVID-19 mortality by in relation to ABSMs
+
+Having looked at overall racialized disparities in COVID-19 mortality, let us now take a look at how mortality varies by ABSMs. Like in the section above, we take age into account by adjusting for age in the model. We fit separate models for each ABSM we are considering.
+
 ```{r modeling 1, fig.width = 10, fig.height = 8}
 #| echo = TRUE,
 #| eval = FALSE
@@ -1458,8 +1477,16 @@ knitr::include_graphics(here("images/09-cook-county-covid/exposure_coefficient_e
 ```
 
 
-
 ### Gradients in COVID-19 mortality by Racialized Group in relation to ABSMs
+
+Now we can take a look at how mortality varies in relation to ABSMs, by racialized group. We build on the code in the section above, but now have models for each racialized group and each ABSM.
+
+:::: {.infobox .dataWrangling}
+Here we fit the three types of models, for three racialized groups, and for seven ABSMs. Writing out 3x3x7 models would take up space and time, and be prone to mistakes. The code below uses the `map` function from the `purrr` package to do this more efficiently. Do you agree with this approach? What are some other ways you would approach this?
+
+You can change to code to focus in on fewer ABSMs or investigate other ABSMs of interest for the presentation.
+::::
+
 ```{r modeling 2, fig.width = 10, fig.height = 8}
 #| eval = FALSE,
 #| echo = TRUE
@@ -1599,9 +1626,13 @@ race_ethnicity_stratified_models %>%
 knitr::include_graphics(here("images/09-cook-county-covid/exposure_coefficient_estimates.png"))
 ```
 
+:::: {.infobox .communication}
+The various models and ABSMs are shown for demonstration. However, it may be better to focus on one particular aspect (e.g. a particular ABSM and model), driven by a specific question and understanding of the context. What would you focus on and why?
+::::
 
 ### Hierarchical and Spatial Models
 
+#### Background
 In the examples above, we modeled the associations between individual- and area-based measures with the outcome in aggregate across the county. However, we may also be interested in modeling the risk of mortality in each ZCTA. This can help us better understand the spatial distribution of risk. 
 
 We may also want to take into account the fact that these ZCTAs are likely not independent of each other, but rather related to each other in a spatially structured fashion. That is, ZCTAs that are next to each other are more likely to have similar rates than ZCTAs that are farther apart.
@@ -1611,6 +1642,8 @@ One of the *statistical* challenges of estimating the risk in each ZCTA (or any 
 Put another way: let us say that a particular part of the county has high mortality rates. If we look at observations over a limited period of time, in each specific ZCTA separately, we may miss this just by chance due to the fact that the populations in individual ZCTAs are small, and thus fewer events are observed. However, if we pool information from neighboring ZCTAs, we would be able to obtain a more stable estimate of the risk.
 
 Hierarchical Bayesian models are a popular set of tools to conduct such estimations. Often, in such approaches, we will model the Standardized Mortality Ratio (SMR), standardized by age. The relative risk or SMR in area $i$, ($\theta_i$) is obtained by dividing the expected count ($E_i$) by the observed count $O_i$). How we calculate the "expected count" depends on the objectives of our study and analysis. For example, if we know that there are strong age effects, and want to estimate excess risk after accounting for age-composition differences between ZCTAs, we can take the age-strata-specific mortality rates for all of Cook County, and apply it to the age-distribution of each ZCTA. This tells us what the "expected" mortality count would be if each ZCTA experienced Cook County's average age-specific mortality rates. One could also standardize by composition in relation to racialized groups, but then we would not be able to estimate how membership in racialized groups was associated with mortality. Similarly, age-standardization precludes the ability to look at the interaction between age and membership in racialized groups, for example.
+
+#### SMR Calculation
 
 In this case, we will estimate the SMR using age-standardization. For each racialized group in each ZCTA, we obtain the age standardized SMR.
 
@@ -1690,6 +1723,8 @@ knitr::include_graphics(here("images/09-cook-county-covid/raw_SMR_caterpillar.pn
 ```
 
 Here we can see that there is large variability in these strata-specific SMRs, as well as large confidence intervals for many strata — especially when the predicted rate is zero.
+
+#### Fitting Models
 
 Instead of just calculating the crude SMRs, we can model them using a Poisson log-normal model such that:
 
@@ -1807,7 +1842,7 @@ spatial_frac(model_bym_mod1, length(unique(smr_df$geoid)))
 ```
 
 
-### Comparing Fitted SMRs
+#### Comparing Fitted SMRs
 Having fit all of these models, let us visualize all of their components and see what we gain from using these different types of models, and how they differ.
 
 First, we can look at the the estimates of the fixed effects. Since our non-hierarchical models also estimated fixed effects, we can include them in this comparison, with the caveat that we are modeling SMRs in the hierarchical models.
@@ -1914,6 +1949,13 @@ ggplot(data = caterpillar_plot) +
 knitr::include_graphics(here("images/09-cook-county-covid/caterpillar_plot_SMRs.png"))
 ```
 
+:::: {.infobox .interpretation}
+These caterpillar plots demonstrates the noisiness of the raw SMRs. Note that we cut off the y-axis range here to allow comparison within a limited range. Both models smooth the SMRs.
+::::
+
+:::: {.infobox .communication}
+These plots also demonstrates the pitfalls of identifying small areas with extreme rates based on crude SMRs only. They may have a small underlying population, and have high confidence intervals.
+::::
 
 The hierarchical models can be most useful when we visualize the estimated ZCTA-specific effects. Since we have racialized group strata within ZCTAs, we can plot maps for each group.
 
@@ -1964,11 +2006,16 @@ knitr::include_graphics(here(
   "images/09-cook-county-covid/modeled_SMR_comparison_1.png"))
 ```
 
-What we see here is that the crude calculated SMRs are very noisy. Using the Poisson hierarchical and BYM models has clear benefits in smoothing the rates. However, there does not seem to be that much difference, at a high level, between the Poisson hierarchical and BYM model. 
-
 The spatial fraction is 72%.
 
-When we look at these smoothed maps, we can see that the risk is lowest for the White non-Hispanic group. However, the spatial patterning of risk is similar for each racialized group. This is because we did not model the spatial component separately for each group. We are going to do this next by fitting a separate models for each racialized group.
+:::: {.infobox .interpretation}
+What we see here is that the crude calculated SMRs are very noisy. Using the Poisson hierarchical and BYM models has clear benefits in smoothing the rates. However, there does not seem to be that much difference, at a high level, between the Poisson hierarchical and BYM model. 
+::::
+
+** IMPORTANT NOTE **
+:::: {.infobox .interpretation}
+When we look at these smoothed maps, we can see that the risk is lowest for the White non-Hispanic group. However, the spatial patterning of risk is similar for each racialized group in the maps. We should be cautious about concluding from this that the spatial patterning is the same. It is the result of how we constrained the model, as we did not model the spatial component separately for each group.  We are going to do this next by fitting a separate models for each racialized group.
+::::
 
 ```{r racialized group specific models}
 #| eval = FALSE,
@@ -2097,7 +2144,7 @@ spatial_frac(model_bym_h, length(unique(smr_df_h$geoid)))
 
 The spatial fraction of the residual variance is 61% for the White, non-Hispanic model; 67.8% for the Black; Hispanic and non-Hispanic model; and 77% for the Hispanic model.
 
-We can visualize the smoothed SMRs from these separate models.
+We can visualize the smoothed SMRs from these separate models. 
 ```{r racialized group specific SMR map}
 #| eval = FALSE,
 #| echo = TRUE
@@ -2151,7 +2198,9 @@ knitr::include_graphics(here(
 ```
 This approach reflects the different spatial patterning of risks for each racialized group, while also smoothing rates. 
 
-We may also be interested in looking at the area-specific **residuals**. These give us a sense of how much each areas risk deviates from the county-wide mean, conditional on any covariates we include in the model. We can visualize the residuals of the models above (where no covariates were included)
+#### Additional Analysis
+
+We may also be interested in looking at the area-specific **residuals**. These give us a sense of how much each areas risk deviates from the county-wide mean, conditional on any covariates we include in the model. We can visualize the residuals of the models above (where no covariates were included). 
 
 ```{r BYM residuals plot}
 #| eval = FALSE,
@@ -2282,59 +2331,3 @@ spatial_frac(model_bym_h2, length(unique(smr_df_h$geoid)))
          
 ```
 
-
-
-```{r coeffcients comparison 2}
-#| eval = FALSE,
-#| echo = TRUE
-
-coefficients_together2 <-
-  bind_rows(race_ethnicity_stratified_models %>% 
-              dplyr::select(-data) %>%
-              filter(exposure_var == "ICEraceinc_cut"),
-            tidy.inla(model_bym_wnh2) %>%
-              mutate(model = "BYM",
-                     race_ethnicity = "White, non-Hispanic",
-                     exposure_var = "ICEraceinc_cut",
-                     across(estimate:conf.high, ~ exp(.x))),
-            tidy.inla(model_bym_bhnh2) %>%
-              mutate(model = "BYM",
-                     race_ethnicity = "Black, Hispanic or non-Hispanic",
-                     exposure_var = "ICEraceinc_cut",
-                     across(estimate:conf.high, ~ exp(.x))),
-            tidy.inla(model_bym_h2) %>%
-              mutate(model = "BYM",
-                     race_ethnicity = "Hispanic",
-                     exposure_var = "ICEraceinc_cut",
-                     across(estimate:conf.high, ~ exp(.x)))) 
-
-
-
-coefficients_together2 %>%
-  filter(term != '(Intercept)') %>%
-  filter(! stringr::str_detect(term, "age_group")) %>%
-  mutate(term = stringr::str_remove(term, exposure_var)) %>% 
-  mutate(term_size = as.numeric(stringr::str_extract(term, "(?<=[\\(\\[])(.*)(?=,)"))) %>% 
-  mutate(term = forcats::fct_reorder(term, -term_size)) %>% 
-  ggplot(
-    aes(
-      x = estimate,
-      xmax = conf.high,
-      xmin = conf.low,
-      y = term,
-      color = model,
-      fill = model,
-      shape = model,
-      group = model  
-    )
-  ) +
-  geom_vline(xintercept = 1, linetype = 'dashed') +
-  geom_pointrange(position = position_dodge(width=.45)) +
-  scale_x_continuous(limits = c(0, NA), n.breaks = 4, trans = scales::pseudo_log_trans()) + 
-  facet_grid(~race_ethnicity, scales='free_y') + 
-  theme(axis.text.x = element_text(angle = 75, hjust = 1)) + 
-  ggtitle("Incident Rate Ratios",
-          subtitle = "Separate Models Fit for Each Categorical Exposure and Racialized Group")
-
-
-```
