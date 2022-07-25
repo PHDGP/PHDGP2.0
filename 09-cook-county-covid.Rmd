@@ -1190,10 +1190,12 @@ df <- readRDS("./data/09-cook-county-covid/cook_county_mortality_cleaned.rds")
 
 ```{r mapview example}
 #| echo = TRUE,
-#| eval = TRUE
+#| eval = FALSE 
 # launch an interactive map to view Cook County ICEraceinc by zip code
-mapview::mapview(df, zcol = "ICEraceinc")
+# mapview::mapview(df, zcol = "ICEraceinc")
 ```
+
+<iframe src = "data/09-cook-county-covid/ICEraceinc_widget.html" width = '100%' height = '500px'></iframe>
 
 ```{r mapview example two}
 #| echo = FALSE,
