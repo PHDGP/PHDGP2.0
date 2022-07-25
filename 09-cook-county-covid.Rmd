@@ -310,6 +310,8 @@ ggplot() +
 
 Now that we have obtained the ZCTAs that we will keep in the study, we can now focus on these to prepare demographic and denominator data.
 ```{r aggregate by ZCTA}
+#| echo = TRUE,
+#| eval = FALSE
 
 # group population sizes together by age groups and racialized group and zip code
 zips_with_population_estimates_by_race_ethnicity_and_age <-
