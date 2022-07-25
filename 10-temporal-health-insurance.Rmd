@@ -714,7 +714,7 @@ map <-
   )
 
 library(htmlwidgets)
-saveWidget(map, "/Users/tamararushovich/map.html")
+saveWidget(map, "map.html")
 
 health_insurance_sf %>% 
   filter(year == min(year)) %>% 
