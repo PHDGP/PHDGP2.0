@@ -6,14 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>8 Case Study 3: COVID-19 Mortality in Cook County (March 2020 - March 2022) | Public Health Disparities Geocoding Project 2.0 Training Manual</title>
 <meta name="author" content="Christian Testa, Jarvis T Chen, Enjoli Hall, Dena Javadi, Justin Morgan, Tamara Rushovich, Sudipta (Shu) Saha, Pamela D Waterman, Nancy Krieger">
-<meta name="description" content="8.1 Introduction The Cook County Medical Examiner has made a dataset with COVID-19 related deaths publicly available with the following intent: Cook County Government has created the Medical...">
+<meta name="description" content="8.1 Introduction In this case study, the outcome of interest is COVID-19 mortality in Cook County. The impact of COVID-19 has been marked by inequities by racialized/ethnic group and socioeconomic...">
 <meta name="generator" content="bookdown 0.26 with bs4_book()">
 <meta property="og:title" content="8 Case Study 3: COVID-19 Mortality in Cook County (March 2020 - March 2022) | Public Health Disparities Geocoding Project 2.0 Training Manual">
 <meta property="og:type" content="book">
-<meta property="og:description" content="8.1 Introduction The Cook County Medical Examiner has made a dataset with COVID-19 related deaths publicly available with the following intent: Cook County Government has created the Medical...">
+<meta property="og:description" content="8.1 Introduction In this case study, the outcome of interest is COVID-19 mortality in Cook County. The impact of COVID-19 has been marked by inequities by racialized/ethnic group and socioeconomic...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="8 Case Study 3: COVID-19 Mortality in Cook County (March 2020 - March 2022) | Public Health Disparities Geocoding Project 2.0 Training Manual">
-<meta name="twitter:description" content="8.1 Introduction The Cook County Medical Examiner has made a dataset with COVID-19 related deaths publicly available with the following intent: Cook County Government has created the Medical...">
+<meta name="twitter:description" content="8.1 Introduction In this case study, the outcome of interest is COVID-19 mortality in Cook County. The impact of COVID-19 has been marked by inequities by racialized/ethnic group and socioeconomic...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1.9000/transition.js"></script><script src="libs/bs3compat-0.3.1.9000/tabs.js"></script><script src="libs/bs3compat-0.3.1.9000/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -79,12 +79,14 @@
 <h2>
 <span class="header-section-number">8.1</span> Introduction<a class="anchor" aria-label="anchor" href="#introduction-1"><i class="fas fa-link"></i></a>
 </h2>
+<p>In this case study, the outcome of interest is COVID-19 mortality in Cook County. The impact of COVID-19 has been marked by inequities by racialized/ethnic group and socioeconomic position. Here we investigate disparities in COVID-19 mortality, with a focus on comparing risks between Black Hispanic and non-Hispanic, White non-Hispanic, and Hispanic populations.</p>
 <p>The Cook County Medical Examiner has made a dataset with COVID-19 related deaths publicly available with the following intent:</p>
 <blockquote>
 <p>Cook County Government has created the Medical Examiner COVID-19 Dashboard to provide direct, transparent access to critical information about COVID-19 deaths in the County for public health agencies, medical professionals, first responders, journalists, policymakers and residents. The Medical Examiner’s Office encourages visitors to use this data to explore trends, identify areas of concern and take appropriate action. The data can be utilized to identify communities that are most severely impacted by the virus and can inform proactive public policy.</p>
 </blockquote>
 <p>Read more: <a href="https://datacatalog.cookcountyil.gov/stories/s/ttk4-trbu" class="uri">https://datacatalog.cookcountyil.gov/stories/s/ttk4-trbu</a></p>
 <p>Data Source: <a href="https://datacatalog.cookcountyil.gov/Public-Safety/Medical-Examiner-Case-Archive-COVID-19-Related-Dea/3trz-enys" class="uri">https://datacatalog.cookcountyil.gov/Public-Safety/Medical-Examiner-Case-Archive-COVID-19-Related-Dea/3trz-enys</a></p>
+<p>The death records in this dataset includes individual-level fields for “Race” and “Latino”, from which we obtain social membership in racialized/ethnic groups. The dataset also includes residential Zip Codes, which we can use to link to area-based social measures (ABSMs) from the American Community Survey (ACS) 2015-19. We will explore how membership in racialized/ethnic groups and ABSMs is associated with COVID-19 mortality.</p>
 </div>
 <div id="motivation-research-questions-and-learning-objectives-2" class="section level2" number="8.2">
 <h2>
@@ -95,10 +97,12 @@
 <li><p>What are the differences in COVID-19 mortality rates by racialized group accounting for age?</p></li>
 <li><p>What are the gradients in overall COVID-19 mortality in relation to ABSMs measuring: racialized group composition, the ICE for racialized economic segregation, percent of population living below the poverty line, percent of people living in crowded housing, and median income;</p></li>
 <li><p>What are the gradients in COVID-19 mortality by racialized group in relation to the ABSMs</p></li>
-<li><p>What is the spatial variation in COVID-19 mortality by racialized group, and how is this related to ABSMs?</p></li>
+<li><p>What is the spatial variation in COVID-19 mortality by racialized group?</p></li>
 </ul>
-<p>In today’s case example using these data, we’ll show you how you can use the <code>tidycensus</code> package to download relevant area based population estimates and sociodemographic measures from the US Census American Community Survey (ACS) to contextualize the deaths observed in this dataset.</p>
-<p>We’ll show you how we cleaned the data and merged in data from the ACS in the <strong>Cleaning the Data</strong> section, but we’re providing to you a cleaned dataset that should allow you to pick up and follow along from the <strong>Visualizing Your Data</strong> section onwards.</p>
+<p>In today’s case example using these data, we’ll show you how you can use the <code>tidycensus</code> package to download relevant area based population estimates and sociodemographic measures from the ACS.</p>
+<div class="infobox dataWrangling">
+<p>We’ll show you how we cleaned the data and merged in data from the ACS in the <strong>Cleaning the Data</strong> section. However, we’re also providing you a cleaned dataset that should allow you to pick up and follow along from the <strong>Visualizing Your Data</strong> section onwards.</p>
+</div>
 </div>
 <div id="approach-2" class="section level2" number="8.3">
 <h2>
@@ -115,7 +119,8 @@
 <h2>
 <span class="header-section-number">8.4</span> Dependencies<a class="anchor" aria-label="anchor" href="#dependencies-2"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<p>These are the packages that you will need to run the code in this case example. Once you copy and run the code below to load the dependencies, you can jump ahead to the <strong>Visualizing Your Data</strong> Section if you want.</p>
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># mission critical packages</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://walker-data.com/tidycensus/">tidycensus</a></span><span class="op">)</span> 
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
@@ -138,15 +143,24 @@
 <h2>
 <span class="header-section-number">8.5</span> Cleaning the Data<a class="anchor" aria-label="anchor" href="#cleaning-the-data"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<div id="denominator-data" class="section level3" number="8.5.1">
+<h3>
+<span class="header-section-number">8.5.1</span> Denominator Data<a class="anchor" aria-label="anchor" href="#denominator-data"><i class="fas fa-link"></i></a>
+</h3>
+<p>Here we will use <code>tidycensus</code> to download relevant variables from the 2015-19 ACS dataset. The complete list of variables can be viewed online here: <a href="https://api.census.gov/data/2019/acs/acs5/variables.html" class="uri">https://api.census.gov/data/2019/acs/acs5/variables.html</a>. You will need a U.S. Census API key to download the data, which you can obtain from here: <a href="https://api.census.gov/data/key_signup.html" class="uri">https://api.census.gov/data/key_signup.html</a>. The key is for personal use here only, so it has been redacted here.</p>
+<p>We will be looking at a range of different ABSMs, and we also require age-stratified populations by racialized group. You can browse the variables to identify which tables contain the variables you need.</p>
+<div class="infobox dataWrangling">
+<p>It can be helpful to identify patterns in the variable names to efficiently query the Census API. In the code below you will see an approach that does not require us to type out all the variable names. Can you think of more efficient ways to query the API?</p>
+</div>
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># census_api_key("Your API KEY goes here")</span>
 
 <span class="co"># get population sizes from ACS -------------------------------------------</span>
+
+<span class="co">#Get a list of the variable names</span>
 <span class="va">acs_vars</span> <span class="op">&lt;-</span> <span class="fu">tidycensus</span><span class="fu">::</span><span class="fu"><a href="https://walker-data.com/tidycensus/reference/load_variables.html">load_variables</a></span><span class="op">(</span><span class="fl">2019</span>, dataset <span class="op">=</span> <span class="st">'acs5'</span><span class="op">)</span>
 
-<span class="co"># the ACS 2015-2019 variables can be viewed online here: </span>
-<span class="co"># https://api.census.gov/data/2019/acs/acs5/variables.html</span>
-<span class="co"># </span>
+
 <span class="co"># the racialized group and age-group stratified population estimates from ACS are</span>
 <span class="co"># in the B01001 table.</span>
 <span class="co"># </span>
@@ -159,12 +173,12 @@
 <span class="co"># a lot of them to type out.</span>
 <span class="va">race_chars</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
-    white <span class="op">=</span> <span class="st">'H'</span>,
+    white <span class="op">=</span> <span class="st">'H'</span>, <span class="co"># In the 2015-19 ACS data, a suffix of H indicates non-Hispanic White, but be careful because these suffixes may change from year to year!</span>
     black <span class="op">=</span> <span class="st">'B'</span>,
     hispanic_or_latino <span class="op">=</span> <span class="st">'I'</span>
   <span class="op">)</span>
 
-<span class="co"># for each of A through I, construct B01001*_001 through _031</span>
+<span class="co"># for each of H, B, and I, construct B01001*_001 through _031. If you look at the variable list at the link above, you will see that the variable names constructed below correspond to total and age-sex specific population estimates for each racialized/ethnic group.</span>
 <span class="va">sex_race_age_vars</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">'B01001'</span>, <span class="va">race_chars</span>, <span class="st">'_0'</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">31</span><span class="op">)</span>,
          <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_pad.html">str_pad</a></span><span class="op">(</span>
@@ -174,7 +188,7 @@
            pad <span class="op">=</span> <span class="st">'0'</span>
          <span class="op">)</span><span class="op">)</span>
 
-<span class="co"># this adds on the sex/gender overall population estimates</span>
+<span class="co"># this adds on the sex/gender overall population estimates (e.g.B01001_001 is the total male population)</span>
 <span class="va">sex_race_age_vars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">.</span>,
                          <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span>
                            <span class="st">'B01001_0'</span>,
@@ -186,7 +200,7 @@
                            <span class="op">)</span>
                          <span class="op">)</span><span class="op">)</span>
 
-<span class="co"># split the label</span>
+<span class="co"># The API gives us data whose labels are all in one string, with information separated by '!!'. We split the label to make it more useful.</span>
 <span class="va">acs_vars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span>
   <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate.html">separate</a></span><span class="op">(</span><span class="va">label</span>,
            into <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'estimate'</span>, <span class="st">'total'</span>, <span class="st">'gender'</span>, <span class="st">'age'</span>, <span class="st">'subgroup'</span><span class="op">)</span>,
@@ -199,17 +213,17 @@
 <span class="co"># select only what we need</span>
 <span class="va">acs_vars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">name</span>, <span class="va">total</span>, <span class="va">gender</span>, <span class="va">age</span>, <span class="va">concept</span><span class="op">)</span>
 
-<span class="co"># get sex, racialized group (incl. hispanic or latino), and age stratified population</span>
+<span class="co"># Now that we have the variables names, we use it to get sex, racialized group (incl. hispanic or latino), and age stratified population</span>
 <span class="co"># estimates</span>
 <span class="va">popsizes</span> <span class="op">&lt;-</span>
   <span class="fu">tidycensus</span><span class="fu">::</span><span class="fu"><a href="https://walker-data.com/tidycensus/reference/get_acs.html">get_acs</a></span><span class="op">(</span>
     geography <span class="op">=</span> <span class="st">'zip code tabulation area'</span>,
     state <span class="op">=</span> <span class="st">'IL'</span>,
     year <span class="op">=</span> <span class="fl">2019</span>,
-    geometry <span class="op">=</span> <span class="cn">TRUE</span>,
+    geometry <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># This obtains the geometry / shapes of each zip-code tabulation area (ZCTA)</span>
     variables <span class="op">=</span> <span class="va">sex_race_age_vars</span>,
     output <span class="op">=</span> <span class="st">'tidy'</span>,
-    cache_table <span class="op">=</span> <span class="cn">T</span>
+    cache_table <span class="op">=</span> <span class="cn">T</span> <span class="co">#this will enable quicker loading if we load the data again in the future</span>
   <span class="op">)</span>
 
 <span class="co"># join in our variable names</span>
@@ -218,7 +232,7 @@
 <span class="va">popsizes</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span> <span class="fu">janitor</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/janitor/man/clean_names.html">clean_names</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># clean column names</span>
 <span class="va">popsizes</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">total</span><span class="op">)</span> <span class="co"># remove total column that only contains 'total'</span>
 
-<span class="co"># take out the geometry for use later</span>
+<span class="co"># While we set geometry = T so that we got the geometry data, we don't need this as we clean the data. It makes things slow, so we take out the geometry for use later</span>
 <span class="va">zip_geometry</span> <span class="op">&lt;-</span> <span class="va">popsizes</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">geoid</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co"># ggplot(zip_geometry) + geom_sf() # zip codes of illinois</span>
 
@@ -238,8 +252,14 @@
   <span class="co"># sums of population size estimates</span>
   moe <span class="op">=</span> <span class="fu">tidycensus</span><span class="fu">::</span><span class="fu"><a href="https://walker-data.com/tidycensus/reference/moe_sum.html">moe_sum</a></span><span class="op">(</span>moe <span class="op">=</span> <span class="va">moe</span>, estimate <span class="op">=</span> <span class="va">estimate</span><span class="op">)</span>
   <span class="op">)</span></code></pre></div>
-<p>Since the Cook County Medical Examiner Case Archive data includes records on deaths where the decedents’ residential ZCTAs are inside as well as outside Cook County, Illinois, we want to restrict our dataset to deaths where their county of residence was in Cook County.</p>
-<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
+<p>Since the Cook County Medical Examiner Case Archive data includes records on deaths where the decedents’ residential ZCTAs are inside as well as outside Cook County, Illinois, we want to restrict our dataset to deaths where their county of residence was in Cook County. An issue is that ZCTAs are not neatly nested within the county borders - often part of a ZCTA can lie outside the county.</p>
+<div class="infobox dataWrangling">
+<p>How would you work with this issue of ZCTAs crossing county borders? Here we calculated the percentage of an area in a ZCTA that also falls within the Cook County borders, and retained those with 90% overlap (an arbitrary threshold). Would you use a different threshold? We also had to deal with issues of parts of Lake Michigan (bordering Cook County’s east coast) being included in some shapefiles but not others.</p>
+</div>
+<div class="infobox interpretation">
+<p>Note that the unit of geography for analysis is the US census-defined Zip Code Tabulation Area (ZCTA), which is related to but not identical with the US Postal Service ZIP Code (which is a unit of mail delivery, reflecting postal carrier routes, such that a given spatial area can encompass several ZIP Codes). To create ZCTAs, the US Census assigns each census block the most frequently occurring ZIP Code within the block. For technical information about ZCTAs, see: <a href="https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html" class="uri">https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html</a>. This means that ZCTAs and zip codes may not cover the same area exactly. A discussion of pitfalls to keep in mind when using ZCTAs linked to residential Zip Code can be found in this paper <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1447194/" class="uri">https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1447194/</a> .</p>
+</div>
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># identify relevant zip codes ---------------------------------------------</span>
 
 <span class="co"># we originally downloaded the county shapefiles using tigris, but </span>
@@ -254,7 +274,7 @@
 <span class="co"># https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html </span>
 
 <span class="co">########## Change to file path where the shape file is downloaded ###########</span>
-<span class="va">counties</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="fu">here</span><span class="op">(</span><span class="st">'data/09-cook-county-covid/cb_2018_us_county_5m/cb_2018_us_county_5m.shp'</span><span class="op">)</span><span class="op">)</span>
+<span class="va">counties</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="st">'./data/09-cook-county-covid/cb_2018_us_county_5m/cb_2018_us_county_5m.shp'</span><span class="op">)</span>
 
 <span class="co"># get the map for cook county</span>
 <span class="va">cook_county</span> <span class="op">&lt;-</span> <span class="va">counties</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span>
@@ -265,7 +285,7 @@
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">county</span> <span class="op">==</span> <span class="st">'Cook County'</span>, <span class="va">state</span> <span class="op">==</span> <span class="st">'IL'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/exposition.html">%$%</a></span> 
     <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">state_code</span>, <span class="va">county_code</span><span class="op">)</span><span class="op">)</span>
 
-<span class="co"># get cook county sf object from tigris that is water inclusive for filtering</span>
+<span class="co"># get cook county sf object from tigris that is water inclusive for filtering. Since the ZIP geometry can include bits of water, we want to use the Cook County boundaries that include Lake Michigan. Otherwise some coastal ZIP codes may have less than 90% overlap and get dropped.</span>
 <span class="va">IL_counties</span> <span class="op">&lt;-</span> <span class="fu">tigris</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tigris/man/counties.html">counties</a></span><span class="op">(</span>state <span class="op">=</span> <span class="st">'IL'</span><span class="op">)</span>
 <span class="va">cook_county_incl_water</span> <span class="op">&lt;-</span> <span class="va">IL_counties</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span>
@@ -276,8 +296,9 @@
     <span class="op">}</span>
   <span class="op">)</span>
 
-<span class="co"># calculate the zip codes intersecting cook county</span>
-<span class="va">zips_with_overlap</span> <span class="op">&lt;-</span> <span class="va">zip_geometry</span><span class="op">[</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">zip_geometry</span>, <span class="va">cook_county_incl_water</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_lgl</a></span><span class="op">(</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>,<span class="op">]</span>
+<span class="co"># Find the zip codes intersecting cook county. In the output of st_intersects, zips that intersect with cook county have length greater than 0. So here we keep Zips with any overlap</span>
+<span class="va">zips_with_overlap</span> <span class="op">&lt;-</span> <span class="va">zip_geometry</span><span class="op">[</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">zip_geometry</span>, <span class="va">cook_county_incl_water</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
+                                    <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_lgl</a></span><span class="op">(</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>,<span class="op">]</span>
 
 <span class="co"># figure showing cook county and all ZCTAs intersecting it </span>
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
@@ -287,15 +308,15 @@
 
 <span class="co"># interactive file </span>
 <span class="fu"><a href="https://rdrr.io/pkg/leaflet/man/leaflet.html">leaflet</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/leaflet/man/map-layers.html">addTiles</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/leaflet/man/map-layers.html">addPolygons</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">cook_county_incl_water</span>, weight <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/leaflet/man/map-layers.html">addPolygons</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">zips_with_overlap</span>, color <span class="op">=</span> <span class="st">'orange'</span>, weight <span class="op">=</span> <span class="fl">2</span>, label <span class="op">=</span> <span class="op">~</span><span class="va">geoid</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/leaflet/man/map-layers.html">addTiles</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="co">#Adds the basemap</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/leaflet/man/map-layers.html">addPolygons</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">cook_county_incl_water</span>, weight <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="co">#Adds the Cook county boundary</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/leaflet/man/map-layers.html">addPolygons</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">zips_with_overlap</span>, color <span class="op">=</span> <span class="st">'orange'</span>, weight <span class="op">=</span> <span class="fl">2</span>, label <span class="op">=</span> <span class="op">~</span><span class="va">geoid</span><span class="op">)</span> <span class="co"># Adds Zip boundaries</span>
 
 <span class="co"># calculate each zip code total area</span>
 <span class="va">zips_with_overlap</span><span class="op">$</span><span class="va">total_area</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html">st_area</a></span><span class="op">(</span><span class="va">zips_with_overlap</span><span class="op">)</span>
 
 <span class="co"># calculate the intersection of cook county and each zip code tabulation area</span>
-<span class="va">zips_with_overlap_intersection</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html">st_intersection</a></span><span class="op">(</span><span class="va">zips_with_overlap</span>, <span class="va">cook_county_incl_water</span><span class="op">)</span>
+<span class="va">zips_with_overlap_intersection</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html">st_intersection</a></span><span class="op">(</span><span class="va">zips_with_overlap</span>, <span class="va">cook_county_incl_water</span><span class="op">)</span> <span class="co">#this returns polygons where county and ZCTA intersect</span>
 <span class="va">zips_with_overlap_intersection</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">geoid</span><span class="op">)</span>
 
 <span class="co"># calculate the area of each intersection</span>
@@ -320,15 +341,15 @@
 
 <span class="co"># Visualize Cook County and ZIPs with over 90 percent overlap</span>
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">cook_county</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"Cook County"</span><span class="op">)</span>, fill <span class="op">=</span> <span class="st">'white'</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">cook_county</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"Cook County"</span><span class="op">)</span>, fill <span class="op">=</span> <span class="st">'white'</span><span class="op">)</span> <span class="op">+</span> <span class="co">#Plots Cook county boundary</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>
-    data <span class="op">=</span> <span class="va">zips_with_over_90pct_overlap</span>,
+    data <span class="op">=</span> <span class="va">zips_with_over_90pct_overlap</span>, <span class="co">#plots zip codes</span>
     mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"Zip Code Tabulation Areas"</span><span class="op">)</span>,
     size <span class="op">=</span> <span class="fl">.5</span>,
-    alpha <span class="op">=</span> <span class="fl">.6</span>
+    alpha <span class="op">=</span> <span class="fl">.6</span> <span class="co">#Sets transparency so we can see both layers</span>
   <span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>
-    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Cook County"</span> <span class="op">=</span> <span class="st">"#E69F00"</span>, <span class="st">"Zip Code Tabulation Areas"</span> <span class="op">=</span> <span class="st">"#56B4E9"</span><span class="op">)</span> 
+    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Cook County"</span> <span class="op">=</span> <span class="st">"#E69F00"</span>, <span class="st">"Zip Code Tabulation Areas"</span> <span class="op">=</span> <span class="st">"#56B4E9"</span><span class="op">)</span> <span class="co">#manually set colors</span>
   <span class="op">)</span> <span class="op">+</span> 
   <span class="co"># theme_bw() + </span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'white'</span>, <span class="st">'grey95'</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -336,17 +357,17 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Cook County and Zip Code Tabulation Areas 90% Contained Within"</span><span class="op">)</span>
 
 <span class="co"># save the plot</span>
-<span class="co"># ggsave(here("images/09-cook-county-covid/cook_county_and_zip_codes.png"), width = 10, height = 6)</span>
-
-<span class="fu">here</span><span class="op">(</span><span class="st">"images/04-getting-your-data/poverty_suffolk_county.png"</span><span class="op">)</span>
-<span class="co"># group population sizes together by age groups and racialized group and zip code</span>
+<span class="co"># ggsave(here("images/09-cook-county-covid/cook_county_and_zip_codes.png"), width = 10, height = 6)</span></code></pre></div>
+<p>Now that we have obtained the ZCTAs that we will keep in the study, we can now focus on these to prepare demographic and denominator data.</p>
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># group population sizes together by age groups and racialized group and zip code</span>
 <span class="va">zips_with_population_estimates_by_race_ethnicity_and_age</span> <span class="op">&lt;-</span>
   <span class="va">popsizes</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">concept</span> <span class="op">!=</span> <span class="st">'SEX BY AGE'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="co"># filter for overall population</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">geoid</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">zips_with_over_90pct_overlap</span><span class="op">$</span><span class="va">geoid</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/exposition.html">%$%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">zips_with_over_90pct_overlap</span>, <span class="va">.</span><span class="op">)</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">geoid</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">zips_with_over_90pct_overlap</span><span class="op">$</span><span class="va">geoid</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/exposition.html">%$%</a></span> <span class="co">#Filter to keep only the zips selected above</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">zips_with_over_90pct_overlap</span>, <span class="va">.</span><span class="op">)</span> <span class="co">#join with the zip dataframe to add the geometry column</span>
 
-<span class="co"># code the Census racialized groups</span>
+<span class="co"># Change names of the Census racialized groups</span>
 <span class="va">zips_with_population_estimates_by_race_ethnicity_and_age</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
   race_ethnicity <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span>
     <span class="va">concept</span> <span class="op">==</span>  <span class="st">"SEX BY AGE (BLACK OR AFRICAN AMERICAN ALONE)"</span> <span class="op">~</span> <span class="st">"Black, Hispanic or non-Hispanic"</span>,
@@ -393,14 +414,14 @@
 <span class="co"># in each ZCTA</span>
 <span class="va">zips_with_population_estimates_by_race_ethnicity_and_age</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">estimate</span><span class="op">)</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">estimate</span><span class="op">)</span> <span class="co">#estimate is the column name for the population size</span>
   <span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="va">race_ethnicity</span><span class="op">~</span><span class="va">age_group</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_log10</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="va">race_ethnicity</span><span class="op">~</span><span class="va">age_group</span><span class="op">)</span> <span class="op">+</span> <span class="co">#creates grid of individual plots for each combination of racialized group and age group</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_log10</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="co">#x axis in log scale since distribution of population counts is skewed</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Population Estimate"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Population Sizes by Racialized Group and Age Group in ZCTAs"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">75</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">75</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="co">#rotate x-axis labels</span>
   
 
 <span class="co"># ggsave(here("images/09-cook-county-covid/population_count_histogram.png"), height = 8, width = 10)</span>
@@ -409,12 +430,17 @@
 <span class="va">zips_with_population_estimates_by_race_ethnicity_and_age</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">estimate</span> <span class="op">&lt;</span> <span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="images/09-cook-county-covid/cook_county_and_zip_codes.png" width="100%"></div>
-<p>Now we’re ready to add the population size estimates for each racialized group (white non-Hispanic, Black non-Hispanic, and Hispanic) and age-group by ZIP code.</p>
-<p>Note that the unit of geography for analysis is the US census-defined Zip Code Tabulation Area (ZCTA), which is related to but not identical with the US Postal Service ZIP Code (which is a unit of mail delivery, reflecting postal carrier routes, such that a given spatial area can encompass several ZIP Codes). To create ZCTAs, the US Census assigns each census block the most frequently occurring ZIP Code within the block. For technical information about ZCTAs, see: <a href="https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html" class="uri">https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html</a></p>
-<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># read in your data</span>
+</div>
+<div id="case-data" class="section level3" number="8.5.2">
+<h3>
+<span class="header-section-number">8.5.2</span> Case Data<a class="anchor" aria-label="anchor" href="#case-data"><i class="fas fa-link"></i></a>
+</h3>
+<p>Now we’re ready to load the case data, and add the population size estimates for each racialized group (White non-Hispanic, Black non-Hispanic, and Hispanic) and age-group by ZIP code.</p>
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># read in your data. This has been donwloaded from the Cook County Medical Examiner's office website, as mentioned above. https://datacatalog.cookcountyil.gov/Public-Safety/Medical-Examiner-Case-Archive-COVID-19-Related-Dea/3trz-enys</span>
+
 <span class="va">cook_county_deaths</span> <span class="op">&lt;-</span> 
-  <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="fu">here</span><span class="op">(</span><span class="st">"data/09-cook-county-covid/Medical_Examiner_Case_Archive_-_COVID-19_Related_Deaths.csv"</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"./data/09-cook-county-covid/Medical_Examiner_Case_Archive_-_COVID-19_Related_Deaths.csv"</span><span class="op">)</span>
 
 <span class="co"># merge racialized group and age-group specific denominators ----------------</span>
 
@@ -448,10 +474,9 @@
 <span class="co">#  unless there is another factor that falls within the Office’s jurisdiction.</span>
 <span class="co"># </span>
 <span class="va">cook_county_deaths</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span>
-  <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html">mdy_hms</a></span><span class="op">(</span><span class="va">date_of_death</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">mdy</a></span><span class="op">(</span><span class="st">"03/01/2020"</span><span class="op">)</span> <span class="op">&amp;</span> 
+  <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html">mdy_hms</a></span><span class="op">(</span><span class="va">date_of_death</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">mdy</a></span><span class="op">(</span><span class="st">"03/01/2020"</span><span class="op">)</span> <span class="op">&amp;</span> <span class="co">#convert date in character format to a date format (POSIXct). This allows evaluation of conditions such as date greater than x, etc.</span>
     <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd_hms.html">mdy_hms</a></span><span class="op">(</span><span class="va">date_of_death</span><span class="op">)</span> <span class="op">&lt;=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/ymd.html">mdy</a></span><span class="op">(</span><span class="st">"04/01/2022"</span><span class="op">)</span>
 <span class="op">)</span>
-
 
 <span class="co"># Truncate Zip Codes to 5 Characters</span>
 <span class="va">cook_county_deaths</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>residence_zip <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">residence_zip</span>, <span class="st">"^[0-9]{5}"</span><span class="op">)</span><span class="op">)</span>
@@ -471,6 +496,7 @@
     <span class="op">)</span>
   <span class="op">)</span>
 
+<span class="co">#Convert to factor so that when plotting age groups are plotted in order</span>
 <span class="va">cook_county_deaths</span><span class="op">$</span><span class="va">age_group</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span>
   levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
    <span class="st">"Under 25"</span>,
@@ -482,7 +508,7 @@
    <span class="st">"65 to 74 years"</span>,
    <span class="st">"75 to 84 years"</span>,
    <span class="st">"85 years and over"</span><span class="op">)</span>
-  <span class="op">)</span>
+  <span class="op">)</span> 
 
 <span class="co"># separate out deaths into the racialized group categories we're interested in </span>
 <span class="co"># </span>
@@ -579,8 +605,8 @@
 
 <span class="co"># ggsave(here("images/09-cook-county-covid/age_distribution_deaths.png"), width = 8, height = 6)</span></code></pre></div>
 <div class="inline-figure"><img src="images/09-cook-county-covid/age_distribution_deaths.png" width="100%"></div>
-<p>We’re in shape to add our area based social metrics. We’ll add the Index of Concentration at the Extremes for Racialized Economic Segregation, the proportion of the population under the poverty line, and the median income in each ZCTA.</p>
-<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
+<p>We can now add ABSMs that we are interested in to the data. We’ll add the Index of Concentration at the Extremes for Racialized Economic Segregation, the proportion of the population under the poverty line, and the median income in each ZCTA.</p>
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># add area based socioeconomic measures  ----------------------------------</span>
 
 <span class="co"># get zip code rates for</span>
@@ -588,6 +614,7 @@
 <span class="co">#   - ICEraceinc</span>
 <span class="co">#   - median income</span>
 
+<span class="co"># We create a data dictionary for ABSMS. The first column indicates the total variable code, the second the variable name, and the third the description.</span>
 <span class="va">absms_dictionary</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span><span class="op">(</span>
   <span class="op">~</span><span class="va">var</span>, <span class="op">~</span><span class="va">varname</span>, <span class="op">~</span><span class="va">description</span>,
   <span class="co"># total population</span>
@@ -632,20 +659,22 @@
   <span class="st">"B01001H_001"</span>,  <span class="st">'total_white_nh'</span>,           <span class="st">'total white, non-hispanic population estimate'</span>
 <span class="op">)</span>
 
+<span class="co"># We create a function which takes as a argument a vector of zip codes, and queries the Census API using those to obtain our ABSM variables for those ZCTAs, and then calculates the ABSMs of interest.</span>
+
 <span class="va">get_absms</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">zip_codes</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">absms</span> <span class="op">&lt;-</span> <span class="fu">tidycensus</span><span class="fu">::</span><span class="fu"><a href="https://walker-data.com/tidycensus/reference/get_acs.html">get_acs</a></span><span class="op">(</span>
     year <span class="op">=</span> <span class="fl">2019</span>,
     geography <span class="op">=</span> <span class="st">'zcta'</span>,
     state <span class="op">=</span> <span class="st">'IL'</span>,
     zcta <span class="op">=</span> <span class="va">zip_codes</span>,
-    variables <span class="op">=</span> <span class="va">absms_dictionary</span><span class="op">$</span><span class="va">var</span>,
-    geometry <span class="op">=</span> <span class="cn">FALSE</span>
+    variables <span class="op">=</span> <span class="va">absms_dictionary</span><span class="op">$</span><span class="va">var</span>, <span class="co">#Get the variables indicated in the data dictionary.</span>
+    geometry <span class="op">=</span> <span class="cn">FALSE</span> <span class="co"># We already have the geometry so we don't need that.</span>
   <span class="op">)</span>
 
-  <span class="co"># pivot wider</span>
+  <span class="co"># pivot wider so that each row corresponds to a ZCTA</span>
   <span class="va">absms</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">moe</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
     <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">variable</span>, values_from <span class="op">=</span> <span class="va">estimate</span><span class="op">)</span>
-
+<span class="co"># Change the new column names to reflect variables names from the dictionary</span>
   <span class="va">rename_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html">setNames</a></span><span class="op">(</span><span class="va">absms_dictionary</span><span class="op">$</span><span class="va">var</span>, <span class="va">absms_dictionary</span><span class="op">$</span><span class="va">varname</span><span class="op">)</span>
   <span class="va">absms</span> <span class="op">&lt;-</span> <span class="va">absms</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="va">rename_vars</span><span class="op">)</span>
 
@@ -682,7 +711,7 @@
 
 <span class="va">absms</span> <span class="op">&lt;-</span> <span class="fu">get_absms</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">geoid</span><span class="op">)</span><span class="op">)</span>
 
-<span class="co"># merge in data</span>
+<span class="co"># merge in absm data to outcome data</span>
 <span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">absms</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'geoid'</span> <span class="op">=</span> <span class="st">'GEOID'</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># get cutpoints for ICEraceinc in illinois --------------------------------</span>
@@ -696,7 +725,7 @@
   <span class="fu">tidycensus</span><span class="fu">::</span><span class="fu"><a href="https://walker-data.com/tidycensus/reference/get_acs.html">get_acs</a></span><span class="op">(</span>
     year <span class="op">=</span> <span class="fl">2019</span>,
     geography <span class="op">=</span> <span class="st">'zcta'</span>,
-    state <span class="op">=</span> <span class="st">'IL'</span>,
+    state <span class="op">=</span> <span class="st">'IL'</span>, <span class="co"># Getting for all of IL</span>
     variables <span class="op">=</span> <span class="va">absms_dictionary</span><span class="op">$</span><span class="va">var</span>,
     geometry <span class="op">=</span> <span class="cn">FALSE</span>
   <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
@@ -736,10 +765,11 @@
     prop_white_nh <span class="op">=</span> <span class="va">total_white_nh</span> <span class="op">/</span> <span class="va">total_popsize</span>
   <span class="op">)</span> 
 
+<span class="co"># Using the state-wide distribution of ABSMs at the ZCTA-level, we select cutpoints for quantiles.</span>
 <span class="va">illinois_ICEraceinc_cutpoints</span> <span class="op">&lt;-</span>
-  <span class="fu">Hmisc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Hmisc/man/wtd.stats.html">wtd.quantile</a></span><span class="op">(</span><span class="va">illinois_absms</span><span class="op">$</span><span class="va">ICEraceinc</span>,
-                      <span class="va">illinois_absms</span><span class="op">$</span><span class="va">total_popsize</span>,
-                      <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">.2</span><span class="op">)</span>,
+  <span class="fu">Hmisc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Hmisc/man/wtd.stats.html">wtd.quantile</a></span><span class="op">(</span><span class="va">illinois_absms</span><span class="op">$</span><span class="va">ICEraceinc</span>, <span class="co">#Weighted quantile of ICE</span>
+                      <span class="va">illinois_absms</span><span class="op">$</span><span class="va">total_popsize</span>, <span class="co">#Weights proportional to population size</span>
+                      <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">.2</span><span class="op">)</span>, <span class="co"># Cutpoints at 0, 0.2, 0.4, 0.8, 1</span>
                       na.rm <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
 
 <span class="va">illinois_ICEraceinc_cutpoints</span> <span class="op">&lt;-</span>
@@ -787,9 +817,16 @@
 <span class="va">df</span><span class="op">$</span><span class="va">prop_black_cut</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">$</span><span class="va">prop_black</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/INLA/man/cut.html">cut</a></span><span class="op">(</span><span class="va">.</span>, <span class="va">illinois_prop_black_cutpoints</span>, include.lowest<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">df</span><span class="op">$</span><span class="va">prop_hispanic_cut</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">$</span><span class="va">prop_hispanic</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/INLA/man/cut.html">cut</a></span><span class="op">(</span><span class="va">.</span>, <span class="va">illinois_prop_hispanic_cutpoints</span>, include.lowest<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">df</span><span class="op">$</span><span class="va">prop_white_nh_cut</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">$</span><span class="va">prop_white_nh</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/INLA/man/cut.html">cut</a></span><span class="op">(</span><span class="va">.</span>, <span class="va">illinois_prop_white_nh_cutpoints</span>, include.lowest<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p>We have a few remaining necessary cleaning steps to perform before we’re ready to model these data. Firstly, we’re going to add discretized (cut, i.e. categorical) versions of the percent in poverty and median income measures. This is because this helps to allow the model flexibility to fit nonlinear responses with increasing levels in these covariates. Alternative approaches could involve fitting the models with smoothing splines on these variables instead, but we aren’t showing that here today.</p>
-<p>Additionally, we have to make sure our factor variables have appropriate reference levels set. Typically we set the reference level as the most privileged group so that we can frame the results as “the _____ group has X times the mortality rate of the reference group.”</p>
-<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
+<p>We have added discretized (cut, i.e. categorical) versions of the different ABSMs. This is because this helps to allow the model flexibility to fit nonlinear responses with increasing levels in these covariates. Alternative approaches could involve fitting the models with smoothing splines on these variables instead, but we aren’t showing that here today. We used Illinois-wide distribution of ABSMs at the ZCTA level to create quantiles for all variables except poverty. For poverty, we use pre-specified cutpoints.</p>
+<div class="infobox interpretation">
+<p>Here we set the cutpoints for the continuous ABSMs based on the state-wide distribution of ZCTAs. How might this affect our interpretation? How might your research question and context affect how you decide what the ABSM cutpoints are?</p>
+</div>
+<div class="infobox communication">
+<p>How might the selection of cutpoints affect your visualizations? How might your cutpoints change depending on what you want to communicate through the map?</p>
+</div>
+<p>We have a few remaining necessary cleaning steps to perform before we’re ready to model these data.</p>
+<p>We have to make sure our factor variables have appropriate reference levels set. Typically we set the reference level as the most privileged group so that we can frame the results as “the _____ group has X times the mortality rate of the reference group.”</p>
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># prepare data for modeling  ----------------------------------------------</span>
 
 <span class="co"># remove infinite or NA mortality rates since they will cause errors in trying</span>
@@ -813,17 +850,20 @@
 <span class="va">df_prepped</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>population_estimate <span class="op">=</span> <span class="va">estimate</span><span class="op">)</span>
 
 <span class="co"># save data </span>
-<span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span><span class="op">(</span><span class="va">df_prepped</span>, <span class="fu">here</span><span class="op">(</span><span class="st">"data/09-cook-county-covid/cook_county_mortality_cleaned.rds"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="co"># saveRDS(df_prepped, here("data/09-cook-county-covid/cook_county_mortality_cleaned.rds"))</span></code></pre></div>
+</div>
 </div>
 <div id="visualizing-your-data-1" class="section level2" number="8.6">
 <h2>
 <span class="header-section-number">8.6</span> Visualizing Your Data<a class="anchor" aria-label="anchor" href="#visualizing-your-data-1"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<p>If you want to start by using the clean dataset you can start from this point on. Now that we have a clean dataset, we can create some exploratory visualizations. In the code chunk above we do some exploratory visualizations of the data. The first series of maps show the crude mortality rates by ZCTA, racialized group and Age Group. <strong>To see a larger version of this or any other image on the online version of the book right click and select open image in new tab.</strong></p>
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#change this to point to where your downloaded file is</span>
-<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="fu">here</span><span class="op">(</span><span class="st">"data/09-cook-county-covid/cook_county_mortality_cleaned.rds"</span><span class="op">)</span><span class="op">)</span> 
+<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="st">"./data/09-cook-county-covid/cook_county_mortality_cleaned.rds"</span><span class="op">)</span> 
 
-<span class="va">counties</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="fu">here</span><span class="op">(</span><span class="st">'data/09-cook-county-covid/cb_2018_us_county_5m/cb_2018_us_county_5m.shp'</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#Read in the county boundary shapefile to plot maps</span>
+<span class="va">counties</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="st">'./data/09-cook-county-covid/cb_2018_us_county_5m/cb_2018_us_county_5m.shp'</span><span class="op">)</span> 
 
 <span class="co"># get the map for cook county</span>
 <span class="va">cook_county</span> <span class="op">&lt;-</span> <span class="va">counties</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span>
@@ -836,23 +876,32 @@
 
 <span class="co"># let's start by mapping the crude mortality rates in each racialized group and </span>
 <span class="co"># age strata</span>
-
-<span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>deaths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">deaths</span><span class="op">)</span>, <span class="fl">0</span>, <span class="va">deaths</span><span class="op">)</span><span class="op">)</span>
-<span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>mortality_per100k_py <span class="op">=</span> <span class="va">deaths</span> <span class="op">/</span> <span class="va">person_time</span> <span class="op">*</span> <span class="fl">1e5</span><span class="op">)</span>
+<span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>deaths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">deaths</span><span class="op">)</span>, <span class="fl">0</span>, <span class="va">deaths</span><span class="op">)</span><span class="op">)</span> <span class="co"># Convert missing cells to 0</span>
+<span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>mortality_per100k_py <span class="op">=</span> <span class="va">deaths</span> <span class="op">/</span> <span class="va">person_time</span> <span class="op">*</span> <span class="fl">1e5</span><span class="op">)</span> <span class="co"># Calculate mortality rate per 100,000 person years</span>
 
 <span class="co"># plot raw mortality rates</span>
 <span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">mortality_per100k_py</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">cook_county</span>, fill <span class="op">=</span> <span class="st">'dimgrey'</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="fu">forcats</span><span class="fu">::</span><span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_rev.html">fct_rev</a></span><span class="op">(</span><span class="va">race_ethnicity</span><span class="op">)</span><span class="op">~</span><span class="va">age_group</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_distiller</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'Reds'</span>, trans <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/log_trans.html">pseudo_log_trans</a></span><span class="op">(</span>sigma <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, direction <span class="op">=</span> <span class="fl">1</span>, 
-                       labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/comma.html">comma_format</a></span><span class="op">(</span><span class="op">)</span>, na.value <span class="op">=</span> <span class="st">'dimgrey'</span>,
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="fu">forcats</span><span class="fu">::</span><span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_rev.html">fct_rev</a></span><span class="op">(</span><span class="va">race_ethnicity</span><span class="op">)</span><span class="op">~</span><span class="va">age_group</span><span class="op">)</span> <span class="op">+</span> <span class="co"># Create maps of mortality rates by age-group and racialized/ethnic groups</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_distiller</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'Reds'</span>, 
+                       trans <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/log_trans.html">pseudo_log_trans</a></span><span class="op">(</span>sigma <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, <span class="co">#log transform since distribution is skewed</span>
+                       direction <span class="op">=</span> <span class="fl">1</span>, <span class="co">#Higher is darker</span>
+                       labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/comma.html">comma_format</a></span><span class="op">(</span><span class="op">)</span>, 
+                       na.value <span class="op">=</span> <span class="st">'dimgrey'</span>, <span class="co">#NAs as grey</span>
                        breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fl">80000</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="op">-</span><span class="fl">88.1</span>, <span class="op">-</span><span class="fl">87.7</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>   
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">'bottom'</span>,
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">'bottom'</span>, 
+        panel.grid <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
+        axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
+        axis.text.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
+        axis.ticks.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
+        axis.ticks.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
         legend.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">75</span>, hjust<span class="op">=</span><span class="fl">1</span><span class="op">)</span>
-        <span class="op">)</span> <span class="op">+</span> 
+        <span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">'COVID-19 Mortality per 100,000 person years'</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Crude COVID-19 Mortality Rates by ZCTA, Racialized Group and Age Group"</span>,
           subtitle <span class="op">=</span> <span class="st">"March 2020 - March 2022"</span><span class="op">)</span>
 
@@ -868,14 +917,20 @@
                        limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">NA</span><span class="op">)</span>, 
                        breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fl">30000</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="op">-</span><span class="fl">88.1</span>, <span class="op">-</span><span class="fl">87.7</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>   
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">'bottom'</span>,
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">'bottom'</span>, 
+        panel.grid <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
+        axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
+        axis.text.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
+        axis.ticks.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
+        axis.ticks.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
         legend.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">75</span>, hjust<span class="op">=</span><span class="fl">1</span><span class="op">)</span>
-        <span class="op">)</span> <span class="op">+</span> 
+        <span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">'Population Estimate'</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Population Size by ZCTA, Racialized Group and Age Group"</span>,
           subtitle <span class="op">=</span> <span class="st">"Data from ACS 2015-2019"</span><span class="op">)</span>
 
-<span class="co"># ggsave(here("images/09-cook-county-covid/population_size_by_zcta.png"), width = 14, height = 8)</span>
+<span class="co"># ggsave("./images/09-cook-county-covid/population_size_by_zcta.png", width = 14, height = 8)</span>
 
 <span class="co">#Plot mortality rates</span>
 <span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">mortality_per100k_py</span>, fill <span class="op">=</span> <span class="va">race_ethnicity</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -888,6 +943,8 @@
     breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">1000</span>, <span class="fl">5e4</span><span class="op">)</span>
   <span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Mortality Rate per 100,000 Person Years"</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Count"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">'Racialized Groups'</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Histogram of Mortality Rates by ZCTA, Age Group and Racialized Group"</span>,
           subtitle <span class="op">=</span> <span class="st">"March 2020 - March 2022"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">'bottom'</span><span class="op">)</span>
@@ -913,21 +970,30 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Mortality Rate per 100,000 Person Years"</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Population Size"</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">'bottom'</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">'Racialized Groups'</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Population Size and Mortality Rates by ZCTA, Age Group and Racialized Group"</span><span class="op">)</span>
 
 <span class="co"># ggsave(here("images/09-cook-county-covid/raw_rates_scatter.png"), width = 16, height = 8)</span></code></pre></div>
-<p>In the code chunk above we do some exploratory visualizations of the data. The first series of maps show the crude mortality rates by ZCTA, racialized group and Age Group. <strong>To see a larger version of this or any other image on the online version of the book right click and select open image in new tab.</strong></p>
-<div class="inline-figure"><img src="images/09-cook-county-covid/raw_rates_by_zcta.png" width="100%"></div>
+<div class="inline-figure">This figure shows a series of maps of the COVID-19 mortality rate per 100,000 person years between 2020-2022, by age and racialied groups.
+<img src="images/09-cook-county-covid/raw_rates_by_zcta.png" width="100%">
+</div>
 <div class="inline-figure">This figure shows a series of maps highlighting the underlying population at risk in each strata.
 <img src="images/09-cook-county-covid/population_size_by_zcta.png" width="100%">
 </div>
 <div class="inline-figure">This figure shows the histogram of these rates to visualizate the distribution of the data.
 <img src="images/09-cook-county-covid/raw_rates_histogram.png" width="100%">
 </div>
-<div class="inline-figure">This figure shows the relationship between mortality rates and population size in each strata. You can see that there are a number of zero-counts, and that rates are noisier when population sizes are smaller.
+<div class="inline-figure">This figure shows the relationship between mortality rates and population size in each strata.
 <img src="images/09-cook-county-covid/raw_rates_scatter.png" width="100%">
 </div>
-<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<p>You can see that there are a number of zero-counts, and that rates are noisier when population sizes are smaller.</p>
+<div class="infobox interpretation">
+<p>The figure above illustrates that there is a lot more variability of mortality rates at the ZCTA-level when the population count is small. Thus we need to be careful when interpreting extreme values obtained in small areas.</p>
+</div>
+<div class="infobox communication">
+<p>A map of crude rates of small areas with low person-time at risk may be misleading. It may identify some areas as having extreme rates, but this may be just due to chance and low population at risk.</p>
+</div>
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># in the following visualizations the motivating principle behind the direction of the </span>
 <span class="co"># color palette is to show (for sequential palettes) higher density with darker colors; </span>
 <span class="co"># for the ICEraceinc variable a divergent color palette is used to draw attention to the </span>
@@ -955,7 +1021,7 @@
     direction <span class="op">=</span> <span class="fl">1</span>,
     labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/percent_format.html">percent_format</a></span><span class="op">(</span><span class="op">)</span>
   <span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_dark</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"Population Percentage"</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Composition in Relation to Racialized Groups"</span>,
           subtitle <span class="op">=</span> <span class="st">"ZCTAs in Cook County (including Chicago); Data from ACS 2015-2019"</span><span class="op">)</span> <span class="op">+</span> 
@@ -967,7 +1033,7 @@
         axis.ticks.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>
         <span class="op">)</span>
 
-<span class="co"># ggsave(here("images/09-cook-county-covid/racial_ethnic_composition.png"), width = 12, height = 8)</span>
+<span class="co"># ggsave("./images/09-cook-county-covid/racial_ethnic_composition.png", width = 12, height = 8)</span>
 
 <span class="co"># visualize median income</span>
 <span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
@@ -975,7 +1041,7 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span>direction <span class="op">=</span> <span class="fl">1</span>, 
                        labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/dollar_format.html">dollar_format</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_dark</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">'Median Income'</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">'bottom'</span>,
         legend.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">75</span>, hjust<span class="op">=</span><span class="fl">1</span><span class="op">)</span>,
@@ -987,15 +1053,15 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Median Income"</span>,
           subtitle <span class="op">=</span> <span class="st">"ZCTAs in Cook County (including Chicago); Data from ACS 2015-2019"</span><span class="op">)</span>
 
-<span class="co"># ggsave(here("images/09-cook-county-covid/median_income.png"), width = 8, height = 8)</span>
+<span class="co"># ggsave("./images/09-cook-county-covid/median_income.png", width = 8, height = 8)</span>
 
 <span class="co"># visualize ICEraceinc</span>
 <span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">ICEraceinc</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_distiller</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'BrBG'</span>, direction <span class="op">=</span> <span class="fl">1</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>,
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_distiller</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'PRGn'</span>, direction <span class="op">=</span> <span class="fl">1</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>,
                        labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/comma.html">number_format</a></span><span class="op">(</span>accuracy <span class="op">=</span> <span class="fl">.01</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_dark</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"High Income (&gt;$100k annual household income) White non-Hispanic (high) vs.\n"</span>,
                      <span class="st">"Low Income (&lt;$25k annual household income) People of Color (low)"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Index of Concentration at the Extremes for Racialized Economic Segregation"</span>,
@@ -1016,14 +1082,14 @@
         axis.ticks.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>
         <span class="op">)</span>
 
-<span class="co"># ggsave(here("images/09-cook-county-covid/ICEraceinc.png"), width = 8, height = 8)</span>
+<span class="co"># ggsave("./images/09-cook-county-covid/ICEraceinc.png", width = 8, height = 8)</span>
 
 
 <span class="co"># visualize crowding </span>
 <span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">crowding</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_dark</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span>direction <span class="op">=</span> <span class="fl">1</span>, 
                        labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/percent_format.html">percent_format</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"% Household Crowding"</span><span class="op">)</span> <span class="op">+</span> 
@@ -1039,7 +1105,7 @@
         axis.ticks.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>
         <span class="op">)</span>
 
-<span class="co"># ggsave(here("images/09-cook-county-covid/crowding.png"), width = 8, height = 8)</span>
+<span class="co"># ggsave("./images/09-cook-county-covid/crowding.png", width = 8, height = 8)</span>
 
 
 <span class="co"># visualize poverty</span>
@@ -1048,7 +1114,7 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html">scale_fill_distiller</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">'Purples'</span>, direction <span class="op">=</span> <span class="fl">1</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="cn">NA</span><span class="op">)</span>,
                        labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/percent_format.html">percent_format</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_dark</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">'Poverty Level'</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Poverty Level"</span>,
           subtitle <span class="op">=</span> <span class="st">"ZCTAs in Cook County (including Chicago); Data from ACS 2015-2019"</span><span class="op">)</span> <span class="op">+</span> 
@@ -1060,13 +1126,21 @@
         axis.ticks.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>
         <span class="op">)</span>
 
-<span class="co"># ggsave(here("images/09-cook-county-covid/poverty.png"), width = 8, height = 8)</span></code></pre></div>
+<span class="co"># ggsave("./images/09-cook-county-covid/poverty.png", width = 8, height = 8)</span></code></pre></div>
 <p>The code above produces a series of maps that visualize the different ABSMs we will use in this analysis. Note that Chicago is situated in Cook County.
 <img src="images/09-cook-county-covid/racial_ethnic_composition.png" width="100%"><img src="images/09-cook-county-covid/median_income.png" width="100%"><img src="images/09-cook-county-covid/ICEraceinc.png" width="100%"><img src="images/09-cook-county-covid/crowding.png" width="100%"><img src="images/09-cook-county-covid/poverty.png" width="100%"></p>
+<div class="infobox interpretation">
+<p>In contrast to the other ABSMs, the Index of Concentration at the Extremes (ICE) highlights racialized economic segregation (i.e., race/ethnicity + income). It measures the extent to which an area’s population is concentrated into extremes of deprivation and privilege. It is scaled from -1 to 1: a value of -1 means that 100% of the population is concentrated in the most deprived group (in this analysis, conceptualized as the population of color in low-income households), and a value of 1 means that 100% of the population is concentrated into the most privileged group (in this analysis, conceptualized as the White non-Hispanic population in high-income households).</p>
+</div>
+<div class="infobox communication">
+<p>The maps above utilize various color scales. How do you think this can affect communication through maps? Do you have a preference? When might you use a diverging versus continuous color scale? Sometimes in can also be useful to plot an interactive map, shown below.</p>
+</div>
 <p>We can utilize the mapview package to plot interactive graphs.</p>
-<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># launch an interactive map to view Cook County ICEraceinc by zip code</span>
 <span class="co"># mapview::mapview(df, zcol = "ICEraceinc")</span></code></pre></div>
+<iframe src="data/09-cook-county-covid/ICEraceinc_widget.html" width="100%" height="500px">
+</iframe>
 </div>
 <div id="analyzing-the-data" class="section level2" number="8.7">
 <h2>
@@ -1076,7 +1150,8 @@
 <h3>
 <span class="header-section-number">8.7.1</span> Differences in COVID-19 mortality rates by racialized group<a class="anchor" aria-label="anchor" href="#differences-in-covid-19-mortality-rates-by-racialized-group"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
+<p>First, we can take a look at the COVID-19 mortality rates by racialized group in aggregate. Because we are aggregating up to the County level, we are not looking at gradients by ABSMs.</p>
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#Since we are not taking into account ABSMs in this first analysis, aggregate the data and visualize</span>
 <span class="va">crude_mortality</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="co">#dplyr works faster if we drop the geometry column.</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">age_group</span>, <span class="va">race_ethnicity</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
@@ -1107,10 +1182,16 @@
           subtitle <span class="op">=</span> <span class="st">"Poisson Model Confidence Intervals Shown"</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">75</span>, hjust<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span> 
 
-<span class="co"># ggsave(here("images/09-cook-county-covid/crude_rates_by_raceethnicity.png"), width = 8, height = 6)</span></code></pre></div>
+<span class="co"># ggsave("./images/09-cook-county-covid/crude_rates_by_raceethnicity.png", width = 8, height = 6)</span></code></pre></div>
+<div class="infobox interpretation">
+<p>There are racialized disparities in mortality across all age groups. How would you interpret this, and is this what you expected to see? Why or why not?</p>
+</div>
 <div class="inline-figure"><img src="images/09-cook-county-covid/crude_rates_by_raceethnicity.png" width="100%"></div>
 <p>We can fit models to the aggregate data to adjust for age and obtain relative risk estimates.</p>
-<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
+<div class="infobox dataWrangling">
+<p>We can fit Poisson, Quasi-Poisson, and Negative Binomial models here, depending on our assumptions about overdispersion. The code below fits the different models and plots them together to demonstrate how modeling assumptions may affect the results. Doing this repeatedly for various analysis can be tedious. One idea could be to write a function that fits all three models given a dataset and model specifications.</p>
+</div>
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#Fit a Poisson model with offset for person time to get rate</span>
 <span class="va">crude_poisson_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">deaths</span> <span class="op">~</span> <span class="va">race_ethnicity</span> <span class="op">+</span> <span class="va">age_group</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/offset.html">offset</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">person_time</span> <span class="op">/</span> <span class="fl">1e5</span><span class="op">)</span><span class="op">)</span>,
                            data <span class="op">=</span> <span class="va">crude_mortality</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span><span class="op">)</span>
@@ -1121,7 +1202,7 @@
 
 <span class="co">#Negative binomial model from MASS package</span>
 <span class="va">crude_negbin_model</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/glm.nb.html">glm.nb</a></span><span class="op">(</span><span class="va">deaths</span> <span class="op">~</span> <span class="va">race_ethnicity</span> <span class="op">+</span> <span class="va">age_group</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/offset.html">offset</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">person_time</span> <span class="op">/</span> <span class="fl">1e5</span><span class="op">)</span><span class="op">)</span>,
-                           data <span class="op">=</span> <span class="va">crude_mortality</span><span class="op">)</span>
+                           data <span class="op">=</span> <span class="va">crude_mortality</span><span class="op">)</span> <span class="co">##The MASS package is used to fit the negative binomial model</span>
 
 <span class="co"># extract the model coefficients</span>
 <span class="va">crude_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span><span class="op">(</span>
@@ -1131,25 +1212,25 @@
   <span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">crude_negbin_model</span>, exponentiate <span class="op">=</span> <span class="cn">TRUE</span>, conf.int <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Model <span class="op">=</span> <span class="st">"Negative Binomial"</span><span class="op">)</span>
 <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">term</span>, <span class="va">estimate</span>, <span class="va">conf.low</span>, <span class="va">conf.high</span>, <span class="va">Model</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">term</span> <span class="op">!=</span> <span class="st">'(Intercept)'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">term</span> <span class="op">!=</span> <span class="st">'(Intercept)'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="co"># Remove the intercept term</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"age_group"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="co">#Clean up the names of variables</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>term <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"race_ethnicity"</span>, <span class="st">""</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>term <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"race_ethnicity"</span>, <span class="st">""</span><span class="op">)</span><span class="op">)</span> <span class="co">#Clean up names of variables</span>
 
 <span class="co">#Plot model results on same plot to compare</span>
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">crude_results</span>,
        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>
          x <span class="op">=</span> <span class="va">estimate</span>,
-         xmax <span class="op">=</span> <span class="va">conf.high</span>,
+         xmax <span class="op">=</span> <span class="va">conf.high</span>, <span class="co">#for confidence interval error bars</span>
          xmin <span class="op">=</span> <span class="va">conf.low</span>,
          y <span class="op">=</span> <span class="va">term</span>,
-         color <span class="op">=</span> <span class="va">Model</span>,
+         color <span class="op">=</span> <span class="va">Model</span>, <span class="co">#Color, fill, shape grouped by model type.</span>
          fill <span class="op">=</span> <span class="va">Model</span>,
          shape <span class="op">=</span> <span class="va">Model</span>,
          group <span class="op">=</span> <span class="va">Model</span>
        <span class="op">)</span>
 <span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">1</span>, linetype <span class="op">=</span> <span class="st">'dashed'</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_pointrange</a></span><span class="op">(</span>position <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_dodge.html">position_dodge</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">.45</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">1</span>, linetype <span class="op">=</span> <span class="st">'dashed'</span><span class="op">)</span> <span class="op">+</span> <span class="co">#Line to represent RR Of 1</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_pointrange</a></span><span class="op">(</span>position <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_dodge.html">position_dodge</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">.45</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="co">#pointrange plots confidence interval and estimate</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>
     limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">NA</span><span class="op">)</span>,
     n.breaks <span class="op">=</span> <span class="fl">4</span>,
@@ -1160,14 +1241,21 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Modeled Incident Rate Ratios"</span>,
           subtitle <span class="op">=</span> <span class="st">"White, Non-Hispanic is the reference racialized group"</span><span class="op">)</span>
 
-<span class="co"># ggsave(here("images/09-cook-county-covid/modeled_IRR_by_raceethnicity.png"), width = 6, height = 4)</span></code></pre></div>
+<span class="co"># ggsave("./images/09-cook-county-covid/modeled_IRR_by_raceethnicity.png", width = 6, height = 4)</span></code></pre></div>
 <div class="inline-figure"><img src="images/09-cook-county-covid/modeled_IRR_by_raceethnicity.png" width="100%"></div>
+<div class="infobox interpretation">
+<p>The Poisson and Quasi-Poisson models have the same point estimate but the confidence interval from the Quasi-Poisson model is much greater. The Negative Binomial models have different point estimates and confidence intervals. Is this what you expected? Why or why not?</p>
+</div>
+<div class="infobox communication">
+<p>When presenting, it would likely be easier to communicate these results by showing results from one type of model.</p>
+</div>
 </div>
 <div id="gradients-in-covid-19-mortality-by-in-relation-to-absms" class="section level3" number="8.7.2">
 <h3>
 <span class="header-section-number">8.7.2</span> Gradients in COVID-19 mortality by in relation to ABSMs<a class="anchor" aria-label="anchor" href="#gradients-in-covid-19-mortality-by-in-relation-to-absms"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
+<p>Having looked at overall racialized disparities in COVID-19 mortality, let us now take a look at how mortality varies by ABSMs. Like in the section above, we take age into account by adjusting for age in the model. We fit separate models for each ABSM we are considering.</p>
+<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## We will aggregate data across racialized groups since we are looking at overall relationships</span>
 <span class="va">age_ZCTA_mortality</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">geoid</span>, <span class="va">age_group</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
@@ -1296,7 +1384,12 @@
 <h3>
 <span class="header-section-number">8.7.3</span> Gradients in COVID-19 mortality by Racialized Group in relation to ABSMs<a class="anchor" aria-label="anchor" href="#gradients-in-covid-19-mortality-by-racialized-group-in-relation-to-absms"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
+<p>Now we can take a look at how mortality varies in relation to ABSMs, by racialized group. We build on the code in the section above, but now have models for each racialized group and each ABSM.</p>
+<div class="infobox dataWrangling">
+<p>Here we fit the three types of models, for three racialized groups, and for seven ABSMs. Writing out 3x3x7 models would take up space and time, and be prone to mistakes. The code below uses the <code>map</code> function from the <code>purrr</code> package to do this more efficiently. Do you agree with this approach? What are some other ways you would approach this?</p>
+<p>You can change to code to focus in on fewer ABSMs or investigate other ABSMs of interest for the presentation.</p>
+</div>
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># specify our variables of interest</span>
 <span class="va">variables_of_interest</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ICEraceinc_cut"</span>,
       <span class="st">"prop_in_poverty_cut"</span>,
@@ -1423,18 +1516,30 @@
 
 <span class="co"># ggsave(here("images/09-cook-county-covid/age_coefficient_estimates.png"), width = 14, height = 18)</span></code></pre></div>
 <div class="inline-figure"><img src="images/09-cook-county-covid/exposure_coefficient_estimates.png" width="100%"></div>
+<div class="infobox communication">
+<p>The various models and ABSMs are shown for demonstration. However, it may be better to focus on one particular aspect (e.g. a particular ABSM and model), driven by a specific question and understanding of the context. What would you focus on and why?</p>
+</div>
 </div>
 <div id="hierarchical-and-spatial-models" class="section level3" number="8.7.4">
 <h3>
 <span class="header-section-number">8.7.4</span> Hierarchical and Spatial Models<a class="anchor" aria-label="anchor" href="#hierarchical-and-spatial-models"><i class="fas fa-link"></i></a>
 </h3>
+<div id="background-1" class="section level4" number="8.7.4.1">
+<h4>
+<span class="header-section-number">8.7.4.1</span> Background<a class="anchor" aria-label="anchor" href="#background-1"><i class="fas fa-link"></i></a>
+</h4>
 <p>In the examples above, we modeled the associations between individual- and area-based measures with the outcome in aggregate across the county. However, we may also be interested in modeling the risk of mortality in each ZCTA. This can help us better understand the spatial distribution of risk.</p>
 <p>We may also want to take into account the fact that these ZCTAs are likely not independent of each other, but rather related to each other in a spatially structured fashion. That is, ZCTAs that are next to each other are more likely to have similar rates than ZCTAs that are farther apart.</p>
 <p>One of the <em>statistical</em> challenges of estimating the risk in each ZCTA (or any other small areal unit), is that, due to small underlying populations and sparse events interspersed in time, small-area estimation (SAE) of risk and incidence rates can be quite unstable. This has led to the use of various strategies to smooth estimates, by borrowing information from nearby spatial units. Thus, by accounting for the fact that ZCTAs that are closer together are more likely to be similar, we can obtain spatially smoothed risk estimates.</p>
 <p>Put another way: let us say that a particular part of the county has high mortality rates. If we look at observations over a limited period of time, in each specific ZCTA separately, we may miss this just by chance due to the fact that the populations in individual ZCTAs are small, and thus fewer events are observed. However, if we pool information from neighboring ZCTAs, we would be able to obtain a more stable estimate of the risk.</p>
 <p>Hierarchical Bayesian models are a popular set of tools to conduct such estimations. Often, in such approaches, we will model the Standardized Mortality Ratio (SMR), standardized by age. The relative risk or SMR in area <span class="math inline">\(i\)</span>, (<span class="math inline">\(\theta_i\)</span>) is obtained by dividing the expected count (<span class="math inline">\(E_i\)</span>) by the observed count <span class="math inline">\(O_i\)</span>). How we calculate the “expected count” depends on the objectives of our study and analysis. For example, if we know that there are strong age effects, and want to estimate excess risk after accounting for age-composition differences between ZCTAs, we can take the age-strata-specific mortality rates for all of Cook County, and apply it to the age-distribution of each ZCTA. This tells us what the “expected” mortality count would be if each ZCTA experienced Cook County’s average age-specific mortality rates. One could also standardize by composition in relation to racialized groups, but then we would not be able to estimate how membership in racialized groups was associated with mortality. Similarly, age-standardization precludes the ability to look at the interaction between age and membership in racialized groups, for example.</p>
+</div>
+<div id="smr-calculation" class="section level4" number="8.7.4.2">
+<h4>
+<span class="header-section-number">8.7.4.2</span> SMR Calculation<a class="anchor" aria-label="anchor" href="#smr-calculation"><i class="fas fa-link"></i></a>
+</h4>
 <p>In this case, we will estimate the SMR using age-standardization. For each racialized group in each ZCTA, we obtain the age standardized SMR.</p>
-<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## We will need to have a ZCTA specific ID number that starts from 1 eventually, so let's first make that</span>
 <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">geoid</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">cur_group_id</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span>
@@ -1470,7 +1575,7 @@ O_{ij} \sim Poisson(\theta_{ij}*E_{ij})
 \]</span></p>
 <p>Now, we are looking at observed, expected counts and SMR within each racialized group strata <span class="math inline">\(j\)</span>, within each ZCTA <span class="math inline">\(i\)</span>.</p>
 <p>Let us visualize these crude SMRs for each ZCTA-racialized group strata, along with their confidence intervals</p>
-<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">smr_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">raw_SMR</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">Exp</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>order_id <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/ranking.html">row_number</a></span><span class="op">(</span><span class="op">)</span>,
                 raw_CI95up <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">raw_CI95up</span> <span class="op">&gt;</span> <span class="fl">40</span>, <span class="fl">40</span>, <span class="va">raw_CI95up</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="co"># Since there are large confidence intervals, we are going to cut them off at 40 for easier visualization.</span>
@@ -1486,6 +1591,11 @@ O_{ij} \sim Poisson(\theta_{ij}*E_{ij})
 <span class="co"># ggsave(here("images/09-cook-county-covid/raw_SMR_caterpillar.png"), height = 6, width = 8)</span></code></pre></div>
 <div class="inline-figure"><img src="images/09-cook-county-covid/raw_SMR_caterpillar.png" width="100%"></div>
 <p>Here we can see that there is large variability in these strata-specific SMRs, as well as large confidence intervals for many strata — especially when the predicted rate is zero.</p>
+</div>
+<div id="fitting-models" class="section level4" number="8.7.4.3">
+<h4>
+<span class="header-section-number">8.7.4.3</span> Fitting Models<a class="anchor" aria-label="anchor" href="#fitting-models"><i class="fas fa-link"></i></a>
+</h4>
 <p>Instead of just calculating the crude SMRs, we can model them using a Poisson log-normal model such that:</p>
 <p><span class="math display">\[
 log(\theta_{ij}) = \beta_0 + v_i \\
@@ -1499,7 +1609,7 @@ where \ v_i \sim Normal(0,\sigma^2_v)
 \]</span>
 Here, there is a county-wide intercept for a reference racialized group <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta\)</span>s for each other racialized group. Note that here we are modeling a constant effect for each racialized group across all ZCTAs.</p>
 <p>Let us fit this model</p>
-<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">formula_poisson_mod1</span> <span class="op">&lt;-</span> <span class="va">Obs</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="va">race_ethnicity</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/INLA/man/f.html">f</a></span><span class="op">(</span><span class="va">geoid</span>, model<span class="op">=</span><span class="st">"iid"</span><span class="op">)</span>
 
 <span class="va">model_poisson_mod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/INLA/man/inla.html">inla</a></span><span class="op">(</span><span class="va">formula_poisson_mod1</span>, family<span class="op">=</span><span class="st">"poisson"</span>, data<span class="op">=</span><span class="va">smr_df</span>, E<span class="op">=</span><span class="va">Exp</span>, control.predictor<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>compute<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>, control.compute <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>dic <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
@@ -1522,7 +1632,7 @@ u_i \sim Conditional \ Autoregressive(W, \sigma_u^2)
 \]</span></p>
 <p>What this specifies is that the part of the residual variation across the ZCTAs is spatially structured such that neighboring ZCTAs have similar excess risks. This part is indicated by the new <span class="math inline">\(u_i\)</span> introduced above. After accounting for the spatial structure, further residual variation is indicated by <span class="math inline">\(v_i\)</span>. After fitting such models, we can also calculate the proportion of the residual variance that is spatially structured (that is, <span class="math inline">\(u_i\)</span>), and this is known as the spatial fraction.</p>
 <p>Let us fit this model:</p>
-<div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#Calculate Neighbours matrix</span>
 <span class="va">W.nb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/spdep/reference/poly2nb.html">poly2nb</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span><span class="op">)</span>, snap<span class="op">=</span><span class="fl">0.001</span><span class="op">)</span>
 <span class="co">#W.list &lt;- nb2listw(W.nb, style="B", zero.policy = TRUE)</span>
@@ -1582,13 +1692,13 @@ u_i \sim Conditional \ Autoregressive(W, \sigma_u^2)
 
 <span class="fu">spatial_frac</span><span class="op">(</span><span class="va">model_bym_mod1</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">smr_df</span><span class="op">$</span><span class="va">geoid</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="comparing-fitted-smrs" class="section level3" number="8.7.5">
-<h3>
-<span class="header-section-number">8.7.5</span> Comparing Fitted SMRs<a class="anchor" aria-label="anchor" href="#comparing-fitted-smrs"><i class="fas fa-link"></i></a>
-</h3>
+<div id="comparing-fitted-smrs" class="section level4" number="8.7.4.4">
+<h4>
+<span class="header-section-number">8.7.4.4</span> Comparing Fitted SMRs<a class="anchor" aria-label="anchor" href="#comparing-fitted-smrs"><i class="fas fa-link"></i></a>
+</h4>
 <p>Having fit all of these models, let us visualize all of their components and see what we gain from using these different types of models, and how they differ.</p>
 <p>First, we can look at the the estimates of the fixed effects. Since our non-hierarchical models also estimated fixed effects, we can include them in this comparison, with the caveat that we are modeling SMRs in the hierarchical models.</p>
-<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#The tidy functions from broom work on most commonly used models in R, but INLA is not one of them. </span>
 <span class="co">#This is a helper function to extract coefficients and credible/"confidence" intervals.</span>
 <span class="va">tidy.inla</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span>
@@ -1616,7 +1726,7 @@ u_i \sim Conditional \ Autoregressive(W, \sigma_u^2)
               <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Model <span class="op">=</span> <span class="st">"BYM"</span>,
                      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="va">estimate</span><span class="op">:</span><span class="va">conf.high</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>term <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"race_ethnicity"</span>, <span class="st">""</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># visualize the effects in each model</span>
 <span class="va">coefficients_together</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">term</span> <span class="op">!=</span> <span class="st">'(Intercept)'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
@@ -1630,7 +1740,7 @@ u_i \sim Conditional \ Autoregressive(W, \sigma_u^2)
 <span class="co"># ggsave(here("images/09-cook-county-covid/coefficient_comparison.png"), height = 6, width = 8)</span></code></pre></div>
 <div class="inline-figure"><img src="images/09-cook-county-covid/coefficient_comparison.png" width="100%"></div>
 <p>One of the motivations for fitting the hierarchical models is to get stable and smoothed estimates of each ZCTA. Let us visualize the modeled SMRs for each ZCTA-racialized group strata, along with their confidence intervals, and compare them to the crude SMRs we calculated in the beginning.</p>
-<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Creating a caterpillar plot to visualize the unsmoothed and smoothed SMRs.</span>
 <span class="va">caterpillar_plot</span> <span class="op">&lt;-</span> <span class="va">smr_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">raw_SMR</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">Exp</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>order_id <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/ranking.html">row_number</a></span><span class="op">(</span><span class="op">)</span>,
@@ -1662,8 +1772,14 @@ u_i \sim Conditional \ Autoregressive(W, \sigma_u^2)
 
 <span class="co"># ggsave(here("images/09-cook-county-covid/caterpillar_plot_SMRs.png"), width = 9, height = 6)</span></code></pre></div>
 <div class="inline-figure"><img src="images/09-cook-county-covid/caterpillar_plot_SMRs.png" width="100%"></div>
+<div class="infobox interpretation">
+<p>These caterpillar plots demonstrates the noisiness of the raw SMRs. Note that we cut off the y-axis range here to allow comparison within a limited range. Both models smooth the SMRs.</p>
+</div>
+<div class="infobox communication">
+<p>These plots also demonstrates the pitfalls of identifying small areas with extreme rates based on crude SMRs only. They may have a small underlying population, and have high confidence intervals.</p>
+</div>
 <p>The hierarchical models can be most useful when we visualize the estimated ZCTA-specific effects. Since we have racialized group strata within ZCTAs, we can plot maps for each group.</p>
-<div class="sourceCode" id="cb95"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Similar code as for the caterpillar plot above, but we are going to plot just the point estimates on a map, and not the CIs</span>
 <span class="va">smr_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">raw_SMR</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">Exp</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
@@ -1698,10 +1814,15 @@ u_i \sim Conditional \ Autoregressive(W, \sigma_u^2)
 
 <span class="co"># ggsave(here("images/09-cook-county-covid/modeled_SMR_comparison_1.png"), width = 10, height = 8)</span></code></pre></div>
 <div class="inline-figure"><img src="images/09-cook-county-covid/modeled_SMR_comparison_1.png" width="100%"></div>
-<p>What we see here is that the crude calculated SMRs are very noisy. Using the Poisson hierarchical and BYM models has clear benefits in smoothing the rates. However, there does not seem to be that much difference, at a high level, between the Poisson hierarchical and BYM model.</p>
 <p>The spatial fraction is 72%.</p>
-<p>When we look at these smoothed maps, we can see that the risk is lowest for the White non-Hispanic group. However, the spatial patterning of risk is similar for each racialized group. This is because we did not model the spatial component separately for each group. We are going to do this next by fitting a separate models for each racialized group.</p>
-<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
+<div class="infobox interpretation">
+<p>What we see here is that the crude calculated SMRs are very noisy. Using the Poisson hierarchical and BYM models has clear benefits in smoothing the rates. However, there does not seem to be that much difference, at a high level, between the Poisson hierarchical and BYM model.</p>
+</div>
+<p>** IMPORTANT NOTE **
+:::: {.infobox .interpretation}
+When we look at these smoothed maps, we can see that the risk is lowest for the White non-Hispanic group. However, the spatial patterning of risk is similar for each racialized group in the maps. We should be cautious about concluding from this that the spatial patterning is the same. It is the result of how we constrained the model, as we did not model the spatial component separately for each group. We are going to do this next by fitting a separate models for each racialized group.
+::::</p>
+<div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Fitting the models for the White Non-Hispanic group</span>
 <span class="va">smr_df_wnh</span> <span class="op">&lt;-</span> <span class="va">smr_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">race_ethnicity</span> <span class="op">==</span> <span class="st">"White, non-Hispanic"</span><span class="op">)</span>
@@ -1823,7 +1944,7 @@ u_i \sim Conditional \ Autoregressive(W, \sigma_u^2)
 <span class="fu">spatial_frac</span><span class="op">(</span><span class="va">model_bym_h</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">smr_df_h</span><span class="op">$</span><span class="va">geoid</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>The spatial fraction of the residual variance is 61% for the White, non-Hispanic model; 67.8% for the Black; Hispanic and non-Hispanic model; and 77% for the Hispanic model.</p>
 <p>We can visualize the smoothed SMRs from these separate models.</p>
-<div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#Combine all of the racialized group specific results into one</span>
 <span class="va">smr_df</span> <span class="op">&lt;-</span> <span class="va">smr_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span>
@@ -1867,8 +1988,13 @@ u_i \sim Conditional \ Autoregressive(W, \sigma_u^2)
 <div class="inline-figure">
 <img src="images/09-cook-county-covid/modeled_SMR_race_specific.png" width="100%">
 This approach reflects the different spatial patterning of risks for each racialized group, while also smoothing rates.</div>
-<p>We may also be interested in looking at the area-specific <strong>residuals</strong>. These give us a sense of how much each areas risk deviates from the county-wide mean, conditional on any covariates we include in the model. We can visualize the residuals of the models above (where no covariates were included)</p>
-<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
+</div>
+<div id="additional-analysis" class="section level4" number="8.7.4.5">
+<h4>
+<span class="header-section-number">8.7.4.5</span> Additional Analysis<a class="anchor" aria-label="anchor" href="#additional-analysis"><i class="fas fa-link"></i></a>
+</h4>
+<p>We may also be interested in looking at the area-specific <strong>residuals</strong>. These give us a sense of how much each areas risk deviates from the county-wide mean, conditional on any covariates we include in the model. We can visualize the residuals of the models above (where no covariates were included).</p>
+<div class="sourceCode" id="cb95"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">smr_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">raw_SMR</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">Exp</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>order_id <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/ranking.html">row_number</a></span><span class="op">(</span><span class="op">)</span>,
@@ -1909,7 +2035,7 @@ where \ v_i \sim Normal(0,\sigma^2_v) \ ,\  and \\
 u_i \sim Conditional \ Autoregressive(W, \sigma_u^2)
 \]</span></p>
 <p>Let us fit this model, using only the ICE for racialized economic segregation as the ABSM of interest:</p>
-<div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Fitting the models for the White Non-Hispanic group</span>
 <span class="va">smr_df_wnh</span> <span class="op">&lt;-</span> <span class="va">smr_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">race_ethnicity</span> <span class="op">==</span> <span class="st">"White, non-Hispanic"</span><span class="op">)</span>
@@ -1977,55 +2103,8 @@ u_i \sim Conditional \ Autoregressive(W, \sigma_u^2)
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>bymmodspecific2_RE <span class="op">=</span> <span class="va">mean</span><span class="op">)</span>
 
 <span class="fu">spatial_frac</span><span class="op">(</span><span class="va">model_bym_h2</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">smr_df_h</span><span class="op">$</span><span class="va">geoid</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">coefficients_together2</span> <span class="op">&lt;-</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span><span class="op">(</span><span class="va">race_ethnicity_stratified_models</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-              <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">data</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-              <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">exposure_var</span> <span class="op">==</span> <span class="st">"ICEraceinc_cut"</span><span class="op">)</span>,
-            <span class="fu">tidy.inla</span><span class="op">(</span><span class="va">model_bym_wnh2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-              <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"BYM"</span>,
-                     race_ethnicity <span class="op">=</span> <span class="st">"White, non-Hispanic"</span>,
-                     exposure_var <span class="op">=</span> <span class="st">"ICEraceinc_cut"</span>,
-                     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="va">estimate</span><span class="op">:</span><span class="va">conf.high</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-            <span class="fu">tidy.inla</span><span class="op">(</span><span class="va">model_bym_bhnh2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-              <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"BYM"</span>,
-                     race_ethnicity <span class="op">=</span> <span class="st">"Black, Hispanic or non-Hispanic"</span>,
-                     exposure_var <span class="op">=</span> <span class="st">"ICEraceinc_cut"</span>,
-                     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="va">estimate</span><span class="op">:</span><span class="va">conf.high</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-            <span class="fu">tidy.inla</span><span class="op">(</span><span class="va">model_bym_h2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-              <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"BYM"</span>,
-                     race_ethnicity <span class="op">=</span> <span class="st">"Hispanic"</span>,
-                     exposure_var <span class="op">=</span> <span class="st">"ICEraceinc_cut"</span>,
-                     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="va">estimate</span><span class="op">:</span><span class="va">conf.high</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> 
 
-
-
-<span class="va">coefficients_together2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">term</span> <span class="op">!=</span> <span class="st">'(Intercept)'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"age_group"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>term <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">term</span>, <span class="va">exposure_var</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>term_size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"(?&lt;=[\\(\\[])(.*)(?=,)"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>term <span class="op">=</span> <span class="fu">forcats</span><span class="fu">::</span><span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_reorder.html">fct_reorder</a></span><span class="op">(</span><span class="va">term</span>, <span class="op">-</span><span class="va">term_size</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>
-      x <span class="op">=</span> <span class="va">estimate</span>,
-      xmax <span class="op">=</span> <span class="va">conf.high</span>,
-      xmin <span class="op">=</span> <span class="va">conf.low</span>,
-      y <span class="op">=</span> <span class="va">term</span>,
-      color <span class="op">=</span> <span class="va">model</span>,
-      fill <span class="op">=</span> <span class="va">model</span>,
-      shape <span class="op">=</span> <span class="va">model</span>,
-      group <span class="op">=</span> <span class="va">model</span>  
-    <span class="op">)</span>
-  <span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">1</span>, linetype <span class="op">=</span> <span class="st">'dashed'</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_pointrange</a></span><span class="op">(</span>position <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_dodge.html">position_dodge</a></span><span class="op">(</span>width<span class="op">=</span><span class="fl">.45</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">NA</span><span class="op">)</span>, n.breaks <span class="op">=</span> <span class="fl">4</span>, trans <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/log_trans.html">pseudo_log_trans</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="op">~</span><span class="va">race_ethnicity</span>, scales<span class="op">=</span><span class="st">'free_y'</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">75</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Incident Rate Ratios"</span>,
-          subtitle <span class="op">=</span> <span class="st">"Separate Models Fit for Each Categorical Exposure and Racialized Group"</span><span class="op">)</span></code></pre></div>
-
+</div>
 </div>
 </div>
 </div>
@@ -2040,7 +2119,12 @@ u_i \sim Conditional \ Autoregressive(W, \sigma_u^2)
 <li><a class="nav-link" href="#motivation-research-questions-and-learning-objectives-2"><span class="header-section-number">8.2</span> Motivation, Research Questions, and Learning Objectives</a></li>
 <li><a class="nav-link" href="#approach-2"><span class="header-section-number">8.3</span> Approach</a></li>
 <li><a class="nav-link" href="#dependencies-2"><span class="header-section-number">8.4</span> Dependencies</a></li>
-<li><a class="nav-link" href="#cleaning-the-data"><span class="header-section-number">8.5</span> Cleaning the Data</a></li>
+<li>
+<a class="nav-link" href="#cleaning-the-data"><span class="header-section-number">8.5</span> Cleaning the Data</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#denominator-data"><span class="header-section-number">8.5.1</span> Denominator Data</a></li>
+<li><a class="nav-link" href="#case-data"><span class="header-section-number">8.5.2</span> Case Data</a></li>
+</ul>
+</li>
 <li><a class="nav-link" href="#visualizing-your-data-1"><span class="header-section-number">8.6</span> Visualizing Your Data</a></li>
 <li>
 <a class="nav-link" href="#analyzing-the-data"><span class="header-section-number">8.7</span> Analyzing the data</a><ul class="nav navbar-nav">
@@ -2048,7 +2132,6 @@ u_i \sim Conditional \ Autoregressive(W, \sigma_u^2)
 <li><a class="nav-link" href="#gradients-in-covid-19-mortality-by-in-relation-to-absms"><span class="header-section-number">8.7.2</span> Gradients in COVID-19 mortality by in relation to ABSMs</a></li>
 <li><a class="nav-link" href="#gradients-in-covid-19-mortality-by-racialized-group-in-relation-to-absms"><span class="header-section-number">8.7.3</span> Gradients in COVID-19 mortality by Racialized Group in relation to ABSMs</a></li>
 <li><a class="nav-link" href="#hierarchical-and-spatial-models"><span class="header-section-number">8.7.4</span> Hierarchical and Spatial Models</a></li>
-<li><a class="nav-link" href="#comparing-fitted-smrs"><span class="header-section-number">8.7.5</span> Comparing Fitted SMRs</a></li>
 </ul>
 </li>
 </ul>

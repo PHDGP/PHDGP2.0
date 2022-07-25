@@ -197,11 +197,12 @@ levels of a factor, violation of positivity assumption</li>
 <h2>
 <span class="header-section-number">10.4</span> Create our Cleaned Dataset<a class="anchor" aria-label="anchor" href="#create-our-cleaned-dataset"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb145"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb134"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># dependencies </span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org">magrittr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://walker-data.com/tidycensus/">tidycensus</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span>
 
 <span class="co"># get our data from PLACES </span>
 <span class="co"># download the county level data from https://chronicdata.cdc.gov/500-Cities-Places/PLACES-Local-Data-for-Better-Health-County-Data-20/swc5-untb </span>
@@ -343,7 +344,7 @@ levels of a factor, violation of positivity assumption</li>
 <h2>
 <span class="header-section-number">10.5</span> Visualizing the Data<a class="anchor" aria-label="anchor" href="#visualizing-the-data"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb146"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># load our cleaned dataset</span>
 <span class="va">uninsurance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="fu">here</span><span class="op">(</span><span class="st">"data/11-health-insurance-comparison/county_uninsurance.rds"</span><span class="op">)</span><span class="op">)</span>
 
@@ -360,7 +361,7 @@ levels of a factor, violation of positivity assumption</li>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Difference Between ACS and PLACES County Estimates for % without Health Insurance"</span>,
       subtitle <span class="op">=</span> <span class="st">"American Community Survey 2015-2019 Data; PLACES 2021 data based on 2019 BRFSS"</span><span class="op">)</span> </code></pre></div>
 <div class="inline-figure"><img src="images/11-health-insurance-comparison/histogram.png" width="100%"></div>
-<div class="sourceCode" id="cb147"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">uninsurance</span>,
        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pct_uninsured_19_64_acs</span>, y <span class="op">=</span> <span class="va">pct_uninsured_18_64_places</span><span class="op">)</span><span class="op">)</span><span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> 
@@ -378,7 +379,7 @@ levels of a factor, violation of positivity assumption</li>
 Figure 10.1: A scatterplot of ACS vs. PLACES estimates for the % without health insurance. The solid line shoes the line with slope = 1 and intercept = 0, while the line in blue shows a linear model line of best fit.
 </p>
 </div>
-<div class="sourceCode" id="cb148"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb137"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">uninsurance</span>,
        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">estimate_total_19_64_population</span>, y <span class="op">=</span> <span class="va">difference_in_acs_minus_places</span> <span class="op">)</span><span class="op">)</span><span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> 
@@ -391,12 +392,18 @@ Figure 10.1: A scatterplot of ACS vs. PLACES estimates for the % without health
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Comparing ACS vs. PLACES Estimate of % without Health Insurance by County"</span>,
     subtitle <span class="op">=</span> <span class="st">"American Community Survey 2015-2019 Data; PLACES 2021 data based on 2019 BRFSS"</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="images/11-health-insurance-comparison/population_size_vs_difference_scatter.png" width="100%"></div>
+<div class="infobox interpretation">
+<p>The last three figures help us to see the on-average differences between ACS and PLACES
+estimates of health uninsurance rates. In the histogram figure, we can see that the
+PLACES estimates of uninsurance are often higher than those in ACS, while the scatter-plot
+figures show us how this relationship changes with population size.</p>
+</div>
 </div>
 <div id="adding-absms-1" class="section level2" number="10.6">
 <h2>
 <span class="header-section-number">10.6</span> Adding ABSMs<a class="anchor" aria-label="anchor" href="#adding-absms-1"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb149"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb138"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">variables_dict</span> <span class="op">&lt;-</span>
   <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span><span class="op">(</span>
   <span class="co"># ICEraceinc</span>
@@ -605,7 +612,7 @@ Figure 10.1: A scatterplot of ACS vs. PLACES estimates for the % without health
     include.lowest<span class="op">=</span><span class="cn">TRUE</span>
   <span class="op">)</span>
 <span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb150"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># relationship between ICE and percent without insurance in PLACES</span>
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span>
   formula <span class="op">=</span> <span class="va">pct_uninsured_18_64_places</span> <span class="op">~</span> <span class="va">ICEraceinc_cut</span>,
@@ -621,7 +628,7 @@ Figure 10.1: A scatterplot of ACS vs. PLACES estimates for the % without health
 ## 3 ICEraceinc_cut(0.144,0.207]      2.80     0.427      6.55 6.54e- 11
 ## 4 ICEraceinc_cut(0.106,0.144]      5.22     0.462     11.3  5.01e- 29
 ## 5 ICEraceinc_cut[-0.476,0.106]     8.07     0.422     19.1  3.79e- 77</code></pre>
-<div class="sourceCode" id="cb152"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># relationship between ICE and percent without insurance in ACS</span>
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span>
   formula <span class="op">=</span> <span class="va">pct_uninsured_19_64_acs</span> <span class="op">~</span> <span class="va">ICEraceinc_cut</span>,
@@ -637,7 +644,7 @@ Figure 10.1: A scatterplot of ACS vs. PLACES estimates for the % without health
 ## 3 ICEraceinc_cut(0.144,0.207]      3.09     0.445      6.94 4.76e- 12
 ## 4 ICEraceinc_cut(0.106,0.144]      5.98     0.484     12.4  2.47e- 34
 ## 5 ICEraceinc_cut[-0.476,0.106]     9.60     0.441     21.8  3.60e- 98</code></pre>
-<div class="sourceCode" id="cb154"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb143"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># relationship between poverty and percent without insurance in ACS</span>
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span>
   formula <span class="op">=</span> <span class="va">pct_uninsured_19_64_acs</span> <span class="op">~</span> <span class="va">poverty_cut</span>,
@@ -653,8 +660,11 @@ Figure 10.1: A scatterplot of ACS vs. PLACES estimates for the % without health
 ## 3 poverty_cut(0.1,0.15]    0.731     0.747     0.978 3.28e- 1
 ## 4 poverty_cut(0.15,0.2]    2.90      0.740     3.91  9.28e- 5
 ## 5 poverty_cut(0.2,1]       6.67      0.716     9.32  2.22e-20</code></pre>
-<div class="sourceCode" id="cb156"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">model_formulae</span> <span class="op">&lt;-</span> 
+<div class="sourceCode" id="cb145"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># create a data frame with the names for each combination of the percent</span>
+<span class="co"># uninsured in PLACES or ACS variables in one column and each of the categorical</span>
+<span class="co"># exposure variables in another column</span>
+<span class="va">model_formulae</span> <span class="op">&lt;-</span> 
   <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/expand_grid.html">expand_grid</a></span><span class="op">(</span>
     exposure <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'ICEraceinc_cut'</span>,
       <span class="st">'poverty_cut'</span>,
@@ -665,8 +675,12 @@ Figure 10.1: A scatterplot of ACS vs. PLACES estimates for the % without health
       <span class="st">'prop_white_nh_cut'</span><span class="op">)</span>,
     outcome <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'pct_uninsured_19_64_acs'</span>, <span class="st">'pct_uninsured_18_64_places'</span><span class="op">)</span><span class="op">)</span>
 
+<span class="co"># create a column that puts the uninsurance variables on the left-hand-side</span>
+<span class="co"># and the exposure variables on the right hand side</span>
 <span class="va">model_formulae</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">outcome</span>, <span class="st">" ~ "</span>, <span class="va">exposure</span><span class="op">)</span><span class="op">)</span>
 
+<span class="co"># fit regression models using the robust linear model rlm method from </span>
+<span class="co"># the MASS package</span>
 <span class="va">model_formulae</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rowwise.html">rowwise</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
   model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
     <span class="co"># note that you do need to have the MASS package installed;</span>
@@ -681,15 +695,26 @@ Figure 10.1: A scatterplot of ACS vs. PLACES estimates for the % without health
   model_coefs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">model</span>, conf.int<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
 <span class="op">)</span>
 
+<span class="co"># extract the coefficient estimates on the exposure terms</span>
 <span class="va">model_formulae</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>model_coefs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">model_coefs</span>, <span class="va">term</span> <span class="op">!=</span> <span class="st">'(Intercept)'</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
+<span class="co"># unnest the model coefficients data</span>
 <span class="va">model_formulae</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/compound.html">%&lt;&gt;%</a></span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html">unnest</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="va">model_coefs</span><span class="op">)</span>
 
+<span class="co"># create a plot showing the coefficient estimates from each model  - </span>
+<span class="co"># </span>
+<span class="co"># the visualization here is what's typically called a "forest plot" and shows</span>
+<span class="co"># the point-estimates for the coefficients and their 95% confidence intervals</span>
+<span class="co"># along with a dashed line at zero so we can see if the coefficients are</span>
+<span class="co"># significantly different from the null hypothesis (the null hypothesis being</span>
+<span class="co"># that the coefficient is zero).</span>
 <span class="va">model_formulae</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
-    term <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">term</span>, <span class="va">exposure</span><span class="op">)</span>,
-    term_size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"[0-9\\-\\.e\\+]+"</span><span class="op">)</span><span class="op">)</span>,
+    term <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">term</span>, <span class="va">exposure</span><span class="op">)</span>, <span class="co"># remove the exposure string repeated in each term</span>
+    term_size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"[0-9\\-\\.e\\+]+"</span><span class="op">)</span><span class="op">)</span>, <span class="co"># get the numeric value of each term;</span>
+    <span class="co"># e.g. if the term was originally poverty_cut[0,0.05) then this regular expression extracts the 0</span>
     term <span class="op">=</span> <span class="fu">forcats</span><span class="fu">::</span><span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_reorder.html">fct_reorder</a></span><span class="op">(</span><span class="va">term</span>, <span class="op">-</span><span class="va">term_size</span><span class="op">)</span>
+    <span class="co"># using the term size, we order the terms so they appear in the correct order</span>
   <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">estimate</span>, xmin <span class="op">=</span> <span class="va">conf.low</span>, xmax <span class="op">=</span> <span class="va">conf.high</span>, y <span class="op">=</span> <span class="va">term</span>,
              shape <span class="op">=</span> <span class="va">outcome</span>, color <span class="op">=</span> <span class="va">outcome</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
@@ -702,15 +727,19 @@ Figure 10.1: A scatterplot of ACS vs. PLACES estimates for the % without health
           subtitle <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">'Models were fit separately for each ABSM'</span><span class="op">)</span>
   <span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="images/11-health-insurance-comparison/modeled_effects_for_each_absm.png" width="100%"></div>
-<div class="sourceCode" id="cb157"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># let's take a look at massachusetts</span>
+<div class="sourceCode" id="cb146"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># let's take a look at some specific states</span>
 
+<span class="co"># extract the maximum uninsurance rate across both ACS and PLACES so that we can</span>
+<span class="co"># use it in making the color palettes consistent between the two maps for ACS</span>
+<span class="co"># and PLACES</span>
 <span class="va">max_uninsurance_rate</span> <span class="op">&lt;-</span> 
   <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">pmax</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">uninsurance</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">state_abbr</span> <span class="op">==</span> <span class="st">'TX'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">pct_uninsured_19_64_acs</span><span class="op">)</span><span class="op">)</span>,
   <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">uninsurance</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">state_abbr</span> <span class="op">==</span> <span class="st">'TX'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">pct_uninsured_18_64_places</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
+<span class="co"># create a map showing the ACS direct estimates of uninsurance rates</span>
 <span class="va">acs_figure</span> <span class="op">&lt;-</span> <span class="va">uninsurance</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">state_abbr</span> <span class="op">==</span> <span class="st">'TX'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">pct_uninsured_19_64_acs</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
@@ -720,6 +749,7 @@ Figure 10.1: A scatterplot of ACS vs. PLACES estimates for the % without health
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"Percent Uninsured (19-64)"</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"ACS Percent Uninsurance Estimates"</span><span class="op">)</span>
 
+<span class="co"># create a map showing the PLACES estimates of uninsurance rates</span>
 <span class="va">places_figure</span> <span class="op">&lt;-</span> <span class="va">uninsurance</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">state_abbr</span> <span class="op">==</span> <span class="st">'TX'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">pct_uninsured_18_64_places</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
@@ -729,13 +759,14 @@ Figure 10.1: A scatterplot of ACS vs. PLACES estimates for the % without health
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"Percent Uninsured (18-64)"</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Places Percent Uninsurance Estimates"</span><span class="op">)</span>
 
-
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span>
+<span class="co"># combine the two figures into one side-by-side figure</span>
 <span class="va">acs_figure</span> <span class="op">+</span> <span class="va">places_figure</span>
 
+<span class="co"># save the figure</span>
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"images/11-health-insurance-comparison/texas_comparison.png"</span>,
        height <span class="op">=</span> <span class="fl">6</span>, width <span class="op">=</span> <span class="fl">12</span><span class="op">)</span>
 
+<span class="co"># create a scatter plot showing the ACS vs. PLACES relationship in Texas</span>
 <span class="va">uninsurance</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">state_abbr</span> <span class="op">==</span> <span class="st">'TX'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pct_uninsured_19_64_acs</span>, y <span class="op">=</span> <span class="va">pct_uninsured_18_64_places</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
@@ -744,17 +775,23 @@ Figure 10.1: A scatterplot of ACS vs. PLACES estimates for the % without health
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html">ylim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">max_uninsurance_rate</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_abline</a></span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span>, intercept <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
 
+<span class="co"># save the figure</span>
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"images/11-health-insurance-comparison/texas_comparison_scatter.png"</span>,
        height <span class="op">=</span> <span class="fl">6</span>, width <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>
 
 
+<span class="co"># florida --- </span>
 
+<span class="co"># extract the maximum uninsurance rate across both ACS and PLACES so that we can</span>
+<span class="co"># use it in making the color palettes consistent between the two maps for ACS</span>
+<span class="co"># and PLACES</span>
 <span class="va">max_uninsurance_rate</span> <span class="op">&lt;-</span> 
   <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">pmax</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">uninsurance</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">state_abbr</span> <span class="op">==</span> <span class="st">'FL'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">pct_uninsured_19_64_acs</span><span class="op">)</span><span class="op">)</span>,
   <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">uninsurance</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">state_abbr</span> <span class="op">==</span> <span class="st">'FL'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">pct_uninsured_18_64_places</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
+<span class="co"># create a map showing the ACS direct estimates of uninsurance rates</span>
 <span class="va">acs_figure</span> <span class="op">&lt;-</span> <span class="va">uninsurance</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">state_abbr</span> <span class="op">==</span> <span class="st">'FL'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">pct_uninsured_19_64_acs</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
@@ -764,6 +801,7 @@ Figure 10.1: A scatterplot of ACS vs. PLACES estimates for the % without health
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"Percent Uninsured (19-64)"</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"ACS Percent Uninsurance Estimates"</span><span class="op">)</span>
 
+<span class="co"># create a map showing the PLACES estimates of uninsurance rates</span>
 <span class="va">places_figure</span> <span class="op">&lt;-</span> <span class="va">uninsurance</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">state_abbr</span> <span class="op">==</span> <span class="st">'FL'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">pct_uninsured_18_64_places</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
@@ -773,12 +811,14 @@ Figure 10.1: A scatterplot of ACS vs. PLACES estimates for the % without health
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"Percent Uninsured (18-64)"</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Places Percent Uninsurance Estimates"</span><span class="op">)</span>
 
+<span class="co"># combine the two figures into one side-by-side figure</span>
 <span class="va">acs_figure</span> <span class="op">+</span> <span class="va">places_figure</span>
 
+<span class="co"># save the figure</span>
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"images/11-health-insurance-comparison/florida_comparison.png"</span>,
        height <span class="op">=</span> <span class="fl">6</span>, width <span class="op">=</span> <span class="fl">12</span><span class="op">)</span>
 
-
+<span class="co"># create a scatter plot showing the ACS vs. PLACES relationship in Florida</span>
 <span class="va">uninsurance</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">state_abbr</span> <span class="op">==</span> <span class="st">'FL'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pct_uninsured_19_64_acs</span>, y <span class="op">=</span> <span class="va">pct_uninsured_18_64_places</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
@@ -792,6 +832,9 @@ Figure 10.1: A scatterplot of ACS vs. PLACES estimates for the % without health
 
 
 <span class="co"># minnesota --- </span>
+
+<span class="co"># follows the same approach as shown above for Texas and Florida </span>
+
 <span class="va">max_uninsurance_rate</span> <span class="op">&lt;-</span> 
   <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">pmax</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">uninsurance</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">state_abbr</span> <span class="op">==</span> <span class="st">'MN'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">pct_uninsured_19_64_acs</span><span class="op">)</span><span class="op">)</span>,
@@ -821,8 +864,12 @@ Figure 10.1: A scatterplot of ACS vs. PLACES estimates for the % without health
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"images/11-health-insurance-comparison/minnesota_comparison.png"</span>,
        height <span class="op">=</span> <span class="fl">6</span>, width <span class="op">=</span> <span class="fl">12</span><span class="op">)</span>
 
+<span class="co"># wisconsin --- </span>
+
+<span class="co"># follows the same approach as shown above for Texas and Florida </span>
+
 <span class="va">uninsurance</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">state_abbr</span> <span class="op">==</span> <span class="st">'WI'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">state_abbr</span> <span class="op">==</span> <span class="st">'MN'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pct_uninsured_19_64_acs</span>, 
         xmin <span class="op">=</span> <span class="va">pct_uninsured_18_64_acs_ci_low</span>, 
@@ -848,6 +895,9 @@ Figure 10.1: A scatterplot of ACS vs. PLACES estimates for the % without health
 
 
 <span class="co"># wisconsin --- </span>
+
+<span class="co"># follows the same approach as above for Texas, Florida, Minnesota</span>
+
 <span class="va">max_uninsurance_rate</span> <span class="op">&lt;-</span> 
   <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">pmax</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">uninsurance</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">state_abbr</span> <span class="op">==</span> <span class="st">'WI'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">pct_uninsured_19_64_acs</span><span class="op">)</span><span class="op">)</span>,
@@ -877,9 +927,10 @@ Figure 10.1: A scatterplot of ACS vs. PLACES estimates for the % without health
 
 <span class="va">acs_figure</span> <span class="op">+</span> <span class="va">places_figure</span>
 
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"images/11-health-insurance-comparison/wisconson_comparison.png"</span>,
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"images/11-health-insurance-comparison/wisconsin_comparison.png"</span>,
        height <span class="op">=</span> <span class="fl">6</span>, width <span class="op">=</span> <span class="fl">12</span><span class="op">)</span>
 
+<span class="co"># this figure slightly differs from the above approach in that it includes error-bars</span>
 <span class="va">uninsurance</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">state_abbr</span> <span class="op">==</span> <span class="st">'WI'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>
@@ -904,27 +955,7 @@ Figure 10.1: A scatterplot of ACS vs. PLACES estimates for the % without health
 
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"images/11-health-insurance-comparison/wisconsin_comparison_scatter.png"</span>,
        height <span class="op">=</span> <span class="fl">6</span>, width <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></code></pre></div>
-<!-- ## Using CDC’s PLACES -->
-<!-- _**What are the strengths and limitations of CDC’s PLACES SAEs?**_ -->
-<!-- STRENGTHS:  -->
-<!--   -    unique source of CT-level health relevant data -->
-<!--   -    can be linked to other CT and other area-based measures of structural and social determinants of health -->
-<!--   -    Good starting point for understanding baseline health-related disparities  -->
-<!--   -    Can be used to assess general trends across areas in order to inform outreach and further contextualized research and program planning -->
-<!-- WEAKNESSES:  -->
-<!--   -    Data not meant for longitudinal research (studies have tried to use PLACES -->
-<!--   estimates as outcomes and applied regressions on exposure data extracted -->
-<!--   elsewhere, despite warning at the PLACES website that the data should not be -->
-<!--   used in this way) -->
-<!--   -    Post-stratification done using 2010 census estimates (cannot disentangle -->
-<!--   predictors) -->
-<!--   -    Environmental exposures are not captured (as the assumption is that -->
-<!--   confounding by these are accounted for by looking at census tract level), so -->
-<!--   estimates cannot be used to evaluate local policies or programs -->
-<!--   -    Stratification by racialized group, age, or socioeconomic position not -->
-<!--   available (hence cannot do sub-analyses for specific age/racialized/income -->
-<!--   groups) -->
-<!--   -    Paucity of validation studies  -->
+<p><img src="images/11-health-insurance-comparison/texas_comparison.png" width="100%"><img src="images/11-health-insurance-comparison/texas_comparison_scatter.png" width="100%"><img src="images/11-health-insurance-comparison/florida_comparison.png" width="100%"><img src="images/11-health-insurance-comparison/florida_comparison_scatter.png" width="100%"><img src="images/11-health-insurance-comparison/minnesota_comparison.png" width="100%"><img src="images/11-health-insurance-comparison/minnesota_comparison_scatter.png" width="100%"><img src="images/11-health-insurance-comparison/wisconsin_comparison.png" width="100%"><img src="images/11-health-insurance-comparison/wisconsin_comparison_scatter.png" width="100%"></p>
 
 </div>
 </div>

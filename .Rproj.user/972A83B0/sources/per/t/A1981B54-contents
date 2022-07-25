@@ -1,0 +1,41 @@
+# Getting your data {#getting-your-data}
+
+<!-- Outline for Chapter --> 
+<!-- 
+  - Downloading data 
+    - Health data
+    - Population data
+        - Numerator and Denominator Issues
+    - Social Metric Data 
+    - Data governance (whose lives are affected by the data, who owns the data) 
+    - tidycensus, shape files
+        - simple example (percent poverty)
+        - constructing the ICE measures
+      - Health data, social metric data
+          - Issues of representativeness (Full enumerationn data vs. Survey estimates)
+  - Geocoding  (different ways to geocode, Google, openstreetmaps, ArcGIS)
+--> 
+
+```{r child='child_documents/04-getting-your-data/high-level-overview.Rmd'}
+```
+
+```{r child='child_documents/04-getting-your-data/data-sources.Rmd'}
+```
+
+```{r child='child_documents/04-getting-your-data/tidycensus-and-mapview-demo.Rmd'}
+```
+
+```{r child='child_documents/04-getting-your-data/cleaning-area-identifiers.Rmd'}
+```
+
+```{r child='child_documents/04-getting-your-data/numerators-and-denominators.Rmd'}
+```
+
+```{r child='child_documents/04-getting-your-data/geocoding.Rmd'}
+```
+
+```{r child='child_documents/04-getting-your-data/data-governance.Rmd'}
+```
+
+```{r child='child_documents/04-getting-your-data/references.Rmd'}
+```
