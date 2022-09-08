@@ -130,7 +130,7 @@
 <span class="header-section-number">7.4.2</span> Dependencies<a class="anchor" aria-label="anchor" href="#dependencies-1"><i class="fas fa-link"></i></a>
 </h3>
 <p>Run the lines of code below to load the R packages that you will need throughout the case study. If this code does not run for you, you may need to run <code>install.packages(“package_name”)</code>.</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Libraries - if this code does not run for you, you may need to run install.package("package_name")</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/">knitr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
@@ -157,7 +157,7 @@
 <p>The mortality data has been aggregated from individual observations into death counts by age, racialized group, census tract, and city/town. When you get unrestricted mortality files from government sources for research, you will likely receive files with one observation per death. After you have geocoded these observations, you will need to aggregate them up to the level of interest for your analysis. This requires aggregation not only up to the census tract level, but also age groups so we can do an appropriate age standardization, sex groups and racialized groups so we can stratify our analyses by these groups, and towns so we can explore a second areal level of analysis.</p>
 <p>Below is some code (for example) to turn a raw mortality file into what has been provided to you, by merging census tracts and towns to the data, and then aggregating into groups. The vast majority of our area-based social metrics come from the U.S. Census, so the most detailed level for analysis available will be the census tract (however for this case study, because we are analyzing a health outcome with relatively small numbers of cases, we need to perform our analysis at a larger geography such as city/town instead of census tract to ensure that there are a sufficient number of cases, especially inclusive of different racialized groups, in our units of analysis). We can use the <code>tigris</code> package to download census tract geometries and the sf package to link our geocoded observations to the appropriate census tracts.</p>
 <p>Ideally when performing an analysis that might include two or more levels the smaller level (e.g., census tracts) would be nested entirely within the larger level (e.g., towns). In Massachusetts though, there are many towns that have such small populations that they are smaller than census tracts. For these towns, we have created a crosswalk wherein small towns have been combined to create larger super towns. These super towns each make up one census tract, so that each super town in the analysis will now have at least one census tract nested within it. Please note that for this analysis we will be focusing on breast cancer mortality in women.</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># the raw mortality data, with the geocoded coordinates converted into spatial feature (sf) data</span>
 <span class="va">ma_mort</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_rds.html">read_rds</a></span><span class="op">(</span><span class="st">"data/08-breast-cancer-mortality/ma_mort_geo.RDS"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span>coords<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"lon"</span>,<span class="st">"lat"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4269</span><span class="op">)</span>
@@ -284,7 +284,7 @@
 </h3>
 <p>We download population data to use as denominators in our rates and area-based social metrics (ABSMs) from the U.S. Census Bureau using the <code>tidycensus</code> package. This requires registering with the U.S. Census for an API key. The key is redacted here, but you can get your own from <a href="https://api.census.gov/data/key_signup.html" class="uri">https://api.census.gov/data/key_signup.html</a>. For this case study, we are using the 2015-2019 American Community Survey (ACS) 5-year estimates counts for our population estimates and for constructing our ABSMs.</p>
 <p>The ABSMs we will use for this analysis are the percentage of the population in poverty (for more information on how the Census Bureau measures poverty, see <a href="https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html" class="uri">https://www.census.gov/topics/income-poverty/poverty/guidance/poverty-measures.html</a>) and the Index of Concentration at the Extremes (ICE) for racialized economic segregation (i.e., race/ethnicity + income), which measures the extent to which an area’s population is concentrated into extremes of deprivation and privilege. The ICE measure for racialized economic segregation is scaled from -1 to 1: a value of -1 means that 100% of the population is concentrated in the most deprived group (in this analysis, conceptualized as the Black non-Hispanic population in low-income households), and a value of 1 means that 100% of the population is concentrated into the most privileged group (in this analysis, conceptualized as the White non-Hispanic population in high-income households). For more information on the formula for the ICE measure and the construction of the specific ICE variables, see Krieger et al., 2016. Both of our area-based social metrics (poverty and racialized economic segregation) are calculated at the city/town level.</p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Population Denominators</span>
 <span class="va">ma_demo_acs_bc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">vector</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"list"</span>, length <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">ma_demo_acs_bc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2013</span>,<span class="fl">2014</span>,<span class="fl">2015</span>,<span class="fl">2016</span>,<span class="fl">2017</span><span class="op">)</span>
@@ -466,15 +466,15 @@
   <span class="fu"><a href="https://r-spatial.github.io/sf/reference/tidyverse.html">summarise</a></span><span class="op">(</span>population <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">population</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 6 × 6
-##   super_town  year age_cat sex    race_group                            population
-##   &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;                                      &lt;dbl&gt;
-## 1 abington    2013 0-4     Female Hispanic                                      45
-## 2 abington    2013 0-4     Female Non-Hispanic Asian or Pacific Island…          0
-## 3 abington    2013 0-4     Female Non-Hispanic Black                            45
-## 4 abington    2013 0-4     Female Non-Hispanic Native American, Alaska…          0
-## 5 abington    2013 0-4     Female Non-Hispanic White                           456
-## 6 abington    2013 0-4     Female Total                                        529</code></pre>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+##   super_town  year age_cat sex    race_group                                          population
+##   &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;                                                    &lt;dbl&gt;
+## 1 abington    2013 0-4     Female Hispanic                                                    45
+## 2 abington    2013 0-4     Female Non-Hispanic Asian or Pacific Islander                       0
+## 3 abington    2013 0-4     Female Non-Hispanic Black                                          45
+## 4 abington    2013 0-4     Female Non-Hispanic Native American, Alaskan Native, Other          0
+## 5 abington    2013 0-4     Female Non-Hispanic White                                         456
+## 6 abington    2013 0-4     Female Total                                                      529</code></pre>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Area-Based Social Metrics</span>
 <span class="va">ma_absm_acs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">vector</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"list"</span>, length <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">ma_absm_acs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2013</span>,<span class="fl">2014</span>,<span class="fl">2015</span>,<span class="fl">2016</span>,<span class="fl">2017</span><span class="op">)</span>
@@ -646,18 +646,16 @@
                           include.lowest<span class="op">=</span><span class="cn">T</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 6 × 19
-##   super_town percBlack percHisp percColor ICEwbinc ICEwnhinc tractPov tractCrowd
-##   &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
-## 1 abington    0.0243     0.0232    0.101     0.378     0.373   0.0384    0.0120 
-## 2 acton       0.0155     0.0236    0.295     0.465     0.448   0.0307    0.00933
-## 3 acushnet    0.000574   0.0331    0.0926    0.309     0.303   0.0546    0.0380 
-## 4 adams       0.00715    0.0121    0.0379    0.183     0.179   0.104     0.0103 
-## 5 agawam      0.0155     0.0609    0.117     0.300     0.271   0.0822    0.0126 
-## 6 amesbury    0.00675    0.0239    0.0668    0.368     0.356   0.0552    0.0111 
-## # … with 11 more variables: tractSevereCrowd &lt;dbl&gt;, ice_wnh_highinc &lt;dbl&gt;,
-## #   ice_wnh_lowinc &lt;dbl&gt;, ice_poc_lowinc &lt;dbl&gt;, ice_poc_highinc &lt;dbl&gt;,
-## #   pop_total &lt;dbl&gt;, pov_cat &lt;fct&gt;, pov_qt &lt;fct&gt;, ICE_qt &lt;fct&gt;,
-## #   perc_Color_qt &lt;fct&gt;, perc_BLACK_qt &lt;fct&gt;</code></pre>
+##   super_town percBlack percHisp percColor ICEwbinc ICEwnhinc tractPov tractCrowd tractSevereCrowd ice_wnh_highinc
+##   &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;            &lt;dbl&gt;           &lt;dbl&gt;
+## 1 abington    0.0243     0.0232    0.101     0.378     0.373   0.0384    0.0120          0.00224            0.379
+## 2 acton       0.0155     0.0236    0.295     0.465     0.448   0.0307    0.00933         0.00130            0.463
+## 3 acushnet    0.000574   0.0331    0.0926    0.309     0.303   0.0546    0.0380          0.00675            0.309
+## 4 adams       0.00715    0.0121    0.0379    0.183     0.179   0.104     0.0103          0.00124            0.190
+## 5 agawam      0.0155     0.0609    0.117     0.300     0.271   0.0822    0.0126          0.00606            0.294
+## 6 amesbury    0.00675    0.0239    0.0668    0.368     0.356   0.0552    0.0111          0.000323           0.360
+## # … with 9 more variables: ice_wnh_lowinc &lt;dbl&gt;, ice_poc_lowinc &lt;dbl&gt;, ice_poc_highinc &lt;dbl&gt;, pop_total &lt;dbl&gt;,
+## #   pov_cat &lt;fct&gt;, pov_qt &lt;fct&gt;, ICE_qt &lt;fct&gt;, perc_Color_qt &lt;fct&gt;, perc_BLACK_qt &lt;fct&gt;</code></pre>
 </div>
 </div>
 <div id="approach-1" class="section level2" number="7.5">
@@ -675,7 +673,7 @@
 <span class="header-section-number">7.5.1</span> Question 1: What is the overall socioeconomic gradient in breast cancer mortality?<a class="anchor" aria-label="anchor" href="#question-1-what-is-the-overall-socioeconomic-gradient-in-breast-cancer-mortality"><i class="fas fa-link"></i></a>
 </h3>
 <p>First, let’s just look at the spatial distribution of the area-based socioeconomic measure of poverty that we constructed: the percentage of the city/town population below poverty. Here is a map of the percentage of population below poverty by Massachusetts city/town poverty quantile for years 2013-2017.</p>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ma_poverty_map</span> <span class="op">&lt;-</span> <span class="va">town_ma_absm_sum</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">town_geometry</span>, by<span class="op">=</span> <span class="st">"super_town"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
@@ -698,7 +696,7 @@
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"ma_poverty_map.png"</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="images/08-breast-cancer-mortality/ma_poverty_map.png" width="100%"></div>
 <p>Now, let’s look at the spatial distribution of the other area-based socioeconomic measure that we constructed: the ICE measure for racialized economic segregation. Compare this map of city/town ICE (racialized group + income) quantile to the first map of city/town poverty quantile. Do you notice any differences? Do you find one of these area-based socioeconomic measures to be more visually clear and compelling than the other, and why or why not?</p>
-<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ma_ice_map</span> <span class="op">&lt;-</span> <span class="va">town_ma_absm_sum</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">town_geometry</span>, by<span class="op">=</span> <span class="st">"super_town"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
@@ -737,7 +735,7 @@
 ## 11 65-74    66037 0.0660
 ## 12 75-84    44841 0.0448
 ## 13 85+      15508 0.0155</code></pre>
-<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ma_mort_ice_qt</span> <span class="op">&lt;-</span> <span class="va">town_ma_mort_bc</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">town_ma_demo_acs_bc</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"year"</span>,<span class="st">"super_town"</span>,<span class="st">"race_group"</span>,<span class="st">"sex"</span>,<span class="st">"age_cat"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">town_ma_absm_sum</span>, by<span class="op">=</span> <span class="st">"super_town"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
@@ -782,7 +780,7 @@
 </h3>
 <p>We can describe inequities by racialized groups much the same way we describe inequities by ABSMs: by aggregating death and population data. We’ve already got this data aggregated, so we can stratify our analysis to compare Black non-Hispanic and White non-Hispanic populations. Note: Throughout the case study we may refer to these groups as Black and White as a shorthand.</p>
 <p>As we did for the first question, we age-adjust our aggregated data by racialized group to compare standardized mortality rates for Black and White populations. We can see lots of variation here as the mortality rates increase - what is causing that?</p>
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ma_mort_stratified</span> <span class="op">&lt;-</span> <span class="va">town_ma_mort_bc</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">town_ma_demo_acs_bc</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"year"</span>,<span class="st">"super_town"</span>,<span class="st">"race_group"</span>,<span class="st">"sex"</span>,<span class="st">"age_cat"</span><span class="op">)</span><span class="op">)</span><span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">race_group</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Non-Hispanic White"</span>,<span class="st">"Non-Hispanic Black"</span><span class="op">)</span>,
@@ -831,7 +829,7 @@
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"bc_dotplot_agg_rates.png"</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="images/08-breast-cancer-mortality/bc_dotplot_agg_rates.png" width="100%"></div>
 <p>Before we explore that variation, as a reminder, we age-adjust our aggregated data by racialized group so we can compare standardized mortality rates, as differences in breast cancer mortality between the two groups may be due to differential distribution of ages by racialized group. We can see that the age distributions for each racialized group are quite different. How would you describe the differences?</p>
-<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bc_tab_age_race</span> <span class="op">&lt;-</span> <span class="va">town_ma_demo_acs_bc</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span>
       <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">race_group</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Non-Hispanic White"</span>,<span class="st">"Non-Hispanic Black"</span><span class="op">)</span>,
          <span class="va">sex</span> <span class="op">==</span> <span class="st">"Female"</span>,
@@ -859,11 +857,11 @@
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span>
     
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"bc_tab_age_race.png"</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="st">"images/08-breast-cancer-mortality/bc_tab_age_race.png"</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="images/08-breast-cancer-mortality/bc_tab_age_race.png" width="100%"></div>
 <p>Now, to return to this question of why we see lots of variation in mortality rates. As we might expect, these extremely variable mortality rates are occurring in small populations. What do these maps look like?</p>
-<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">plotlist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">vector</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"list"</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">plotlist</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Non-Hispanic White"</span>,<span class="st">"Non-Hispanic Black"</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">plt</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">plotlist</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
@@ -928,7 +926,7 @@
 <div class="inline-figure"><img src="images/08-breast-cancer-mortality/bc_byrace_std_rates.png" width="100%"></div>
 <p>We are seeing some really extreme rates in the Black population, where we have smaller overall sample sizes. We are also seeing many cities and towns with no recorded breast cancer deaths for both Black and White populations, but this is particularly the case for the Black population (it is likely that these are cities and towns with very small or no resident Black populations due to racialized economic segregation). What else do you observe?</p>
 <p>We can also display these two maps as one, by calculating the rate difference, or the rate ratio. We will calculate and display the incidence rate ratio comparing the age-standardized mortality rates for the Black non-Hispanic and White non-Hispanic populations, as we visualized at the start of this section.</p>
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">irr_data</span> <span class="op">&lt;-</span> <span class="va">ma_mort_stratified</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">super_town</span>,<span class="va">race_group</span>, <span class="va">std_rate</span>, <span class="va">var_std_rate</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>id_cols <span class="op">=</span> <span class="va">super_town</span>,
@@ -957,7 +955,7 @@
   
 <span class="va">irr_plot</span></code></pre></div>
 <p>We can also map this like the other maps.</p>
-<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">map.irr.bc</span> <span class="op">&lt;-</span> <span class="va">irr_data</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>irr <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span><span class="va">irr</span> <span class="op">&gt;</span> <span class="fl">4</span>  <span class="op">~</span> <span class="fl">4</span>,
                          <span class="cn">TRUE</span>     <span class="op">~</span> <span class="va">irr</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
@@ -1011,7 +1009,7 @@
 <h3>
 <span class="header-section-number">7.5.3</span> Question 3: How do area-based socioeconomic measures interact with individual-level membership in racialized groups to affect patterns of breast cancer mortality (i.e., interactions between socioeconomic position and racialized groups, not just socioeconomic inequities within racialized groups)?<a class="anchor" aria-label="anchor" href="#question-3-how-do-area-based-socioeconomic-measures-interact-with-individual-level-membership-in-racialized-groups-to-affect-patterns-of-breast-cancer-mortality-i.e.-interactions-between-socioeconomic-position-and-racialized-groups-not-just-socioeconomic-inequities-within-racialized-groups"><i class="fas fa-link"></i></a>
 </h3>
-<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">poisson_data</span> <span class="op">&lt;-</span> <span class="va">town_ma_mort_bc</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">town_ma_demo_acs_bc</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"year"</span>,<span class="st">"super_town"</span>,<span class="st">"race_group"</span>,<span class="st">"sex"</span>,<span class="st">"age_cat"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">race_group</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Non-Hispanic White"</span>,<span class="st">"Non-Hispanic Black"</span><span class="op">)</span>,
@@ -1074,7 +1072,7 @@
 <p>And of course, now we can map that value as well.</p>
 <div class="inline-figure"><img src="images/08-breast-cancer-mortality/map.p.irr_bc.png" width="100%"></div>
 <p>An adjusted model would allow for us to see how poverty rates are impacting the incidence rate ratio.</p>
-<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Adjusted Poisson Model</span>
 <span class="va">model1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">num</span> <span class="op">~</span> <span class="va">race_group</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">age_cat</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">race_group</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">pov_cat</span>, exclude <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/offset.html">offset</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">den</span><span class="op">)</span><span class="op">)</span>,
                         family<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span>link<span class="op">=</span><span class="va">log</span><span class="op">)</span>,
@@ -1113,7 +1111,7 @@
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"adj_poisson_irr_plot_bc.png"</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="images/08-breast-cancer-mortality/adj_poisson_irr_plot_bc.png" width="100%"></div>
 <p>And now the map.</p>
-<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">adj_map.state.p.irr</span> <span class="op">&lt;-</span> <span class="va">adj_poisson_irr</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>adj_fit_irr <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span><span class="va">adj_fit_irr</span> <span class="op">&gt;</span> <span class="fl">4</span>  <span class="op">~</span> <span class="fl">4</span>,
                          <span class="cn">TRUE</span>     <span class="op">~</span> <span class="va">adj_fit_irr</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tigris/man/tigris-exports.html">%&gt;%</a></span> 
@@ -1178,54 +1176,18 @@
 ## -4.5916  -0.2185   0.4568   1.2308   7.0101  
 ## 
 ## Coefficients:
-##                                                                      Estimate
-## (Intercept)                                                          -6.00791
-## race_groupNon-Hispanic Black                                          3.60000
-## factor(age_cat)25-29                                                 -2.21154
-## factor(age_cat)30-34                                                 -1.13313
-## factor(age_cat)85+                                                    0.42021
-## factor(pov_cat, exclude = NULL)5-9.9%                                -0.09688
-## factor(pov_cat, exclude = NULL)10-19.9%                              -0.36987
-## factor(pov_cat, exclude = NULL)20-100%                               -0.67203
-## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)5-9.9%    2.64245
-## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)10-19.9% -2.01362
-## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)20-100%  -3.30795
-##                                                                      Std. Error
-## (Intercept)                                                             1.00397
-## race_groupNon-Hispanic Black                                            0.74960
-## factor(age_cat)25-29                                                    1.05829
-## factor(age_cat)30-34                                                    1.02978
-## factor(age_cat)85+                                                      1.00158
-## factor(pov_cat, exclude = NULL)5-9.9%                                   0.08916
-## factor(pov_cat, exclude = NULL)10-19.9%                                 0.10031
-## factor(pov_cat, exclude = NULL)20-100%                                  0.11095
-## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)5-9.9%      0.84169
-## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)10-19.9%    0.80967
-## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)20-100%     0.77136
-##                                                                      z value
-## (Intercept)                                                           -5.984
-## race_groupNon-Hispanic Black                                           4.803
-## factor(age_cat)25-29                                                  -2.090
-## factor(age_cat)30-34                                                  -1.100
-## factor(age_cat)85+                                                     0.420
-## factor(pov_cat, exclude = NULL)5-9.9%                                 -1.087
-## factor(pov_cat, exclude = NULL)10-19.9%                               -3.687
-## factor(pov_cat, exclude = NULL)20-100%                                -6.057
-## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)5-9.9%     3.139
-## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)10-19.9%  -2.487
-## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)20-100%   -4.288
-##                                                                      Pr(&gt;|z|)    
-## (Intercept)                                                          2.17e-09 ***
-## race_groupNon-Hispanic Black                                         1.57e-06 ***
-## factor(age_cat)25-29                                                 0.036641 *  
-## factor(age_cat)30-34                                                 0.271174    
-## factor(age_cat)85+                                                   0.674820    
-## factor(pov_cat, exclude = NULL)5-9.9%                                0.277233    
-## factor(pov_cat, exclude = NULL)10-19.9%                              0.000227 ***
-## factor(pov_cat, exclude = NULL)20-100%                               1.39e-09 ***
-## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)5-9.9%   0.001692 ** 
-## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)10-19.9% 0.012884 *  
-## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)20-100%  1.80e-05 ***
+##                                                                      Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)                                                          -6.00791    1.00397  -5.984 2.17e-09 ***
+## race_groupNon-Hispanic Black                                          3.60000    0.74960   4.803 1.57e-06 ***
+## factor(age_cat)25-29                                                 -2.21154    1.05829  -2.090 0.036641 *  
+## factor(age_cat)30-34                                                 -1.13313    1.02978  -1.100 0.271174    
+## factor(age_cat)85+                                                    0.42021    1.00158   0.420 0.674820    
+## factor(pov_cat, exclude = NULL)5-9.9%                                -0.09688    0.08916  -1.087 0.277233    
+## factor(pov_cat, exclude = NULL)10-19.9%                              -0.36987    0.10031  -3.687 0.000227 ***
+## factor(pov_cat, exclude = NULL)20-100%                               -0.67203    0.11095  -6.057 1.39e-09 ***
+## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)5-9.9%    2.64245    0.84169   3.139 0.001692 ** 
+## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)10-19.9% -2.01362    0.80967  -2.487 0.012884 *  
+## race_groupNon-Hispanic Black:factor(pov_cat, exclude = NULL)20-100%  -3.30795    0.77136  -4.288 1.80e-05 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 

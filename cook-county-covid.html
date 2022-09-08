@@ -126,7 +126,7 @@
 <span class="header-section-number">8.4</span> Dependencies<a class="anchor" aria-label="anchor" href="#dependencies-2"><i class="fas fa-link"></i></a>
 </h2>
 <p>These are the packages that you will need to run the code in this case example. Once you copy and run the code below to load the dependencies, you can jump ahead to the <strong>Visualizing Your Data</strong> Section if you want.</p>
-<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># mission critical packages</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://walker-data.com/tidycensus/">tidycensus</a></span><span class="op">)</span> 
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
@@ -158,7 +158,7 @@
 <div class="infobox dataWrangling">
 <p>It can be helpful to identify patterns in the variable names to efficiently query the Census API. In the code below you will see an approach that does not require us to type out all the variable names. Can you think of more efficient ways to query the API?</p>
 </div>
-<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># census_api_key("Your API KEY goes here")</span>
 
 <span class="co"># get population sizes from ACS -------------------------------------------</span>
@@ -265,7 +265,7 @@
 <div class="infobox interpretation">
 <p>Note that the unit of geography for analysis is the US census-defined Zip Code Tabulation Area (ZCTA), which is related to but not identical with the US Postal Service ZIP Code (which is a unit of mail delivery, reflecting postal carrier routes, such that a given spatial area can encompass several ZIP Codes). To create ZCTAs, the US Census assigns each census block the most frequently occurring ZIP Code within the block. For technical information about ZCTAs, see: <a href="https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html" class="uri">https://www.census.gov/programs-surveys/geography/guidance/geo-areas/zctas.html</a>. This means that ZCTAs and zip codes may not cover the same area exactly. A discussion of pitfalls to keep in mind when using ZCTAs linked to residential Zip Code can be found in this paper <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1447194/" class="uri">https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1447194/</a> .</p>
 </div>
-<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># identify relevant zip codes ---------------------------------------------</span>
 
 <span class="co"># we originally downloaded the county shapefiles using tigris, but </span>
@@ -365,7 +365,7 @@
 <span class="co"># save the plot</span>
 <span class="co"># ggsave(here("images/09-cook-county-covid/cook_county_and_zip_codes.png"), width = 10, height = 6)</span></code></pre></div>
 <p>Now that we have obtained the ZCTAs that we will keep in the study, we can now focus on these to prepare demographic and denominator data.</p>
-<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># group population sizes together by age groups and racialized group and zip code</span>
 <span class="va">zips_with_population_estimates_by_race_ethnicity_and_age</span> <span class="op">&lt;-</span>
   <span class="va">popsizes</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
@@ -442,7 +442,7 @@
 <span class="header-section-number">8.5.2</span> Case Data<a class="anchor" aria-label="anchor" href="#case-data"><i class="fas fa-link"></i></a>
 </h3>
 <p>Now we’re ready to load the case data, and add the population size estimates for each racialized group (White non-Hispanic, Black non-Hispanic, and Hispanic) and age-group by ZIP code.</p>
-<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># read in your data. This has been donwloaded from the Cook County Medical Examiner's office website, as mentioned above. https://datacatalog.cookcountyil.gov/Public-Safety/Medical-Examiner-Case-Archive-COVID-19-Related-Dea/3trz-enys</span>
 
 <span class="va">cook_county_deaths</span> <span class="op">&lt;-</span> 
@@ -612,7 +612,7 @@
 <span class="co"># ggsave(here("images/09-cook-county-covid/age_distribution_deaths.png"), width = 8, height = 6)</span></code></pre></div>
 <div class="inline-figure"><img src="images/09-cook-county-covid/age_distribution_deaths.png" width="100%"></div>
 <p>We can now add ABSMs that we are interested in to the data. We’ll add the Index of Concentration at the Extremes for Racialized Economic Segregation, the proportion of the population under the poverty line, and the median income in each ZCTA.</p>
-<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># add area based socioeconomic measures  ----------------------------------</span>
 
 <span class="co"># get zip code rates for</span>
@@ -832,7 +832,7 @@
 </div>
 <p>We have a few remaining necessary cleaning steps to perform before we’re ready to model these data.</p>
 <p>We have to make sure our factor variables have appropriate reference levels set. Typically we set the reference level as the most privileged group so that we can frame the results as “the _____ group has X times the mortality rate of the reference group.”</p>
-<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># prepare data for modeling  ----------------------------------------------</span>
 
 <span class="co"># remove infinite or NA mortality rates since they will cause errors in trying</span>
@@ -864,7 +864,7 @@
 <span class="header-section-number">8.6</span> Visualizing Your Data<a class="anchor" aria-label="anchor" href="#visualizing-your-data-1"><i class="fas fa-link"></i></a>
 </h2>
 <p>If you want to start by using the clean dataset you can start from this point on. Now that we have a clean dataset, we can create some exploratory visualizations. In the code chunk above we do some exploratory visualizations of the data. The first series of maps show the crude mortality rates by ZCTA, racialized group and Age Group. <strong>To see a larger version of this or any other image on the online version of the book right click and select open image in new tab.</strong></p>
-<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#change this to point to where your downloaded file is</span>
 <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="st">"./data/09-cook-county-covid/cook_county_mortality_cleaned.rds"</span><span class="op">)</span> 
 
@@ -999,7 +999,7 @@
 <div class="infobox communication">
 <p>A map of crude rates of small areas with low person-time at risk may be misleading. It may identify some areas as having extreme rates, but this may be just due to chance and low population at risk.</p>
 </div>
-<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># in the following visualizations the motivating principle behind the direction of the </span>
 <span class="co"># color palette is to show (for sequential palettes) higher density with darker colors; </span>
 <span class="co"># for the ICEraceinc variable a divergent color palette is used to draw attention to the </span>
@@ -1142,7 +1142,7 @@
 <p>The maps above utilize various color scales. How do you think this can affect communication through maps? Do you have a preference? When might you use a diverging versus continuous color scale? Sometimes in can also be useful to plot an interactive map, shown below.</p>
 </div>
 <p>We can utilize the mapview package to plot interactive graphs.</p>
-<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># launch an interactive map to view Cook County ICEraceinc by zip code</span>
 <span class="co"># mapview::mapview(df, zcol = "ICEraceinc")</span></code></pre></div>
 <iframe src="data/09-cook-county-covid/ICEraceinc_widget.html" width="100%" height="500px">
@@ -1157,7 +1157,7 @@
 <span class="header-section-number">8.7.1</span> Differences in COVID-19 mortality rates by racialized group<a class="anchor" aria-label="anchor" href="#differences-in-covid-19-mortality-rates-by-racialized-group"><i class="fas fa-link"></i></a>
 </h3>
 <p>First, we can take a look at the COVID-19 mortality rates by racialized group in aggregate. Because we are aggregating up to the County level, we are not looking at gradients by ABSMs.</p>
-<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#Since we are not taking into account ABSMs in this first analysis, aggregate the data and visualize</span>
 <span class="va">crude_mortality</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="co">#dplyr works faster if we drop the geometry column.</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">age_group</span>, <span class="va">race_ethnicity</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
@@ -1197,7 +1197,7 @@
 <div class="infobox dataWrangling">
 <p>We can fit Poisson, Quasi-Poisson, and Negative Binomial models here, depending on our assumptions about overdispersion. The code below fits the different models and plots them together to demonstrate how modeling assumptions may affect the results. Doing this repeatedly for various analysis can be tedious. One idea could be to write a function that fits all three models given a dataset and model specifications.</p>
 </div>
-<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#Fit a Poisson model with offset for person time to get rate</span>
 <span class="va">crude_poisson_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">deaths</span> <span class="op">~</span> <span class="va">race_ethnicity</span> <span class="op">+</span> <span class="va">age_group</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/offset.html">offset</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">person_time</span> <span class="op">/</span> <span class="fl">1e5</span><span class="op">)</span><span class="op">)</span>,
                            data <span class="op">=</span> <span class="va">crude_mortality</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span><span class="op">)</span>
@@ -1261,7 +1261,7 @@
 <span class="header-section-number">8.7.2</span> Gradients in COVID-19 mortality by in relation to ABSMs<a class="anchor" aria-label="anchor" href="#gradients-in-covid-19-mortality-by-in-relation-to-absms"><i class="fas fa-link"></i></a>
 </h3>
 <p>Having looked at overall racialized disparities in COVID-19 mortality, let us now take a look at how mortality varies by ABSMs. Like in the section above, we take age into account by adjusting for age in the model. We fit separate models for each ABSM we are considering.</p>
-<div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## We will aggregate data across racialized groups since we are looking at overall relationships</span>
 <span class="va">age_ZCTA_mortality</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">geoid</span>, <span class="va">age_group</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
@@ -1395,7 +1395,7 @@
 <p>Here we fit the three types of models, for three racialized groups, and for seven ABSMs. Writing out 3x3x7 models would take up space and time, and be prone to mistakes. The code below uses the <code>map</code> function from the <code>purrr</code> package to do this more efficiently. Do you agree with this approach? What are some other ways you would approach this?</p>
 <p>You can change to code to focus in on fewer ABSMs or investigate other ABSMs of interest for the presentation.</p>
 </div>
-<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># specify our variables of interest</span>
 <span class="va">variables_of_interest</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ICEraceinc_cut"</span>,
       <span class="st">"prop_in_poverty_cut"</span>,
@@ -1545,7 +1545,7 @@
 <span class="header-section-number">8.7.4.2</span> SMR Calculation<a class="anchor" aria-label="anchor" href="#smr-calculation"><i class="fas fa-link"></i></a>
 </h4>
 <p>In this case, we will estimate the SMR using age-standardization. For each racialized group in each ZCTA, we obtain the age standardized SMR.</p>
-<div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## We will need to have a ZCTA specific ID number that starts from 1 eventually, so let's first make that</span>
 <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">geoid</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">cur_group_id</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span>
@@ -1581,7 +1581,7 @@ O_{ij} \sim Poisson(\theta_{ij}*E_{ij})
 \]</span></p>
 <p>Now, we are looking at observed, expected counts and SMR within each racialized group strata <span class="math inline">\(j\)</span>, within each ZCTA <span class="math inline">\(i\)</span>.</p>
 <p>Let us visualize these crude SMRs for each ZCTA-racialized group strata, along with their confidence intervals</p>
-<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">smr_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">raw_SMR</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">Exp</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
          <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>order_id <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/ranking.html">row_number</a></span><span class="op">(</span><span class="op">)</span>,
                 raw_CI95up <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">raw_CI95up</span> <span class="op">&gt;</span> <span class="fl">40</span>, <span class="fl">40</span>, <span class="va">raw_CI95up</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="co"># Since there are large confidence intervals, we are going to cut them off at 40 for easier visualization.</span>
@@ -1615,7 +1615,7 @@ where \ v_i \sim Normal(0,\sigma^2_v)
 \]</span>
 Here, there is a county-wide intercept for a reference racialized group <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta\)</span>s for each other racialized group. Note that here we are modeling a constant effect for each racialized group across all ZCTAs.</p>
 <p>Let us fit this model</p>
-<div class="sourceCode" id="cb95"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">formula_poisson_mod1</span> <span class="op">&lt;-</span> <span class="va">Obs</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="va">race_ethnicity</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/INLA/man/f.html">f</a></span><span class="op">(</span><span class="va">geoid</span>, model<span class="op">=</span><span class="st">"iid"</span><span class="op">)</span>
 
 <span class="va">model_poisson_mod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/INLA/man/inla.html">inla</a></span><span class="op">(</span><span class="va">formula_poisson_mod1</span>, family<span class="op">=</span><span class="st">"poisson"</span>, data<span class="op">=</span><span class="va">smr_df</span>, E<span class="op">=</span><span class="va">Exp</span>, control.predictor<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>compute<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>, control.compute <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>dic <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
@@ -1638,7 +1638,7 @@ u_i \sim Conditional \ Autoregressive(W, \sigma_u^2)
 \]</span></p>
 <p>What this specifies is that the part of the residual variation across the ZCTAs is spatially structured such that neighboring ZCTAs have similar excess risks. This part is indicated by the new <span class="math inline">\(u_i\)</span> introduced above. After accounting for the spatial structure, further residual variation is indicated by <span class="math inline">\(v_i\)</span>. After fitting such models, we can also calculate the proportion of the residual variance that is spatially structured (that is, <span class="math inline">\(u_i\)</span>), and this is known as the spatial fraction.</p>
 <p>Let us fit this model:</p>
-<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#Calculate Neighbours matrix</span>
 <span class="va">W.nb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/spdep/reference/poly2nb.html">poly2nb</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span><span class="op">)</span>, snap<span class="op">=</span><span class="fl">0.001</span><span class="op">)</span>
 <span class="co">#W.list &lt;- nb2listw(W.nb, style="B", zero.policy = TRUE)</span>
@@ -1704,7 +1704,7 @@ u_i \sim Conditional \ Autoregressive(W, \sigma_u^2)
 </h4>
 <p>Having fit all of these models, let us visualize all of their components and see what we gain from using these different types of models, and how they differ.</p>
 <p>First, we can look at the the estimates of the fixed effects. Since our non-hierarchical models also estimated fixed effects, we can include them in this comparison, with the caveat that we are modeling SMRs in the hierarchical models.</p>
-<div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#The tidy functions from broom work on most commonly used models in R, but INLA is not one of them. </span>
 <span class="co">#This is a helper function to extract coefficients and credible/"confidence" intervals.</span>
 <span class="va">tidy.inla</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span>
@@ -1732,7 +1732,7 @@ u_i \sim Conditional \ Autoregressive(W, \sigma_u^2)
               <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Model <span class="op">=</span> <span class="st">"BYM"</span>,
                      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="va">estimate</span><span class="op">:</span><span class="va">conf.high</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>term <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">term</span>, <span class="st">"race_ethnicity"</span>, <span class="st">""</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># visualize the effects in each model</span>
 <span class="va">coefficients_together</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">term</span> <span class="op">!=</span> <span class="st">'(Intercept)'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
@@ -1746,7 +1746,7 @@ u_i \sim Conditional \ Autoregressive(W, \sigma_u^2)
 <span class="co"># ggsave(here("images/09-cook-county-covid/coefficient_comparison.png"), height = 6, width = 8)</span></code></pre></div>
 <div class="inline-figure"><img src="images/09-cook-county-covid/coefficient_comparison.png" width="100%"></div>
 <p>One of the motivations for fitting the hierarchical models is to get stable and smoothed estimates of each ZCTA. Let us visualize the modeled SMRs for each ZCTA-racialized group strata, along with their confidence intervals, and compare them to the crude SMRs we calculated in the beginning.</p>
-<div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb95"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Creating a caterpillar plot to visualize the unsmoothed and smoothed SMRs.</span>
 <span class="va">caterpillar_plot</span> <span class="op">&lt;-</span> <span class="va">smr_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">raw_SMR</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">Exp</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>order_id <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/ranking.html">row_number</a></span><span class="op">(</span><span class="op">)</span>,
@@ -1785,7 +1785,7 @@ u_i \sim Conditional \ Autoregressive(W, \sigma_u^2)
 <p>These plots also demonstrates the pitfalls of identifying small areas with extreme rates based on crude SMRs only. They may have a small underlying population, and have high confidence intervals.</p>
 </div>
 <p>The hierarchical models can be most useful when we visualize the estimated ZCTA-specific effects. Since we have racialized group strata within ZCTAs, we can plot maps for each group.</p>
-<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Similar code as for the caterpillar plot above, but we are going to plot just the point estimates on a map, and not the CIs</span>
 <span class="va">smr_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">raw_SMR</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">Exp</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
@@ -1828,7 +1828,7 @@ u_i \sim Conditional \ Autoregressive(W, \sigma_u^2)
 :::: {.infobox .interpretation}
 When we look at these smoothed maps, we can see that the risk is lowest for the White non-Hispanic group. However, the spatial patterning of risk is similar for each racialized group in the maps. We should be cautious about concluding from this that the spatial patterning is the same. It is the result of how we constrained the model, as we did not model the spatial component separately for each group. We are going to do this next by fitting a separate models for each racialized group.
 ::::</p>
-<div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Fitting the models for the White Non-Hispanic group</span>
 <span class="va">smr_df_wnh</span> <span class="op">&lt;-</span> <span class="va">smr_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">race_ethnicity</span> <span class="op">==</span> <span class="st">"White, non-Hispanic"</span><span class="op">)</span>
@@ -1950,7 +1950,7 @@ When we look at these smoothed maps, we can see that the risk is lowest for the 
 <span class="fu">spatial_frac</span><span class="op">(</span><span class="va">model_bym_h</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">smr_df_h</span><span class="op">$</span><span class="va">geoid</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>The spatial fraction of the residual variance is 61% for the White, non-Hispanic model; 67.8% for the Black; Hispanic and non-Hispanic model; and 77% for the Hispanic model.</p>
 <p>We can visualize the smoothed SMRs from these separate models.</p>
-<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#Combine all of the racialized group specific results into one</span>
 <span class="va">smr_df</span> <span class="op">&lt;-</span> <span class="va">smr_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span>
@@ -2000,7 +2000,7 @@ This approach reflects the different spatial patterning of risks for each racial
 <span class="header-section-number">8.7.4.5</span> Additional Analysis<a class="anchor" aria-label="anchor" href="#additional-analysis"><i class="fas fa-link"></i></a>
 </h4>
 <p>We may also be interested in looking at the area-specific <strong>residuals</strong>. These give us a sense of how much each areas risk deviates from the county-wide mean, conditional on any covariates we include in the model. We can visualize the residuals of the models above (where no covariates were included).</p>
-<div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">smr_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">raw_SMR</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">Exp</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>order_id <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/ranking.html">row_number</a></span><span class="op">(</span><span class="op">)</span>,
@@ -2041,7 +2041,7 @@ where \ v_i \sim Normal(0,\sigma^2_v) \ ,\  and \\
 u_i \sim Conditional \ Autoregressive(W, \sigma_u^2)
 \]</span></p>
 <p>Let us fit this model, using only the ICE for racialized economic segregation as the ABSM of interest:</p>
-<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Fitting the models for the White Non-Hispanic group</span>
 <span class="va">smr_df_wnh</span> <span class="op">&lt;-</span> <span class="va">smr_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">race_ethnicity</span> <span class="op">==</span> <span class="st">"White, non-Hispanic"</span><span class="op">)</span>

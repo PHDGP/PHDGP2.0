@@ -1,0 +1,15 @@
+{
+    "dialog-state": {
+        "query": "images/06-analyzing-your-data/age-specific-comparison-plot.png",
+        "path": "",
+        "regex": false,
+        "caseSensitive": false,
+        "wholeWord": false,
+        "filePatterns": [],
+        "excludeFilePatterns": [],
+        "resultsCount": 2,
+        "errorCount": 0,
+        "replaceErrors": "",
+        "projectRelative": true
+    }
+}
