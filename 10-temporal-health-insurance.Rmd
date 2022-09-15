@@ -1,6 +1,6 @@
 # Case Study 4: Case Study on Temporal Trends using American Community Survey (ACS) data (2012-2019) {#temporal-health-insurance}
 
-## Introduction
+## Introduction 
 
 The American Community Survey (ACS), conducted by the U.S. census bureau is a yearly survey (monthly samples providing annual updates) that provides vital information on educational attainment, jobs, occupations, veterans, house ownership, disability, poverty status, demographics, [and more](https://www.census.gov/programs-surveys/acs/guidance/subjects.html).
 
@@ -29,19 +29,6 @@ In this case study, we are particularly interested in observed differences in he
 2) How is county-level poverty associated with health insurance coverage from 2012-2019 in each state?   
 3) How is county-level racialized economic segregation as measured by the Index of Concentration at the Extremes (ICE) associated with health insurance coverage from 2012-2019 in each state?  
 
-
- <!-- TODO: 
-   We have done linear models for each county, but we haven't gotten more
-   complicated than that
-   
-      * with linear models
-      * with temporal fixed effects 
-      * with smoothing splines 
-      * weighted by margin of error or denominator data 
-      * stratified by social variables 
-  - Model estimates incorporating spatial uncertainty to smooth estimates
-    and reduce noisiness in estimates in areas where little data is observed
-    --> 
 
 ## Downloading your data
 
@@ -264,11 +251,20 @@ library(patchwork)
 ```
 
 ```{r}
+library(colorblindr)
 # create plot of county level % with health insurance by year and smooth with geom_smooth method = 'loess' by year 
 ggplot(health_insurance, aes(x = year, y = estimate_zero_to_64_insurance_prop, color = state)) + 
   geom_jitter(alpha = 0.6, height = 0) + 
   geom_smooth(method = 'loess', color = 'dimgrey') + 
   facet_wrap(~state) + 
+  scale_fill_manual(
+    values = setNames(palette_OkabeIto[c(1,2,3,6)],
+                      c('Texas', 'Massachusetts', 'Florida', 'California'))
+                      ) + 
+  scale_color_manual(
+    values = setNames(palette_OkabeIto[c(1,2,3,6)],
+                      c('Texas', 'Massachusetts', 'Florida', 'California'))
+                      ) + 
   xlab("Year") + 
   ylab("Percent with Health Insurance (age 0-64)") + 
   scale_y_continuous(labels = scales::percent_format()) + 
@@ -277,7 +273,6 @@ ggplot(health_insurance, aes(x = year, y = estimate_zero_to_64_insurance_prop, c
 
 # here's a version using ggdist to plot quantile ribbons on top of the jittered points 
 library(ggdist)
-library(colorblindr)
 ggplot(health_insurance,
        aes(
          x = year,
@@ -322,7 +317,7 @@ We didn't want to download the geometry data in our calls to `tidycensus` for tw
 reasons: 
   
   1. Because the `tidycensus` package returns tidy formatted data (one variable
-  and observation per row, our geometry data would be repeated many times taking
+  and observation per row), our geometry data would be repeated many times taking
   up more space than necessary; and
   
   2. Because it's easier to do our aggregation and data manipulation without the
@@ -376,10 +371,11 @@ map_health_insurance_over_time('Texas', estimate_zero_to_64_insurance_prop)
 
 # Notice, in Texas there is one county that seems to experience a decrease in insurance coverage over time. This seems strange! Let's investigate. We can use plotly to help us identify that McCulloch County is decreasing. Next, we can plot the estimates and margin of error for just McCulloch County over time. 
 
-# Try it out!
-# library(plotly)
-# ggplotly(map_health_insurance_over_time('Texas', estimate_zero_to_64_insurance_prop))
+# Try it out! When you run ggplotly, you will get a map that will allow you to hover your cursor over a county to see the name of the county and the percent with health insurance. This is how we can identify which county appears to be decreasing over time. 
+library(plotly)
+ggplotly(map_health_insurance_over_time('Texas', estimate_zero_to_64_insurance_prop))
 
+#Now we can take a closer look at McCulloch County, TX and see that it has a large margin of error!
 health_insurance %>% 
   filter(NAME == 'McCulloch County, Texas') %>% 
   ggplot(aes(x = year, y = estimate_zero_to_64_insurance_prop,
@@ -394,7 +390,9 @@ health_insurance %>%
           "90% Margin of Error and Estimates Shown") 
 
 
-# visualize the margin of error data
+# visualize the margin of error data.
+# for more information on how the ACS calculates margin of error, see https://www.census.gov/data/academy/webinars/2020/calculating-margins-of-error-acs.html 
+
 map_health_insurance_over_time('Texas', outcome_var = moe_zero_to_64_insurance_prop,
                                fill_label = 'Margin of Error') +
   scale_fill_distiller(
@@ -427,8 +425,7 @@ map_health_insurance_over_time('Florida', outcome_var = moe_zero_to_64_insurance
 ```
 
 
-Congrats!  You can now visualize your estimates and uncertainty in plots
-and maps. 
+Congrats!  You can now visualize your estimates and uncertainty in plots and maps. 
 
 ## Adding ABSMs
 
@@ -471,7 +468,7 @@ health_insurance %>%
   ggtitle("Relationship Between Percent in Poverty and Percent with Health Insurance",
           "County Observations, Texas -- Weighted by Inverse Margin of Error") 
 
-# plot 1 and 2 over each other
+# display plot 1 and 2 over each other
 plt1 / plt2 
 
 # massachusetts poverty relationship unweighted
@@ -504,7 +501,7 @@ health_insurance %>%
   labs(title=str_wrap("Relationship Between Percent in Poverty and Percent with Health Insurance",width =33, indent=0, exdent=0),
        subtitle=str_wrap("County Observations, Massachusetts -- Weighted by Inverse Margin of Error",width =42, indent=0, exdent=0)) 
 
-# put plot 1 and 2 side by side
+# display plot 1 and 2 side by side
 plt1 + plt2 
 
 # look at the relationship with ICEraceinc and insurance, weighted by inverse margin of error
@@ -671,6 +668,7 @@ health_insurance_sf_w_model_coefs %>%
   labs(fill = 'Change over Time') + 
   ggtitle("Change in Health Insurance Rates, 2012-2019, Texas")
 
+
 library(leaflet)
 library(leafpop)
 
@@ -713,6 +711,7 @@ map <-
     labels = c('Increasing', 'Stable/Uncertain', 'Decreasing')
   )
 
+# additional ways to map change in insurance coverage over time
 library(htmlwidgets)
 saveWidget(map, "map.html")
 
