@@ -29,6 +29,9 @@ In this case study, we are particularly interested in observed differences in he
 2) How is county-level poverty associated with health insurance coverage from 2012-2019 in each state?   
 3) How is county-level racialized economic segregation as measured by the Index of Concentration at the Extremes (ICE) associated with health insurance coverage from 2012-2019 in each state?  
 
+:::: {.infobox .dataWrangling}
+In this next section,**Downloading your Data**, we will show you how to download ACS data by querying the census API and how to manipulate the data into the format we need for the rest of the analysis. This case study investigates the ACS variable of health insurance in four states. See if you can replicate the analysis with a different ACS variable or in different states!
+::::
 
 ## Downloading your data
 
@@ -251,6 +254,8 @@ library(patchwork)
 ```
 
 ```{r}
+#| echo = TRUE,
+#| eval = FALSE
 library(colorblindr)
 # create plot of county level % with health insurance by year and smooth with geom_smooth method = 'loess' by year 
 ggplot(health_insurance, aes(x = year, y = estimate_zero_to_64_insurance_prop, color = state)) + 
@@ -307,7 +312,8 @@ ggplot(health_insurance,
 
 ```
 
-Now we might want to map our quantities of interest
+:::: {.infobox .dataWrangling}
+Now, we might want to map our quantities of interest!
 
 Since we didn't download the geometry with our queries to the Census API through
 `tidycensus`, we can now download our county geometry from `tigris` and merge it
@@ -324,9 +330,15 @@ reasons:
   spatial/geometry data and to add them in afterwards as some functions from
   `dplyr` or the `tidyverse` may not work well with spatial data frames.
   
-When you look at the maps, make sure to note that the scales differ! 
+When you look at the maps, make sure to note the scales because sometimes they 
+differ! 
+::::
+
+
 
 ```{r}
+#| echo = TRUE,
+#| eval = FALSE
 counties_sf <- 
   tigris::counties(
     state = c('CA', 'FL', 'MA', 'TX'),
@@ -368,10 +380,20 @@ map_health_insurance_over_time('California', estimate_zero_to_64_insurance_prop)
 map_health_insurance_over_time('Florida', estimate_zero_to_64_insurance_prop)
 map_health_insurance_over_time('Massachusetts', estimate_zero_to_64_insurance_prop)
 map_health_insurance_over_time('Texas', estimate_zero_to_64_insurance_prop)
+```
 
-# Notice, in Texas there is one county that seems to experience a decrease in insurance coverage over time. This seems strange! Let's investigate. We can use plotly to help us identify that McCulloch County is decreasing. Next, we can plot the estimates and margin of error for just McCulloch County over time. 
+:::: {.infobox .interpretation}
+Notice, in Texas there is one county that seems to experience a decrease in insurance coverage over time. This seems strange! What do you think is the reason for this? Let's investigate further. 
+::::
 
-# Try it out! When you run ggplotly, you will get a map that will allow you to hover your cursor over a county to see the name of the county and the percent with health insurance. This is how we can identify which county appears to be decreasing over time. 
+:::: {.infobox .dataWrangling}
+One way to identify which county in Texas appears to be decreasing is by using the R package plotly. The function ggplotly, produces a map that will allow you to hover your cursor over a county to see the name of the county and the percent with health insurance. This is how we can identify that the percent with health insurance in McCulloch County appears to be decreasing over time. Try it out below!
+::::
+
+
+```{r}
+#| echo = TRUE,
+#| eval = FALSE
 library(plotly)
 ggplotly(map_health_insurance_over_time('Texas', estimate_zero_to_64_insurance_prop))
 
@@ -389,10 +411,20 @@ health_insurance %>%
   ggtitle("% with Health Insurance, McCulloch County, Texas",
           "90% Margin of Error and Estimates Shown") 
 
+```
 
+:::: {.infobox .dataWrangling}
+For more information on how the ACS calculates margin of error, see https://www.census.gov/data/academy/webinars/2020/calculating-margins-of-error-acs.html 
+::::
+
+:::: {.infobox .communication}
+The margin of error is a measure of uncertainty of the estimate. Often the width of the margin of error has to do with the sample size, whereby very small sample sizes yield estimates with large margins of error. Why do you think it is important to communicate uncertainty in the data to the public?
+::::
+
+```{r}
+#| echo = TRUE,
+#| eval = FALSE
 # visualize the margin of error data.
-# for more information on how the ACS calculates margin of error, see https://www.census.gov/data/academy/webinars/2020/calculating-margins-of-error-acs.html 
-
 map_health_insurance_over_time('Texas', outcome_var = moe_zero_to_64_insurance_prop,
                                fill_label = 'Margin of Error') +
   scale_fill_distiller(
@@ -427,7 +459,7 @@ map_health_insurance_over_time('Florida', outcome_var = moe_zero_to_64_insurance
 
 Congrats!  You can now visualize your estimates and uncertainty in plots and maps. 
 
-## Adding ABSMs
+## Adding Area Based Social Metrics
 
 Now let's look at our ABSMs. We are going to assess the association between poverty and health insurance and between racialized economic segregation (as measured by the ICE) and health insurance. 
 
@@ -436,8 +468,8 @@ First, we will assess the association between poverty and health insurance by pl
 Next, we will plot the trend in heath insurance status by quintiles of poverty and ICE using loess smoothing. 
 
 ```{r}
-
-
+#| echo = TRUE,
+#| eval = FALSE
 # look at relationship between poverty and insurance proportion
 plt1 <- 
 health_insurance %>% 
@@ -564,7 +596,8 @@ health_insurance %>%
 
 
 ```
-Now, we are going to use linear regression with inverse margin of error weighting to assess the trends in insurance coverage by county. We will categorize each county as increase, stable/uncertain, or decreasing. We will visualize these results with maps and histograms.
+
+Now, we are going to use linear regression with inverse margin of error weighting to assess the trends in insurance coverage by county. We will categorize each county as increase, stable/uncertain, or decreasing. We will visualize these results with both maps and histograms.
 
 ```{r fit models to insurance data}
 #| eval = FALSE,
