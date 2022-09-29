@@ -30,7 +30,7 @@ In this case study, we are particularly interested in observed differences in he
 3) How is county-level racialized economic segregation as measured by the Index of Concentration at the Extremes (ICE) associated with health insurance coverage from 2012-2019 in each state?  
 
 :::: {.infobox .dataWrangling}
-In this next section,**Downloading your Data**, we will show you how to download ACS data by querying the census API and how to manipulate the data into the format we need for the rest of the analysis. This case study investigates the ACS variable of health insurance in four states. See if you can replicate the analysis with a different ACS variable or in different states!
+In this next section, **Downloading your Data**, we will show you how to download ACS data by querying the census API and how to manipulate the data into the format we need for the rest of the analysis. This case study investigates the ACS variable of health insurance in four states. See if you can replicate the analysis with a different ACS variable or in different states!
 ::::
 
 ## Downloading your data
