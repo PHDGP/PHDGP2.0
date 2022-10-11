@@ -327,7 +327,7 @@ ggplot(health_insurance,
 ggsave("images/10-temporal-health-insurance/perc_with_health_insurance.png", width = 10, height = 5)
 ```
 
-```{r, out.width="75%"}
+```{r, out.width="80%"}
 #| echo = FALSE,
 #| include = TRUE,
 
@@ -410,7 +410,7 @@ ggsave("images/10-temporal-health-insurance/texas.png", width = 8, height = 5)
 ```
 
 
-```{r, out.width="75%"}
+```{r, out.width="80%"}
 #| echo = FALSE,
 #| include = TRUE,
 
@@ -499,7 +499,7 @@ map_health_insurance_over_time('Florida', outcome_var = moe_zero_to_64_insurance
 ggsave("images/10-temporal-health-insurance/floridamoe.png", width = 8, height = 5)
 ```
 
-```{r, out.width="75%"}
+```{r, out.width="80%"}
 #| echo = FALSE,
 #| include = TRUE,
 
@@ -597,7 +597,7 @@ plt1 + plt2
 ggsave("images/10-temporal-health-insurance/povertycomparison.png", width = 8, height = 5)
 ```
 
-```{r, out.width="75%"}
+```{r, out.width="80%"}
 #| echo = FALSE,
 #| include = TRUE,
 #| fig.cap = 'County observations of adult (age 19-64) health insurance rates in California'
@@ -674,7 +674,7 @@ ggsave("images/10-temporal-health-insurance/healthinsurance_poverty_time.png", w
 ```
 
 
-```{r, out.width="75%"}
+```{r, out.width=80%"}
 #| echo = FALSE,
 #| include = TRUE,
 
@@ -874,7 +874,7 @@ health_insurance_sf %>%
 ```
 
 
-```{r, out.width="75%"}
+```{r, out.width="80%"}
 #| echo = FALSE,
 #| include = TRUE,
 #| fig.cap = 'County observations of adult (age 19-64) health insurance rates in California'
