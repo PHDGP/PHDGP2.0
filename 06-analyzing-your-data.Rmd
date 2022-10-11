@@ -207,7 +207,8 @@ Let $Y_{ij}$ be the count of deaths in age-stratum $j$ in census tract $i$ and $
 \[
 \begin{align*}
 Y_{ij} & \sim \mbox{Poisson}(\mu_i) \\
-\log(\mu_{ij}) & = \beta_0 + \beta_1 I(pov=5-9.9\%) + \beta_2 I(pov=10-19.9\%) + \beta_3 I(pov=20-100\%) + \sum_{j=2}^{J} \alpha_j I(age=age_j) + \log(n_{ij})
+\log(\mu_{ij}) & = \beta_0 + \beta_1 I(pov=5-9.9\%) + \beta_2 I(pov=10-19.9\%) + \beta_3 I(pov=20-100\%) +\\
+\sum_{j=2}^{J} \alpha_j I(age=age_j) + \log(n_{ij})
 \end{align*}
 \]
 
