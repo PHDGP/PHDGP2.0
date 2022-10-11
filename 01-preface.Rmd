@@ -1,5 +1,7 @@
 # Preface {#preface .unnumbered}
 
+*By: Nancy Krieger PhD, Dena Javadi*
+
 In June 2004, a team based at the Harvard School of Public Health
 published a [monograph](https://www.hsph.harvard.edu/thegeocodingproject/public-health-disparities-geocoding-project-monograph-june-2004/) (Krieger et al, 2004) based on the research and trainings we
 created for our *Public Health Disparities Geocoding Project* (Krieger et al, 2004).

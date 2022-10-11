@@ -1,5 +1,6 @@
 # Analyzing your data {#analyzing-your-data}
 
+*By: Jarvis Chen, ScD*
 
 ```{r, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)

@@ -1,5 +1,7 @@
 # Case Study 5: Case Study Comparing County Analyses of Inequities in Health Insurance using ACS vs. CDC PLACES data (2019) {#health-insurance-comparison}
 
+*By: Christian Testa, Dena Javadi*
+
 ## Introduction 
 
 The [CDC PLACES](https://www.cdc.gov/places/) dataset and [American Community Survey (ACS)](https://www.census.gov/data/developers/data-sets/acs-5year.html) 

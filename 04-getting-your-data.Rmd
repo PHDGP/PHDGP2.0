@@ -1,5 +1,7 @@
 # Getting your data {#getting-your-data}
 
+*By: Christian Testa*
+
 <!-- Outline for Chapter --> 
 <!-- 
   - Downloading data 

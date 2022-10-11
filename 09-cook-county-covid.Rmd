@@ -1,5 +1,6 @@
 # Case Study 3: COVID-19 Mortality in Cook County (March 2020 - March 2022) {#cook-county-covid}
 
+*By: Sudipta Saha, Christian Testa*
 
 ## Introduction 
 

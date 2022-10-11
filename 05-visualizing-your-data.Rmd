@@ -1,5 +1,7 @@
 # Visualizing your data {#visualizing-your-data}
 
+*By: Christian Testa*
+
 Data visualization is a critical component in communicating and advocating for
 health equity as it makes data accessible and transparent.  However, it is not 
 without its pitfalls, and in this chapter we will discuss some of the important

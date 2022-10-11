@@ -1,5 +1,7 @@
 # Getting Setup with R and RStudio {#getting-setup}
 
+*By: Christian Testa*
+
 We recommend before moving on, readers should download and install R and RStudio
 and the recommended R packages and dependencies.
 

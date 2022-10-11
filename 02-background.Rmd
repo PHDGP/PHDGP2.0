@@ -1,5 +1,7 @@
 # Background and History of Analytic Methods {#background}
 
+*By: Nancy Krieger PhD, Dena Javadi*
+
 In 2004, a team based at the Harvard T.H Chan School of Public Health's
 Department of Social and Behavioral Sciences published a [[Project
 Monograph]{.underline}](https://www.hsph.harvard.edu/thegeocodingproject/public-health-disparities-geocoding-project-monograph-june-2004/)
