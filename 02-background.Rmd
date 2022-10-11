@@ -209,24 +209,20 @@ provides:
 -   R code for extracting ABSMs from the ACS and replicating analyses in
     the published empirical papers
 
-The *Public Health Disparities Geocoding Project 2.0* training in June
-and July 2022 builds on the work of our team throughout the pandemic and
-is offering an updated and revised training on why & how to analyze
-population health and health inequities in relation to census tract,
-county, and other georeferenced societal and environmental data. Because
-the area-based metrics we employ in this study include diverse social
-metrics, no longer restricted solely to economic measures, we employ the
-updated terminology of "area-based social metrics" -- which we continue
-to abbreviate as "ABSMs."
-
-The training and final version of our training module are designed to be
-available asynchronously, by the end of 2022, following the
-administration of two synchronous sessions in June 2022 and July 2022.
+The *Public Health Disparities Geocoding Project 2.0* training (held online 
+in June and July 2022) and now available through this manual builds on the 
+work of our team throughout the pandemic and is offering an updated and revised 
+training on why & how to analyze population health and health inequities in 
+relation to census tract, county, and other georeferenced societal and 
+environmental data. Because the area-based metrics we employ in this study 
+include diverse social metrics, no longer restricted solely to economic 
+measures, we employ the updated terminology of "area-based social metrics" 
+-- which we continue to abbreviate as "ABSMs."
 
 This online companion site will walk through each step of the training
 including:
 
--   Chapter 2 Getting Set Up
+-   Chapter 2: Getting Set Up
 
 -   Chapter 3: Getting your Data
 
