@@ -674,7 +674,7 @@ ggsave("images/10-temporal-health-insurance/healthinsurance_poverty_time.png", w
 ```
 
 
-```{r, out.width=80%"}
+```{r, out.width="80%"}
 #| echo = FALSE,
 #| include = TRUE,
 
