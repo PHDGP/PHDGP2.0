@@ -131,29 +131,29 @@ In summary, addressing health inequities requires a relational understanding of 
 REFERENCES
 
 
-Buzzelli, M. (2020) ‘Modifiable Areal Unit Problem’, International Encyclopedia of Human Geography, pp. 169–173. doi:10.1016/B978-0-08-102295-5.10406-8.
+Buzzelli M. (2020) ‘Modifiable Areal Unit Problem’, International Encyclopedia of Human Geography, pp. 169–173. doi:10.1016/B978-0-08-102295-5.10406-8.
 
-Chowkwanyun, M., & Reed Jr., A. L. (2020). Racial health disparities and Covid-19—Caution and context. New England Journal of Medicine, 383(3), 201-203. doi:10.1056/NEJMp2012910
+Chowkwanyun M and Reed Jr AL. (2020). Racial health disparities and Covid-19—Caution and context. New England Journal of Medicine, 383(3), 201-203. doi:10.1056/NEJMp2012910
 
 Craddock, S. (2004). City of plagues: Disease, poverty, and deviance in San Francisco. University of Minnesota Press. 
 
-Deluca, E. and Nelson, S. (2017) ‘Lying With Maps’. Available at: https://open.lib.umn.edu/mapping/chapter/7-lying-with-maps/ (Accessed: 7 June 2022).
+Deluca E. and Nelson S. (2017) ‘Lying With Maps’. Available at: https://open.lib.umn.edu/mapping/chapter/7-lying-with-maps/ (Accessed: 7 June 2022).
 
 Dorling D, Fairbairn D (1997). Mapping: Ways of Representing the World. Old Tappen, UK: Routledge.
 
-Fleckenstein, L. (1991) ‘How Maps Lie’, Syracuse University Magazine, December. Available at: https://surface.syr.edu/cgi/viewcontent.cgi?article=1245&context=sumagazine.
+Fleckenstein L. (1991) ‘How Maps Lie’, Syracuse University Magazine, December. Available at: https://surface.syr.edu/cgi/viewcontent.cgi?article=1245&context=sumagazine.
 
-Gimond, M. (2022) Intro to GIS and Spatial Analysis. Available at: https://mgimond.github.io/Spatial/index.html (Accessed: 7 June 2022).
+Gimond M. (2022) Intro to GIS and Spatial Analysis. Available at: https://mgimond.github.io/Spatial/index.html (Accessed: 7 June 2022).
 
-Goetz, E. G., Damiano, A., & Williams, R. A. Racially concentrated areas of affluence: A preliminary investigation. Cityscape, 21(1), 99-123. 
+Goetz EG, Damiano A, and Williams RA. Racially concentrated areas of affluence: A preliminary investigation. Cityscape, 21(1), 99-123. 
 
 Katsnelson, A. (2021) ‘Colour me better: fixing figures for colour blindness’, Nature, 598(7879), pp. 224–225. doi:10.1038/d41586-021-02696-z.
 
-Keena A, Latner M., McGann AJM, Smith CA. Gerrymandering the States: Partisanship, Race, and the Transformation of American Federalism. Cambridge, UK: Cambridge University Press, 2021.
+Keena A, Latner M, McGann AJM, Smith CA. Gerrymandering the States: Partisanship, Race, and the Transformation of American Federalism. Cambridge, UK: Cambridge University Press, 2021.
 
-Koch, T. (2011) Disease Maps: Epidemics on the Ground. Chicago, IL: University of Chicago Press. Available at: https://press.uchicago.edu/ucp/books/book/chicago/D/bo8490164.html (Accessed: 7 June 2022).
+Koch T. (2011) Disease Maps: Epidemics on the Ground. Chicago, IL: University of Chicago Press. Available at: https://press.uchicago.edu/ucp/books/book/chicago/D/bo8490164.html (Accessed: 7 June 2022).
 
-Koch, T. (2017) Ethics in Everyday Places: Mapping Moral Stress, Distress, and Injury | Esri Press (2017). Available at: https://www.esri.com/en-us/esri-press/browse/ethics-in-everyday-places-mapping-moral-stress-distress-and-injury (Accessed: 7 June 2022).
+Koch T. (2017) Ethics in Everyday Places: Mapping Moral Stress, Distress, and Injury | Esri Press (2017). Available at: https://www.esri.com/en-us/esri-press/browse/ethics-in-everyday-places-mapping-moral-stress-distress-and-injury (Accessed: 7 June 2022).
 
 Krieger N, Van Wye G, Huynh M, Waterman PD, Maduro G, Li W, Gwynn C, Barbot O, Bassett MT. Historical redlining, structural racism, and preterm birth risk in New York City (2013-2017). Am J Public Health 2020; 110(7):1046-1053.
 
@@ -171,29 +171,29 @@ Krieger N. The US Census and the people's health: Public health engagement from 
 
 Krieger N, Testa C, Chen JT, Hanage WP, McGregor AJ. Relationship of political ideology of US Federal and State elected officials and key COVID pandemic outcomes during the vaccine era: April 2021-March 2022. Available at SSRN: https://ssrn.com/abstract=4131161 ; posted: June 8, 2022
 
-Krupar, S., & Ehlers, N. (2017). Biofutures: Race and the governance of health. Environment and Planning D: Society and Space, 35(2), 222-240. doi:10.1177/0263775816654475
+Krupar S, & Ehlers N. (2017). Biofutures: Race and the governance of health. Environment and Planning D: Society and Space, 35(2), 222-240. doi:10.1177/0263775816654475
 
-Lopez R. P. (2009). Public health, the APHA, and urban renewal. American Journal of Public Health, 99(9), 1603-1611. doi:10.2105/AJPH.2008.150136
+Lopez RP. (2009). Public health, the APHA, and urban renewal. American Journal of Public Health, 99(9), 1603-1611. doi:10.2105/AJPH.2008.150136
 
-Lovelace, R., Nowosad, J. and Muenchow, J. (2022) Geocomputation with R. Available at: https://geocompr.robinlovelace.net/ (Accessed: 7 June 2022).
+Lovelace R, Nowosad J, and Muenchow J. (2022) Geocomputation with R. Available at: https://geocompr.robinlovelace.net/ (Accessed: 7 June 2022).
 
-Molina, N. (2006). Fit to be citizens? Public health and race in Los Angeles, 1879-1939. University of California Press.
+Molina N. (2006). Fit to be citizens? Public health and race in Los Angeles, 1879-1939. University of California Press.
 
-Monmonier, M. (2018) How to Lie with Maps, Third Edition. Chicago, IL: University of Chicago Press. Available at: https://press.uchicago.edu/ucp/books/book/chicago/H/bo27400568.html (Accessed: 7 June 2022).
+Monmonier M. (2018) How to Lie with Maps, Third Edition. Chicago, IL: University of Chicago Press. Available at: https://press.uchicago.edu/ucp/books/book/chicago/H/bo27400568.html (Accessed: 7 June 2022).
 
 Nelson R, Winling L, Connolly NDB, Madron J, Marciano, R. Mapping Inequality: Redlining in New Deal America. https://dsl.richmond.edu/panorama/redlining/#loc=5/39.1/-94.58&text=about ; accessed June 17, 2022.
 
 Ou, J. (2021) Safe colorsets. Available at: https://cran.r-project.org/web/packages/colorBlindness/vignettes/colorBlindness.html (Accessed: 7 June 2022).
 
-Roberts Jr., S. K. (2009). Infectious fear: Politics, disease, and the health effects of segregation. University of North Carolina Press. 
+Roberts Jr SK. (2009). Infectious fear: Politics, disease, and the health effects of segregation. University of North Carolina Press. 
 
-Rothstein R (2017). The Color of Law: A Forgotten History of How Our Government Segregated America. New York: Liveright Publishing Co., W.W. Norton & Co.
+Rothstein R. (2017). The Color of Law: A Forgotten History of How Our Government Segregated America. New York: Liveright Publishing Co., W.W. Norton & Co.
 
-Tufte D (2001). The Visual Display of Quantitative Information. 2nd ed. Cheshire, CT: Graphics Press.
+Tufte D. (2001). The Visual Display of Quantitative Information. 2nd ed. Cheshire, CT: Graphics Press.
 
-Tufte ER (2020). Seeing with Fresh Eyes: Meaning, Space, Data, Truth. Cheshire, CT: Graphics Press.
+Tufte ER. (2020). Seeing with Fresh Eyes: Meaning, Space, Data, Truth. Cheshire, CT: Graphics Press.
 
-Wong, D. (2004) ‘The modifiable areal unit problem (MAUP)’, in WorldMinds: Geographical Perspectives on 100 Problems. Springer Netherlands. Available at: https://link.springer.com/chapter/10.1007/978-1-4020-2352-1_93.
+Wong D. (2004) ‘The modifiable areal unit problem (MAUP)’, in WorldMinds: Geographical Perspectives on 100 Problems. Springer Netherlands. Available at: https://link.springer.com/chapter/10.1007/978-1-4020-2352-1_93.
 
 Wright E, Waterman PD, Testa C, Chen JT, Krieger N. Breast Cancer Incidence, Hormone Receptor Status, Historical Redlining, and Current Neighborhood Characteristics in Massachusetts, 2005-2015. JNCI Cancer Spectrum 2022; 6(2);  https://doi.org/10.1093/jncics/pkac016; epub on-line: Feb 18, 2022.
 

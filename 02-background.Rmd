@@ -256,12 +256,12 @@ Bambra C, Lynch J, Smith KE. The Unequal Pandemic: COVID-19 and Health Inequalit
 
 Beckfield J. Political Sociology and The People's Health. New York: Oxford University Press, 2018.
 
-Chen, J.T. and Krieger, N. Revealing the unequal burden of
+Chen JT and Krieger N. Revealing the unequal burden of
 COVID-19 by income, race/ethnicity, and household crowding: US county
 versus zip code analyses. Journal of Public Health Management and
 Practice. 2021; 27(1), pp.S43-S56.
 
-Frank, J.W. and Matsunaga, E. National monitoring systems for
+Frank JW and Matsunaga E. National monitoring systems for
 health inequalities by socioeconomic status--an OECD snapshot. Critical
 Public Health. 2020; pp.1-8.
 
@@ -289,29 +289,28 @@ Krieger N. Putting health inequities on the map: social epidemiology meets medic
 
 Krieger N, Alegría M, Almeida-Filho N et al. Who, and what, causes health inequities? Reflections on emerging debates from an exploratory Latin American/North American workshop. J Epidemiol Community Health. 2010;64(9):747–749.
 
+Krieger N. Epidemiology and The People’s Health: Theory and Context. New York: Oxford University Press, 2011.
 
-Krieger, N. Epidemiology and The People’s Health: Theory and Context. New York: Oxford University Press, 2011.
-
-Krieger, N., 2012. Who and what is a "population"? Historical debates,
+Krieger N, 2012. Who and what is a "population"? Historical debates,
 current controversies, and implications for understanding "population
 health" and rectifying health inequities. The Milbank Quarterly, 90(4),
 pp.634-681.
 
 Krieger N, Waterman PD, Gryparis A, Coull BA. Black carbon exposure, socioeconomic and racial/ethnic spatial polarization, and the Index of Concentration at the Extremes (ICE) Health Place. 2015;34:215–228.
 
-Krieger, N., Waterman, P.D., Spasojevic, J., Li, W., Maduro, G. and Van
+Krieger N, Waterman PD, Spasojevic J, Li W, Maduro G. and Van
 Wye, G. Public health monitoring of privilege and deprivation
 with the index of concentration at the extremes. American journal of
 public health. 2016A; 106(2), pp.256-263.
 
-Krieger, N., Singh, N. and Waterman, P.D.Metrics for monitoring
+Krieger N, Singh N, and Waterman PD. Metrics for monitoring
 cancer inequities: residential segregation, the Index of Concentration
 at the Extremes (ICE), and breast cancer estrogen receptor status (USA,
 1992--2012). Cancer Causes & Control. 2016B; 27(9), pp.1139-1151.
 
 Krieger N, Feldman JM, Waterman PD, Chen JT, Coull BA, Hemenway D. Local Residential Segregation Matters: Stronger Association of Census Tract Compared to Conventional City-Level Measures with Fatal and Non-Fatal Assaults (Total and Firearm Related), Using the Index of Concentration at the Extremes (ICE) for Racial, Economic, and Racialized Economic Segregation, Massachusetts (US), 1995-2010. J Urban Health. 2017 Apr;94(2):244-258. doi: 10.1007/s11524-016-0116-z.
 
-Krieger, N., Feldman, J.M., Kim, R. and Waterman, P.D. Cancer
+Krieger N, Feldman JM, Kim R, and Waterman, PD. Cancer
 incidence and multilevel measures of residential economic and racial
 segregation for cancer registries. JNCI Cancer Spectrum. 2018; 2(1), p.pky009.
 
@@ -330,32 +329,31 @@ Massey DS. The prodigal paradigm returns: ecology comes back to sociology. In: B
 
 Massey DS. Reflections on the dimensions of segregation. Soc Forces. 2012;91(1):39–43.
 
-McLennan, David, Stefan Noble, Michael Noble, Emma Plunkett, Gemma Wright, and Nils Gutacker. The English indices of deprivation 2019: technical report. 2019.
+McLennan D, Noble S, Noble M, Plunkett E, Wright G, and Gutacker N. The English indices of deprivation 2019: technical report. 2019.
 
-Messer, L.C., Laraia, B.A., Kaufman, J.S., Eyster, J., Holzman, C.,
-Culhane, J., Elo, I., Burke, J.G. and O'campo, P. The development
+Messer LC, Laraia BA, Kaufman JS, Eyster J, Holzman C,
+Culhane J, Elo I, Burke JG, and O'campo P. The development
 of a standardized neighborhood deprivation index. Journal of Urban
 Health. 2006; 83(6), pp.1041-1062.
 
 Nathan WB. Health conditions in North Harlem 1923-1927. New York:
 National Tuberculosis Association, 1932.
 
-O'Campo, P., Burke, J.G., Culhane, J., Elo, I.T., Eyster, J., Holzman,
-C., Messer, L.C., Kaufman, J.S. and Laraia, B.A. Neighborhood
+O'Campo P, Burke JG, Culhane J, Elo IT, Eyster J, Holzman C, Messer LC, Kaufman JS, and Laraia BA. Neighborhood
 deprivation and preterm birth among non-Hispanic Black and White women
 in eight geographic areas in the United States. American journal of
 epidemiology. 2008; 167(2), pp.155-163.
 
 Presidential COVID-19 Health Equity Task Force. Final reportand recommendations. HHS, Office of Minority Health. https://minorityhealth.hhs.gov/omh/browse.aspx?lvl=2&lvlid=100. UpdatedNovember 10, 2021. Accessed June 14, 2022.
 
-Rothstein, R. The color of law : A forgotten history of how our government segregated America (First ed., Democracy and urban landscapes). New York ; London: Liveright Publishing Corporation, a division of W.W. Norton & Company, 2017.
+Rothstein R. The color of law : A forgotten history of how our government segregated America (First ed., Democracy and urban landscapes). New York ; London: Liveright Publishing Corporation, a division of W.W. Norton & Company, 2017.
 
-Schuurman, N., Bell, N., Dunn, J.R. and Oliver, L. Deprivation
+Schuurman N, Bell N, Dunn JR, and Oliver L. Deprivation
 indices, population health and geography: an evaluation of the spatial
 effectiveness of indices at multiple scales. Journal of urban health. 2007;
 84(4), pp.591-603.
 
-Scally, B.J., Krieger, N. and Chen, J.T. Racialized economic
+Scally BJ, Krieger N. and Chen JT. Racialized economic
 segregation and stage at diagnosis of colorectal cancer in the United
 States. Cancer Causes & Control. 2018; 29(6), pp.527-537.
 
@@ -365,5 +363,5 @@ and Measures. Bristol, UK: The Policy Press, 2007.
 
 UK Office of National Statistics. The National Statistics Socio-economic classification (NS-SEC). https://www.ons.gov.uk/methodology/classificationsandstandards/otherclassifications/thenationalstatisticssocioeconomicclassificationnssecrebasedonsoc2010 ; accessed June 14, 2022.
 
-Whitehead, M. William Farr's legacy to the study of inequalities
+Whitehead M. William Farr's legacy to the study of inequalities
 in health. Bulletin of the World Health Organization. 2000; 78(1), p.86.

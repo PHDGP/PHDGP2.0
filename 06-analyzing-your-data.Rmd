@@ -213,7 +213,6 @@ Y_{ij} & \sim \mbox{Poisson}(\mu_i) \\
 \]
 
 
-
 ### Quasi-poisson regression
 
 A key assumption of the Poisson distribution is that the variance of the expected count equals the mean,
@@ -895,7 +894,7 @@ United States Census Bureau. Population and Housing Estimate Program (PEP). Upda
 
 VanderWeele TJ. Explanation in Causal Inference: Methods for Mediation and Interaction. New York, NY: Oxford University Press, 2015.
 
-Wakefield, J.C., Best, N.G. and Waller, L. Bayesian approaches to diseasemapping,  In:  Elliott,  P.,  Wakefield,  J.C.,  Best,  N.G.  and  Briggs,  D.J. SpatialEpidemiology: Methods and Applications, Oxford University Press, London, UK.pp 104–127, 2000.
+Wakefield JC, Best NG, and Waller L. Bayesian approaches to diseasemapping,  In:  Elliott,  P.,  Wakefield,  J.C.,  Best,  N.G.  and  Briggs,  D.J. SpatialEpidemiology: Methods and Applications, Oxford University Press, London, UK.pp 104–127, 2000.
 
 Wolpert RL, Ickstadt K. Poisson/gamma random field models for spatial statistics. Biometrika. 1998 Jun 1;85(2):251-67.
 
