@@ -252,7 +252,8 @@ Now on to visualizing estimates:
 
 ```{r}
 #| echo = FALSE,
-#| eval = TRUE
+#| eval = TRUE,
+#| message = FALSE
 library(tidyverse)
 library(sf)
 library(mapview)
@@ -323,10 +324,10 @@ ggplot(health_insurance,
 #| echo = FALSE,
 #| include = FALSE,
 #| eval = FALSE
-ggsave("images/10-temporal-health-insurance/perc_with_health_insurance.png", width = 8, height = 4)
+ggsave("images/10-temporal-health-insurance/perc_with_health_insurance.png", width = 10, height = 5)
 ```
 
-```{r}
+```{r, out.width="50%"}
 #| echo = FALSE,
 #| include = TRUE,
 
@@ -399,17 +400,17 @@ map_health_insurance_over_time <- function(state_name, outcome_var,
 
 # create choropleth maps over time for each measure
 map_health_insurance_over_time('California', estimate_zero_to_64_insurance_prop)
-ggsave("images/10-temporal-health-insurance/california.png", width = 5, height = 3)
+ggsave("images/10-temporal-health-insurance/california.png", width = 8, height = 5)
 map_health_insurance_over_time('Florida', estimate_zero_to_64_insurance_prop)
-ggsave("images/10-temporal-health-insurance/florida.png", width = 5, height = 3)
+ggsave("images/10-temporal-health-insurance/florida.png", width = 8, height = 5)
 map_health_insurance_over_time('Massachusetts', estimate_zero_to_64_insurance_prop)
-ggsave("images/10-temporal-health-insurance/massachusetts.png", width = 5, height = 3)
+ggsave("images/10-temporal-health-insurance/massachusetts.png", width = 8, height = 5)
 map_health_insurance_over_time('Texas', estimate_zero_to_64_insurance_prop)
-ggsave("images/10-temporal-health-insurance/texas.png", width = 5, height = 3)
+ggsave("images/10-temporal-health-insurance/texas.png", width = 8, height = 5)
 ```
 
 
-```{r}
+```{r, out.width="50%"}
 #| echo = FALSE,
 #| include = TRUE,
 
@@ -472,7 +473,7 @@ map_health_insurance_over_time('Texas', outcome_var = moe_zero_to_64_insurance_p
     labels = scales::percent_format()
   )
 
-ggsave("images/10-temporal-health-insurance/texasmoe.png", width = 5, height = 3)
+ggsave("images/10-temporal-health-insurance/texasmoe.png", width = 8, height = 5)
 
 map_health_insurance_over_time('Massachusetts',
                                outcome_var = moe_zero_to_64_insurance_prop,
@@ -484,7 +485,7 @@ map_health_insurance_over_time('Massachusetts',
     labels = scales::percent_format()
   )
 
-ggsave("images/10-temporal-health-insurance/massmoe.png", width = 5, height = 3)
+ggsave("images/10-temporal-health-insurance/massmoe.png", width = 8, height = 5)
 
 map_health_insurance_over_time('Florida', outcome_var = moe_zero_to_64_insurance_prop,
                                fill_label = 'Margin of Error') +
@@ -495,10 +496,10 @@ map_health_insurance_over_time('Florida', outcome_var = moe_zero_to_64_insurance
     labels = scales::percent_format()
   )
 
-ggsave("images/10-temporal-health-insurance/floridamoe.png", width = 5, height = 3)
+ggsave("images/10-temporal-health-insurance/floridamoe.png", width = 8, height = 5)
 ```
 
-```{r}
+```{r, out.width="50%"}
 #| echo = FALSE,
 #| include = TRUE,
 
@@ -593,10 +594,10 @@ plt1 + plt2
 #| echo = FALSE,
 #| include = FALSE,
 #| eval = FALSE
-ggsave("images/10-temporal-health-insurance/povertycomparison.png", width = 5, height = 3)
+ggsave("images/10-temporal-health-insurance/povertycomparison.png", width = 8, height = 5)
 ```
 
-```{r}
+```{r, out.width="50%"}
 #| echo = FALSE,
 #| include = TRUE,
 #| fig.cap = 'County observations of adult (age 19-64) health insurance rates in California'
@@ -644,7 +645,7 @@ health_insurance %>%
   scale_y_continuous(labels = scales::percent_format()) + 
   ggtitle("Relationship Between Percent with Health Insurance by ICE for Racialized \nEconomic Segregation over Time",
           "County Observations, Texas -- Weighted by Inverse Margin of Error") 
-ggsave("images/10-temporal-health-insurance/healthinsurance_ICE_time.png", width = 5, height = 3)
+ggsave("images/10-temporal-health-insurance/healthinsurance_ICE_time.png", width = 8, height = 5)
 
 # smoothed relationship between poverty (cut in quantiles) and insurance rates
 # using loess smoothing
@@ -668,12 +669,12 @@ health_insurance %>%
   theme(legend.position = 'bottom') + 
   ggtitle("Relationship Between Percent with Health Insurance by Percent in Poverty \nover Time",
           "County Observations, Texas -- Weighted by Inverse Margin of Error")
-ggsave("images/10-temporal-health-insurance/healthinsurance_poverty_time.png", width = 5, height = 3)
+ggsave("images/10-temporal-health-insurance/healthinsurance_poverty_time.png", width = 8, height = 5)
 
 ```
 
 
-```{r}
+```{r, out.width="50%"}
 #| echo = FALSE,
 #| include = TRUE,
 
@@ -873,7 +874,7 @@ health_insurance_sf %>%
 ```
 
 
-```{r}
+```{r, out.width="50%"}
 #| echo = FALSE,
 #| include = TRUE,
 #| fig.cap = 'County observations of adult (age 19-64) health insurance rates in California'
