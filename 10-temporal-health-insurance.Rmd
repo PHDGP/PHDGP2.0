@@ -314,6 +314,21 @@ ggplot(health_insurance,
 
 ```
 
+```{r}
+#| echo = FALSE,
+#| include = FALSE,
+#| eval = FALSE
+ggsave("images/10-temporal-health-insurance/perc_with_health_insurance.png", width = 8, height = 4)
+```
+
+```{r}
+#| echo = FALSE,
+#| include = TRUE,
+
+knitr::include_graphics("images/10-temporal-health-insurance/perc_with_health_insurance.png")
+
+```
+
 :::: {.infobox .dataWrangling}
 Now, we might want to map our quantities of interest!
 
@@ -379,9 +394,25 @@ map_health_insurance_over_time <- function(state_name, outcome_var,
 
 # create choropleth maps over time for each measure
 map_health_insurance_over_time('California', estimate_zero_to_64_insurance_prop)
+ggsave("images/10-temporal-health-insurance/california.png", width = 8, height = 4)
 map_health_insurance_over_time('Florida', estimate_zero_to_64_insurance_prop)
+ggsave("images/10-temporal-health-insurance/florida.png", width = 8, height = 4)
 map_health_insurance_over_time('Massachusetts', estimate_zero_to_64_insurance_prop)
+ggsave("images/10-temporal-health-insurance/massachusetts.png", width = 8, height = 4)
 map_health_insurance_over_time('Texas', estimate_zero_to_64_insurance_prop)
+ggsave("images/10-temporal-health-insurance/texas.png", width = 8, height = 4)
+```
+
+
+```{r}
+#| echo = FALSE,
+#| include = TRUE,
+
+knitr::include_graphics("images/10-temporal-health-insurance/california.png")
+knitr::include_graphics("images/10-temporal-health-insurance/florida.png")
+knitr::include_graphics("images/10-temporal-health-insurance/massachusetts.png")
+knitr::include_graphics("images/10-temporal-health-insurance/texas.png")
+
 ```
 
 :::: {.infobox .interpretation}
@@ -436,6 +467,8 @@ map_health_insurance_over_time('Texas', outcome_var = moe_zero_to_64_insurance_p
     labels = scales::percent_format()
   )
 
+ggsave("images/10-temporal-health-insurance/texasmoe.png", width = 8, height = 4)
+
 map_health_insurance_over_time('Massachusetts',
                                outcome_var = moe_zero_to_64_insurance_prop,
                                fill_label = 'Margin of Error') +
@@ -446,6 +479,7 @@ map_health_insurance_over_time('Massachusetts',
     labels = scales::percent_format()
   )
 
+ggsave("images/10-temporal-health-insurance/massmoe.png", width = 8, height = 4)
 
 map_health_insurance_over_time('Florida', outcome_var = moe_zero_to_64_insurance_prop,
                                fill_label = 'Margin of Error') +
@@ -456,8 +490,18 @@ map_health_insurance_over_time('Florida', outcome_var = moe_zero_to_64_insurance
     labels = scales::percent_format()
   )
 
+ggsave("images/10-temporal-health-insurance/floridamoe.png", width = 8, height = 4)
 ```
 
+```{r}
+#| echo = FALSE,
+#| include = TRUE,
+
+
+knitr::include_graphics("images/10-temporal-health-insurance/massmoe.png")
+knitr::include_graphics("images/10-temporal-health-insurance/floridamoe.png")
+
+```
 
 Congrats!  You can now visualize your estimates and uncertainty in plots and maps. 
 
@@ -538,6 +582,29 @@ health_insurance %>%
 # display plot 1 and 2 side by side
 plt1 + plt2 
 
+```
+
+```{r}
+#| echo = FALSE,
+#| include = FALSE,
+#| eval = FALSE
+ggsave("images/10-temporal-health-insurance/povertycomparison.png", width = 8, height = 4)
+```
+
+```{r}
+#| echo = FALSE,
+#| include = TRUE,
+#| fig.cap = 'County observations of adult (age 19-64) health insurance rates in California'
+
+knitr::include_graphics("images/10-temporal-health-insurance/povertycomparison.png")
+
+```
+
+Notice the difference in weighted vs unweighted estimates. 
+
+Now we will explore the relationships between ICE and health insurance, weighted by the inverse margin of error as well as poverty and health insurance, weighted by the inverse margin of error.
+
+```{r}
 # look at the relationship with ICEraceinc and insurance, weighted by inverse margin of error
 health_insurance %>% 
   filter(state == 'Texas') %>% 
@@ -572,6 +639,7 @@ health_insurance %>%
   scale_y_continuous(labels = scales::percent_format()) + 
   ggtitle("Relationship Between Percent with Health Insurance by ICE for Racialized \nEconomic Segregation over Time",
           "County Observations, Texas -- Weighted by Inverse Margin of Error") 
+ggsave("images/10-temporal-health-insurance/healthinsurance_ICE_time.png", width = 8, height = 4)
 
 # smoothed relationship between poverty (cut in quantiles) and insurance rates
 # using loess smoothing
@@ -595,9 +663,21 @@ health_insurance %>%
   theme(legend.position = 'bottom') + 
   ggtitle("Relationship Between Percent with Health Insurance by Percent in Poverty \nover Time",
           "County Observations, Texas -- Weighted by Inverse Margin of Error")
-
+ggsave("images/10-temporal-health-insurance/healthinsurance_poverty_time.png", width = 8, height = 4)
 
 ```
+
+
+```{r}
+#| echo = FALSE,
+#| include = TRUE,
+
+knitr::include_graphics("images/10-temporal-health-insurance/healthinsurance_ICE_time.png")
+knitr::include_graphics("images/10-temporal-health-insurance/healthinsurance_poverty_time.png")
+
+```
+
+
 
 Now, we are going to use linear regression with inverse margin of error weighting to assess the trends in insurance coverage by county. We will categorize each county as increase, stable/uncertain, or decreasing. We will visualize these results with both maps and histograms.
 
@@ -643,6 +723,8 @@ model_df %>%
   xlab("Coefficient Estimates for Average Percentage Point Increase Each Year") + 
   facet_wrap(~state) + 
   ggtitle("Estimates for County Change in Percent with Health Insurance")
+
+ggsave("images/10-temporal-health-insurance/estimate_countychange.png", width = 8, height = 4)
 
 # classify into increasing, decreasing, or uncertain/stable
 model_df %<>% mutate(
@@ -788,19 +870,12 @@ health_insurance_sf %>%
 
 ```{r}
 #| echo = FALSE,
-#| include = FALSE,
-#| eval = FALSE
-ggsave("images/10-temporal-health-insurance/health_insurance_county_temporal.png", width = 8, height = 4)
-```
-
-```{r}
-#| echo = FALSE,
 #| include = TRUE,
-#| fig.cap = 'County observations of adult (age 19-64) health insurance rates in California, Florida, Massachusetts, and Texas'
+#| fig.cap = 'County observations of adult (age 19-64) health insurance rates in California'
 
-knitr::include_graphics("images/10-temporal-health-insurance/health_insurance_county_temporal.png")
+knitr::include_graphics("images/10-temporal-health-insurance/estimate_countychange.png")
 
 
 ```
 
-
+What additional analyses might you be interested in?
