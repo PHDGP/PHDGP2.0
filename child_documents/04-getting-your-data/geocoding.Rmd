@@ -5,7 +5,38 @@ Address geocoding, or just geocoding, is the process of converting a location de
 
 When you need to geocode many addresses, which we often need to do when working with large datasets, this is called ‘batch’ geocoding. Many services offer batch geocoding, with varying degrees of speed, accuracy, and pricing. We recommend reviewing multiple services before deciding what is right for you and your team. We have provided a handout with comparisons of some geocoding services you might be interested in.
 
-<mark>[We can include the table of comparisons slimmed down here, or separately]</mark>
+#### There are a variety of geocoding services available on the internet ranging from free to very expensive. The table below contains a list of some of the available geocoding services. 
+
+
+#### There are several important questions to consider when choosing a geocoding services, including:\
+* Is it free? If not, what kind of subscription packages do they offer? \
+* Is caching or locally/permanently storing geocoding results permitted?\
+* Is using geocoding results with third-party basemaps permitted?\
+* Does service have the right to store your geocoding requests and results and transmit these data to third parties?\
+* What is their privacy and data protection policy?\
+
+
+<table>
+
+Geocoder                                                                                                                       
+-------------                                                                                                                --------
+[ArcGIS World Geocoding Service](https://www.arcgis.com/home/item.html?id=305f2e55e67f4389bef269669fc2e284)
+[ArcGIS StreetMap Premium](https://pro.arcgis.com/en/pro-app/2.8/help/data/streetmap-premium/what-is-streetmap-premium-.htm)
+[Bing Maps](https://docs.microsoft.com/en-us/bingmaps/spatial-data-services/)
+[Census Geocoder](https://geocoding.geo.census.gov/geocoder/)
+[Geoapify](https://www.geoapify.com/geocoding-api)
+[Geocode Earth](https://geocode.earth/features/)
+[Geocodio](https://www.geocod.io/)
+[Google Maps](https://developers.google.com/maps/documentation/geocoding)
+[HERE](https://www.here.com/platform/geocoding)
+[LocationIQ](https://locationiq.com/geocoding)
+[Mapbox](https://docs.mapbox.com/api/search/geocoding/)
+[MapQuest](https://developer.mapquest.com/documentation/geocoding-api/)
+[OpenCage](https://opencagedata.com/)
+[TomTom](https://developer.tomtom.com/search-api/documentation/geocoding-service/geocode)
+
+</table>
+
 
 In order to access a geocoding service, you will have to interact with its application program interface (API). Some services, like ArcGIS, have interfaces that are internal to the software you might download for your computer. Other’s like Google, or Nominatum, require some programming to access. We utilize R packages to access APIs from within the R environment. We will walk you through this process using Google’s Geocoding API as an example.
 
