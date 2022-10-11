@@ -1,6 +1,6 @@
 # Getting your data {#getting-your-data}
 
-*By: Christian Testa*
+*By: Christian Testa, Jarvis Chen ScD, Dena Javadi*
 
 <!-- Outline for Chapter --> 
 <!-- 

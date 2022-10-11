@@ -133,7 +133,7 @@ The following steps are used to generate age-standardized disease rates stratifi
 5. Generate age-standardized rates and other summary measures.
 
 
-:::: {.infobox}
+:::: {.infobox .dataWrangling}
 
 Advantages:
 
