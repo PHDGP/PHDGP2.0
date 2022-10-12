@@ -1,6 +1,6 @@
 # Getting your data {#getting-your-data}
 
-*By: Christian Testa, Jarvis Chen ScD, Dena Javadi, Enjoli Hall, Tamara Rushovich*
+*By: Christian Testa, Jarvis Chen ScD, Enjoli Hall, Dena Javadi, Tamara Rushovich*
 
 <!-- Outline for Chapter --> 
 <!-- 
