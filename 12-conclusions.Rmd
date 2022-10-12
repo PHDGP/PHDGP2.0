@@ -3,7 +3,7 @@ output:
   pdf_document: default
   html_document: default
 ---
-# Conclusions {#conclusions}
+# Conclusion {#conclusions}
 
 This manual has highlighted the history, context, rationale, and approaches for using spatial analysis tools and area based social metrics (ABSMs) to describe, analyze, visualize and communicate health inequities across geographic levels.
 
