@@ -33,7 +33,7 @@ knitr::include_graphics("images/coverart.png")
 
 
 
-Visit the [Public Health Disparities Geocoding Project] (https://www.hsph.harvard.edu/thegeocodingproject/save-the-date-the-public-health-disparities-geocoding-project-2-0/) website!
+Visit the [Public Health Disparities Geocoding Project](https://www.hsph.harvard.edu/thegeocodingproject/save-the-date-the-public-health-disparities-geocoding-project-2-0/) website!
 
 
 Source of funding: American Cancer Society Clinical Research Professor Award to 
