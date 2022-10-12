@@ -674,17 +674,6 @@ ggsave("images/10-temporal-health-insurance/healthinsurance_poverty_time.png", w
 ```
 
 
-```{r, out.width="80%"}
-#| echo = FALSE,
-#| include = TRUE,
-
-knitr::include_graphics("images/10-temporal-health-insurance/healthinsurance_ICE_time.png")
-knitr::include_graphics("images/10-temporal-health-insurance/healthinsurance_poverty_time.png")
-
-```
-
-
-
 Now, we are going to use linear regression with inverse margin of error weighting to assess the trends in insurance coverage by county. We will categorize each county as increase, stable/uncertain, or decreasing. We will visualize these results with both maps and histograms.
 
 ```{r fit models to insurance data}
