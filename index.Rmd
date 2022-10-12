@@ -24,14 +24,16 @@ library(here)
 
 From the Harvard T.H. Chan School of Public Health, Boston MA <br>
 
-```{r}
+**Authors: Christian Testa, Jarvis T. Chen, Enjoli Hall, Dena Javadi, Justin Morgan, Tamara Rushovich,  Sudipta Saha, Pamela D. Waterman, Nancy Krieger**
+
+
+```{r, echo=FALSE, message=FALSE}
 knitr::include_graphics("images/coverart.png")
 ```
 
 
-*Trainings held June 21-25, 2022 and July 25-August 1, 2022*
 
-https://www.hsph.harvard.edu/thegeocodingproject/save-the-date-the-public-health-disparities-geocoding-project-2-0/
+Visit the [Public Health Disparities Geocoding Project] (https://www.hsph.harvard.edu/thegeocodingproject/save-the-date-the-public-health-disparities-geocoding-project-2-0/) website!
 
 
 Source of funding: American Cancer Society Clinical Research Professor Award to 

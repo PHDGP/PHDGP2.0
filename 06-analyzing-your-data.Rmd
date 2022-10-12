@@ -205,13 +205,11 @@ While the aggregation method is attractive for its conceptual simplicity and eas
 
 Let $Y_{ij}$ be the count of deaths in age-stratum $j$ in census tract $i$ and $n_{ij}$ be the corresponding person-time at risk. We fit a Poisson log linear model to the data and include dummy variables for ABSM categories, e.g. with $x_1$, $x_2$, $x_3$, and $x_4$ coded 1 if the census tract is in the corresponding category of CT % below poverty and 0 otherwise. We model age categories as a set of dummy variables. We also include $\log(n_{ij})$ as an offset in the model for $\log(\mu_{ij})$.
 \[
-\begin{align*}
+\begin{aligned}
 Y_{ij} & \sim \mbox{Poisson}(\mu_i) \\
-\log(\mu_{ij}) & = \beta_0 + \beta_1 I(pov=5-9.9\%) + \beta_2 I(pov=10-19.9\%) + \beta_3 I(pov=20-100\%) +\\
-\sum_{j=2}^{J} \alpha_j I(age=age_j) + \log(n_{ij})
-\end{align*}
+\log(\mu_{ij}) & = \beta_0 + \beta_1 I(pov=5-9.9\%) + \beta_2 I(pov=10-19.9\%) + \beta_3 I(pov=20-100\%) \\&+\sum_{j=2}^{J} \alpha_j I(age=age_j) + \log(n_{ij})
+\end{aligned}
 \]
-
 
 ### Quasi-poisson regression
 
