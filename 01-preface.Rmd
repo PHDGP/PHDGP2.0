@@ -32,10 +32,10 @@ census tract level ABSMs (restricted data).
 
 Since 2004, there has been a huge increase in conceptual and methodological work regarding use of ABSMs to document and analyze health inequities, and the computing tools and statistical methods to measure them have evolved. In particular, the availability of software
 that facilitates data access, mapping, visualization, and fitting of multilevel and spatial models has greatly enhanced the accessibility of these analytic methods for public health scientists, advocates, activists, and policy makers interested in advancing health equity. The
-updated [*Public Health Disparities Geocoding Project  2.0*](https://www.hsph.harvard.edu/thegeocodingproject/save-the-date-the-public-health-disparities-geocoding-project-2-0/) training (PHDGP2.0, 2022), held in June and July 2022, builds on our prior 2004 training, and expands on why & how to analyze population health and health inequities in relation to census tract, county, and other georeferenced societal
+updated [*Public Health Disparities Geocoding Project  2.0*](https://www.hsph.harvard.edu/thegeocodingproject/save-the-date-the-public-health-disparities-geocoding-project-2-0/) training (PHDGP2.0, 2022), held in June and July 2022 and now available through this manual, builds on our prior 2004 training, and expands on why & how to analyze population health and health inequities in relation to census tract, county, and other georeferenced societal
 and environmental data.
 
-This online manual for the virtual training serves as a guide to help users explore the following topics:
+This online manual serves as a guide to help users explore the following topics:
 
 - the history and context of, and rationale for, conducting this type of work
 - getting data from the Census and other sources
