@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 
 ## Geocoding
 
@@ -8,13 +13,17 @@ When you need to geocode many addresses, which we often need to do when working 
 There are a variety of geocoding services available on the internet ranging from free to very expensive. The table below contains a list of some of the available geocoding services. 
 
 
-**There are several important questions to consider when choosing a geocoding services, including:\**
-* Is it free? If not, what kind of subscription packages do they offer? \
-* Is caching or locally/permanently storing geocoding results permitted?\
-* Is using geocoding results with third-party basemaps permitted?\
-* Does service have the right to store your geocoding requests and results and transmit these data to third parties?\
-* What is their privacy and data protection policy?\
+**There are several important questions to consider when choosing a geocoding services, including:**
 
+- Is it free? If not, what kind of subscription packages do they offer? 
+
+- Is caching or locally/permanently storing geocoding results permitted?
+
+- Is using geocoding results with third-party basemaps permitted?
+
+- Does service have the right to store your geocoding requests and results and transmit these data to third parties?
+
+- What is their privacy and data protection policy?
 
 <table>
 
@@ -38,7 +47,7 @@ Geocoder
 </table>
 
 
-In order to access a geocoding service, you will have to interact with its application program interface (API). Some services, like ArcGIS, have interfaces that are internal to the software you might download for your computer. Other’s like Google, or Nominatum, require some programming to access. We utilize R packages to access APIs from within the R environment. We will walk you through this process using Google’s Geocoding API as an example.
+In order to access a geocoding service, you will have to interact with its application program interface (API). Some services, like ArcGIS, have interfaces that are internal to the software you might download for your computer. Others like Google, or Nominatum, require some programming to access. We utilize R packages to access APIs from within the R environment. We will walk you through this process using Google’s Geocoding API as an example.
 
 ### Getting your Data in Shape
 
