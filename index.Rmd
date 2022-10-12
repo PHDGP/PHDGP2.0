@@ -24,7 +24,7 @@ library(here)
 
 From the Harvard T.H. Chan School of Public Health, Boston MA <br>
 
-**Authors: Christian Testa, Jarvis T. Chen, Enjoli Hall, Dena Javadi, Justin Morgan, Tamara Rushovich,  Sudipta Saha, Pamela D. Waterman, Nancy Krieger**
+*Authors: Christian Testa, Jarvis T. Chen, Enjoli Hall, Dena Javadi, Justin Morgan, Tamara Rushovich,  Sudipta Saha, Pamela D. Waterman, Nancy Krieger*
 
 
 ```{r, echo=FALSE, message=FALSE}
