@@ -219,7 +219,7 @@ include diverse social metrics, no longer restricted solely to economic
 measures, we employ the updated terminology of "area-based social metrics" 
 -- which we continue to abbreviate as "ABSMs."
 
-This online companion site will walk through each step of the training
+This online manual will walk through each step of the training
 including:
 
 -   Chapter 2: Getting Set Up
