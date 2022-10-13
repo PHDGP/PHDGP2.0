@@ -1,306 +1,133 @@
-# Case Study 1: Premature Mortality in Massachusetts {#premature-mortality}
+---
+  output:
+  pdf_document: default
+  html_document: default
+---
+```{r setup, include = FALSE}
+library(knitr)
+```
 
-*By: Justin Morgan*
+# Case Study 1: Premature Mortality in Massachusetts (2013 - 2017) {#premature-mortality}
+
+*By: Justin W. Morgan*
 
 ## Introduction
 
-For this case study, we will be working with mortality data from the Massachusetts Registry of Vital Records and Statistics [https://www.mass.gov/lists/death-data] for the years 2013-2017. Vital Statistics registries are how states (which submit their data to the federal government) keep an official enumeration of deaths^1-3^; because the death certificates require data on residential address at time of death, they can be useful tools for monitoring health and health equity. Having data on the residential address of each individual allows us to geocode each observation to the physical and social environment in which the person lived. Death records also typically include demographic information about the deceased, including categories for racialized groups that conform to the 1997 US Office of Management and Budget (OMB) standards for the classification of federal data on race and ethnicity^4^. We will explore how social membership in racialized groups, area-based social metrics (ABSMs), and local government spending might impact premature mortality (mortality before the age of 65) across Massachusetts. To do this, we will pair our mortality data with demographic and socioeconomic data from the Census Bureau's 5-year American Community Survey (ACS) files, and utilize expenditure reports from the government of Massachusetts.
+In this case study, the outcome of interest is premature mortality (here defined as death occuring before age 65). This data, which was requested from the [Massachusetts Registry of Vital Records and Statistics](https://www.mass.gov/lists/death-data) is for the years 2013-2017 and is merged with area-based social metrics (ABSMs) created from American Community Survey (ACS) 5-Year Estimates. For more information on how the ACA estimates these metrics from their survey, please visit [thier website]((https://www.census.gov/programs-surveys/acs/methodology/design-and-methodology.html). Vital Statistics registries require data on residential address at time of death, so they can be useful tools for monitoring health and health equity. These data were geocoded using the [Google Maps API](https://developers.google.com/maps).
 
 ## Motivation, Research Questions, and Learning Objectives
 
 The goal of this case study is to develop familiarity with methods of exploring and visualizing racial disparities in health data. Our specific goals will be to:
 
-1. Download and merge different datasets for our analysis
-2. Visualize and map estimates of ABSMs and premature mortality
-3. Identify the relationships between racialized group, ABSMs, and premature mortality
-4. Model how space may impact disparities in premature mortality
+  - Download and merge health outcome and ABSM data
+  - Visualize and map estimates of ABSMs and premature mortality
+  - Identify the relationships between racialized group, ABSMs, and premature mortality
+  - Model the interaction effects between racialized group and ABSM.
  
 The research questions we will seek to answer throughout this case study include:
  
 1. What is the overall socioeconomic gradient in premature mortality? 
-  1a. We can visualize this with a spatial model
-2) What is the racialized disparity overall?
-  2a. We can visualize this with stratified aggregate analyses
-3) What are the associations with ABSM by racialized group?/ How does ABSM interact with individual level membership in racialized groups? (i.e., interactions between socioeconomic position and racialized groups, not just socioeconomic inequities within racialized groups)
-  3a. We can observe this using a poisson model with and interaction term
-4) How does the racialized disparity vary across space? 
-  4a. We can observe this with a multilevel model with city/town level with a random slope for racialized group
-  4b. We can also control for city expenditures
+2) What is the racialized disparity in premature mortality?
+3) How does ABSM interact with individual level membership in racialized groups? (i.e., interactions between socioeconomic position and racialized groups, not just socioeconomic inequities within racialized groups)
 
-## Getting and Wrangling Your Data
-
-We are providing datasets for you to use throughout these case studies that have been wrangled and reshaped for your use, and we also provide code to show how you could go through that process on your own. Once you copy and run the code for your "Dependencies" you can skip ahead to the "Approach" section and follow along with the case study without issue.
+## Downloading and Wrangling Your Data
  
-You can look at whole datasets in RStudio using the `View()` command, or look at summaries of the datasets by simply typing the dataset name into the console.
+ :::: {.infobox .dataWrangling}
+In this section, we will show you how to download ACS data by querying the census API and how to manipulate the data into the format we need for the rest of the analysis. This case study investigates a constructed variable: the Index of Concentration at the Extremes (for high-income Non-Hispanic White people vs low-income people of Color). See if you can replicate the analysis with a different ACS variable!
+
+Note: Our outcome data cannot be shared due to privacy restrictions - for this case study, you will receive a pre-wrangled mortality dataset. Example code for how the wrangling could be done is included in this chapter's appendix.
+::::
 
 ### Dependencies
 
-You will need these packages throughout our case study
+You will need these packages throughout our case study:
 
-```{r dependencies, message = FALSE}
-#| eval=FALSE
-# Libraries - if this code does not run for you, you may need to run install.package("package_name")
-library(knitr)
-library(tidyverse)
-library(readxl)
-library(ggplot2)
-library(cowplot)
-library(tidycensus)
-library(tigris)
-options(tigris_use_cache = TRUE)
-library(sf)
-library(spdep)
-library(viridis) 
-library(Hmisc)
-library(fastDummies)
-library(lme4)
-library(INLA)
-library(broom)
+```{r dependencies, eval = FALSE}
+
+# "mission critical" packages
+library(tidyverse)      # A collection of packages used for tidy data wrangling
+library(readxl)         # A package for easy loading of Excel files
+library(ggplot2)        # The most popular and flexible visualization package in R
+library(tidycensus)     # A package to download data from the U.S. Census Bureau API
+library(tigris)         # A package to download shapefiles from the U.S. Census Bureau
+library(sf)             # A package with tools for simple (spatial) features
+library(INLA)           # A package that allows for bayesian inference
+inla.setOption(inla.mode = "experimental") # An option to use the experimental (beta version)
+library(spdep)          # A package to allow for spatial weighting in analyses
+
+# "nice-to-have" packages
+library(cowplot)        # A ggplot2 add-on that will allow us to add sub plots
+options(tigris_use_cache = TRUE) # An option within `tigris` to save what you download
+library(viridis)        # A package including color-blind friendly color pallettes
+library(Hmisc)          # A package containing useful functions for data analyses
+library(fastDummies)    # A package that includes functions to create indicator variables
+library(mapview)        # For interactive mapping, including topographical mapping
+library(purrr)          # A programming toolkit for R
+library(scales)         # An add-on package to help with scaling our maps appropriately
+library(broom)          # A package that allows for extraction and wrangling of model output
+
+# If this code does not run for you, you may need to run install.package("package_name")
 ```
 
 ### Your Health Outcome Data - Premature Mortality
 
-Your data have been aggregated from individual observations into death counts by age, racialized group, census tract, and town. When you get unrestricted mortality files from government sources for research, you will likely receive files with one observation per death. After you have geocoded these observations, you will need to aggregate them up to the level of interest for your analysis. This requires aggregation not only up to the census tract level, but also age groups so we can do an appropriate age standardization, racialized groups so we can stratify our analyses by these groups, and towns so we can explore a second areal level of analysis. Below is some code (for example) to turn a raw mortality file into what has been provided to you, by merging census tracts and towns to the data, and then aggregating into groups that align with the age and racialized groups that match your denominator data. The vast majority of our area-based social metrics come from the U.S. Census, so the most detailed level for analysis available will be the census tract (for which all the ABSMs are available, which is not the case for the census block group or census block). We can use the `tigris` package to download census tract geometries and the `sf` package to link our geocoded observations to the appropriate census tracts. Ideally when performing an analysis that might include two or more levels, the smaller level (here, census tracts) would be nested entirely within the larger level (towns). In Massachusetts though, there are several towns that have such small populations that they are smaller than census tracts. For these towns, we have created a crosswalk wherein small towns have been combined to create larger super towns. These super towns each make up one census tract, so that each super town in the analysis will now have at least one census tract nested within it for an eventual multilevel analysis
+This data have been aggregated from individual observations into death counts by year, age, sex, racialized group, census tract, and town. When you receive unrestricted mortality files from government agencies for research, you will likely encounter files with one observation per death. After you have geocoded these individual-level observations, you will need to aggregate them up to the geographic level of interest for your analysis. The data we use is also aggregated into groups that correspond to common variables on the ACS, so that they can be aligned to population counts that will be used as denominators as rates are calculated. Aggregation to specific age groups and racial categorizations allows us to perform key aspects of our analysis, such as age-standardization of the data, and stratification of analysis by racialized group.
 
-```{r wrangling_outcome, eval = FALSE}
-#| eval=FALSE
-# the raw mortality data, with the geocoded coordinates converted into spatial feature (sf) data
-ma_mort <- read_rds("ma_mort_geo.RDS") %>% 
-  st_as_sf(coords=c("lon","lat"), crs = 4269)
+:::: {.infobox}
+NOTE: the variable for town refers to a constructed variable. Ideally when performing an analysis that might include two or more levels, the smaller level (here, census tracts) would be nested entirely within the larger level (towns). In Massachusetts though, there are several towns that have such small populations that they are smaller than census tracts. For these towns, we have created a crosswalk wherein neighboring small towns have been combined to create larger "super towns". These super towns each make up one census tract, so that each super town in the analysis will now have at least one census tract "nested within it" in a multilevel analysis. If you are interested in attempting a multilevel analysis, this data may make good practice!
+::::
 
-# Importing tract shapefile using tigris package
-tracts_sf <- tracts(state = "25", year = "2010")
-
-# Linking Census Tracts and Tiny Towns File
-supertowns <- read_excel("ma ct to supertinytowns.xlsx", col_names = FALSE, col_types = "text") %>%
-  transmute(GEOID10 = ...1,
-            super_town = str_to_lower(...2))
-
-tracts_sf <- inner_join(tracts_sf,supertowns, by = "GEOID10")
-
-# Merging to geocoded mortality and dropping geometries
-# The geometries of a shapefile can be very unweildy and slow data wrangling commands. Since we only need them to map, we will remove them for now
-ma_mort_ct <- st_join(tracts_sf, ma_mort, left = FALSE) %>%
-  st_drop_geometry() %>%
-  arrange(id) %>%
-  mutate(super_town = case_when(GEOID10   == "25023500101" ~ "hull",
-                                super_town == "stt1"       ~ "charlemont-colrain-hawley-heath-monroe-rowe",
-                                super_town == "stt2"       ~ "cummington-middlefield-plainfield-worthington",
-                                super_town == "stt3"       ~ "monterey-tyringham",
-                                super_town == "stt4"       ~ "hardwick-new braintree",
-                                super_town == "stt5"       ~ "bernardston-gill-leyden",
-                                super_town == "stt6"       ~ "blandford-chester-granville-montgomery-russell-tolland",
-                                super_town == "stt7"       ~ "sunderland-whateley",
-                                super_town == "stt8"       ~ "becket-washington",
-                                super_town == "stt9"       ~ "holland-wales",
-                                super_town == "stt10"      ~ "peru-windsor",
-                                super_town == "stt11"      ~ "goshen-williamsburg",
-                                super_town == "stt12"      ~ "hancock-new ashford-richmond",
-                                super_town == "stt13"      ~ "leverett-new salem-shutesbury",
-                                super_town == "stt14"      ~ "sandisfield-otis",
-                                super_town == "stt15"      ~ "erving-warwick-wendell",
-                                super_town == "stt16"      ~ "buckland-shelburne",
-                                super_town == "stt17"      ~ "alford-egremont-mount washington",
-                                super_town == "stt18"      ~ "ashfield-conway",
-                                super_town == "stt19"      ~ "aquinnah-chilmark-gosnold-west tisbury",
-                                super_town == "stt20"      ~ "petersham-phillipston",
-                                super_town == "stt21"      ~ "florida-savoy",
-                                geo_town != super_town     ~ super_town,
-                                TRUE                       ~ geo_town)) %>% 
-  select(id, year, date,
-         age, sex, starts_with("race"), hisp, immigrant, starts_with("educ"),
-         contains("icd10"),
-         address, zip, starts_with("geo"), super_town, contains("type"), north, south, east, west,
-         GEOID10)
-
-# Aggregating the data by our selected variables of interest
-# Dropping deaths that occurred after age 65
-# Creating Category Totals foe each variable
-ma_mort_agg <- ma_mort_ct %>%
-  filter(age < 65) %>% 
-  mutate(age_cat = cut(age,
-                       breaks = c(-1,4,9,14,19,24,29,34,39,44,49,54,59,64),
-                       labels = c("0-4",  "5-9",  "10-14","15-19","20-24",
-                                  "25-29","30-34","35-39","40-44","45-49",
-                                  "50-54","55-59","60-64"))) %>%
-  select(-c(age, race, immigrant, educ_years, contains("icd10"),
-            contains("address"), zip, super_town, contains("type"),
-            north, south, east, west, date, hisp)) %>%
-  group_by(year,
-           age_cat,
-           sex,
-           race_group,
-           super_town,
-           GEOID10) %>%
-  summarise(deaths = n()) %>%
-  ungroup() %>%
-  pivot_wider(id_cols = c(year, GEOID10, super_town),
-              names_from = c("race_group","sex","age_cat"),
-              values_from = deaths,
-              names_sep = "__",
-              values_fill = 0) %>%
-  rowwise() %>%
-  mutate(`Total__Male__0-4` = sum(c_across(ends_with("__Male__0-4"))),
-         `Total__Male__5-9` = sum(c_across(ends_with("__Male__5-9"))),
-         `Total__Male__10-14` = sum(c_across(ends_with("__Male__10-14"))),
-         `Total__Male__15-19` = sum(c_across(ends_with("__Male__15-19"))),
-         `Total__Male__20-24` = sum(c_across(ends_with("__Male__20-24"))),
-         `Total__Male__25-29` = sum(c_across(ends_with("__Male__25-29"))),
-         `Total__Male__30-34` = sum(c_across(ends_with("__Male__30-34"))),
-         `Total__Male__35-39` = sum(c_across(ends_with("__Male__35-39"))),
-         `Total__Male__40-44` = sum(c_across(ends_with("__Male__40-44"))),
-         `Total__Male__45-49` = sum(c_across(ends_with("__Male__45-49"))),
-         `Total__Male__50-54` = sum(c_across(ends_with("__Male__50-54"))),
-         `Total__Male__55-59` = sum(c_across(ends_with("__Male__55-59"))),
-         `Total__Male__60-64` = sum(c_across(ends_with("__Male__60-64"))),
-          Total__Male__Total  = sum(c_across(starts_with("Total__Male"))),
-
-         `Total__Female__0-4` = sum(c_across(ends_with("__Female__0-4"))),
-         `Total__Female__5-9` = sum(c_across(ends_with("__Female__5-9"))),
-         `Total__Female__10-14` = sum(c_across(ends_with("__Female__10-14"))),
-         `Total__Female__15-19` = sum(c_across(ends_with("__Female__15-19"))),
-         `Total__Female__20-24` = sum(c_across(ends_with("__Female__20-24"))),
-         `Total__Female__25-29` = sum(c_across(ends_with("__Female__25-29"))),
-         `Total__Female__30-34` = sum(c_across(ends_with("__Female__30-34"))),
-         `Total__Female__35-39` = sum(c_across(ends_with("__Female__35-39"))),
-         `Total__Female__40-44` = sum(c_across(ends_with("__Female__40-44"))),
-         `Total__Female__45-49` = sum(c_across(ends_with("__Female__45-49"))),
-         `Total__Female__50-54` = sum(c_across(ends_with("__Female__50-54"))),
-         `Total__Female__55-59` = sum(c_across(ends_with("__Female__55-59"))),
-         `Total__Female__Total` = sum(c_across(starts_with("Total__Female"))),
-         `Total__Female__60-64` = sum(c_across(ends_with("__Female__60-64"))),
-          Total__Total__Total  = `Total__Female__Total` + `Total__Male__Total`,
-
-         `Non-Hispanic Black__Male__35-44` = `Non-Hispanic Black__Male__35-39` + `Non-Hispanic Black__Male__40-44`,
-         `Non-Hispanic Black__Male__45-54` = `Non-Hispanic Black__Male__45-49` + `Non-Hispanic Black__Male__50-54`,
-         `Non-Hispanic Black__Male__55-64` = `Non-Hispanic Black__Male__55-59` + `Non-Hispanic Black__Male__60-64`,
-         `Non-Hispanic Black__Male__Total` = sum(c_across(starts_with("Non-Hispanic Black__Male"))),
-
-         `Non-Hispanic Black__Female__35-44` = `Non-Hispanic Black__Female__35-39` + `Non-Hispanic Black__Female__40-44`,
-         `Non-Hispanic Black__Female__45-54` = `Non-Hispanic Black__Female__45-49` + `Non-Hispanic Black__Female__50-54`,
-         `Non-Hispanic Black__Female__55-64` = `Non-Hispanic Black__Female__55-59` + `Non-Hispanic Black__Female__60-64`,
-         `Non-Hispanic Black__Female__Total` = sum(c_across(starts_with("Non-Hispanic Black__Female"))),
-         `Non-Hispanic Black__Total__Total` = `Non-Hispanic Black__Female__Total` + `Non-Hispanic Black__Male__Total`,
-
-         `Non-Hispanic Native American, Alaskan Native, Other__Male__35-44` = `Non-Hispanic Native American, Alaskan Native, Other__Male__35-39` + `Non-Hispanic Native American, Alaskan Native, Other__Male__40-44`,
-         `Non-Hispanic Native American, Alaskan Native, Other__Male__45-54` = `Non-Hispanic Native American, Alaskan Native, Other__Male__45-49` + `Non-Hispanic Native American, Alaskan Native, Other__Male__50-54`,
-         `Non-Hispanic Native American, Alaskan Native, Other__Male__55-64` = `Non-Hispanic Native American, Alaskan Native, Other__Male__55-59` + `Non-Hispanic Native American, Alaskan Native, Other__Male__60-64`,
-         `Non-Hispanic Native American, Alaskan Native, Other__Male__Total` = sum(c_across(starts_with("Non-Hispanic Native American, Alaskan Native, Other__Male"))),
-
-         `Non-Hispanic Native American, Alaskan Native, Other__Female__35-44` = `Non-Hispanic Native American, Alaskan Native, Other__Female__35-39` + `Non-Hispanic Native American, Alaskan Native, Other__Female__40-44`,
-         `Non-Hispanic Native American, Alaskan Native, Other__Female__45-54` = `Non-Hispanic Native American, Alaskan Native, Other__Female__45-49` + `Non-Hispanic Native American, Alaskan Native, Other__Female__50-54`,
-         `Non-Hispanic Native American, Alaskan Native, Other__Female__55-64` = `Non-Hispanic Native American, Alaskan Native, Other__Female__55-59` + `Non-Hispanic Native American, Alaskan Native, Other__Female__60-64`,
-         `Non-Hispanic Native American, Alaskan Native, Other__Female__Total` = sum(c_across(starts_with("Non-Hispanic Native American, Alaskan Native, Other__Female"))),
-         `Non-Hispanic Native American, Alaskan Native, Other__Total__Total` = `Non-Hispanic Native American, Alaskan Native, Other__Female__Total` + `Non-Hispanic Native American, Alaskan Native, Other__Male__Total`,
-
-         `Non-Hispanic White__Male__35-44` = `Non-Hispanic White__Male__35-39` + `Non-Hispanic White__Male__40-44`,
-         `Non-Hispanic White__Male__45-54` = `Non-Hispanic White__Male__45-49` + `Non-Hispanic White__Male__50-54`,
-         `Non-Hispanic White__Male__55-64` = `Non-Hispanic White__Male__55-59` + `Non-Hispanic White__Male__60-64`,
-         `Non-Hispanic White__Male__Total` = sum(c_across(starts_with("Non-Hispanic White__Male"))),
-
-         `Non-Hispanic White__Female__35-44` = `Non-Hispanic White__Female__35-39` + `Non-Hispanic White__Female__40-44`,
-         `Non-Hispanic White__Female__45-54` = `Non-Hispanic White__Female__45-49` + `Non-Hispanic White__Female__50-54`,
-         `Non-Hispanic White__Female__55-64` = `Non-Hispanic White__Female__55-59` + `Non-Hispanic White__Female__60-64`,
-         `Non-Hispanic White__Female__Total` = sum(c_across(starts_with("Non-Hispanic White__Female"))),
-         `Non-Hispanic White__Total__Total` = `Non-Hispanic White__Female__Total` + `Non-Hispanic White__Male__Total`,
-
-         `Non-Hispanic Asian or Pacific Islander__Male__35-44` = `Non-Hispanic Asian or Pacific Islander__Male__35-39` + `Non-Hispanic Asian or Pacific Islander__Male__40-44`,
-         `Non-Hispanic Asian or Pacific Islander__Male__45-54` = `Non-Hispanic Asian or Pacific Islander__Male__45-49` + `Non-Hispanic Asian or Pacific Islander__Male__50-54`,
-         `Non-Hispanic Asian or Pacific Islander__Male__55-64` = `Non-Hispanic Asian or Pacific Islander__Male__55-59` + `Non-Hispanic Asian or Pacific Islander__Male__60-64`,
-         `Non-Hispanic Asian or Pacific Islander__Male__Total` = sum(c_across(starts_with("Non-Hispanic Asian or Pacific Islander__Male"))),
-
-         `Non-Hispanic Asian or Pacific Islander__Female__35-44` = `Non-Hispanic Asian or Pacific Islander__Female__35-39` + `Non-Hispanic Asian or Pacific Islander__Female__40-44`,
-         `Non-Hispanic Asian or Pacific Islander__Female__45-54` = `Non-Hispanic Asian or Pacific Islander__Female__45-49` + `Non-Hispanic Asian or Pacific Islander__Female__50-54`,
-         `Non-Hispanic Asian or Pacific Islander__Female__55-64` = `Non-Hispanic Asian or Pacific Islander__Female__55-59` + `Non-Hispanic Asian or Pacific Islander__Female__60-64`,
-         `Non-Hispanic Asian or Pacific Islander__Female__Total` = sum(c_across(starts_with("Non-Hispanic Asian or Pacific Islander__Female"))),
-         `Non-Hispanic Asian or Pacific Islander__Female__Total__Total` = `Non-Hispanic Asian or Pacific Islander__Female__Total` + `Non-Hispanic Asian or Pacific Islander__Male__Total`,
-
-         `Hispanic__Male__35-44` = `Hispanic__Male__35-39` + `Hispanic__Male__40-44`,
-         `Hispanic__Male__45-54` = `Hispanic__Male__45-49` + `Hispanic__Male__50-54`,
-         `Hispanic__Male__55-64` = `Hispanic__Male__55-59` + `Hispanic__Male__60-64`,
-         `Hispanic__Male__Total` = sum(c_across(starts_with("Hispanic__Male"))),
-         `Hispanic__Female__35-44` = `Hispanic__Female__35-39` + `Hispanic__Female__40-44`,
-         `Hispanic__Female__45-54` = `Hispanic__Female__45-49` + `Hispanic__Female__50-54`,
-         `Hispanic__Female__55-64` = `Hispanic__Female__55-59` + `Hispanic__Female__60-64`,
-         `Hispanic__Female__Total` = sum(c_across(starts_with("Hispanic__Female"))),
-         `Hispanic__Total__Total` = `Hispanic__Female__Total` + `Hispanic__Male__Total`) %>%
-  ungroup() %>%
-  pivot_longer(cols = `Non-Hispanic White__Male__0-4`:`Hispanic__Total__Total`,
-               names_to = c("race_group","sex","age_cat"),
-               names_sep = "__",
-               values_to = "deaths")
-               
-ma_mort_agg
+```{r load mortality, eval = FALSE}
+ma_mort_ct <- readRDS("your_file_path/ma_mort_ct.RDS")
 ```
 
-```{r head_ma_mort_agg, echo = FALSE}
-head_ma_mort_agg <- read_rds("data/07-premature-mortality/head_ma_mort_agg.rds")
-head_ma_mort_agg
-```
+### Your Denominator Data and ABSM
 
-### Your Denominator Data and ABSM’s
+We download population data (to use as denominators to calculate mortality rates) and ABSMs from the U.S. Census Bureau API using the `tidycensus` package. This requires registering with the Bureau for an API key. The key is redacted here, but you can get your own [from the Bureau](https://api.census.gov/data/key_signup.html). The ABSM we will use for this analysis is the Index of Concentration at the Extremes for Racialized Economic Segregation (ICE), which quantifies how persons in a specified area are concentrated into the top vs bottom of a specified societal distribution. The distribution we will construct is comparing high-income Non-Hispanic White people to low-income people of Color.
 
-We download population data to use as denominators in our rates and ABSMs from the U.S. Census Bureau using the tidycensus package. This requires registering with the U.S. Census for an API key. The key is redacted here, but you can get your own from https://api.census.gov/data/key_signup.html. The ABSMs we will use for this analysis are percentage of the population in poverty, the Index of Concentration at the Extremes (ICE) which quantifies how persons in a specified area are concentrated into the top vs bottom of a specified societal distribution, and the ATSDR/CDC Social Vulnerability Index, which employs data on poverty, transportation access, crowded housing and other social variables to generate a measure of vulnerability for communities.
-
-```{r wrangling_denominators, eval = FALSE}
+```{r wrangling denominators, eval = FALSE}
 # Population Denominators
-ma_demo_acs <- vector(mode = "list", length = 5)
-names(ma_demo_acs) <- c(2013,2014,2015,2016,2017)
-for (nm in names(ma_demo_acs)) {
-  ma_demo_acs[[nm]] <- get_acs(geography = "tract",
-                               # These are the myriad variables that make up the variables we intend to use
-                               variables = c("B01001_003","B01001_004","B01001_005","B01001_006",
-                                             "B01001_007","B01001_008","B01001_009","B01001_010",
-                                             "B01001_011","B01001_012","B01001_013","B01001_014",
-                                             "B01001_015","B01001_016","B01001_017","B01001_018",
-                                             "B01001_019","B01001_027","B01001_028","B01001_029",
-                                             "B01001_030","B01001_031","B01001_032","B01001_033",
-                                             "B01001_034","B01001_035","B01001_036","B01001_037",
-                                             "B01001_038","B01001_039","B01001_040","B01001_041",
-                                             "B01001_042","B01001_043", 
-                                             "B01001B_003","B01001B_004","B01001B_005","B01001B_006",
-                                             "B01001B_007","B01001B_008","B01001B_009","B01001B_010",
-                                             "B01001B_011","B01001B_012","B01001B_013","B01001B_018",
-                                             "B01001B_019","B01001B_020","B01001B_021","B01001B_022",
-                                             "B01001B_023","B01001B_024","B01001B_025","B01001B_026",
-                                             "B01001B_027","B01001B_028", 
-                                             "B01001C_003","B01001C_004","B01001C_005","B01001C_006",
-                                             "B01001C_007","B01001C_008","B01001C_009","B01001C_010",
-                                             "B01001C_011","B01001C_012","B01001C_013","B01001C_018",
-                                             "B01001C_019","B01001C_020","B01001C_021","B01001C_022",
-                                             "B01001C_023","B01001C_024","B01001C_025","B01001C_026",
-                                             "B01001C_027","B01001C_028", 
-                                             "B01001D_003","B01001D_004","B01001D_005","B01001D_006",
-                                             "B01001D_007","B01001D_008","B01001D_009","B01001D_010",
-                                             "B01001D_011","B01001D_012","B01001D_013","B01001D_018",
-                                             "B01001D_019","B01001D_020","B01001D_021","B01001D_022",
-                                             "B01001D_023","B01001D_024","B01001D_025","B01001D_026",
-                                             "B01001D_027","B01001D_028", 
-                                             "B01001E_003","B01001E_004","B01001E_005","B01001E_006",
-                                             "B01001E_007","B01001E_008","B01001E_009","B01001E_010",
-                                             "B01001E_011","B01001E_012","B01001E_013","B01001E_018",
-                                             "B01001E_019","B01001E_020","B01001E_021","B01001E_022",
-                                             "B01001E_023","B01001E_024","B01001E_025","B01001E_026",
-                                             "B01001E_027","B01001E_028", 
-                                             "B01001H_003","B01001H_004","B01001H_005","B01001H_006",
-                                             "B01001H_007","B01001H_008","B01001H_009","B01001H_010",
-                                             "B01001H_011","B01001H_012","B01001H_013","B01001H_018",
-                                             "B01001H_019","B01001H_020","B01001H_021","B01001H_022",
-                                             "B01001H_023","B01001H_024","B01001H_025","B01001H_026",
-                                             "B01001H_027", "B01001H_028", 
-                                             "B01001I_003","B01001I_004","B01001I_005","B01001I_006",
-                                             "B01001I_007","B01001I_008","B01001I_009","B01001I_010",
-                                             "B01001I_011","B01001I_012","B01001I_013","B01001I_018",
-                                             "B01001I_019","B01001I_020","B01001I_021","B01001I_022",
-                                             "B01001I_023","B01001I_024","B01001I_025","B01001I_026",
-                                             "B01001I_027","B01001I_028"), 
+ma_denominator <- vector(mode = "list", length = 5)     # Create an empty list to store our data in
+names(ma_denominator) <- c(2013,2014,2015,2016,2017)    # Name the indices of the list for the data years
+
+# The following code creates a loop, and then runs the tidycensus package get_acs() function to draw down population counts for a list of variables (using their Census Bureau designations). You can see the full list of variables at https://api.census.gov/data/2019/acs/acs5/variables.html.
+
+for (nm in names(ma_denominator)) {                   
+  ma_denominator[[nm]] <- get_acs(geography = "tract",
+                            variables = c("B01001_003","B01001_004","B01001_005","B01001_006",
+                                          "B01001_007","B01001_008","B01001_009","B01001_010",
+                                          "B01001_011","B01001_012","B01001_013","B01001_014",
+                                          "B01001_015","B01001_016","B01001_017","B01001_018",
+                                          "B01001_019","B01001_027","B01001_028","B01001_029",
+                                          "B01001_030","B01001_031","B01001_032","B01001_033",
+                                          "B01001_034","B01001_035","B01001_036","B01001_037",
+                                          "B01001_038","B01001_039","B01001_040","B01001_041",
+                                          "B01001_042","B01001_043",
+                                          "B01001B_003","B01001B_004","B01001B_005",
+                                          "B01001B_006","B01001B_007","B01001B_008",
+                                          "B01001B_009","B01001B_010","B01001B_011",
+                                          "B01001B_012","B01001B_013","B01001B_018",
+                                          "B01001B_019","B01001B_020","B01001B_021",
+                                          "B01001B_022","B01001B_023","B01001B_024",
+                                          "B01001B_025","B01001B_026","B01001B_027",
+                                          "B01001B_028",
+                                          "B01001H_003","B01001H_004","B01001H_005",
+                                          "B01001H_006","B01001H_007","B01001H_008",
+                                          "B01001H_009","B01001H_010","B01001H_011",
+                                          "B01001H_012","B01001H_013","B01001H_018",
+                                          "B01001H_019","B01001H_020","B01001H_021",
+                                          "B01001H_022","B01001H_023","B01001H_024",
+                                          "B01001H_025","B01001H_026","B01001H_027",
+                                          "B01001H_028"), 
                                year = as.numeric(nm) + 2,
                                output = "wide",
                                state = "MA",
-                               geometry = FALSE,
+                               geometry = FALSE, # you can opt to download spatial information here
+                               key = "your_key_here",
                                moe_level = 95,
                                survey = "acs5") %>%
     rowwise() %>%
+
     # Here, we will transform those variables into variables that align better with our outcome data
     mutate(year = as.numeric(nm),
            GEOID10 = GEOID,
@@ -360,57 +187,7 @@ for (nm in names(ma_demo_acs)) {
            `black_female_55-64` = B01001B_028E,
            black_female_total = sum(c_across(starts_with("black_female"))),
            black_total_total = black_male_total + black_female_total,
-           # native Male Age Groups
-           `native_male_00-04` = B01001C_003E,
-           `native_male_05-09` = B01001C_004E,
-           `native_male_10-14` = B01001C_005E,
-           `native_male_15-19` = B01001C_006E + B01001C_007E,
-           `native_male_20-24` = B01001C_008E,
-           `native_male_25-29` = B01001C_009E,
-           `native_male_30-34` = B01001C_010E,
-           `native_male_35-44` = B01001C_011E,
-           `native_male_45-54` = B01001C_012E,
-           `native_male_55-64` = B01001C_013E,
-           native_male_total  = sum(c_across(starts_with("native_male"))),
-           # native Female Age Groups
-           `native_female_00-04` = B01001C_018E,
-           `native_female_05-09` = B01001C_019E,
-           `native_female_10-14` = B01001C_020E,
-           `native_female_15-19` = B01001C_021E + B01001C_022E,
-           `native_female_20-24` = B01001C_023E,
-           `native_female_25-29` = B01001C_024E,
-           `native_female_30-34` = B01001C_025E,
-           `native_female_35-44` = B01001C_026E,
-           `native_female_45-54` = B01001C_027E,
-           `native_female_55-64` = B01001C_028E,
-           native_female_total = sum(c_across(starts_with("native_female"))),
-           native_total_total = native_male_total + native_female_total,
-           # Asian PI Male Age Groups
-           `asian_male_00-04` = B01001D_003E + B01001E_003E,
-           `asian_male_05-09` = B01001D_004E + B01001E_004E,
-           `asian_male_10-14` = B01001D_005E + B01001E_005E,
-           `asian_male_15-19` = B01001D_006E + B01001E_006E + B01001D_007E + B01001E_007E,
-           `asian_male_20-24` = B01001D_008E + B01001E_008E,
-           `asian_male_25-29` = B01001D_009E + B01001E_009E,
-           `asian_male_30-34` = B01001D_010E + B01001E_010E,
-           `asian_male_35-44` = B01001D_011E + B01001E_011E,
-           `asian_male_45-54` = B01001D_012E + B01001E_012E,
-           `asian_male_55-64` = B01001D_013E + B01001E_013E,
-           asian_male_total  = sum(c_across(starts_with("asian_male"))),
-           # Asian PI Female Age Groups
-           `asian_female_00-04` = B01001D_018E + B01001E_018E,
-           `asian_female_05-09` = B01001D_019E + B01001E_019E,
-           `asian_female_10-14` = B01001D_020E + B01001E_020E,
-           `asian_female_15-19` = B01001D_021E + B01001E_021E + B01001D_022E + B01001E_022E,
-           `asian_female_20-24` = B01001D_023E + B01001E_023E,
-           `asian_female_25-29` = B01001D_024E + B01001E_024E,
-           `asian_female_30-34` = B01001D_025E + B01001E_025E,
-           `asian_female_35-44` = B01001D_026E + B01001E_026E,
-           `asian_female_45-54` = B01001D_027E + B01001E_027E,
-           `asian_female_55-64` = B01001D_028E + B01001E_028E,
-           asian_female_total = sum(c_across(starts_with("asian_female"))),
-           asian_total_total = asian_male_total + asian_female_total,
-           # White Male Age Groups
+           # Non-Hispanic White Male Age Groups
            `white_male_00-04` = B01001H_003E,
            `white_male_05-09` = B01001H_004E,
            `white_male_10-14` = B01001H_005E,
@@ -422,7 +199,7 @@ for (nm in names(ma_demo_acs)) {
            `white_male_45-54` = B01001H_012E,
            `white_male_55-64` = B01001H_013E,
            white_male_total  = sum(c_across(starts_with("white_male"))),
-           # White Female Age Groups
+           # Non-Hispanic White Female Age Groups
            `white_female_00-04` = B01001H_018E,
            `white_female_05-09` = B01001H_019E,
            `white_female_10-14` = B01001H_020E,
@@ -434,40 +211,12 @@ for (nm in names(ma_demo_acs)) {
            `white_female_45-54` = B01001H_027E,
            `white_female_55-64` = B01001H_028E,
            white_female_total = sum(c_across(starts_with("white_female"))),
-           white_total_total = white_male_total + white_female_total,
-           # Hispanic Male Age Groups
-           `hisp_male_00-04` = B01001I_003E,
-           `hisp_male_05-09` = B01001I_004E,
-           `hisp_male_10-14` = B01001I_005E,
-           `hisp_male_15-19` = B01001I_006E + B01001I_007E,
-           `hisp_male_20-24` = B01001I_008E,
-           `hisp_male_25-29` = B01001I_009E,
-           `hisp_male_30-34` = B01001I_010E,
-           `hisp_male_35-44` = B01001I_011E,
-           `hisp_male_45-54` = B01001I_012E,
-           `hisp_male_55-64` = B01001I_013E,
-           `hisp_male_total` = sum(c_across(starts_with("hisp_male"))),
-           # HispaniI Female Age Groups
-           `hisp_female_00-04` = B01001I_018E,
-           `hisp_female_05-09` = B01001I_019E,
-           `hisp_female_10-14` = B01001I_020E,
-           `hisp_female_15-19` = B01001I_021E + B01001I_022E,
-           `hisp_female_20-24` = B01001I_023E,
-           `hisp_female_25-29` = B01001I_024E,
-           `hisp_female_30-34` = B01001I_025E,
-           `hisp_female_35-44` = B01001I_026E,
-           `hisp_female_45-54` = B01001I_027E,
-           `hisp_female_55-64` = B01001I_028E,
-           hisp_female_total = sum(c_across(starts_with("hisp_female"))),
-           hisp_total_total = hisp_male_total + hisp_female_total) %>%
+           white_total_total = white_male_total + white_female_total) %>%
     ungroup() %>%
     select(-starts_with("B0")) %>%
-    pivot_longer(cols      = c(starts_with("total"),
-                               starts_with("hisp"),
-                               starts_with("black"),
-                               starts_with("native"),
-                               starts_with("white"),
-                               starts_with("asian")),
+    pivot_longer(cols = c(starts_with("total"),
+                          starts_with("black"),
+                          starts_with("white")),
                  names_to  = c("race_group", "sex", "age_cat"),
                  names_sep = "_",
                  values_to = "population") %>%
@@ -477,293 +226,198 @@ for (nm in names(ma_demo_acs)) {
                                  TRUE               ~ age_cat),
            sex       = str_to_title(sex),
            race_group = case_when(race_group == "white"  ~ "Non-Hispanic White",
-                                  race_group == "black"  ~ "Non-Hispanic Black",
-                                  race_group == "native" ~ "Non-Hispanic Native American, Alaskan Native, Other",
-                                  race_group == "asian"  ~ "Non-Hispanic Asian or Pacific Islander",
-                                  race_group == "hisp"   ~ "Hispanic",
+                                  race_group == "black"  ~ "Black",
                                   race_group == "total"  ~ "Total"))
-}
+}           
+
 # Combining all 5 years into one dataset
-ma_demo_acs <- rbind(ma_demo_acs[[1]],
-                     ma_demo_acs[[2]],
-                     ma_demo_acs[[3]],
-                     ma_demo_acs[[4]],
-                     ma_demo_acs[[5]]) %>%
+ma_denominator <- rbind(ma_denominator[[1]],
+                     ma_denominator[[2]],
+                     ma_denominator[[3]],
+                     ma_denominator[[4]],
+                     ma_denominator[[5]]) %>%
   select(year, GEOID10, GEO_NAME = NAME, everything(), -GEOID)
+
+# saveRDS(ma_denominator, file = "ma_denominator.RDS")
 ```
 
-```{r head_ma_demo_acs, echo = FALSE}
-head_ma_demo_acs <- read_rds("data/07-premature-mortality/head_ma_demo_acs.rds")
-head_ma_demo_acs
-```
+```{r wrangling absm, eval = FALSE}
+# Area Based Social Metric
+ma_absm <- vector(mode = "list", length = 5)
+names(ma_absm) <- c(2013,2014,2015,2016,2017)
 
-```{r wrandling_absm, eval = FALSE}
-# Area Based Social Metrics
-ma_absm_acs <- vector(mode = "list", length = 5)
-names(ma_absm_acs) <- c(2013,2014,2015,2016,2017)
-for (nm in names(ma_absm_acs)) {
-  ma_absm_acs[[nm]] <- get_acs(geography = "tract",
-                               variables = c("B01003_001E","B02001_001E","B02001_002E","B02001_003E",
-                                             "B02001_004E","B02001_005E","B02001_006E","B02001_007E",
-                                             "B02001_008E","B02001_009E","B02001_010E","B03001_001E",
-                                             "B03001_003","B01001H_001E"), 
-                               year = as.numeric(nm) + 2,
-                               output = "wide",
-                               state = "MA",
-                               geometry = FALSE,
-                               moe_level = 95,
-                               survey = "acs5",
-                               cache_table = TRUE) %>%
+for (nm in names(ma_absm)) {
+  ma_absm[[nm]] <- get_acs(geography = "tract",
+                           variables = c("B01003_001E",
+                                         "B19001_001E",
+                                         "B19001_002E","B19001_003E","B19001_004E","B19001_005E",
+                                         "B19001_014E","B19001_015E","B19001_016E","B19001_017E",
+                                         "B19001H_002E","B19001H_003E","B19001H_004E","B19001H_005E",
+                                         "B19001H_014E","B19001H_015E","B19001H_016E","B19001H_017E"), 
+                           year = as.numeric(nm) + 2,
+                           output = "wide",
+                           state = "MA",
+                           geometry = FALSE,
+                           key = "4407a63721e192545e1e2a2fc7f6920477b10108",
+                           moe_level = 95,
+                           survey = "acs5",
+                           cache_table = TRUE) %>%
     # Transforming ACS variables into the ABSM's we want to use for our dataset
     mutate(GEOID10 = GEOID,
-           percBlack = B02001_003E/B02001_001E,
-           percHisp = B03001_003E/B03001_001E,
            pop_total = B01003_001E,
-           pop_white = B02001_002E,
-           pop_black = B02001_003E,
-           pop_amind = B02001_004E,
-           pop_api = B02001_005E + B02001_006E,
-           pop_hisp = B03001_003E,
-           pop_wnh = B01001H_001E,
-           percColor = (B01003_001E - B01001H_001E)/B01003_001E,
-           year = as.numeric(nm)) %>%
-    select(GEOID10, percBlack, percHisp, percColor, pop_total,
-           pop_white, pop_black, pop_amind, pop_api,
-           pop_hisp, pop_wnh, year)
-  
-  # Downloading tables from the ACS in addition to those variables
-
-    raw.white <- get_acs(geography="tract", table="B19001A", state="MA", year= as.numeric(nm) + 2, 
-                         output="wide", cache_table=TRUE)
-    raw.black <- get_acs(geography="tract", table="B19001B", state="MA", year= as.numeric(nm) + 2, 
-                         output="wide", cache_table=TRUE)
-    raw.all   <- get_acs(geography="tract", table="B19001",  state="MA", year= as.numeric(nm) + 2, 
-                         output="wide", cache_table=TRUE)
-    raw.pov   <- get_acs(geography="tract", table="B17001",  state="MA", year= as.numeric(nm) + 2, 
-                         output="wide", cache_table=TRUE)
-    raw.crowd <- get_acs(geography="tract", table="B25014",  state="MA", year= as.numeric(nm) + 2, 
-                         output="wide", cache_table=TRUE)
-    raw.wnh   <- get_acs(geography="tract", table="B19001H", state="MA", year= as.numeric(nm) + 2, 
-                         output="wide", cache_table=TRUE)
-    
-    d.merge <- left_join(raw.white, raw.black, by="GEOID") %>%
-      left_join(raw.wnh, by="GEOID") %>%
-      left_join(raw.all, by="GEOID") %>%
-      left_join(raw.pov, by="GEOID") %>%
-      left_join(raw.crowd, by="GEOID") %>%
-      select(c("GEOID","B19001_001E","B19001_002E","B19001_003E","B19001_004E","B19001_005E",
-               "B19001_014E","B19001_015E","B19001_016E","B19001_017E","B19001A_014E",
-               "B19001A_015E","B19001A_016E","B19001A_017E","B19001B_002E","B19001B_003E",
-               "B19001B_004E","B19001B_005E","B19001H_002E","B19001H_003E","B19001H_004E",
-               "B19001H_005E","B19001H_014E","B19001H_015E","B19001H_016E","B19001H_017E",
-               "B17001_001E","B17001_002E","B25014_001E", "B25014_005E","B25014_006E",
-               "B25014_007E","B25014_011E","B25014_012E","B25014_013E")) %>% 
-      mutate(ICEwbinc=((B19001A_014E + B19001A_015E + B19001A_016E + B19001A_017E) -
-                         (B19001B_002E + B19001B_003E + B19001B_004E + B19001B_005E))/B19001_001E,
-             ICEwnhinc=((B19001H_014E + B19001H_015E + B19001H_016E + B19001H_017E) -
-                          (B19001_002E + B19001_003E + B19001_004E + B19001_005E -
-                             B19001H_002E - B19001H_003E - B19001H_004E - B19001H_005E))/B19001_001E,
-             ice_wnh_highinc= (B19001H_014E + B19001H_015E + B19001H_016E + B19001H_017E)/B19001_001E,
-             ice_poc_lowinc = (B19001_002E + B19001_003E + B19001_004E + B19001_005E -
-                                 B19001H_002E - B19001H_003E - B19001H_004E - B19001H_005E)/B19001_001E,
-             ice_wnh_lowinc = (B19001H_002E + B19001H_003E + B19001H_004E + B19001H_005E)/B19001_001E,
-             ice_poc_highinc = (B19001_014E + B19001_015E + B19001_016E + B19001_017E -
-                                  B19001H_014E - B19001H_015E - B19001H_016E - B19001H_017E)/B19001_001E,
-             tractPov = B17001_002E/B17001_001E,
-             tractCrowd = (B25014_005E + B25014_006E + B25014_007E +
-                             B25014_011E + B25014_012E + B25014_013E) / B25014_001E,
-             tractSevereCrowd = (B25014_006E + B25014_007E +
-                                   B25014_012E + B25014_013E) / B25014_001E,
-             year = as.numeric(nm)) %>%
-     select(GEOID10 = GEOID, ICEwbinc, ICEwnhinc, tractPov, tractCrowd, tractSevereCrowd, year,
-            ice_wnh_highinc, ice_wnh_lowinc, ice_poc_lowinc, ice_poc_highinc)
-    
-    ma_absm_acs[[nm]] <- left_join(ma_absm_acs[[nm]], d.merge, by=c("GEOID10","year"))
+           ICEwnhinc = ((B19001H_014E + B19001H_015E + B19001H_016E + B19001H_017E) - 
+                        (B19001_002E + B19001_003E + B19001_004E + B19001_005E - 
+                         B19001H_002E - B19001H_003E - B19001H_004E - B19001H_005E))/B19001_001E,           year = as.numeric(nm)) %>%
+    select(GEOID10, pop_total, ICEwnhinc, year)
 }
 
-ma_absm_acs <- rbind(ma_absm_acs[[1]],
-                     ma_absm_acs[[2]],
-                     ma_absm_acs[[3]],
-                     ma_absm_acs[[4]],
-                     ma_absm_acs[[5]]) %>%
+ma_absm <- rbind(ma_absm[[1]],
+                 ma_absm[[2]],
+                 ma_absm[[3]],
+                 ma_absm[[4]],
+                 ma_absm[[5]]) %>%
   select(year, GEOID10, everything())
 
-# Downloading and formatting the SVI data
-
-svi.tract <- read.csv("data/07-premature-mortality/ma_svi.csv") %>%
-  mutate(GEOID10=ifelse(FIPS<9999999999, paste0("0",FIPS), paste0(FIPS)),
-         svi_themes = ifelse(RPL_THEMES==-999, NA, RPL_THEMES),
-         svi_theme1 = ifelse(RPL_THEME1==-999, NA, RPL_THEME1),
-         svi_theme2 = ifelse(RPL_THEME2==-999, NA, RPL_THEME2),
-         svi_theme3 = ifelse(RPL_THEME3==-999, NA, RPL_THEME3),
-         svi_theme4 = ifelse(RPL_THEME4==-999, NA, RPL_THEME4)) %>%
-  dplyr::select(GEOID10, svi_themes, svi_theme1, svi_theme2, svi_theme3, svi_theme4) %>%
-  filter(substr(GEOID10,1,2)=="25")
-
-
-# Creating a dataset for visualization and analysis from the weighted ABSM over all 5 years
-ma_absm_sum <- ma_absm_acs %>% 
+# Weighting the ICE measure across all 5 years for visualization and analysis 
+ma_absm_sum <- ma_absm %>% 
   group_by(GEOID10) %>% 
   mutate(wt = pop_total / sum(pop_total, na.rm = TRUE)) %>% 
-  summarise(percBlack        = mean(percBlack, wt = wt, na.rm = TRUE),
-            percHisp         = mean(percHisp,  wt = wt, na.rm = TRUE),
-            percColor        = mean(percColor, wt = wt, na.rm = TRUE),
-            ICEwbinc         = mean(ICEwbinc, wt = wt, na.rm = TRUE),
-            ICEwnhinc        = mean(ICEwnhinc, wt = wt, na.rm = TRUE),
-            tractPov         = mean(tractPov, wt = wt, na.rm = TRUE),
-            tractCrowd       = mean(tractCrowd, wt = wt, na.rm = TRUE),
-            tractSevereCrowd = mean(tractSevereCrowd, wt = wt, na.rm = TRUE),
-            ice_wnh_highinc  = mean(ice_wnh_highinc, wt = wt, na.rm = TRUE),
-            ice_wnh_lowinc   = mean(ice_wnh_lowinc, wt = wt, na.rm = TRUE),
-            ice_poc_lowinc   = mean(ice_poc_lowinc, wt = wt, na.rm = TRUE),
-            ice_poc_highinc  = mean(ice_poc_highinc, wt = wt, na.rm = TRUE),
+  summarise(ICEwnhinc        = mean(ICEwnhinc, wt = wt, na.rm = TRUE),
             pop_total        = sum(pop_total, na.rm = TRUE)) %>% 
-  left_join(svi.tract, by="GEOID10") %>%
-  mutate(pov_cat=factor(case_when(0<=tractPov  & tractPov<0.05 ~ "0-4.9%",
-                                   0.05<=tractPov & tractPov<0.10 ~ "5-9.9%",
-                                   0.10<=tractPov & tractPov<0.2 ~ "10-19.9%",
-                                   0.20<=tractPov & tractPov<=1 ~ "20-100%",
-                                   TRUE ~ NA_character_), 
-                         levels=c("0-4.9%","5-9.9%","10-19.9%","20-100%")),
-         pov_qt=cut(tractPov, wtd.quantile(tractPov, weights=pop_total,
-                                            probs=c(0,0.2,0.4,0.6,0.8,1)),
-                     na.rm=TRUE, 
-                     include.lowest=T),
-         ICE_qt=cut(ICEwnhinc, wtd.quantile(ICEwnhinc, weights=pop_total,
+  mutate(ICE_qt=cut(ICEwnhinc, wtd.quantile(ICEwnhinc, weights=pop_total,
                                                 probs=c(0,0.2,0.4,0.6,0.8,1)),
-                        na.rm=TRUE, 
-                        include.lowest=T),
-         perc_Color_qt = cut(percColor, wtd.quantile(percColor, weights=pop_total,
-                                                  probs=c(0,0.2,0.4,0.6,0.8,1)),
-                          na.rm=TRUE, 
-                          include.lowest=T),
-         perc_BLACK_qt = cut(percBlack, wtd.quantile(percBlack, weights=pop_total,
-                                                  probs=c(0,0.2,0.4,0.6,0.8,1)),
-                          na.rm=TRUE, 
-                          include.lowest=T),
-         SVI_qt = cut(svi_themes, wtd.quantile(svi_themes, weights=pop_total,
-                                             probs=c(0,0.2,0.4,0.6,0.8,1)),
-                    na.rm=TRUE, 
-                    include.lowest=T))
-```
+                        na.rm=TRUE))
 
-```{r head_absm_sum, echo = FALSE}
-head_ma_absm_sum <- read_rds("data/07-premature-mortality/head_ma_absm_sum.rds")
-head_ma_absm_sum
+# saveRDS(ma_absm_sum, file = "ma_absm_sum.RDS")
 ```
 
 ## Approach 
 
 Now that we have our data, let’s revisit our questions of interest:
 
-1. What is the overall socioeconomic gradient in premature mortality?
-2. What is the racialized disparity overall?
-3. What are the association with ABSM by racialized group?/ How does ABSM interact with individual level membership in racialized groups? (i.e., interactions between socioeconomic position and racialized groups, not just socioeconomic inequities within racialized groups)
-4. How does the racialized  disparity vary across space?
+1. What is the overall socioeconomic gradient in premature mortality? 
+2) What is the racialized disparity in premature mortality?
+3) How does ABSM interact with individual level membership in racialized groups? (i.e., interactions between socioeconomic position and racialized groups, not just socioeconomic inequities within racialized groups)
 
 Let’s first visualize the overall socioeconomic gradient in premature mortality.
 
 ### What is the overall socioeconomic gradient in premature mortality?
 
-```{r}
-#| echo=FALSE
-knitr::include_graphics("images/07-premature-mortality/adj_smr_map.png")
+Before we try to see how our ABSM might impact premature mortality, let us first assess how the ICE measure is distributed across space in Massachusetts. We can visualize this using a map. In order to map our data, we will need to add geometries to our dataset. We will import a census tract shapefile produced by the government of [Massachusetts](https://www.mass.gov/info-details/massgis-data-municipalities).
+
+```{r importing tract data, eval = FALSE}
+tract_geometry <- st_read("CENSUS2010_BLK_BG_TRCT_SHP",
+                       layer = "CENSUS2010TRACTS_POLY") %>% 
+  mutate(id_order = row_number()) %>% 
+  select(GEOID10, id_order)
 ```
 
-How exactly do we get from our data to this map visualizing how the standard mortality ratio for premature mortality varies across space?
-We can visualize how premature mortality varies across space using spatial models. For our spatial models, we first need to utilize the indirect method to age-standardize our data and create reference rates for the population groups.
+This code adds the census tract geometries to our ICE data, and then creates a map. There are several lines, each referring to a different customization of the map. `ggplot2` has many such options, you can learn more about these [here](https://ggplot2.tidyverse.org/)
+
+```{r map.ice, eval = FALSE}
+map.ice <- ma_absm_sum %>% 
+  left_join(tract_geometry, by = "GEOID10") %>% 
+  ggplot(aes(geometry = geometry, fill=ICE_qt)) +
+    geom_sf(col="black", size=0.1) +
+    labs(fill="Census Tract ICE", 
+         x="", y="", 
+         title=expression(atop("Census Tract Level Index of Concentration at the Extremes",
+                             "Massachusetts, 5-Year ACS files from end-years 2015-2019"))) +
+    scale_fill_brewer(palette="Oranges", direction=-1, na.value="grey50") +
+    theme_void() +
+    theme(axis.text.x=element_blank(), #remove x axis labels
+          axis.ticks.x=element_blank(), #remove x axis ticks
+          axis.text.y=element_blank(),  #remove y axis labels
+          axis.ticks.y=element_blank(),
+          legend.position = c(0.25, 0.25),
+          legend.key.size = unit(0.4, "cm"))
+
+# ggsave("your_file_path/map.ice.png")
+```
+
+```{r map.ice.png}
+#| echo=FALSE
+knitr::include_graphics("images/07-premature-mortality/map.ice.png")
+```
+
+:::: {.infobox .interpretation}
+
+This map is showing us how the ICE measure is distributed across the state of Massachusetts. This particular iteration of ICE compares high-income Non-Hispanic White people with low-income people of Color. When ICE is low, those neighborhoods are concentrated with low-income people of Color. At 0, there is no extreme concentration (or, alternatively, the polarization is balanced). And when ICE is higher, there is a high concentration of high-income Non-Hispanic White people.
+
+::::
+
+Next, we will visualize our premature mortality data, using spatial models. In order to do this, we will first utilize the indirect method to age-standardize the data. Once we have the data age-standardized we can calculate raw standardized mortality ratios (SMRs). 
 
 ```{r age_standardization, eval = FALSE}
-ref_pop <- ma_demo_acs %>% 
-  filter(race_group =="Total",
+# Calculate reference rates by age for MA overall
+
+# This will give us overall totals, and remove the race specific information we arent interested in right now
+ma_total_pop <- ma_denominator %>%
+                filter(race_group == "Total") 
+
+# This will align the mortality counts with those denominators so we can create total population expected death rates for each age group
+reference_rates <- ma_mort_ct %>%
+  filter(race_group == "Total",
          sex != "Total",
          age_cat != "Total") %>% 
-  pivot_wider(id_cols = c(year, GEOID10,GEO_NAME,race_group,sex),
-              names_from = age_cat,
-              values_from = population) %>% 
-  mutate(`35-44` = `35-39` + `40-44`,
-         `45-54` = `45-49` + `50-54`,
-         `55-64` = `55-59` + `60-64`)%>% 
-  pivot_longer(cols = `0-4`:`55-64`,
-               names_to = "age_cat",
-               values_to = "population")
-
-ref_rates <- ma_mort_agg %>% 
-  filter(race_group =="Total",
-         sex != "Total",
-         age_cat != "Total")%>% 
-  pivot_wider(id_cols = c(year, GEOID10,super_town,sex, race_group),
-              names_from = age_cat,
-              values_from = deaths)%>% 
-  mutate(across(`0-4`:`60-64`, ~ ifelse(is.na(.),0,.)),
-         `35-44` = `35-39` + `40-44`,
-         `45-54` = `45-49` + `50-54`,
-         `55-64` = `55-59` + `60-64`)%>% 
-  pivot_longer(cols = `0-4`:`55-64`,
-               names_to = "age_cat",
-               values_to = "deaths") %>% 
-  left_join(ref_pop, by = c("year","GEOID10","sex","age_cat","race_group")) %>% 
+  group_by(GEOID10, year, sex, age_cat) %>%
+  summarise(deaths=n()) %>%
+  left_join(ma_total_pop,
+             by=c("GEOID10", "year", "sex", "age_cat")) %>%
+  mutate(age_cat = case_when(age_cat %in% c("35-39","40-44") ~ "35-44",
+                             age_cat %in% c("45-49","50-54") ~ "45-54",
+                             age_cat %in% c("55-59","60-64") ~ "55-64",
+                             TRUE ~ age_cat),
+         deaths = ifelse(is.na(deaths), 0, deaths)) %>%
   group_by(age_cat) %>%
   summarise(num = sum(deaths),
             den = sum(population)) %>%
   mutate(ref_rate = num/den) %>%
   select(age_cat, ref_rate)
 
-```
-
-Once we have the data age standardized we can calculate raw standardized mortality ratios. These ratios are susceptible to much of what is discussed in previous chapters with regards to infinity rates and small sample sizes leading to extreme results. But as we are going to eventually smooth this data with our model, we are not as concerned here about the state of the raw data. Here we can see our raw standardized mortality ratios extend from zero to infinity.
-
-```{r std_data, eval = FALSE}
-ma_mort_indirect <- ma_mort_agg %>% 
-  inner_join(ma_demo_acs, by = c("year","GEOID10","race_group","sex","age_cat")) %>% 
-  filter(race_group == "Total",
+ma_mort_istd <- ma_mort_ct %>%
+  filter(race_group != "Total",
          sex != "Total",
          age_cat != "Total") %>% 
-  left_join(ref_rates, by= "age_cat") %>%
-  mutate(expected = ref_rate*population) %>% 
-  group_by(GEOID10, super_town) %>% 
+  mutate(race_group = ifelse(race_group == "Non-Hispanic Black", "Black", race_group)) %>% 
+  left_join(ma_denominator, by = c("GEOID10","year","age_cat","race_group","sex")) %>% 
+  mutate(age_cat = case_when(age_cat %in% c("35-39","40-44") ~ "35-44",
+                             age_cat %in% c("45-49","50-54") ~ "45-54",
+                             age_cat %in% c("55-59","60-64") ~ "55-64",
+                             TRUE ~ age_cat)) %>%
+  group_by(GEOID10, super_town, age_cat) %>% 
+  summarise(deaths = sum(deaths, na.rm = TRUE),
+            population = sum(population, na.rm = TRUE))%>% 
+  right_join(reference_rates, by="age_cat") %>%
+  mutate(expected = ref_rate*population) %>%
+  group_by(GEOID10, super_town) %>%
   summarise(O = sum(deaths),
             E = sum(expected),
             raw_smr = O/E,
             var_raw_smr = O/E^2,
             raw_smr_lo95 = raw_smr - 1.96*sqrt(var_raw_smr),
             raw_smr_up95 = raw_smr + 1.96*sqrt(var_raw_smr)) %>%
-  inner_join(ma_absm_sum, by = "GEOID10") %>% 
-  mutate(id=row_number()) %>% 
-  fastDummies::dummy_cols(select_columns=c("pov_cat", "ICE_qt", "SVI_qt")) %>%
-  rename(pov_cat_1 = "pov_cat_0-4.9%",
-         pov_cat_2 = "pov_cat_5-9.9%",
-         pov_cat_3 = "pov_cat_10-19.9%",
-         pov_cat_4 = "pov_cat_20-100%",
-         ICE_qt_1 = "ICE_qt_[-0.689,0.0607]",
-         ICE_qt_2 = "ICE_qt_(0.0607,0.245]" , 
-         ICE_qt_3 = "ICE_qt_(0.245,0.362]" ,  
-         ICE_qt_4 = "ICE_qt_(0.362,0.465]" ,  
-         ICE_qt_5 = "ICE_qt_(0.465,0.727]" ,
-         SVI_qt_1 = "SVI_qt_[0,0.195]",
-         SVI_qt_2 = "SVI_qt_(0.195,0.397]"  ,
-         SVI_qt_3 = "SVI_qt_(0.397,0.583]",
-         SVI_qt_4 = "SVI_qt_(0.583,0.781]",
-         SVI_qt_5 = "SVI_qt_(0.781,1]") 
-
-
+  left_join(ma_absm_sum, by = "GEOID10") %>% 
+  mutate(id = row_number()) %>%
+  dummy_cols(select_columns = "ICE_qt") %>%
+  rename(ICE_qt_1  = "ICE_qt_(-0.689,0.0607]",
+         ICE_qt_2  = "ICE_qt_(0.0607,0.245]", 
+         ICE_qt_3  = "ICE_qt_(0.245,0.362]",  
+         ICE_qt_4  = "ICE_qt_(0.362,0.465]",  
+         ICE_qt_5  = "ICE_qt_(0.465,0.727]") 
 ```
 
-```{r head_ma_mort_indirect, echo = FALSE}
-head_ma_mort_indirect <- read_rds("data/07-premature-mortality/head_ma_mort_indirect.rds")
-head_ma_mort_indirect
-```
+These ratios are susceptible to much of what is discussed in previous chapters with regards to infinity-magnitude rates, and smaller sample sizes inducing extreme results. But as we are going to eventually smooth this data with our model, we are not as concerned here about the state of the raw data. Here we can see our raw standardized mortality ratios extend from zero to infinity.
 
-```{r raw_smr_dotplot, eval = FALSE}
-raw_smr_dotplot <- ma_mort_indirect %>%
-  ungroup() %>% 
-  arrange(raw_smr) %>% 
+```{r SMR caterpillar plot, eval = FALSE}
+plot.raw_smr <-  ma_mort_istd %>%
+  arrange(raw_smr) %>%
   mutate(orderID = row_number()) %>% 
   ggplot(aes(x=orderID, y=raw_smr)) + 
-    geom_point(color = "limegreen", alpha = 0.8, size = 0.5) +
     geom_errorbar(aes(ymin = raw_smr_lo95, ymax=raw_smr_up95), size = 0.1) +
+    geom_point(color = "limegreen", alpha = 0.8, size = 0.5) +
     geom_hline(yintercept = 1, col="red", linetype="dotted") +
-    ylim(0,5) +
+    ylim(0,4) +
     labs(title = "Raw Standardized Mortality Ratio by Census Tract, with error",
          caption = expression(atop("Source: Massachusetts Mortality Data 2013-2017", 
                                  "5-Year ACS files from end-years 2015-2019"))) +
@@ -771,121 +425,121 @@ raw_smr_dotplot <- ma_mort_indirect %>%
     ylab("SMR") +
     theme_minimal()
 
-ggsave("raw_smr_dotplot.png")
+# ggsave("your_file_path/plot.raw_smr.png")
 ```
 
-```{r, echo = FALSE}
-knitr::include_graphics("images/07-premature-mortality/raw_smr_dotplot.png")
+```{r plot.raw_smr.png}
+#| echo=FALSE
+include_graphics("images/07-premature-mortality/plot.raw_smr.png")
 ```
 
-We can also produce a map of these relationships. To do so, we will import a map file produced by the State of Massachusetts [https://www.mass.gov/info-details/massgis-data-municipalities].
+:::: {.infobox .interpretation}
 
-```{r, eval = FALSE}
-tract_geometry <- st_read("CENSUS2010_BLK_BG_TRCT_SHP",
-                       layer = "CENSUS2010TRACTS_POLY") %>% 
-  mutate(id_order = row_number()) %>% 
-  select(GEOID10, id_order)
-```
+The SMR shows us the ratio of mortality in a given census tract compared to what would be expected had that census tract had the same age_specific rates as the standard population. So an SMR greater than 1 means the area premature mortality is higher than expected. An SMR less than one means the opposite.
 
-```{r head_geoms, echo = FALSE}
-head_geoms <- readRDS("data/07-premature-mortality/head_geoms.RDS")
-head_geoms
-```
-We will include a cut-out of Boston so we can see some census tracts in more detail:
+::::
+
+We can also map out this relationship:
 
 ```{r raw_smr_map, eval = FALSE}
-raw_smr_map.state <- ma_mort_indirect %>% 
+# Here you will see code for two maps. This block of code creates one state level map, and then a smaller, Boston area map to accompany it. This optional subsetting provides detail in an area of interest. The cowplot package combines the maps to display both in one space
+
+map.raw_smr_state <- ma_mort_istd %>% 
   left_join(tract_geometry, by= "GEOID10") %>% 
   ggplot() +
   geom_sf(mapping = aes(geometry=geometry, 
-                        fill=exp(raw_smr)),
+                        fill=raw_smr),
           lwd = 0.1) +
-  scale_fill_viridis(option = "E",
-                     trans  = scales::pseudo_log_trans(sigma=0.01),
-                     limits = exp(c(-1,1)*log(4)),
-                     breaks = c(0.25, 0.5, 1, 2, 4)) +
-  labs(title = "Raw Standardized Mortality Ratios (SMR)",
-       caption = expression(atop("Source: Massachusetts Mortality Data 2013-2017", 
-                                 "5-Year ACS files from end-years 2015-2019")),
-       fill = "SMR", x="", y="") +
-  theme_void() +
-  theme(axis.text.x=element_blank(), #remove x axis labels
-        axis.ticks.x=element_blank(), #remove x axis ticks
-        axis.text.y=element_blank(),  #remove y axis labels
-        axis.ticks.y=element_blank(),
-        legend.position = c(0.25, 0.25),
-        legend.key.size = unit(0.4, "cm"))
+    scale_fill_distiller(palette = "BrBG",
+                         trans = scales::pseudo_log_trans(sigma=0.01),
+                         limits = exp(c(-1,1)*log(4)),
+                         breaks = c(0.25,0.5,1,2,4), oob=squish) +
+    labs(title = "Raw Standardized Mortality Ratios (SMR)",
+         caption = expression(atop("Source: Massachusetts Mortality Data 2013-2017", 
+                                   "5-Year ACS files from end-years 2015-2019")),
+         fill = "SMR", x="", y="") +
+    theme_void() +
+    theme(axis.text.x=element_blank(), #remove x axis labels
+          axis.ticks.x=element_blank(), #remove x axis ticks
+          axis.text.y=element_blank(),  #remove y axis labels
+          axis.ticks.y=element_blank(),
+          legend.position = c(0.25, 0.25),
+          legend.key.size = unit(0.4, "cm"))
 
-raw_smr_map.boston <- ma_mort_indirect %>% 
+map.raw_smr_boston <- ma_mort_istd %>% 
   left_join(tract_geometry, by= "GEOID10") %>% 
-  filter(super_town == "boston") %>% 
+  filter(super_town %in% c("boston","brookline","chelsea","cambridge",
+                           "everett","hull","malden","medford","newton",
+                           "somerville","winthrop","watertown")) %>% 
   ggplot() +
     geom_sf(mapping = aes(geometry = geometry,
-                          fill = exp(raw_smr)),
-            lwd = 0.1) +
-  scale_fill_viridis(option = "E",
-                     trans  = scales::pseudo_log_trans(sigma=0.01),
-                     limits = exp(c(-1,1)*log(4)),
-                     breaks = c(0.25, 0.5,1,2,4)) +
+                          fill = raw_smr),
+            lwd = 0.01) +
+    scale_fill_distiller(palette = "BrBG",
+                         trans = scales::pseudo_log_trans(sigma=0.01),
+                         limits = exp(c(-1,1)*log(4)),
+                         breaks = c(0.25,0.5,1,2,4), oob=squish) +
     labs(title = "Boston") +
     theme_void() +
     theme(strip.text.x = element_blank(),
           legend.position = "None",
           plot.title      = element_text(hjust = 0.5)) 
 
-raw_smr_map <- ggdraw() +
-  draw_plot(raw_smr_map.state , x = 0.00, y = 0.00, width = 0.80, height = 1.00) +
-  draw_plot(raw_smr_map.boston, x = 0.65, y = 0.50, width = 0.30, height = 0.30)
+map.raw_smr <- ggdraw() +
+  draw_plot(map.raw_smr_state , x = 0.00, y = 0.00, width = 0.80, height = 1.00) +
+  draw_plot(map.raw_smr_boston, x = 0.65, y = 0.50, width = 0.30, height = 0.30)
 
-ggsave("raw_smr_map.png")
-```
-```{r raw_smr_map.png, echo = FALSE}
-include_graphics("images/07-premature-mortality/raw_smr_map.png")
+# ggsave("your_file_path/map.raw_smr.png")
 ```
 
-We can fit a spatial model using the INLA package which will “smooth” our results by fitting our data to a BYM model that will adjust estimates based on the surrounding areas. We first need to be able to create an adjacency matrix, so that the package knows which census tracts are neighbors
+```{r map.raw_smr.png}
+#| echo=FALSE
+include_graphics("images/07-premature-mortality/map.raw_smr.png")
+```
 
-```{r inla_model, eval = FALSE}
-# Make sure that the data file has areas in the same order as the shape file
-ma_mort_indirect_ordered <- ma_mort_indirect %>% 
+We can fit a spatial model using the `INLA` package which will “smooth” our results by fitting our data to a Besag York Mollié (BYM) model. As mentioned in previous chapters, a BYM model will adjust estimates based on the surrounding areas - instead of assuming neighboring geographies are independent, the model will assume they are similar. In order to implement this model in R, we first need to create an adjacency matrix, so that the package knows which census tracts are neighbors
+
+```{r inla model, eval = FALSE}
+# We first want to make sure that our data file has our geometries in the same order as our shapefile - in other words, ensure that they are aligned. 
+ma_mort_istd_ordered <- ma_mort_istd %>% 
   mutate(intercept = 1) %>%
   right_join(tract_geometry, by="GEOID10")%>% 
   arrange(id_order) %>%
   select(-geometry)
 
-numarea <- ma_mort_indirect_ordered %>% 
+n.tracts <- ma_mort_istd_ordered %>% 
   select(GEOID10) %>% 
   unique() %>% 
   nrow()
 
-# calculate neighbors matrix
+# THis code will calculate the adjacency matrix 
 W.nb <- poly2nb(tract_geometry , snap=0.001)
 W.list <- nb2listw(W.nb, style="B", zero.policy = TRUE)
 
-#Make adjacency matrix in format INLA can understand
-nb2INLA("INLA_adj_mat", W.nb) #this saves a file in the working directory
+# And this code will convert that matrix into a format INLA can understand
+nb2INLA("INLA_adj_mat", W.nb) # this saves a file in the working directory
 INLA_adj_mat <- "INLA_adj_mat"
 
-# Intercept only BYM model 
-model_form <- O ~ 1 + f(id_order, model="bym2", graph=INLA_adj_mat, scale.model=TRUE, constr=TRUE)
+# Intercept only ("null") BYM model 
+model_form_0 <- O ~ 1 + f(id_order, model="bym2", graph=INLA_adj_mat, scale.model=TRUE, constr=TRUE)
 
-model_0 <- inla(model_form, family="poisson", 
-                data=ma_mort_indirect_ordered, E=E, # E points to the expected count field
+model_0 <- inla(model_form_0, family="poisson", 
+                data=ma_mort_istd_ordered, E=E, # E points to the expected count field
                 control.predictor=list(compute=TRUE), # computes transformed posterior marginals
                 control.compute=list(dic=TRUE)) # computes DIC for model fit
 
-# Extract posterior means of the area effects
-null_random <- model_0$summary.random$id_order$mean[1:numarea]
+# Extract posterior (meaning, after the model is accounted for) means of the area effects
+null_random <- model_0$summary.random$id_order$mean[1:n.tracts]
 
-# Percentage of spatial variation has to be calculated empirically
-mat.marg <- matrix(NA, nrow=numarea, ncol=100000) #create empty matrix
+# If we are interested in calculating the percentage of the variation that is spatially correlated, we have to do so empirically - if not, you can skip the next few lines. 
+mat.marg <- matrix(NA, nrow=n.tracts, ncol=100000) #create empty matrix
 m <- model_0$marginals.random$id_order
 
-for (i in 1:numarea){
+for (i in 1:n.tracts){
   #the first block of the random effects matrix contains area-specific effects (u + v), 
   #and the second block contains spatially structured residuals (u). 
   #So this is extracting from the second block of rows
-  u <- m[[numarea+i]] 
+  u <- m[[n.tracts+i]] 
   mat.marg[i,] <- inla.rmarginal(100000, u) #randomly pick 100000 values from posterior distributions of area-specific spatially structures residuals
 }
 #Get empirical variance from 100000 obs
@@ -895,155 +549,153 @@ var.u <- apply(mat.marg, 2, var)
 var.v <- inla.rmarginal(100000,
                         inla.tmarginal(function(x) 1/x, model_0$marginals.hyperpar$`Precision for id_order`))
 
-#Calculate spatially structured variance percentage
+# Calculate spatially structured variance percentage
 perc.var.u <- mean(var.u/(var.u+var.v))
-# compute QR90 = comparing the 95th to the 5th quantile of the random effects distribution
+
+# In addition to computing the spatially structured variance, you can also compute a QR90, comparing the 95th to the 5th quantile of the random effects distribution
 qr90 <- exp(diff(quantile(null_random, probs=c(0.05, 0.95))))
 
-# append estimated random effects ma_mort_indirect_ordered for mapping
-ma_mort_indirect_ordered <- data.frame(smooth_smr = null_random) %>%
+# We will append the estimated effects back onto our dataset so that we can plot and map them.
+ma_mort_istd_smoothed <- data.frame(data.frame(smooth_smr = null_random,
+                                               smooth_smr_lo95 = model_0$summary.random$id_order$`0.025quant`[1:n.tracts],
+                                               smooth_smr_up95 = model_0$summary.random$id_order$`0.975quan`[1:n.tracts])) %>%
   mutate(id_order = row_number()) %>%
-  right_join(ma_mort_indirect_ordered, by="id_order") %>% 
+  right_join(ma_mort_istd_ordered, by="id_order") %>% 
   mutate(raw_smr = log(O/E)+0.046)
 
 ```
 
-Note the code above provides code to calculate the percentage of the variance in the data that is spatially correlated - in this case,  about 80%.
+Note the code above provides code to calculate the percentage of the variance in the data that is spatially correlated - in this case,  about 45%.
 
-We can now visualize our smoothed SMR. First, let's look at a similar dot plot to what we did with the raw SMR:
+We can now visualize our smoothed SMR. First, let's look at a similar caterpillar plot to what we did with the raw SMR. The plot looks slightly flatter, and notably, the infinity and zero values have been pulled more towards the middle of the plot. 
 
-```{r smoothed_plot, eval = FALSE}
-smooth_smr_dotplot <- ma_mort_indirect_ordered %>%
+```{r smoothed plot, eval = FALSE}
+plot.smr_smooth <- ma_mort_istd_smoothed %>%
   ungroup() %>% 
   arrange(smooth_smr) %>% 
   mutate(orderID = row_number()) %>% 
   ggplot(aes(x=orderID, y=exp(smooth_smr))) + 
+    geom_errorbar(aes(ymin = exp(smooth_smr_lo95), ymax=exp(smooth_smr_up95)), size = 0.1) +
     geom_point(color = "limegreen", alpha = 0.8, size = 0.5) +
     geom_hline(yintercept = 1, col="red", linetype="dotted") +
-    ylim(0,5) +
+    ylim(0,4) +
     labs(title = "Smoothed Standardized Mortality Ratio by Census Tract",
          caption = "Source: Massachusetts Mortality Data 2013-2017, 5-Year ACS files from end-years 2015-2019") +
     xlab("Census Tract") +
     ylab("Smoothed SMR") +
     theme_minimal()
 
-ggsave("smooth_smr_dotplot.png")
+plot.comp_smr <- plot_grid(plot.raw_smr, plot.smr_smooth,
+                           ncol = 2)
+# ggsave("your_file_path/plot.comp_smr.png"
 ```
 
-```{r, echo = FALSE}
-include_graphics("images/07-premature-mortality/smooth_smr_dotplot.png")
+```{r plot.comp_smr.png}
+#| echo=FALSE
+include_graphics("images/07-premature-mortality/plot.comp_smr.png")
 ```
 
-And now we can visualize the smooth map
+And in the map, we can see some of the color of extreme values lighten.
 
-```{r, echo = FALSE, eval = FALSE}
-
-smooth_smr_map.state <- ma_mort_indirect_ordered %>% 
+```{r smoothed map, eval = FALSE}
+map.smooth_smr_state <- ma_mort_istd_smoothed %>% 
   left_join(tract_geometry, by= "GEOID10") %>% 
   ggplot() +
   geom_sf(mapping = aes(geometry=geometry, 
-                        fill=exp(smooth_smr)),
+                        fill= exp(smooth_smr)),
           lwd = 0.1) +
-  scale_fill_viridis(option = "E",
-                     trans  = scales::pseudo_log_trans(sigma=0.01),
-                     limits = exp(c(-1,1)*log(4)),
-                     breaks = c(0.25, 0.5, 1, 2, 4)) +
-  labs(title = "Smoothed Standardized Mortality Ratios (SMR)",
-       caption = expression(atop("Source: Massachusetts Mortality Data 2013-2017", 
-                                 "5-Year ACS files from end-years 2015-2019")),
-       fill = "Smoothed SMR", x="", y="") +
-  theme_void() +
-  theme(axis.text.x=element_blank(), #remove x axis labels
-        axis.ticks.x=element_blank(), #remove x axis ticks
-        axis.text.y=element_blank(),  #remove y axis labels
-        axis.ticks.y=element_blank(),
-        legend.position = c(0.25, 0.25),
-        legend.key.size = unit(0.4, "cm"))
+    scale_fill_distiller(palette = "BrBG",
+                         trans = scales::pseudo_log_trans(sigma=0.01),
+                         limits = exp(c(-1.01,1)*log(4)),
+                         breaks=c(0.25,0.5,1,2,4), oob=squish) +
+    labs(title = "Smoothed Standardized Mortality Ratios (SMR)",
+         caption = expression(atop("Source: Massachusetts Mortality Data 2013-2017", 
+                                   "5-Year ACS files from end-years 2015-2019")),
+         fill = "Smoothed SMR", x="", y="") +
+    theme_void() +
+    theme(axis.text.x=element_blank(), #remove x axis labels
+          axis.ticks.x=element_blank(), #remove x axis ticks
+          axis.text.y=element_blank(),  #remove y axis labels
+          axis.ticks.y=element_blank(),
+          legend.position = c(0.25, 0.25),
+          legend.key.size = unit(0.4, "cm"))
 
-smooth_smr_map.boston <- ma_mort_indirect_ordered %>% 
+map.smooth_smr_boston <- ma_mort_istd_smoothed %>% 
   left_join(tract_geometry, by= "GEOID10") %>% 
-  filter(super_town == "boston") %>% 
+  filter(super_town %in% c("boston","brookline","chelsea","cambridge",
+                           "everett","hull","malden","medford","newton",
+                           "somerville","winthrop","watertown")) %>% 
   ggplot() +
     geom_sf(mapping = aes(geometry = geometry,
                           fill = exp(smooth_smr)),
             lwd = 0.1) +
-  scale_fill_viridis(option = "E",
-                     trans  = scales::pseudo_log_trans(sigma=0.01),
-                     limits = exp(c(-1,1)*log(4)),
-                     breaks = c(0.25, 0.5,1,2,4)) +
+    scale_fill_distiller(palette = "BrBG",
+                         trans = scales::pseudo_log_trans(sigma=0.01),
+                         limits = exp(c(-1.01,1)*log(4)),
+                         breaks=c(0.25,0.5,1,2,4), oob=squish) +
     labs(title = "Boston") +
     theme_void() +
     theme(strip.text.x = element_blank(),
           legend.position = "None",
           plot.title      = element_text(hjust = 0.5)) 
 
-smooth_smr_map <- ggdraw() +
-  draw_plot(smooth_smr_map.state , x = 0.00, y = 0.00, width = 0.80, height = 1.00) +
-  draw_plot(smooth_smr_map.boston, x = 0.65, y = 0.50, width = 0.30, height = 0.30)
+map.smooth_smr <- ggdraw() +
+  draw_plot(map.smooth_smr_state , x = 0.00, y = 0.00, width = 0.80, height = 1.00) +
+  draw_plot(map.smooth_smr_boston, x = 0.65, y = 0.50, width = 0.30, height = 0.30)
 
-ggsave("smooth_smr_map.png")
+map.comp_smr <- plot_grid(map.raw_smr, map.smooth_smr,
+                           ncol = 2)
+
+# ggsave("your_file_path/map.comp_smr.png")
 ```
 
-```{r, echo = FALSE}
-include_graphics("images/07-premature-mortality/smooth_smr_map.png")
+```{r map.comp_smr.png}
+#| echo=FALSE
+include_graphics("images/07-premature-mortality/map.comp_smr.png")
 ```
 
-We can see from the plot and the map that while there is still variation in the SMR - it is much less extreme than the raw SMR.
-But to get a true sense of how premature mortality varies across the socioeconomic gradient, we should look at a model that adjusts for our ABSMs and see if there are any changes in variation. Let's look at the SMR after we adjust for poverty, giving us the map we introduced this section with.
+We can see from the plot and the map that while there is still variation in the spatially smoothed SMR - it is a bit less extreme in some areas than the raw SMR. To get a sense of how premature mortality varies with respect to ICE, we should look at a model that adjusts for our ICE data and see if there are any changes in variation. 
 
-```{r, eval = FALSE}
+```{r adjusted smr model, eval = FALSE}
 #Code to include our ABSM
-these_variables <- c("pov_cat_2 + pov_cat_3 + pov_cat_4 + pov_cat_NA",
-                     "ICE_qt_1 + ICE_qt_2 + ICE_qt_3 + ICE_qt_4 + ICE_qt_NA",
-                     "SVI_qt_2 + SVI_qt_3 + SVI_qt_4 + SVI_qt_5 + SVI_qt_NA")
+model_form_1 <- O ~ 1 + f(id_order, model='bym2', graph=INLA_adj_mat, scale.model=TRUE, constr=TRUE) + ICE_qt_2 + ICE_qt_3 + ICE_qt_4 + ICE_qt_5 + ICE_qt_NA
 
-model_form_stem <- "O ~ 1 + f(id_order, model='bym2', graph=INLA_adj_mat, scale.model=TRUE, constr=TRUE) + "
-model_form <- paste0(model_form_stem, these_variables) %>%
-  sapply(as.formula)
+model_1 <- inla(model_form_1, family="poisson",
+                data = ma_mort_istd_ordered,
+                E=E, # E points to the expected count field
+                control.predictor = list(compute=TRUE), # computes transformed posterior marginals
+                control.compute   = list(dic=TRUE)) # computes DIC for model fit
 
-model_results <- list()
-# Run models with different ABSMs
-for (formula_i in 1:length(model_form)){
-  
-  model_results[[formula_i]] <- inla(model_form[[formula_i]], family="poisson", 
-                                     data = ma_mort_indirect_ordered, E=E, # E points to the expected count field
-                                     control.predictor = list(compute=TRUE), # computes transformed posterior marginals
-                                     control.compute   = list(dic=TRUE)) # computes DIC for model fit
-}
-
-# extract results
-fixed_results <- lapply(model_results, function(x){ x$summary.fixed })
-dic_results <- sapply(model_results, function(x){ summary(x)$dic$dic} )
+# We can use this code to extract results of the model
+fixed_results <- model_1$summary.fixed 
+dic_results <- summary(model_1$dic$dic)
 
 # the first block of the summary.random output are the area effects (u + v)
-random_results <- lapply(model_results, function(x){x$summary.random$id_order$mean[1:numarea]})
+random_results <- model_1$summary.random$id_order$mean[1:n.tracts]
 
-
-absm_residuals <- data.frame(pov_cat_residuals = random_results[[1]],
-                             ICE_qt_residuals = random_results[[2]],
-                             SVI_qt_residuals = random_results[[3]]) %>%
+# and this code pulls out the residual results after adjusting for ICE
+risk_residuals <- data.frame(ice_residuals = random_results) %>%
   mutate(id_order = row_number())
 
-# append to ma_mort_indirect_ordered
-ma_mort_indirect_ordered <- data.frame(smooth_SMR = null_random) %>%
-  mutate(id_order = row_number()) %>%
-  right_join(ma_mort_indirect_ordered, by="id_order") %>% 
-  left_join(absm_residuals, by="id_order")
+# append to dataset of other model effects
+ma_mort_istd_adj <- ma_mort_istd_smoothed %>% 
+  left_join(risk_residuals, by="id_order")
 
-# Visualize map after adjusting for poverty
-adj_smr_map.state <- ma_mort_indirect_ordered %>% 
+# Visualize map after adjusting for ICE
+map.adj_smr_state <- ma_mort_istd_adj %>% 
   left_join(tract_geometry, by= c("GEOID10","id_order")) %>% 
   ggplot() +
   geom_sf(mapping = aes(geometry = geometry, 
-                        fill     = exp(pov_cat_residuals)),
+                        fill     = exp(ice_residuals)),
           lwd = 0.1) +
-  scale_fill_viridis(option = "E",
-                     trans  = scales::pseudo_log_trans(sigma=0.01),
-                     limits = exp(c(-1,1)*log(4)),
-                     breaks = c(0.25, 0.5, 1, 2, 4)) +
-  labs(title = "Residual Standardized Mortality Ratios after adjusting for Poverty",
+    scale_fill_distiller(palette = "BrBG",
+                         trans = scales::pseudo_log_trans(sigma=0.01),
+                         limits = exp(c(-1.01,1)*log(4)),
+                         breaks=c(0.25,0.5,1,2,4), oob=squish) +
+  labs(title = "Residual Standardized Mortality Ratios after adjusting for ICE",
        caption = expression(atop("Source: Massachusetts Mortality Data 2013-2017", 
-                                 "5-Year ACS files from end-years 2015-2019")),
+                                 "5-Year ACS files from end-years 2015-2019",
+                                 "National Air Toxin Assessment, 2017")),
        fill = "Adjusted SMR", x="", y="") +
   theme_void() +
   theme(axis.text.x=element_blank(), #remove x axis labels
@@ -1053,54 +705,64 @@ adj_smr_map.state <- ma_mort_indirect_ordered %>%
         legend.position = c(0.25, 0.25),
         legend.key.size = unit(0.4, "cm"))
 
-adj_smr_map.boston <- ma_mort_indirect_ordered %>% 
+map.adj_smr_boston <- ma_mort_istd_adj %>% 
   left_join(tract_geometry, by= c("GEOID10","id_order")) %>% 
-  filter(super_town == "boston") %>% 
+  filter(super_town %in% c("boston","brookline","chelsea","cambridge",
+                           "everett","hull","malden","medford","newton",
+                           "somerville","winthrop","watertown")) %>% 
   ggplot() +
     geom_sf(mapping = aes(geometry = geometry,
-                          fill = exp(pov_cat_residuals)),
+                          fill = exp(ice_residuals)),
             lwd = 0.1) +
-  scale_fill_viridis(option = "E",
-                     trans  = scales::pseudo_log_trans(sigma=0.01),
-                     limits = exp(c(-1,1)*log(4)),
-                     breaks = c(0.25, 0.5,1,2,4)) +
+    scale_fill_distiller(palette = "BrBG",
+                         trans = scales::pseudo_log_trans(sigma=0.01),
+                         limits = exp(c(-1.01,1)*log(4)),
+                         breaks=c(0.25,0.5,1,2,4), oob=squish) +
     labs(title = "Boston") +
     theme_void() +
     theme(strip.text.x = element_blank(),
           legend.position = "None",
           plot.title      = element_text(hjust = 0.5)) 
 
-adj_smr_map <- ggdraw() +
-  draw_plot(adj_smr_map.state , x = 0.00, y = 0.00, width = 0.80, height = 1.00) +
-  draw_plot(adj_smr_map.boston, x = 0.65, y = 0.50, width = 0.30, height = 0.30)
+map.adj_smr <- ggdraw() +
+  draw_plot(map.adj_smr_state , x = 0.00, y = 0.00, width = 0.80, height = 1.00) +
+  draw_plot(map.adj_smr_boston, x = 0.65, y = 0.50, width = 0.30, height = 0.30)
 
-ggsave("adj_smr_map.png")
+# ggsave("your_file_path/map.adj_smr.png")
+
+map.comp_smr2 <- plot_grid(map.smooth_smr, map.adj_smr,
+                           ncol = 2)
+
+# ggsave("your_file_path/map.comp_smr2.png")
 
 ```
 
-```{r, echo=FALSE}
-include_graphics("images/07-premature-mortality/adj_smr_map.png")
+```{r map.comp_smr2.png}
+#| echo=FALSE
+include_graphics("images/07-premature-mortality/map.comp_smr2.png")
 ```
 
-In comparing the smoothed effect from our null model and the effects of our model adjusting for poverty, we can visualize the extent of the impact poverty has on the distribution of premature mortality
+:::: {.infobox .interpretation}
 
-```{r, echo=FALSE}
-include_graphics("images/07-premature-mortality/smooth_smr_map.png")
-```
+Comparing the map adjusted for the ICE measure to the smoothed map reveals that concentration of polarized racial-economic populations did contribute to some of the impact. This is most clearly seen in the less pronounced SMRs (in both directions) after adjusting for ICE in areas of southern Boston.
+
+::::
 
 ### What is the racialized disparity in premature mortality overall?
 
-```{r}
-include_graphics("images/07-premature-mortality/map.irr.png")
-```
+We can describe inequities by racialized groups much the same way we describe inequities in ABSM - by aggregating death and population data. We already have these aggregated - now we can stratify our analysis to compare the White Non-Hispanic and Black populations. Throughout the example we may refer to these groups as White and Black as a shorthand. 
 
-We can describe inequities by racialized groups much the same way we describe inequities in ABSM - by aggregating death and population data. We already have these aggregated - we can stratify our analysis to compare the White Non-Hispanic and Black Non-Hispanic populations. Throughout the example we may refer to these groups as White and Black as a shorthand.
+:::: {.infobox}
 
-We will need to age-adjust our data here, as differences in premature mortality may be due to differential distribution of ages by racialized group:
+NOTE: You may have noticed that the description of the White population includes a "Non-Hispanic" designation, while the description of the Black population does not. This is a quirk of the ACS data - population counts are not readily available for the Black Non-Hispanic population. There is thus a slight mismatch in in the numerator from the mortality data (Non-Hispanic Black deaths) and denominator (Black population).
 
-```{r, eval = FALSE, echo = FALSE}
-tab_age_race <- ma_demo_acs %>%
-      filter(race_group %in% c("Non-Hispanic White","Non-Hispanic Black"),
+::::
+
+We will need to age-adjust our data here, as differences in premature mortality may be due to differential distribution of ages by racialized group seen here:
+
+```{r age tabulation by race, eval = FALSE}
+tab_age_race <- ma_denominator %>%
+      filter(race_group %in% c("Non-Hispanic White","Black"),
          sex != "Total",
          age_cat != "Total") %>% 
   group_by(GEOID10, race_group, sex, age_cat) %>% 
@@ -1124,31 +786,33 @@ tab_age_race <- ma_demo_acs %>%
     theme(legend.position="bottom") +
     theme_minimal()
     
-ggsave("tab_age_race.png")
+# ggsave("your_file_path/tab_age_race.png")
 ```
 
-```{r, echo = FALSE}
+```{r tab_age_race.png}
+#| echo=FALSE
 include_graphics("images/07-premature-mortality/tab_age_race.png")
 ```
 
-Direct age adjustment to get standardized mortality ratios will require a reference population, which we have downloaded (and wrangled) from the National Cancer Institute (https://seer.cancer.gov/stdpopulations/).
+We will, in this case, do a direct age adjustment to get standardized mortality ratios. This will require a reference population, which we have downloaded (and wrangled) from the National Cancer Institute (https://seer.cancer.gov/stdpopulations/). This is preferential to indirect age standardization, as the Non-Hispanic White population would drive the expected rates using that method.
 
-```{r, echo = FALSE}
+```{r SEER data, eval = FALSE}
 seer_std <- readRDS("data/07-premature-mortality/seer_std.RDS")
-seer_std
 ```
 
 Let’s now age adjust our aggregated data by racialized group so we can compare standardized mortality rates.
 
-```{r, eval = FALSE}
-ma_mort_direct <- ma_mort_agg %>%
-  inner_join(ma_demo_acs, by = c("year","GEOID10","race_group","sex","age_cat")) %>% 
-  filter(race_group %in% c("Non-Hispanic White","Non-Hispanic Black"),
+```{r direct age standardization, eval = FALSE}
+ma_mort_dstd <- ma_mort_ct %>%
+  mutate(race_group = case_when(race_group == "Non-Hispanic Black" ~ "Black",
+                                TRUE ~ race_group)) %>% 
+  inner_join(ma_denominator, by = c("year","GEOID10","race_group","sex","age_cat")) %>%
+  filter(race_group %in% c("Non-Hispanic White","Black"),
          age_cat != "Total") %>% 
   group_by(GEOID10,super_town, race_group, age_cat) %>% 
   summarise(num = sum(deaths, na.rm=T),
             den = sum(population, na.rm=T))%>%
-  mutate(den = den + 0.001) %>% 
+  mutate(den = ifelse(den == 0, num, den)) %>% # this line takes areas with population counts as zero, and provides the count as the number of deaths. This is an approach to resolve when population data does not align with the outcome data
   left_join(seer_std, by="age_cat") %>%
   mutate(rate_i = wt*num/den,
          var_rate_i = (num*wt^2)/den^2) %>%
@@ -1165,7 +829,7 @@ ma_mort_direct <- ma_mort_agg %>%
          std_rate_up95 = std_rate + 1.96*sqrt(var_std_rate)) %>%
   ungroup()
 
-plot.agg_rates <- ma_mort_direct %>% 
+ plot.agg_rates <- ma_mort_dstd %>% 
   filter(!is.na(std_rate)) %>% 
   select(GEOID10,race_group, contains("std_rate")) %>% 
   arrange(std_rate) %>% 
@@ -1173,30 +837,30 @@ plot.agg_rates <- ma_mort_direct %>%
   mutate(orderID = row_number()) %>%
   ungroup() %>% 
   ggplot(aes(x=orderID, y=std_rate)) + 
-    geom_point(color = "limegreen", alpha = 0.8, size = 1) +
     geom_errorbar(aes(ymin = std_rate_lo95, ymax=std_rate_up95), size = 0.1) +
+    geom_point(color = "limegreen", alpha = 0.8, size = 1) +
     labs(title = "Age-Standardized Premature Mortality Rate",
          caption = expression(atop("Source: Massachusetts Mortality Data 2013-2017", 
                                    "5-Year ACS files from end-years 2015-2019"))) +
     xlab("Census Tracts") +
-    ylab("Mortality Rates") +
+    ylab("Mortality Rates per 1000") +
     facet_wrap(vars(race_group), ncol = 2, scales = "free_x") +
     theme_minimal() +
     theme(axis.ticks.x = element_blank(), 
           axis.text.x = element_blank())
 
-ggsave("plot.agg_rates.png")
-
+# ggsave("your_file_path/plot.agg_rates.png")
 ```
 
-```{r, echo = FALSE}
+```{r plot.agg_rates.png}
+#| echo=FALSE
 include_graphics("images/07-premature-mortality/plot.agg_rates.png")
 ```
-We can see lots of variation here as the mortality rates increase - what is causing that?
 
-```{r, eval = FALSE, echo = FALSE}
+As mortality rates increase, there also seems to be an increase in the variance of the estimates. This is because the more extreme rates we are seeing are really a product of having very small sample sizes in some districts. We can see that demonstrated by ordering the results by the population size of the census tract.
 
-ordered.agg_rates <- ma_mort_direct %>% 
+```{r rates by size, eval = FALSE}
+ordered.agg_rates <- ma_mort_dstd %>% 
   filter(!is.na(std_rate)) %>% 
   select(GEOID10, race_group, contains("std_rate"), den) %>% 
   ggplot(aes(x=den, y=std_rate)) + 
@@ -1210,21 +874,22 @@ ordered.agg_rates <- ma_mort_direct %>%
     facet_wrap(vars(race_group), ncol = 2, scales = "free_x") +
     theme_minimal() 
 
-ggsave("ordered.agg_rates.png")
+# ggsave("your_file_path/ordered.agg_rates.png")
 ```
 
-```{r, echo = FALSE}
+```{r ordered.agg_rates.png}
+#| echo=FALSE
 include_graphics("images/07-premature-mortality/ordered.agg_rates.png")
 ```
 
-As we might expect, these extremely variable mortality rates are occurring in small populations. What do these maps look like?
+As we might expect, these extremely variable mortality rates are occurring in smaller populations. What do these maps look like?
 
-```{r, eval = FALSE}
+```{r maps by race, eval = FALSE}
 plotlist <- vector(mode = "list", length = 2)
-names(plotlist) <- c("Non-Hispanic White","Non-Hispanic Black")
-for (plt in names(plotlist)) {
+names(plotlist) <- c("Non-Hispanic White","Black")
+for (plt in names(plotlist)) { # This loop allows us to make the same map twice, one for Non-Hispanic White, and one for Black
 
-  map.state <- ma_mort_direct %>% 
+  map.state <- ma_mort_dstd %>% 
     filter(race_group == plt) %>%
     mutate(std_rate = ifelse(std_rate > 10, 10, std_rate)) %>% 
     left_join(tract_geometry, by= "GEOID10") %>% 
@@ -1232,7 +897,7 @@ for (plt in names(plotlist)) {
       geom_sf(mapping = aes(geometry = geometry,
                             fill = std_rate),
               lwd = 0) +
-      scale_fill_viridis(option = "B", limits = c (0, 10)) +
+      scale_fill_distiller(palette = 'Blues', direction = 1, limits = c(0, 10)) + 
       labs(title = plt,
            fill = "Age Standardized Mortality Rate", x="", y="") +
       theme_void() +
@@ -1243,16 +908,18 @@ for (plt in names(plotlist)) {
             legend.position = c(0.25, 0.25),
             legend.key.size = unit(0.2, "cm"))
   
-  map.boston <- ma_mort_direct %>% 
+  map.boston <- ma_mort_dstd %>% 
     filter(race_group == plt,
-           super_town == "boston") %>% 
+           super_town %in% c("boston","brookline","chelsea","cambridge",
+                           "everett","hull","malden","medford","newton",
+                           "somerville","winthrop","watertown")) %>% 
     mutate(std_rate = ifelse(std_rate > 10, 10, std_rate)) %>% 
     left_join(tract_geometry, by= "GEOID10") %>% 
     ggplot() +
       geom_sf(mapping = aes(geometry = geometry,
                             fill = std_rate),
               lwd = 0) +
-      scale_fill_viridis(option = "B", limits = c (0, 10)) +
+      scale_fill_distiller(palette = 'Blues', direction = 1, limits = c(0, 10)) + 
       labs(title = "Boston") +
       theme_void() + 
       theme(strip.text.x = element_blank(),
@@ -1271,33 +938,28 @@ caption1 <- ggdraw() +
   draw_label("Source: Massachusetts Mortality Data 2013-2017", size = 8, hjust = 0.5) 
 caption2 <- ggdraw() +
   draw_label("5-Year ACS files from end-years 2015-2019", size = 8, hjust = 0.5) 
-plots <- plot_grid(plotlist = plotlist,
-                  ncol = 1)
-
-byrace_std_rates <- plot_grid(title, plots, caption1, caption2,
-          rel_heights = c(0.05, 1.0, 0.05, 0.05),
-          ncol = 1)
-
 
 byrace_std_rates <- plot_grid(plotlist = plotlist,
-                              ncol = 1)
-ggsave("byrace_std_rates.png")
+                              ncol = 2)
+
+# ggsave("your_file_path/byrace_std_rates.png")
 ```
 
-```{r, echo = FALSE}
+```{r byrace_std_rates.png}
+#| echo=FALSE
 include_graphics("images/07-premature-mortality/byrace_std_rates.png")
 ```
 
-We are seeing some really extreme rates in the Black population, where we have smaller overall sample sizes. We are also seeing many census tracts with no black population. We can also display these two maps as one, by calculating the Rate Difference, or the Rate Ratio. Here we will show the Rate Ratio of the Age Standardized rates, as we visualized at the start of this section. Key is understanding that these rates are influenced by the small sample sizes and large potential errors we have previously visualized. It's for researchers and communities to interpret how "real" the effects we see are
+We are seeing some really high rates in more census tracts in the Black population, where we have smaller overall sample sizes. We are also seeing many census tracts with no black population. We can also display these two maps as one, by calculating the Rate Difference, or the Rate Ratio. Here we will show the crude Rate Ratio of the Age Standardized rates. Key to interpreting this map is understanding that these rates are influenced by the small sample sizes and large potential errors we have previously visualized. It's for researchers and communities to interpret how "real" the effects we see here are.
 
-```{r, eval = FALSE}
-irr_data <- ma_mort_direct %>% 
+```{r irr data, eval = FALSE}
+irr_data <- ma_mort_dstd %>% 
   select(GEOID10,super_town,race_group, std_rate, var_std_rate) %>% 
   pivot_wider(id_cols = c(GEOID10,super_town),
               names_from = race_group,
               values_from = c(std_rate, var_std_rate)) %>% 
-  mutate(irr = ifelse(`std_rate_Non-Hispanic White` == 0, NA_real_, `std_rate_Non-Hispanic Black` / `std_rate_Non-Hispanic White`),
-         irr_var = `var_std_rate_Non-Hispanic Black` + `var_std_rate_Non-Hispanic White`,
+  mutate(irr = ifelse(`std_rate_Non-Hispanic White` == 0, NA_real_, `std_rate_Black` / `std_rate_Non-Hispanic White`),
+         irr_var = `var_std_rate_Black` + `var_std_rate_Non-Hispanic White`,
          irr_lo95 = irr - 1.96*sqrt(irr_var),
          irr_up95 = irr + 1.96*sqrt(irr_var)) 
 
@@ -1308,7 +970,7 @@ irr_plot <- irr_data %>%
   ggplot(aes(x=orderID, y=irr)) + 
     geom_point(color = "limegreen", alpha = 0.8, size = 1) +
     geom_errorbar(aes(ymin = irr_lo95, ymax=irr_up95), size = 0.1) +
-    labs(title = expression(atop("Incidence Rate Ratio Comparing Non-Hispanic Black", 
+    labs(title = expression(atop("Incidence Rate Ratio Comparing Black", 
                                  "and Non Hispanic White Populations")),
          caption = expression(atop("Source: Massachusetts Mortality Data 2013-2017",
                                    "5-Year ACS files from end-years 2015-2019"))) +
@@ -1316,50 +978,54 @@ irr_plot <- irr_data %>%
          ylab("IRR") +
     theme_minimal() 
   
-irr_plot
+# ggsave("your_file_path/irr_plot.png")
 ```
-When we map the IRR, we can see the crude rate ratio between Non-Hispanic Black and Non-Hispanic White populations:
+
+When we map the IRR, we can see the crude rate ratio between Black and Non-Hispanic White populations:
 
 ```{r, eval = FALSE}
 map.state.irr <- irr_data %>% 
   mutate(irr = case_when(irr > 4  ~ 4,
+                         std_rate_Black == 0 ~ NA_real_, # Setting as missing any areas with no black deaths
                          TRUE     ~ irr)) %>% 
   left_join(tract_geometry, by= "GEOID10") %>% 
   ggplot() +
     geom_sf(mapping = aes(geometry = geometry,
                           fill = irr),
             lwd = 0.1) +
-  scale_fill_viridis(option = "E",
-                     trans = scales::pseudo_log_trans(sigma=0.01),
-                     limits = exp(c(-1,1)*log(4)),
-                     breaks=c(0.25, 0.5,1,2,4),
-                     na.value = "white") +
-  labs(title = expression(atop("Incidence Rate Ratio Comparing Non-Hispanic Black", 
+    scale_fill_distiller(palette = "BrBG",
+                         trans = scales::pseudo_log_trans(sigma=0.01),
+                         limits = exp(c(-1,1)*log(4)),
+                         breaks = c(0.25,0.5,1,2,4), oob=squish,
+                         na.value = "grey") +
+    labs(title = expression(atop("Incidence Rate Ratio Comparing Non-Hispanic Black", 
                                  "and Non Hispanic White Populations")),
-       caption = expression(atop("Source: Massachusetts Mortality Data 2013-2017", 
-                                 "5-Year ACS files from end-years 2015-2019")),
-       fill = "IRR", x="", y="") +
-  theme_void() +
+         caption = expression(atop("Source: Massachusetts Mortality Data 2013-2017",
+                                   "5-Year ACS files from end-years 2015-2019")),
+         fill = "IRR", x="", y="") +
+    theme_void() +
     theme(legend.position = c(0.25, 0.25),
           legend.key.size = unit(0.3, "cm"),
           plot.title      = element_text(hjust = 0.1),
           plot.subtitle   = element_text(hjust = 0.1))
 
 map.boston.irr <- irr_data %>% 
-  filter(super_town == "boston") %>% 
+  filter(super_town %in% c("boston","brookline","chelsea","cambridge",
+                           "everett","hull","malden","medford","newton",
+                           "somerville","winthrop","watertown")) %>% 
   mutate(irr = case_when(irr > 4  ~ 4,
-                         irr == 0 ~ 0.0000001,
+                         std_rate_Black == 0 ~ NA_real_,
                          TRUE     ~ irr)) %>% 
   left_join(tract_geometry, by= "GEOID10") %>% 
   ggplot() +
     geom_sf(mapping = aes(geometry = geometry,
                           fill = irr),
             lwd = 0.1) +
-  scale_fill_viridis(option = "E",
-                     trans = scales::pseudo_log_trans(sigma=0.01),
-                     limits = exp(c(-1,1)*log(4)),
-                     breaks=c(0.25, 0.5,1,2,4),
-                     na.value = "white") +
+    scale_fill_distiller(palette = "BrBG",
+                         trans = scales::pseudo_log_trans(sigma=0.01),
+                         limits = exp(c(-1,1)*log(4)),
+                         breaks = c(0.25,0.5,1,2,4), oob=squish,
+                         na.value = "grey") +
     labs(title = "Boston") +
     theme_void() + 
     theme(strip.text.x = element_blank(),
@@ -1367,391 +1033,324 @@ map.boston.irr <- irr_data %>%
           plot.title      = element_text(hjust = 0.5)) 
 
 map.irr <- ggdraw() +
-  draw_plot(plot.state.irr , x = 0.00, y = 0.05, width = 0.80, height = 1.00) +
-  draw_plot(plot.boston.irr, x = 0.55, y = 0.55, width = 0.45, height = 0.45)
+  draw_plot(map.state.irr , x = 0.00, y = 0.05, width = 0.80, height = 1.00) +
+  draw_plot(map.boston.irr, x = 0.65, y = 0.55, width = 0.30, height = 0.30)
 
-ggsave("map.irr.png")
+#ggsave("your_file_path/map.irr.png")
 ```
 
-```{r, echo = FALSE}
+So we can see from this crude map that, in areas where there were Black deaths, there was some variation in the IRR, and some very high, concerning IRR values.
+
+```{r map.irr.png}
+#| echo=FALSE
 include_graphics("images/07-premature-mortality/map.irr.png")
 ```
 
 ### What are the associations with ABSM by racialized group? 
 
-```{r, echo = FALSE}
-include_graphics("images/07-premature-mortality/adj_map.p.irr.png")
-```
+In order to visualize differences in how our ABSM - ICE - interacts with racialized group, we can use a poisson model for the mortality rates, and include an interaction term between racialized group and poverty. We can plot this using `INLA' again or alternatively use a generalized linear model function. We will have to recreate our indirect standardization - this time by race, in order to include both variables in the model.
 
-In order to visualize differences in how an ABSM - we will use poverty - interacts with racialized group, we can use a poisson model for the mortality rates, and include an interaction term between racialized group and poverty.
-
-Let's first plot the IRR produced by a poisson model for the rates.
-
-```{r poisson, eval = FALSE}
-
-poisson_data <- ma_mort_agg %>%
-  inner_join(ma_demo_acs, by = c("year","GEOID10","race_group","sex","age_cat")) %>%
-  filter(race_group %in% c("Non-Hispanic White","Non-Hispanic Black"),
+```{r indirect standard by race, eval = FALSE}
+# Indirect standardization to prepare the data for spatial models
+ma_mort_istd_byrace <- ma_mort_ct %>%
+  filter(race_group != "Total",
+         sex != "Total",
          age_cat != "Total") %>% 
-  group_by(GEOID10,super_town, race_group, age_cat) %>% 
-  summarise(num = sum(deaths, na.rm=T),
-            den = sum(population, na.rm=T))%>%
-  mutate(den = den + 0.001,
-         race_group = factor(race_group),
-         race_group =  relevel(race_group, ref = 2)) %>%
-  inner_join(ma_absm_sum, by = c("GEOID10")) %>% 
-  fastDummies::dummy_cols(select_columns=c("pov_cat", "ICE_qt", "SVI_qt")) %>%
-  rename(pov_cat_1 = "pov_cat_0-4.9%",
-         pov_cat_2 = "pov_cat_5-9.9%",
-         pov_cat_3 = "pov_cat_10-19.9%",
-         pov_cat_4 = "pov_cat_20-100%",
-         ICE_qt_1 = "ICE_qt_[-0.689,0.0607]",
-         ICE_qt_2 = "ICE_qt_(0.0607,0.245]" , 
-         ICE_qt_3 = "ICE_qt_(0.245,0.362]" ,  
-         ICE_qt_4 = "ICE_qt_(0.362,0.465]" ,  
-         ICE_qt_5 = "ICE_qt_(0.465,0.727]" ,
-         SVI_qt_1 = "SVI_qt_[0,0.195]",
-         SVI_qt_2 = "SVI_qt_(0.195,0.397]"  ,
-         SVI_qt_3 = "SVI_qt_(0.397,0.583]",
-         SVI_qt_4 = "SVI_qt_(0.583,0.781]",
-         SVI_qt_5 = "SVI_qt_(0.781,1]") 
-
-# Null poisson model
-model0 <- glm(num ~ race_group + factor(age_cat) + offset(log(den)),
-                        family=poisson(link=log),
-                        data=poisson_data)
-
-summary.model0 <- summary(model0)
-saveRDS(summary.model0, file = "poisson0.rds")
-
-
-poisson_data$fit <- as_tibble(predict(model0)) %>% 
-  transmute(fit = exp(value))
-
-poisson_irr <- poisson_data %>%
-  group_by(GEOID10,super_town, race_group) %>% 
-  summarise(num = sum(fit, na.rm=T),
-            den = sum(den, na.rm=T)) %>% 
-  mutate(fit_rate = num/den * 1000) %>% 
-  pivot_wider(id_cols = c(GEOID10,super_town),
-              names_from = race_group,
-              values_from = fit_rate) %>% 
-  mutate(fit_irr = ifelse(`Non-Hispanic White` == 0, NA_real_, `Non-Hispanic Black` / `Non-Hispanic White`))
-
-poisson_irr_plot <- poisson_irr %>% 
-  ungroup() %>% 
-  arrange(fit_irr) %>% 
-  mutate(orderID = row_number())%>%
-  ggplot(aes(x=orderID, y=fit_irr)) + 
-    geom_point(color = "limegreen", alpha = 0.8, size = 1) +
-    labs(title = expression(atop("Incidence Rate Ratio Comparing Non-Hispanic Black", 
-                                 "and Non Hispanic White Populations")),
-         caption = expression(atop("Source: Massachusetts Mortality Data 2013-2017",
-                                   "5-Year ACS files from end-years 2015-2019"))) +
-         xlab("Census Tracts") +
-         ylab("IRR") +
-    theme_minimal() 
-
-ggsave("poisson_irr_plot.png")
+  mutate(race_group = ifelse(race_group == "Non-Hispanic Black", "Black", race_group)) %>% 
+  filter(race_group %in% c("Non-Hispanic White","Black")) %>% 
+  left_join(ma_denominator, by = c("GEOID10","year","age_cat","race_group","sex")) %>% 
+  mutate(age_cat = case_when(age_cat %in% c("35-39","40-44") ~ "35-44",
+                             age_cat %in% c("45-49","50-54") ~ "45-54",
+                             age_cat %in% c("55-59","60-64") ~ "55-64",
+                             TRUE ~ age_cat)) %>%
+  group_by(GEOID10, super_town, age_cat, race_group) %>% 
+  summarise(deaths = sum(deaths, na.rm = TRUE),
+            population = sum(population, na.rm = TRUE))%>% 
+  right_join(reference_rates, by="age_cat") %>%
+  mutate(expected = ref_rate*population) %>%
+  group_by(GEOID10, super_town, race_group) %>%
+  summarise(O = sum(deaths),
+            E = sum(expected),
+            raw_smr = O/E,
+            var_raw_smr = O/E^2,
+            raw_smr_lo95 = raw_smr - 1.96*sqrt(var_raw_smr),
+            raw_smr_up95 = raw_smr + 1.96*sqrt(var_raw_smr)) %>%
+  left_join(ma_absm_sum, by = "GEOID10") %>% 
+  mutate(id = row_number()) %>%
+  fastDummies::dummy_cols(select_columns= "ICE_qt") %>%
+  rename(ICE_qt_1  = "ICE_qt_(-0.689,0.0607]",
+         ICE_qt_2  = "ICE_qt_(0.0607,0.245]", 
+         ICE_qt_3  = "ICE_qt_(0.245,0.362]",  
+         ICE_qt_4  = "ICE_qt_(0.362,0.465]",  
+         ICE_qt_5  = "ICE_qt_(0.465,0.727]") 
 ```
 
-```{r, echo = FALSE}
-include_graphics("images/07-premature-mortality/poisson_irr_plot.png")
+```{r ordering the data, eval = FALSE}
+# Make sure that the data file has areas in the same order as the shape file
+ma_mort_istd_byrace_ordered <- ma_mort_istd_byrace %>% 
+  filter(!(O == 0 & E == 0)) %>% 
+  mutate(intercept = 1) %>%
+  left_join(tract_geometry, by="GEOID10") %>%
+  select(-geometry) %>% 
+  arrange(id_order) %>%
+  mutate(race_group = factor(race_group, levels = c("Non-Hispanic White", "Black")),
+         ICE_qt = factor(ICE_qt, levels=c("(0.465,0.727]",
+                                          "(0.362,0.465]",
+                                          "(0.245,0.362]",
+                                          "(0.0607,0.245]",
+                                          "(-0.689,0.0607]")))
 ```
 
-And of course, now we can map that value as well.
+```{r interaction model, eval = FALSE}
+# BYM model with ICE-race interaction
+model_form_2 <- O ~ 1 + f(id_order, model='bym2', graph=INLA_adj_mat, scale.model=TRUE, constr=TRUE) + factor(race_group)*factor(ICE_qt)
 
-```{r poisson map, eval = FALSE, echo = FALSE}
-map.state.p.irr <- poisson_irr %>% 
-  mutate(fit_irr = case_when(fit_irr > 4  ~ 4,
-                         TRUE     ~ fit_irr)) %>% 
-  left_join(tract_geometry, by= "GEOID10") %>% 
-  ggplot() +
-    geom_sf(mapping = aes(geometry = geometry,
-                          fill = fit_irr),
-            lwd = 0.1) +
-  scale_fill_viridis(option = "E",
-                     trans = scales::pseudo_log_trans(sigma=0.01),
-                     limits = exp(c(-1,1)*log(4)),
-                     breaks=c(0.25, 0.5,1,2,4),
-                     na.value = "white") +
-  labs(title = expression(atop("Incidence Rate Ratio Comparing Non-Hispanic Black", 
-                                 "and Non Hispanic White Populations")),
+#The following code outlines the linear combinations our model will make, so that we can calculate intersectional inequities
+
+linear_combinations <- inla.make.lincombs(
+"factor(race_group)Black"                       = c(1,1,1,1,0,0,0,0,1,1,1,1),
+"factor(ICE_qt)(0.362,0.465]"                   = c(0,0,0,0,1,0,0,0,1,0,0,0),
+"factor(ICE_qt)(0.245,0.362]"                   = c(0,0,0,0,0,1,0,0,0,1,0,0),  
+"factor(ICE_qt)(0.0607,0.245]"                  = c(0,0,0,0,0,0,1,0,0,0,1,0),
+"factor(ICE_qt)(-0.689,0.0607]"                 = c(0,0,0,0,0,0,0,1,0,0,0,1),
+"factor(race_group)Black:factor(ICE_qt)(0.362,0.465]"   = c(1,0,0,0,1,0,0,0,1,0,0,0),
+"factor(race_group)Black:factor(ICE_qt)(0.245,0.362]"   = c(0,1,0,0,0,1,0,0,0,1,0,0),
+"factor(race_group)Black:factor(ICE_qt)(0.0607,0.245]"  = c(0,0,1,0,0,0,1,0,0,0,1,0),
+"factor(race_group)Black:factor(ICE_qt)(-0.689,0.0607]" = c(0,0,0,1,0,0,0,1,0,0,0,1))
+
+model_results_lc <- inla(model_form_2, 
+                         family="poisson",
+                         data=ma_mort_istd_byrace_ordered, E=E, 
+                         control.predictor=list(compute=TRUE), 
+                         control.compute=list(dic=TRUE, waic=TRUE),
+                         lincomb = linear_combinations)
+
+# Function to extract the fixed results
+tidy.inla.fixed <- function(x){
+  # x = model_inla
+  term_names <- rownames(x$summary.fixed)
+
+  tibble::as_tibble(x$summary.fixed) %>%
+    dplyr::mutate(terms = term_names) %>%
+    dplyr::rename(term = terms,
+                  estimate = mean,
+                  conf.low = `0.025quant`, 
+                  conf.high = `0.975quant`) %>%
+    dplyr::select(term, estimate,
+                  conf.low, conf.high)
+}
+
+# Function to extract the linear combinations
+tidy.inla.lc <- function(x){
+  # x = model_inla
+  term_names <- rownames(x$summary.lincomb.derived)
+
+  tibble::as_tibble(x$summary.lincomb.derived) %>%
+    dplyr::mutate(terms = term_names) %>%
+    dplyr::rename(term = terms,
+                  estimate = mean,
+                  conf.low = `0.025quant`, 
+                  conf.high = `0.975quant`) %>%
+    dplyr::select(term, estimate,
+                  conf.low, conf.high)
+}
+
+tidy_fixed_results <- tidy.inla.fixed(model_results_lc) %>%
+  filter(!term=="(Intercept)" & !stringr::str_detect(term, ":")) %>%
+  separate(col=term, into=c("pre1", "term"), sep='\\)') %>%
+  select(-pre1) %>%
+  mutate(race_group = case_when(term=="Black" ~ "Black",
+                                TRUE ~ "Non-Hispanic White"),
+         qval = case_when(!term=="Black" ~ term),
+         which = case_when(term=="Black" ~ "byICE_qt",
+                           TRUE ~ "byRace"),
+         twoway = case_when(term=="Black" ~ 1,
+                            TRUE ~ 1))
+
+tidy_lc_results <-  tidy.inla.lc(model_results_lc) %>% 
+  mutate(race_group = "Black",
+         qval = factor(case_when(term %in% c("lc01", "lc05", "lc09") ~ "(0.362,0.465]",
+                                 term %in% c("lc02", "lc06", "lc10") ~ "(0.245,0.362]",
+                                 term %in% c("lc03", "lc07", "lc11") ~ "(0.0607,0.245]",
+                                 term %in% c("lc04", "lc08", "lc12") ~ "(-0.689,0.0607]"),
+                       levels=levels(ma_mort_istd_byrace_ordered$ICE_qt)),
+         which = factor(case_when(term %in% c("lc01", "lc02", "lc03", "lc04") ~ "byICE_qt",
+                                  term %in% c("lc05", "lc06", "lc07", "lc08") ~ "byRace")),
+         twoway = case_when(term %in% c("lc09", "lc10", "lc11", "lc12") ~ 1 ,
+                            TRUE ~ 0))
+
+interaction_effects_bym <- bind_rows(tidy_fixed_results, tidy_lc_results) %>%
+  arrange(which, race_group, qval) %>%
+  mutate(qval = ifelse(is.na(qval),"(0.465,0.727]",qval)) %>% 
+  select(-term)
+```
+
+We can look at some of these results in plots, to get a sense of the way that ICE is interacting with race to impact mortality in Massachusetts.
+
+```{r interaction plots, eval = FALSE}
+# Plot black/white disparities within ICE categories
+race_effect_within_ICEqt <- interaction_effects_bym %>%
+  filter(which == "byICE_qt") %>% 
+  ggplot(aes(x=qval, 
+             y=exp(estimate), 
+             ymin=exp(conf.low), 
+             ymax=exp(conf.high))) +
+  geom_point(position=position_dodge(width=0.5), size=3) +
+  geom_errorbar(width=0.2, position = position_dodge(width=0.5)) +
+  geom_hline(yintercept=1, linetype="dotted") +
+  scale_color_brewer(palette="Set1") +
+  labs(title = "Impact of Race on Premature Mortality, across levels of ICE",
        caption = expression(atop("Source: Massachusetts Mortality Data 2013-2017", 
                                  "5-Year ACS files from end-years 2015-2019")),
-       fill = "IRR", x="", y="") +
-  theme_void() +
-    theme(legend.position = c(0.25, 0.25),
-          legend.key.size = unit(0.3, "cm"),
-          plot.title      = element_text(hjust = 0.1),
-          plot.subtitle   = element_text(hjust = 0.1))
+       x = "", y = "IRR comparing Black to White population") +
+  theme_minimal() +
+  theme(legend.position="bottom", 
+        axis.text.x=element_text(angle=65, hjust=1, vjust=1))
 
-map.boston.p.irr <- poisson_irr %>% 
-  filter(super_town == "boston") %>% 
-  mutate(fit_irr = case_when(fit_irr > 4  ~ 4,
-                         TRUE     ~ fit_irr)) %>% 
-  left_join(tract_geometry, by= "GEOID10") %>% 
-  ggplot() +
-    geom_sf(mapping = aes(geometry = geometry,
-                          fill = fit_irr),
-            lwd = 0.1) +
-  scale_fill_viridis(option = "E",
-                     trans = scales::pseudo_log_trans(sigma=0.01),
-                     limits = exp(c(-1,1)*log(4)),
-                     breaks=c(0.25, 0.5,1,2,4),
-                     na.value = "white") +
-    labs(title = "Boston") +
-    theme_void() + 
-    theme(strip.text.x = element_blank(),
-          legend.position = "None",
-          plot.title      = element_text(hjust = 0.5)) 
-
-map.p.irr <- ggdraw() +
-  draw_plot(map.state.p.irr , x = 0.00, y = 0.00, width = 0.80, height = 1.00) +
-  draw_plot(map.boston.p.irr, x = 0.65, y = 0.50, width = 0.30, height = 0.30)
-
-ggsave("map.p.irr.png")
-
-```
-
-
-```{r, echo = FALSE}
-include_graphics("images/07-premature-mortality/map.p.irr.png")
-```
-
-An adjusted model would allow for us to see how poverty rates are impacting the IRR.
-
-```{r, eval = FALSE}
-# Adjusted Poisson Model
-model1 <- glm(num ~ race_group + factor(age_cat) + (race_group * factor(pov_cat, exclude = NULL)) + offset(log(den)),
-                        family=poisson(link=log),
-                        data=poisson_data)
-
-summary.model1 <- summary(model1)
-saveRDS(summary.model1, file = "poisson1.rds")
-
-poisson_data$adj_fit <- as_tibble(predict(model1)) %>% 
-  transmute(adj_fit = exp(value))
-
-adj_poisson_irr <- poisson_data %>%
-  group_by(GEOID10,super_town, race_group) %>% 
-  summarise(num = sum(adj_fit, na.rm=T),
-            den = sum(den, na.rm=T)) %>% 
-  mutate(adj_fit_rate = num/den * 1000) %>% 
-  pivot_wider(id_cols = c(GEOID10,super_town),
-              names_from = race_group,
-              values_from = adj_fit_rate) %>% 
-  mutate(adj_fit_irr = ifelse(`Non-Hispanic White` == 0, NA_real_, `Non-Hispanic Black` / `Non-Hispanic White`))
-
-adj_poisson_irr_plot <- adj_poisson_irr %>% 
-  ungroup() %>% 
-  arrange(adj_fit_irr) %>% 
-  mutate(orderID = row_number())%>%
-  ggplot(aes(x=orderID, y=adj_fit_irr)) + 
-    geom_point(color = "limegreen", alpha = 0.8, size = 1) +
-    labs(title = expression(atop("Poverty Adjusted Incidence Rate Ratio", 
-                                 "Comparing Non-Hispanic Black and Non Hispanic White Populations")),
-         caption = expression(atop("Source: Massachusetts Mortality Data 2013-2017",
-                                   "5-Year ACS files from end-years 2015-2019"))) +
-         xlab("Census Tracts") +
-         ylab("IRR") +
-    theme_minimal() 
-
-ggsave("adj_poisson_irr_plot.png")
-
-```
-
-```{r, echo = FALSE}
-include_graphics("images/07-premature-mortality/adj_poisson_irr_plot.png")
-```
-
-And now the map:
-
-```{r, eval = FALSE}
-adj_map.state.p.irr <- adj_poisson_irr %>% 
-  mutate(adj_fit_irr = case_when(adj_fit_irr > 4  ~ 4,
-                         TRUE     ~ adj_fit_irr)) %>% 
-  left_join(tract_geometry, by= "GEOID10") %>% 
-  ggplot() +
-    geom_sf(mapping = aes(geometry = geometry,
-                          fill = adj_fit_irr),
-            lwd = 0.1) +
-  scale_fill_viridis(option = "E",
-                     trans = scales::pseudo_log_trans(sigma=0.01),
-                     limits = exp(c(-1,1)*log(4)),
-                     breaks=c(0.25, 0.5,1,2,4),
-                     na.value = "white") +
-  labs(title = expression(atop("Poverty Adjusted Incidence Rate Ratio", 
-                                 "Comparing Non-Hispanic Black and Non Hispanic White Populations")),
+# Plot ABSM disparities within racial/ethnic categories, for aggregated method and Poisson robust
+ICEqt_effect_within_race <- interaction_effects_bym %>% 
+  filter(which=="byRace") %>% 
+  ggplot(aes(x=qval, 
+             y=exp(estimate), 
+             ymin=exp(conf.low), 
+             ymax=exp(conf.high),
+             color = race_group)) +
+  geom_point(size=3) +
+  geom_errorbar(width=0.2) +
+  geom_hline(yintercept=1, linetype="dotted") +
+  labs(title = "Impact of ICE on Premature Mortality, across racial categorizations",
        caption = expression(atop("Source: Massachusetts Mortality Data 2013-2017", 
                                  "5-Year ACS files from end-years 2015-2019")),
-       fill = "IRR", x="", y="") +
-  theme_void() +
-    theme(legend.position = c(0.25, 0.25),
-          legend.key.size = unit(0.3, "cm"),
-          plot.title      = element_text(hjust = 0.1),
-          plot.subtitle   = element_text(hjust = 0.1))
+       x="", 
+       y="IRR comparing ICE category to reference", 
+       color = "race_group") +
+  theme_minimal() +
+  theme(legend.position="bottom", 
+        axis.text.x=element_text(angle=65, hjust=1, vjust=1))
 
-adj_map.boston.p.irr <- adj_poisson_irr %>% 
-  filter(super_town == "boston") %>% 
-  mutate(adj_fit_irr = case_when(adj_fit_irr > 4  ~ 4,
-                         TRUE     ~ adj_fit_irr)) %>% 
-  left_join(tract_geometry, by= "GEOID10") %>% 
-  ggplot() +
-    geom_sf(mapping = aes(geometry = geometry,
-                          fill = adj_fit_irr),
-            lwd = 0.1) +
-  scale_fill_viridis(option = "E",
-                     trans = scales::pseudo_log_trans(sigma=0.01),
-                     limits = exp(c(-1,1)*log(4)),
-                     breaks=c(0.25, 0.5,1,2,4),
-                     na.value = "white") +
-    labs(title = "Boston") +
-    theme_void() + 
-    theme(strip.text.x = element_blank(),
-          legend.position = "None",
-          plot.title      = element_text(hjust = 0.5)) 
+interaction_plots <- plot_grid(race_effect_within_ICEqt, ICEqt_effect_within_race,
+                               ncol = 2)
 
-adj_map.p.irr <- ggdraw() +
-  draw_plot(adj_map.state.p.irr , x = 0.00, y = 0.00, width = 0.80, height = 1.00) +
-  draw_plot(adj_map.boston.p.irr, x = 0.65, y = 0.50, width = 0.30, height = 0.30)
-
-ggsave("adj_map.p.irr.png")
+#ggsave("your_file_path/interaction_plots.png")
 ```
 
-```{r, echo = FALSE}
-include_graphics("images/07-premature-mortality/adj_map.p.irr.png")
+```{r interaction_plots.png, echo = FALSE}
+include_graphics("images/07-premature-mortality/interaction_plots.png")
 ```
 
-To understand statistically how poverty is impacting the relationship between racialized groups and premature mortality, we can compare the models with and without poverty. We can see the impact of membership in racialized groups is reduced with the presence of the census tract level poverty.
+:::: {.infobox .interpretation}
 
-```{r, echo = FALSE}
-summary.model0 <- readRDS("data/07-premature-mortality/poisson0.rds")
-summary.model0
+We can see from these plots that as areas become more heavily concentrated with Non-Hispanic White, high-income individuals, the impact of racialized group on Premature Mortality increases. In populations that are heavily concentrated with low-income People of Color (POC), the mortality rates for Non-Hispanic White individuals is higher than that of Black individuals. At the other end of the spectrum the results are insignificant (possibly because Massachusetts has less census tracts in that category) but trend the other direction.
+
+When we look at the impact of ICE within racial categories we actually see very little impact for the Black population, with the impact of ICE only significantly different in the most concentrated low-income POC category. But for the Non-Hispanic White population we see larger differences from the reference, and a clear pattern where in Non-Hispanic White individuals fare much worse in neighborhoods with more low-income POC.
+
+Why would this be? What have we learned about the differential impact of neighborhood context by individual racialized group membership?
+
+::::
+
+## Appendix: Wrangling Your Mortality Data
+
+Below is some code (for example) to turn a geocoded mortality file into what has been provided to you, by merging census tracts and towns to the data, and then aggregating into groups that align with the age and racialized groups that match your denominator data.
+
+```{r wrangling outcome, eval = FALSE}
+# Importing the raw mortality data, with the geocoded coordinates, converted into spatial feature (sf) data
+ma_mort <- read_rds("ma_mort_geo.RDS") %>% 
+  st_as_sf(coords=c("lon","lat"), crs = 4269)
+
+# Importing a MA tract-level shapefile using tigris package
+tracts_sf <- tracts(state = "25", year = "2010")
+
+# Merging the Census Tracts to our crosswalk of towns so we know which ones need to be combined
+supertowns <- read_excel("ma ct to supertinytowns.xlsx", col_names = FALSE, col_types = "text") %>%
+  transmute(GEOID10 = ...1,
+            super_town = str_to_lower(...2))
+
+tracts_sf <- left_join(tracts_sf,supertowns, by = "GEOID10")
+
+# Merging to geocoded mortality and dropping geometries
+# The geometries (actual stored location information) of a shapefile can be very unwieldy and slow data wrangling commands. Since we only need them to visualize our maps, we will remove them for now
+
+ma_mort_agg <- st_join(tracts_sf, ma_mort, left = FALSE) %>%
+  st_drop_geometry() %>%
+  arrange(id) %>%
+  mutate(super_town = case_when(super_town == "stt1"   ~ "Super Town 1",
+                                super_town == "stt2"   ~ "Super Town 2",
+                                super_town == "stt3"   ~ "Super Town 3",
+                                super_town == "stt4"   ~ "Super Town 4",
+                                super_town == "stt5"   ~ "Super Town 5",
+                                super_town == "stt6"   ~ "Super Town 6",
+                                super_town == "stt7"   ~ "Super Town 7",
+                                super_town == "stt8"   ~ "Super Town 8",
+                                super_town == "stt9"   ~ "Super Town 9",
+                                super_town == "stt10"  ~ "Super Town 10",
+                                super_town == "stt11"  ~ "Super Town 11",
+                                super_town == "stt12"  ~ "Super Town 12",
+                                super_town == "stt13"  ~ "Super Town 13",
+                                super_town == "stt14"  ~ "Super Town 14",
+                                super_town == "stt15"  ~ "Super Town 15",
+                                super_town == "stt16"  ~ "Super Town 16",
+                                super_town == "stt17"  ~ "Super Town 17",
+                                super_town == "stt18"  ~ "Super Town 18",
+                                super_town == "stt19"  ~ "Super Town 19",
+                                super_town == "stt20"  ~ "Super Town 20",
+                                super_town == "stt21"  ~ "Super Town 21",
+                                geo_town != super_town ~ super_town,
+                                TRUE                   ~ geo_town)) %>% 
+  select(id, year, date,
+         age, sex, starts_with("race"), hisp, immigrant, starts_with("educ"),
+         contains("icd10"),
+         address, zip, starts_with("geo"), super_town, contains("type"), north, south, east, west,
+         GEOID10)
+
+# Aggregating the data by census tract and our selected variables of interest
+# Dropping deaths that occurred after age 65
+# Creating Category Totals for each variable
+ma_mort_ct <- ma_mort_agg %>%
+  mutate(age_cat = cut(age,
+                       breaks = c(-1,4,9,14,19,24,29,34,39,44,49,54,59,64),
+                       labels = c("0-4",  "5-9",  "10-14","15-19","20-24",
+                                  "25-29","30-34","35-39","40-44","45-49",
+                                  "50-54","55-59","60-64"))) %>%
+    filter(age < 65,
+           race_group != "Other",
+           sex %in% c("Female","Male")) %>% 
+  select(-c(age, race, immigrant, educ_years, contains("icd10"),
+            contains("address"), zip, geo_town, contains("type"),
+            north, south, east, west, date, hisp)) %>%
+  group_by(year,
+           age_cat,
+           sex,
+           race_group,
+           super_town,
+           GEOID10) %>%
+  summarise(deaths = n()) %>%
+  ungroup() %>%
+  pivot_wider(id_cols = c(year, GEOID10, super_town),
+              names_from = c("race_group","sex","age_cat"),
+              values_from = deaths,
+              names_sep = "__",
+              values_fill = 0) %>%
+  rowwise() %>%
+  mutate(`Black__Male__35-44` = `Black__Male__35-39` + `Black__Male__40-44`,
+         `Black__Male__45-54` = `Black__Male__45-49` + `Black__Male__50-54`,
+         `Black__Male__55-64` = `Black__Male__55-59` + `Black__Male__60-64`,
+
+         `Black__Female__35-44` = `Black__Female__35-39` + `Black__Female__40-44`,
+         `Black__Female__45-54` = `Black__Female__45-49` + `Black__Female__50-54`,
+         `Black__Female__55-64` = `Black__Female__55-59` + `Black__Female__60-64`,
+
+         `Non-Hispanic White__Male__35-44` = `Non-Hispanic White__Male__35-39` + `Non-Hispanic White__Male__40-44`,
+         `Non-Hispanic White__Male__45-54` = `Non-Hispanic White__Male__45-49` + `Non-Hispanic White__Male__50-54`,
+         `Non-Hispanic White__Male__55-64` = `Non-Hispanic White__Male__55-59` + `Non-Hispanic White__Male__60-64`,
+
+         `Non-Hispanic White__Female__35-44` = `Non-Hispanic White__Female__35-39` + `Non-Hispanic White__Female__40-44`,
+         `Non-Hispanic White__Female__45-54` = `Non-Hispanic White__Female__45-49` + `Non-Hispanic White__Female__50-54`,
+         `Non-Hispanic White__Female__55-64` = `Non-Hispanic White__Female__55-59` + `Non-Hispanic White__Female__60-64`) %>%
+  ungroup() %>%
+  pivot_longer(cols = `Black__Male__0-4`:`Non-Hispanic White__Female__55-64`,
+               names_to = c("race_group","sex","age_cat"),
+               names_sep = "__",
+               values_to = "deaths")
+
+# saveRDS(ma_mort_ct, file = "ma_mort_ct.RDS")               
 ```
-
-```{r, echo = FALSE}
-summary.model1 <- readRDS("data/07-premature-mortality/poisson1.rds")
-summary.model1
-```
-
-The impact of membership in racialized groups becomes non-significant when poverty is included in the model. We could interpret this as poverty driving the relationship between racialized group and premature mortality. If this is the case, what conclusions could we draw about the need for appropriately contextualized maps
-
-### How does the racialized disparity vary across space? 
-
-Although much of our data are at the census tract level, census tracts are not areas of political decision making. Political decisions in Massachusetts are made at the level of cities and towns. We would expect that cities and towns might be more important than census tracts in determining premature mortality, because it is at those boundaries that resources are distributed. We can fit a multilevel model to test this hypothesis.
-
-```{r multilevel, eval = FALSE}
-# Bringing in city expenditure data
-expenditures <- readRDS("expenditures.RDS")
-
-mlm_data <- ma_mort_agg %>%
-  inner_join(ma_demo_acs, by = c("year","GEOID10","race_group","sex","age_cat")) %>%
-  filter(race_group %in% c("Non-Hispanic White","Non-Hispanic Black"),
-         age_cat != "Total") %>% 
-  group_by(GEOID10,super_town, race_group, age_cat) %>% 
-  summarise(num = sum(deaths, na.rm=T),
-            den = sum(population, na.rm=T))%>%
-  mutate(den = den + 0.001,
-         race_group = factor(race_group),
-         race_group =  relevel(race_group, ref = 2)) %>%
-  inner_join(ma_absm_sum, by = c("GEOID10")) %>% 
-  fastDummies::dummy_cols(select_columns=c("pov_cat", "ICE_qt", "SVI_qt")) %>%
-  rename(pov_cat_1 = "pov_cat_0-4.9%",
-         pov_cat_2 = "pov_cat_5-9.9%",
-         pov_cat_3 = "pov_cat_10-19.9%",
-         pov_cat_4 = "pov_cat_20-100%",
-         ICE_qt_1 = "ICE_qt_[-0.689,0.0607]",
-         ICE_qt_2 = "ICE_qt_(0.0607,0.245]" , 
-         ICE_qt_3 = "ICE_qt_(0.245,0.362]" ,  
-         ICE_qt_4 = "ICE_qt_(0.362,0.465]" ,  
-         ICE_qt_5 = "ICE_qt_(0.465,0.727]" ,
-         SVI_qt_1 = "SVI_qt_[0,0.195]",
-         SVI_qt_2 = "SVI_qt_(0.195,0.397]"  ,
-         SVI_qt_3 = "SVI_qt_(0.397,0.583]",
-         SVI_qt_4 = "SVI_qt_(0.583,0.781]",
-         SVI_qt_5 = "SVI_qt_(0.781,1]") %>% 
-  left_join(expenditures, by = "GEOID10") %>% 
-  mutate(social_exp_perc = human_services / total_exp)
-
-# Multilevel Models
-mlm0 <- glmer(num ~ 1 + (1 | super_town) + offset(log(den)),
-              family  = poisson(link=log),
-              data    = mlm_data,
-              nAGQ    = 0, 
-              control = glmerControl(optimizer="Nelder_Mead"))
-
-summary(mlm0)
-summary.mlm0 <- summary(mlm0)
-saveRDS(summary.mlm0, file = "mlm0.rds")
-
-mlm1 <- glmer(num ~ 1 + race_group + factor(age_cat) + (1 | super_town) + offset(log(den)),
-              family  = poisson(link=log),
-              data    = mlm_data,
-              nAGQ    = 0, 
-              control = glmerControl(optimizer="Nelder_Mead"))
-
-summary(mlm1)
-summary.mlm1 <- summary(mlm1)
-saveRDS(summary.mlm1, file = "mlm1.rds")
-
-mlm2 <- glmer(num ~ 1  + race_group + factor(age_cat) + (race_group | super_town) + offset(log(den)),
-              family  = poisson(link=log),
-              data    = mlm_data,
-              nAGQ    = 0, 
-              control = glmerControl(optimizer="Nelder_Mead"))
-
-summary(mlm2)
-summary.mlm2 <- summary(mlm2)
-saveRDS(summary.mlm2, file = "mlm2.rds")
-
-mlm3 <- glmer(num ~ 1  + race_group + factor(age_cat)  + social_exp_perc + (race_group  + social_exp_perc | super_town) + offset(log(den)),
-              family  = poisson(link=log),
-              data    = mlm_data,
-              nAGQ    = 0, 
-              control = glmerControl(optimizer="Nelder_Mead"))
-
-summary(mlm3)
-summary.mlm3 <- summary(mlm3)
-saveRDS(summary.mlm3, file = "mlm3.rds")
-```
-So how do we interpret these models? What do they tell us about whether we should be mapping at the census tract level, or the city level? What can they tell us about what sorts of variables we should include in our analyses?
-
-#### Null Model
-```{r, echo = FALSE}
-summary.mlm0 <- read_rds("data/07-premature-mortality/mlm0.rds")
-summary.mlm0
-```
-
-#### Racialized group and Age Fixed Effects Model
-
-```{r, echo = FALSE}
-summary.mlm1 <- read_rds("data/07-premature-mortality/mlm1.rds")
-summary.mlm1
-```
-
-#### Racialized group Random Effect at the Town Level
-
-```{r, echo = FALSE}
-summary.mlm2 <- read_rds("data/07-premature-mortality/mlm2.rds")
-summary.mlm2
-
-```
-
-#### Town Level Spending Random Effect
-
-```{r, echo = FALSE}
-summary.mlm3 <- read_rds("data/07-premature-mortality/mlm3.rds")
-summary.mlm3
-```
-
-## Bibliography
-
-1) Friedman D, Hunter E, Parrish R (eds). (2005). Health statistics. New York: Oxford University Press.
-
-2) Hetzel AM (1997). HIstory and organization of vital statistics systems. Bethesda, MA: National Center for Health Statistics. https://www.cdc.gov/nchs/data/misc/usvss.pdf ; accessed June 14, 2022.
-
-3) Krieger N. The US Census and the People's Health: Public Health Engagement From Enslavement and "Indians Not Taxed" to Census Tracts and Health Equity (1790-2018). Am J Public Health. 2019 Aug;109(8):1092-1100. doi: 10.2105/AJPH.2019.305017. Epub 2019 Jun 20.
-
-4) US Office of Management and Budget. Revisions to the Standards for the Classification of Federal Data on Race and Ethnicity. Federal Register 1997; 62(210):58782-58790. https://www.govinfo.gov/content/pkg/FR-1997-10-30/pdf/97-28653.pdf ; accessed June 14, 2022.
-
