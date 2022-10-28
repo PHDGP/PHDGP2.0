@@ -353,8 +353,8 @@ reasons:
   spatial/geometry data and to add them in afterwards as some functions from
   `dplyr` or the `tidyverse` may not work well with spatial data frames.
   
-When you look at the maps, make sure to note the scales because sometimes they 
-differ! 
+When you look at the maps, make sure to note the scales presented in the legend because sometimes they 
+differ (i.e. pay attention to what the range in the legend represents)! 
 ::::
 
 
@@ -450,7 +450,21 @@ health_insurance %>%
   ggtitle("% with Health Insurance, McCulloch County, Texas",
           "90% Margin of Error and Estimates Shown") 
 
+# One reason that a county would have a large margin of error is if it has a small population size. Let's see what the population size is of McCulloch County, TX.
+#Here we see that the adult population of McCulloch county went from 4,649 in 2012 to 4,364 in 2019.
+
+McCulloch<-health_insurance %>%
+  filter(NAME=="McCulloch County, Texas")
+
+McCulloch$estimate_adult_denom
+
+#Here we can see that the range of the adult population across all counties in the four states we are examining is 48 - 6,496,638. That means that that McCulloch county, with a population of around 4,500 falls in the bottom quantile, which likely explains the large margin of error.
+
+summary(health_insurance$estimate_adult_denom)
+
 ```
+
+
 
 :::: {.infobox .dataWrangling}
 For more information on how the ACS calculates margin of error, see https://www.census.gov/data/academy/webinars/2020/calculating-margins-of-error-acs.html 

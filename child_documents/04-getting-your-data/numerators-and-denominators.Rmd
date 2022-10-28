@@ -58,8 +58,9 @@ To ensure that there is no numerator/denominator mismatch and that all cases in 
   - How are cases defined? 
   - Does the data source include just adults or all ages? 
   - Is the data source limited to non-institutionalized populations? 
-  - Does the data source include just residents of a jurisdiction?
+  - Does the data source include solely residents of the jurisdiction?
   - What happens to individuals who do not have an address of residence?
+  - What happens to individuals who are institutionalized, including incarcerated?
 
 Additionally, one should exclude all records that are not geocoded, do not meet the case definition, or are missing data on important covariates (e.g. age, gender, race/ethnicity, etc. depending on the question being asked). However, any such exclusions need to be clearly documented, with careful thought given to how the resulting selection bias can affect interpretation of the results.
 

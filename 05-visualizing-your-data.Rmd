@@ -96,7 +96,7 @@ data visualization and mapping are powerful tools to communicate (or
 miscommunicate) data, it is critical to be aware of how they can reflect bias
 and tell lies (Deluca and Nelson, 2017), (Fleckenstein 1991), (Monmonier 2021),
 as well as reveal powerful truths (Koch 2017). Tom Koch outlines the history of
-disease mapping in his book Disease Maps, Epidemics on the Ground (2011), and in
+disease mapping in his book *Disease Maps, Epidemics on the Ground* (2011), and in
 his 2017 follow-up book, *Ethics in Everyday Places: Mapping Moral Stress,
 Distress, and Injury,* he takes a broader perspective.
 
@@ -135,7 +135,7 @@ Buzzelli M. (2020) ‘Modifiable Areal Unit Problem’, International Encycloped
 
 Chowkwanyun M and Reed Jr AL. (2020). Racial health disparities and Covid-19—Caution and context. New England Journal of Medicine, 383(3), 201-203. doi:10.1056/NEJMp2012910
 
-Craddock, S. (2004). City of plagues: Disease, poverty, and deviance in San Francisco. University of Minnesota Press. 
+Craddock, S. (2004). City of Plagues: Disease, Poverty, and Deviance in San Francisco. University of Minnesota Press. 
 
 Deluca E. and Nelson S. (2017) ‘Lying With Maps’. Available at: https://open.lib.umn.edu/mapping/chapter/7-lying-with-maps/ (Accessed: 7 June 2022).
 
@@ -169,7 +169,7 @@ Krieger N, Kim R, Feldman J, Waterman PD. Using the Index of Concentration at th
 
 Krieger N. The US Census and the people's health: Public health engagement from enslavement and "Indians Not Taxed" to census tracts and health equity (1790-2018). Am J Public Health 2019; 109(8):1092-1100.
 
-Krieger N, Testa C, Chen JT, Hanage WP, McGregor AJ. Relationship of political ideology of US Federal and State elected officials and key COVID pandemic outcomes during the vaccine era: April 2021-March 2022. Available at SSRN: https://ssrn.com/abstract=4131161 ; posted: June 8, 2022
+Krieger N, Testa C, Chen JT, Hanage WP, McGregor AJ. Relationship of political ideology of US federal and state elected officials and key COVID pandemic outcomes during the vaccine era: April 2021-March 2022. Lancet – Regional Health Americas (in press).
 
 Krupar S, & Ehlers N. (2017). Biofutures: Race and the governance of health. Environment and Planning D: Society and Space, 35(2), 222-240. doi:10.1177/0263775816654475
 
@@ -177,7 +177,7 @@ Lopez RP. (2009). Public health, the APHA, and urban renewal. American Journal o
 
 Lovelace R, Nowosad J, and Muenchow J. (2022) Geocomputation with R. Available at: https://geocompr.robinlovelace.net/ (Accessed: 7 June 2022).
 
-Molina N. (2006). Fit to be citizens? Public health and race in Los Angeles, 1879-1939. University of California Press.
+Molina N. (2006). Fit to be Citizens? Public Health and Race in Los Angeles, 1879-1939. University of California Press.
 
 Monmonier M. (2018) How to Lie with Maps, Third Edition. Chicago, IL: University of Chicago Press. Available at: https://press.uchicago.edu/ucp/books/book/chicago/H/bo27400568.html (Accessed: 7 June 2022).
 
@@ -185,7 +185,7 @@ Nelson R, Winling L, Connolly NDB, Madron J, Marciano, R. Mapping Inequality: Re
 
 Ou, J. (2021) Safe colorsets. Available at: https://cran.r-project.org/web/packages/colorBlindness/vignettes/colorBlindness.html (Accessed: 7 June 2022).
 
-Roberts Jr SK. (2009). Infectious fear: Politics, disease, and the health effects of segregation. University of North Carolina Press. 
+Roberts Jr SK. (2009). Infectious Fear: Politics, disease, and the Health Effects of Segregation. University of North Carolina Press. 
 
 Rothstein R. (2017). The Color of Law: A Forgotten History of How Our Government Segregated America. New York: Liveright Publishing Co., W.W. Norton & Co.
 

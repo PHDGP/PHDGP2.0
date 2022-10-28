@@ -14,7 +14,7 @@ Read more: https://datacatalog.cookcountyil.gov/stories/s/ttk4-trbu
 
 Data Source: https://datacatalog.cookcountyil.gov/Public-Safety/Medical-Examiner-Case-Archive-COVID-19-Related-Dea/3trz-enys
 
-The death records in this dataset includes individual-level fields for "Race" and "Latino", from which we obtain social membership in racialized/ethnic groups. The dataset also includes residential Zip Codes, which we can use to link to area-based social measures (ABSMs) from the American Community Survey (ACS) 2015-19. We will explore how membership in racialized/ethnic groups and ABSMs is associated with COVID-19 mortality. 
+The death records in this dataset includes individual-level fields for "Race" and "Latino", from which we obtain social membership in racialized/ethnic groups. The data set also includes residential ZIP Codes, which can be linked to US Census ZIP Code Tabulation Areas (ZCTAs), which we can use to link to area-based social measures (ABSMs) from the American Community Survey (ACS) 2015-19. We will explore how membership in racialized/ethnic groups and ABSMs is associated with COVID-19 mortality. 
 
 ## Motivation, Research Questions, and Learning Objectives
 
@@ -22,9 +22,9 @@ This case study focuses on the following research questions:
 
   - What are the differences in COVID-19 mortality rates by racialized group accounting for age?
   
-  - What are the gradients in overall COVID-19 mortality in relation to ABSMs measuring: racialized group composition, the ICE for racialized economic segregation, percent of population living below the poverty line, percent of people living in crowded housing, and median income;
+  - What are the gradients in overall COVID-19 mortality in relation to ABSMs measuring: racialized group composition, the ICE for racialized economic segregation, percent of population living below the poverty line, percent of people living in crowded housing, and median income?
 
-  - What are the gradients in COVID-19 mortality by racialized group in relation to the ABSMs
+  - What are the gradients in COVID-19 mortality by racialized group in relation to the ABSMs?
   
   - What is the spatial variation in COVID-19 mortality by racialized group?
   
@@ -794,7 +794,7 @@ df$prop_hispanic_cut <- df$prop_hispanic %>% cut(., illinois_prop_hispanic_cutpo
 df$prop_white_nh_cut <- df$prop_white_nh %>% cut(., illinois_prop_white_nh_cutpoints, include.lowest=TRUE)
 ```
 
-We have added discretized (cut, i.e. categorical) versions of the different ABSMs.  This allows the model to fit nonlinear responses with increasing levels in these covariates.  Alternative approaches could involve fitting the models with smoothing splines on these variables instead, but we aren't showing that here today. We used Illinois-wide distribution of ABSMs at the ZCTA level to create quantiles for all variables except poverty. For poverty, we use pre-specified cutpoints. 
+We have added discretized (cut, i.e. categorical) versions of the different ABSMs.  This allows the model to fit nonlinear responses with increasing levels in these covariates.  Alternative approaches could involve fitting the models with smoothing splines on these variables instead, but we aren’t including these approaches here. We used Illinois-wide distribution of ABSMs at the ZCTA level to create quantiles for all variables except poverty. For poverty, we use pre-specified cutpoints. 
 
 :::: {.infobox .interpretation}
 Here we set the cutpoints for the continuous ABSMs based on the state-wide distribution of ZCTAs. How might this affect our interpretation? How might your research question and context affect how you decide what the ABSM cutpoints are?
@@ -1002,7 +1002,7 @@ The figure above illustrates that there is a lot more variability of mortality r
 ::::
 
 :::: {.infobox .communication}
-A map of crude rates of small areas with low person-time at risk may be misleading. It may identify some areas as having extreme rates, but this may be just due to chance and low population at risk.
+A map of crude rates of small areas with low person-time at risk may be misleading. It may identify some areas as having extreme rates, but this may be just due to chance and the small size of the population at risk.
 ::::
 
 ```{r visualize racial/ethnic breakdown by zip, fig.width = 8, fig.height = 4}
@@ -1178,7 +1178,7 @@ In contrast to the other ABSMs, the Index of Concentration at the Extremes (ICE)
 ::::
 
 :::: {.infobox .communication}
-The maps above utilize various color scales. How do you think this can affect communication through maps? Do you have a preference? When might you use a diverging versus continuous color scale? Sometimes in can also be useful to plot an interactive map, shown below.
+The maps above utilize various color scales. How do you think this can affect communication through maps? Do you have a preference? When might you use a diverging versus continuous color scale? Sometimes it can also be useful to plot an interactive map, shown below.
 ::::
 
 We can utilize the mapview package to plot interactive graphs. 

@@ -3,9 +3,9 @@
 
 Krieger N. The US Census and the People's Health: Public Health Engagement From Enslavement and "Indians Not Taxed" to Census Tracts and Health Equity (1790-2018). Am J Public Health. 2019 Aug;109(8):1092-1100. doi: 10.2105/AJPH.2019.305017. Epub 2019 Jun 20.
 
-Nethery, Rachel C., Tamara Rushovich, Emily Peterson, Jarvis T. Chen, Pamela D. Waterman, Nancy Krieger, Lance Waller, and Brent A. Coull. "Comparing denominator sources for real-time disease incidence modeling: American Community Survey and WorldPop." SSM-population health 14 (2021): 100786.
+Nethery, Rachel C., Tamara Rushovich, Emily Peterson, Jarvis T. Chen, Pamela D. Waterman, Nancy Krieger, Lance Waller, and Brent A. Coull. "Comparing denominator sources for real-time disease incidence modeling: American Community Survey and WorldPop." SSM-Population Health 14 (2021): 100786.
 
-Rothman, Kenneth J., Sander Greenland, and Timothy L. Lash. Modern epidemiology. Vol. 3. Philadelphia: Wolters Kluwer Health/Lippincott Williams & Wilkins, 2008.
+Rothman, Kenneth J., Sander Greenland, and Timothy L. Lash. Modern Epidemiology. Vol. 3. Philadelphia: Wolters Kluwer Health/Lippincott Williams & Wilkins, 2008.
 
 Else H. African researchers lead campaign for equity in global collaborations. Nature. 2022 Jun 10. doi: 10.1038/d41586-022-01604-3. Epub ahead of print.
 

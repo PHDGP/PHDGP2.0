@@ -8,7 +8,7 @@ output:
 
 Address geocoding, or just geocoding, is the process of converting a location description (usually an address) into some form of geographic representation (usually latitude and longitude coordinates). A geocoding software or program will parse input data into standard, recognizable values, compare this information to an internal reference database of points, lines, or polygons, and then return the best match of values in the database to the input data. We use geocoding software regularly in everyday life – anytime you look up directions to a friends house, search for nearby restaurants for dinner, or hail a ride-sharing service, a geocoding tool is operating under the hood to provide the information you need.
 
-When you need to geocode many addresses, which we often need to do when working with large datasets, this is called ‘batch’ geocoding. Many services offer batch geocoding, with varying degrees of speed, accuracy, and pricing. We recommend reviewing multiple services before deciding what is right for you and your team. We have provided a handout with comparisons of some geocoding services you might be interested in.
+When you need to geocode many addresses, which we often need to do when working with large datasets, this is called ‘batch’ geocoding. Many services offer batch geocoding, with varying degrees of speed, accuracy, and pricing. We recommend reviewing multiple services before deciding what is right for you and your team. Below we provide a table of some geocoding services you might be interested in.
 
 There are a variety of geocoding services available on the internet ranging from free to very expensive. The table below contains a list of some of the available geocoding services. 
 

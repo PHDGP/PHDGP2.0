@@ -20,21 +20,18 @@ chronic obstructive pulmonary disease (COPD) in CDC PLACES.
 
 The goal of this case study is to gain familiarity with the ACS and CDC’s
 PLACES, understand how SAEs are created, and visualize comparisons between SAEs.
-The outcome of interest in this case study is health insurance. The specific
-learning objectives are to: Download specific ACS and CDC’s PLACES data
-Visualize (plot) and map estimates Characterize trends in the estimates by area
-based socioeconomic measures (ABSMs) Understand limitations of SAEs Explore
-validity of model-based estimates Understand the effect of smoothing estimates
-in very small areas Given that both CDC PLACES and the ACS provide estimates of
-the Census tract prevalence of health insurance, we were interested in assessing
-what difference there are between the two datasets and how that difference may
-vary according to area based social metrics (ABSMs) and estimation of health
-inequities.
+The outcome of interest in this case study is health insurance. 
 
-Given that both CDC PLACES and the ACS provide estimates of the Census tract 
-prevalence of health insurance, we were interested in assessing what difference 
-there are between the two datasets and how that difference may vary according
-to area based social measures (ABSMs). 
+The specific learning objectives are to: 
+
+- Download specific ACS and CDC’s PLACES data
+- Visualize (plot) and map estimates Characterize trends in the estimates by area
+based social measures (ABSMs) 
+- Understand limitations of SAEs Explore
+validity of model-based estimates 
+- Understand the effect of smoothing estimates in very small areas 
+
+Given that both CDC PLACES and the ACS provide estimates of the Census tract prevalence of health insurance, we are interested in assessing what difference there is between the two datasets and how that difference may vary according to ABSM.
 
 ## Understanding Small Area Estimates
 
@@ -975,3 +972,8 @@ knitr::include_graphics("images/11-health-insurance-comparison/wisconsin_compari
 knitr::include_graphics("images/11-health-insurance-comparison/wisconsin_comparison_scatter.png")
 ```
 
+What do these graphs and analyses reveal about the value of looking at the relationships between the PLACES and ACS health insurance data in different states? 
+
+What do they show about how this relationship differs by the level of state’s overall value for health insurance coverage as well as the distribution of uninsurance? 
+
+What does this make you ask about why and how place matters?
