@@ -166,7 +166,7 @@ evenness of distribution), is that they are only meaningful at higher
 geographic levels (Krieger et al, 2016; Krieger et al, 2017). At issue is how, within the US, policies and
 practices, past and present, to generate and enforce racialized economic
 segregation have worked to buttress neighborhood boundaries, especially
-to keep some areas white and affluent and relegate lower-income
+to keep some areas White and affluent and relegate lower-income
 populations, disproportionately Black, Latinx, Indigenous and immigrant
 in the US to underdeveloped neighborhoods lacking resources for people
 to thrive (Krieger et al, 2016; Krieger et al, 2017; Rothstein, 2017; Bailey et al, 2017).
@@ -249,6 +249,8 @@ including:
 
 We hope that this resource is of use to you. If you have questions or
 comments, please reach out to: geoproj@hsph.harvard.edu
+
+
 
 REFERENCES
 
