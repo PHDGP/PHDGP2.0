@@ -1,6 +1,6 @@
 ---
 title: "Public Health Disparities Geocoding Project 2.0 Training Manual"
-author: "Christian Testa, Jarvis T Chen, Enjoli Hall, Dena Javadi, Justin Morgan, Tamara Rushovich,  Sudipta (Shu) Saha, Pamela D Waterman, Nancy Krieger"
+author: "Christian Testa, Jarvis T Chen, Enjoli Hall, Dena Javadi, Justin Morgan, Tamara Rushovich,  Sudipta Saha, Pamela D Waterman, Nancy Krieger"
 date: ""
 description: |
   The online training materials for the Population Health Disparities 
@@ -26,6 +26,7 @@ From the Harvard T.H. Chan School of Public Health, Boston MA <br>
 
 *Authors: Christian Testa, Jarvis T. Chen, Enjoli Hall, Dena Javadi, Justin Morgan, Tamara Rushovich,  Sudipta Saha, Pamela D. Waterman, Nancy Krieger*
 
+November 2022
 
 ```{r, echo=FALSE, message=FALSE}
 knitr::include_graphics("images/coverart.png")

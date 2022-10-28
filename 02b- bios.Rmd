@@ -1,9 +1,4 @@
----
-title: "Bio Pages"
-output:
-  html_document: default
-  pdf_document: default
----
+# Author Bios {#bios}
 
 ```{r, echo=FALSE, message=FALSE, out.width="300px"}
 knitr::include_graphics("images/biophotos/nk.jpg")
