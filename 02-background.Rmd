@@ -150,7 +150,7 @@ Messer et al, 2006; Hu et al, 2021; ATSDR 2022).
 However, one problem common to many indices, and also single-variable
 measures (such as percent below poverty), is that they do not provide
 insight into the power relations and spatial social polarization driving
-health inequities (Krieger et al, 2016A; Krieger et al, 2017). For example, the metric "percent below
+health inequities (Krieger et al, 2016; Krieger et al, 2017). For example, the metric "percent below
 poverty," while useful for describing socioeconomic gradients in health,
 notably provides no information on the income distribution of those
 "above poverty," which can range from barely above poverty to extremely
@@ -163,13 +163,13 @@ inequality across the full population distribution, such as the Gini
 coefficient or the dissimilarity index (which measures the proportion of
 a population that would need to move within a geographic area to achieve
 evenness of distribution), is that they are only meaningful at higher
-geographic levels (Krieger et al, 2016A; Krieger et al, 2017). At issue is how, within the US, policies and
+geographic levels (Krieger et al, 2016; Krieger et al, 2017). At issue is how, within the US, policies and
 practices, past and present, to generate and enforce racialized economic
 segregation have worked to buttress neighborhood boundaries, especially
 to keep some areas white and affluent and relegate lower-income
 populations, disproportionately Black, Latinx, Indigenous and immigrant
 in the US to underdeveloped neighborhoods lacking resources for people
-to thrive (Krieger et al, 2016A; Krieger et al, 2017; Rothstein, 2017; Bailey et al, 2017).
+to thrive (Krieger et al, 2016; Krieger et al, 2017; Rothstein, 2017; Bailey et al, 2017).
 
 A new approach to capturing the extreme range of concentrations of
 economic deprivation and privilege, termed the "Index of Concentration
@@ -183,10 +183,14 @@ promoting use of the ICE in public health research, and also extending
 Massey's original work to develop ICE measures that quantify not only
 racialized residential segregation but also racialized economic
 segregation, with the latter comprising the first metric of its kind
-(Krieger et al, 2016A; Krieger et al, 2016B; Scally et al, 2018; Krieger
+(Krieger et al, 2016; Krieger et al, 2016B; Scally et al, 2018; Krieger
 et al, 2018; Chen & Krieger, 2021; Krieger et al, 2015). The intent is to provide insight
 into who and what drives health inequities, not just focus solely on
 those harmed (Krieger et al, 2010; Beckfield, 2018; Bambra et al, 2021; Bailey et al, 2017).
+
+```{r, echo=FALSE, message=FALSE}
+knitr::include_graphics("images/02-background/ICEfig.png")
+```
 
 The Covid-19 pandemic - due to the social and geographic patterning in
 the spread of the virus and associated hospitalizations and deaths - has
@@ -263,7 +267,7 @@ Practice. 2021; 27(1), pp.S43-S56.
 
 Frank JW and Matsunaga E. National monitoring systems for
 health inequalities by socioeconomic status--an OECD snapshot. Critical
-Public Health. 2020; pp.1-8.
+Public Health. 2020; pp.1-8. doi: 10.1080/09581596.2020.1862761
 
 Green HW. Tuberculosis and economic strata, Cleveland's Five-City
 Area, 1928-1931. Cleveland, OH: Anti-Tuberculosis League, 1932.
@@ -274,14 +278,12 @@ Hunter E, Friedman D, Parrish R (eds). Health statistics : Shaping policy and pr
 
 Krieger N. Epidemiology and the web of causation: has anyone seen the spider? Soc Sci Med. 1994 Oct;39(7):887-903. doi: 10.1016/0277-9536(94)90202-x.
 
-Krieger, N. Socioeconomic data in cancer registries. American
-journal of public health. 2001; 91(1), p.156.
+Krieger, N. Socioeconomic data in cancer registries. Am J Public Health. 2001; 91(1), p.156.
 
 Krieger, N. Chen, J.T., Waterman, P.D., Rehkopf, D.H. and Subramanian,
 S.V. Race/ethnicity, gender, and monitoring socioeconomic
 gradients in health: a comparison of area-based socioeconomic
-measures---the public health disparities geocoding project. American
-journal of public health. 2003; 93(10), pp.1655-1671.
+measures---the public health disparities geocoding project. Am J Public Health. 2003; 93(10), pp.1655-1671.
 
 Krieger N, Chen JT, Waterman PD, Rehkopf DH, Subramanian SV. Painting a truer picture of US socioeconomic and racial/ethnic health inequalities: the Public Health Disparities Geocoding Project. Am J Public Health. 2005 Feb;95(2):312-23. doi: 10.2105/AJPH.2003.032482.
 
@@ -300,8 +302,7 @@ Krieger N, Waterman PD, Gryparis A, Coull BA. Black carbon exposure, socioeconom
 
 Krieger N, Waterman PD, Spasojevic J, Li W, Maduro G. and Van
 Wye, G. Public health monitoring of privilege and deprivation
-with the index of concentration at the extremes. American journal of
-public health. 2016A; 106(2), pp.256-263.
+with the index of concentration at the extremes. Am J Public Health. 2016; 106(2), pp.256-263.
 
 Krieger N, Singh N, and Waterman PD. Metrics for monitoring
 cancer inequities: residential segregation, the Index of Concentration
@@ -329,7 +330,7 @@ Massey DS. The prodigal paradigm returns: ecology comes back to sociology. In: B
 
 Massey DS. Reflections on the dimensions of segregation. Soc Forces. 2012;91(1):39–43.
 
-McLennan D, Noble S, Noble M, Plunkett E, Wright G, and Gutacker N. The English indices of deprivation 2019: technical report. 2019.
+McLennan D, Noble S, Noble M, Plunkett E, Wright G, and Gutacker N. The English indices of deprivation 2019: technical report. 2019. https://www.gov.uk/government/statistics/english-indices-of-deprivation-2019. Accessed June 5th, 2022.
 
 Messer LC, Laraia BA, Kaufman JS, Eyster J, Holzman C,
 Culhane J, Elo I, Burke JG, and O'campo P. The development
@@ -341,16 +342,15 @@ National Tuberculosis Association, 1932.
 
 O'Campo P, Burke JG, Culhane J, Elo IT, Eyster J, Holzman C, Messer LC, Kaufman JS, and Laraia BA. Neighborhood
 deprivation and preterm birth among non-Hispanic Black and White women
-in eight geographic areas in the United States. American journal of
-epidemiology. 2008; 167(2), pp.155-163.
+in eight geographic areas in the United States. Am J Epidemiology. 2008; 167(2), pp.155-163.
 
-Presidential COVID-19 Health Equity Task Force. Final reportand recommendations. HHS, Office of Minority Health. https://minorityhealth.hhs.gov/omh/browse.aspx?lvl=2&lvlid=100. UpdatedNovember 10, 2021. Accessed June 14, 2022.
+Presidential COVID-19 Health Equity Task Force. Final reportand recommendations. HHS, Office of Minority Health. https://minorityhealth.hhs.gov/omh/browse.aspx?lvl=2&lvlid=100. Updated November 10, 2021. Accessed June 14, 2022.
 
 Rothstein R. The color of law : A forgotten history of how our government segregated America (First ed., Democracy and urban landscapes). New York ; London: Liveright Publishing Corporation, a division of W.W. Norton & Company, 2017.
 
 Schuurman N, Bell N, Dunn JR, and Oliver L. Deprivation
 indices, population health and geography: an evaluation of the spatial
-effectiveness of indices at multiple scales. Journal of urban health. 2007;
+effectiveness of indices at multiple scales. Journal of Urban Health. 2007;
 84(4), pp.591-603.
 
 Scally BJ, Krieger N. and Chen JT. Racialized economic
