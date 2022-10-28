@@ -65,14 +65,14 @@ Your data have been aggregated from individual observations into death counts by
 ```{r wrangling_outcome, eval = FALSE}
 #| eval=FALSE
 # the raw mortality data, with the geocoded coordinates converted into spatial feature (sf) data
-ma_mort <- read_rds("ma_mort_geo.RDS") %>% 
+ma_mort <- read_rds("data/07-premature-mortality/ma_mort_geo.RDS") %>% 
   st_as_sf(coords=c("lon","lat"), crs = 4269)
 
 # Importing tract shapefile using tigris package
 tracts_sf <- tracts(state = "25", year = "2010")
 
 # Linking Census Tracts and Tiny Towns File
-supertowns <- read_excel("ma ct to supertinytowns.xlsx", col_names = FALSE, col_types = "text") %>%
+supertowns <- read_excel("data/07-premature-mortality/ma ct to supertinytowns.xlsx", col_names = FALSE, col_types = "text") %>%
   transmute(GEOID10 = ...1,
             super_town = str_to_lower(...2))
 
