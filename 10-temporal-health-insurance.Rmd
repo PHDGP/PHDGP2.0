@@ -146,15 +146,15 @@ health_insurance %<>% mutate(
   poverty_prop = estimate_in_poverty / estimate_total_pop_for_poverty_estimates,
   
       # we calculate the people of color low income counts as the overall 
-    # low income counts minus the white non-hispanic low income counts
+    # low income counts minus the White non-Hispanic low income counts
     people_of_color_low_income = 
       (estimate_hhinc_total_1 + estimate_hhinc_total_2 + estimate_hhinc_total_3 + estimate_hhinc_total_4) - 
       (estimate_hhinc_w_1 + estimate_hhinc_w_2 + estimate_hhinc_w_3 + estimate_hhinc_w_4),
-    # sum up the white non-hispanic high income counts
-    white_non_hispanic_high_income = 
+    # sum up the White non-Hispanic high income counts
+    White_non_hispanic_high_income = 
       (estimate_hhinc_w_5 + estimate_hhinc_w_6 + estimate_hhinc_w_7 + estimate_hhinc_w_8),
     # calculate the index of concentration at the extremes for racialized 
-    # economic segregation (high income white non-hispanic vs. low income 
+    # economic segregation (high income White non-Hispanic vs. low income 
     # people of color)
     ICEraceinc = 
       (white_non_hispanic_high_income - people_of_color_low_income) / 

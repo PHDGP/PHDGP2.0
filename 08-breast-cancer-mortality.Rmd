@@ -684,7 +684,7 @@ We can see a clear socioeconomic gradient in breast cancer mortality rates at th
 
 ### Question 2: What is the racialized disparity in breast cancer mortality overall?
 
-We can describe inequities by racialized groups much the same way we describe inequities by ABSMs: by aggregating death and population data. We've already got this data aggregated, so we can stratify our analysis to compare Black non-Hispanic and White non-Hispanic populations. Note: Throughout the case study we may refer to these groups as Black and White as a shorthand.
+We can describe inequities by racialized groups much the same way we describe inequities by ABSMs: by aggregating death and population data. We've already got this data aggregated, so we can stratify our analysis to compare Black non-Hispanic and White non-Hispanic populations. Note: Throughout the case study we may refer to these groups as Black and White as a shorthand (see footnote in preface regarding capitalization conventions used throughout the manual).
 
 As we did for the first question, we age-adjust our aggregated data by racialized group to compare standardized mortality rates for Black and White populations. We can see lots of variation here as the mortality rates increase - what is causing that?
 

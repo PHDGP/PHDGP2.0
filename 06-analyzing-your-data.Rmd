@@ -48,13 +48,13 @@ As the choice of methods for any data analysis depends fundamentally on the goal
 
 ### Example: Age-specific all-cause mortality by racialized group in Massachusetts, 2013-2017
 
-We compared the use of the aggregation method to a non-spatial Poisson model for analyzing deaths from all causes by age and racialized group. Using the aggregation method, deaths and population person-time at risk are aggregated into strata by age (0-4, 5-9, 10-14, 15-19, 20-24, 25-29, 30-34, 35-44, 45-54, 55-64, 65-74, 75-84, 85+) and racialized group (white non-Hispanic and Black), and mortality rates per 100,000 person-years are computed using the formulas listed in Section xxx. For the non-spatial Poisson model, the inputs are age- and racialized-group specific deaths for each census tract in the study area, the log(population person-time at risk) as an offset, and a set of indicators for each stratum of age category by racialized group. 
+We compared the use of the aggregation method to a non-spatial Poisson model for analyzing deaths from all causes by age and racialized group. Using the aggregation method, deaths and population person-time at risk are aggregated into strata by age (0-4, 5-9, 10-14, 15-19, 20-24, 25-29, 30-34, 35-44, 45-54, 55-64, 65-74, 75-84, 85+) and racialized group (White non-Hispanic and Black), and mortality rates per 100,000 person-years are computed using the formulas listed in Section xxx. For the non-spatial Poisson model, the inputs are age- and racialized-group specific deaths for each census tract in the study area, the log(population person-time at risk) as an offset, and a set of indicators for each stratum of age category by racialized group. 
 
 When the log(population person-time at risk) variable is zero, however, this presents a problem for the Poisson model-fitting algorithm as the rate is undefined. Census tracts where there are zero deaths and zero person-time at risk in a particular strata can be deleted from the dataset as these observations contribute no information. But situations where the count of deaths in a stratum is greater than zero but the population person-time at risk is zero continue to be an issue (numerator/denominator mismatch). It may be tempting to delete these observations from the dataset as well, reasoning that as these usually involve just one death occurring in a stratum where the population estimate is zero, deleting these observations will not unduly affect the analysis. 
 
-Unfortunately, it turns out that numerator/denominator mismatch occurs more frequently for Black observations in the dataset, due to patterns of racialized residential segregation and that fact that the Black population accounts for a much smaller proportion of the population  compared with the white non-Hispanic population (10.1% vs. 72.9% in Massachusetts according to the ACS population estimates we used for our population denominators). That is, at the census tract level, there are more likely to be age strata where there are deaths reported by zero population person-time at risk for the Black population compared with the white non-Hispanic population.  As a result, when we delete these observations, we end up deleting a larger proportion of the Black deaths across the whole state, which has an impact on our estimates of rates and rate ratios.
+Unfortunately, it turns out that numerator/denominator mismatch occurs more frequently for Black observations in the dataset, due to patterns of racialized residential segregation and that fact that the Black population accounts for a much smaller proportion of the population  compared with the White non-Hispanic population (10.1% vs. 72.9% in Massachusetts according to the ACS population estimates we used for our population denominators). That is, at the census tract level, there are more likely to be age strata where there are deaths reported by zero population person-time at risk for the Black population compared with the White non-Hispanic population.  As a result, when we delete these observations, we end up deleting a larger proportion of the Black deaths across the whole state, which has an impact on our estimates of rates and rate ratios.
 
-To see this, consider the following table where we show the number of deaths and population by age and racialized group aggregated across census tracts. In columns 2-8, we show the deaths, population, and estimated rates per 100,000 person-years for white Non-Hispanics and Blacks in the full dataset, while in columns 9-15 we show the deaths and population after deleting observations where the numerator is greater than zero but the denominator is zero. In columns 16-22 we show the percent bias by strata comparing the dataset with deleted observations to the full dataset. As is evident in column 19, the effect of deleting these observations is to reduce the Black death count in age strata (between 4-30% across strata) to a much greater degree than among the white non-Hispanic age strata (between 0-2%). As a result, the age-specific incidence rate ratios can be depressed by as much as 30% relative to the IRRs calculated using the full aggregated data.
+To see this, consider the following table where we show the number of deaths and population by age and racialized group aggregated across census tracts. In columns 2-8, we show the deaths, population, and estimated rates per 100,000 person-years for White Non-Hispanics and Blacks in the full dataset, while in columns 9-15 we show the deaths and population after deleting observations where the numerator is greater than zero but the denominator is zero. In columns 16-22 we show the percent bias by strata comparing the dataset with deleted observations to the full dataset. As is evident in column 19, the effect of deleting these observations is to reduce the Black death count in age strata (between 4-30% across strata) to a much greater degree than among the White non-Hispanic age strata (between 0-2%). As a result, the age-specific incidence rate ratios can be depressed by as much as 30% relative to the IRRs calculated using the full aggregated data.
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 table_removezeroes <- read_csv("data/06-analyzing-your-data/numden_mismatch_remove_zeroes.csv")
@@ -756,9 +756,9 @@ Moreover, a thorough reporting of interaction analyses should present measures o
 
 We begin by computing age-standardized premature mortality rates by racialized group and CT ABSMs. Similar to how we computed these age-standardized rates by CT ABSMs alone, we aggregate age-specific death counts and population person-time by racialized group across census tracts within categories of CT ABSM and apply direct age-standardization. We present theses estimated age-standardized premature mortality rates and 95% confidence intervals in Figure \@ref(fig:age-std-intersectional).
 
-Several patterns are apparent from the visualization of the age-standardized rates. Firstly, gradients in inequities by CT ABSM are apparent for all three ABSMs, with premature mortality rates higher in more disadvantaged census tracts. This gradient is more pronounced among the non-Hispanic white population, with steeper gradients and tighter confidence limits. Among the Black population, inequities across CT ABSM categories are more shallow, with wider confidence limits in the more advantaged categories reflecting the smaller population sizes of Black individuals living in these census tracts.
+Several patterns are apparent from the visualization of the age-standardized rates. Firstly, gradients in inequities by CT ABSM are apparent for all three ABSMs, with premature mortality rates higher in more disadvantaged census tracts. This gradient is more pronounced among the non-Hispanic White population, with steeper gradients and tighter confidence limits. Among the Black population, inequities across CT ABSM categories are more shallow, with wider confidence limits in the more advantaged categories reflecting the smaller population sizes of Black individuals living in these census tracts.
 
-Focusing on the Black/white inequities across CT ABSM categories, there is some suggestion of qualitative interaction. That is, Black/white inequities are largest in the most advantaged census tracts, but in more disadvantaged census tracts, non-Hispanic whites have higher rates of premature mortality than Black populations living in the same areas, particular by quintile of CT ICE and SVI. 
+Focusing on the Black/White inequities across CT ABSM categories, there is some suggestion of qualitative interaction. That is, Black/White inequities are largest in the most advantaged census tracts, but in more disadvantaged census tracts, non-Hispanic Whites have higher rates of premature mortality than Black populations living in the same areas, particular by quintile of CT ICE and SVI. 
 
 ```{r age-std-intersectional, echo=FALSE, fig.cap="Age-standardized premature mortality rates by racialized group and CT ABSM, Greater Boston, 2013-2017, as computed by the aggregated method"}
 
@@ -766,17 +766,17 @@ knitr::include_graphics("images/06-analyzing-your-data/fig_aggregate_twoway_rate
 
 ```
 
-To evaluate the magnitude of the CT ABSM inequities **within** racialized group, we present (a) age-standardized rate differences per 100,000 person-years and (b) age-standardized incidence rate ratios in Figure \@ref(fig:agg-absm-byRace). On both the additive (incidence rate difference) and multiplicative scales (incidence rate ratio), ABSM gradients are much steeper among the non-Hispanic white population compared with the Black population. ABSM gradients among the Black population are attenuated towards the null and have much wider confidence limits. 
+To evaluate the magnitude of the CT ABSM inequities **within** racialized group, we present (a) age-standardized rate differences per 100,000 person-years and (b) age-standardized incidence rate ratios in Figure \@ref(fig:agg-absm-byRace). On both the additive (incidence rate difference) and multiplicative scales (incidence rate ratio), ABSM gradients are much steeper among the non-Hispanic White population compared with the Black population. ABSM gradients among the Black population are attenuated towards the null and have much wider confidence limits. 
 
-```{r agg-absm-byRace, echo=FALSE, fig.cap="ABSM gradients in premature mortality by racialized group (Blacks vs. Non-Hispanic whites): age-standardized rate differences per 100,000 person-years (top row) and rate ratios (bottom row) computed using the aggregation method, Greater Boston, 2013-2017. In each plot, the reference group is the most advantaged racialized group-specific ABSM category."}
+```{r agg-absm-byRace, echo=FALSE, fig.cap="ABSM gradients in premature mortality by racialized group (Blacks vs. Non-Hispanic Whites): age-standardized rate differences per 100,000 person-years (top row) and rate ratios (bottom row) computed using the aggregation method, Greater Boston, 2013-2017. In each plot, the reference group is the most advantaged racialized group-specific ABSM category."}
 
 knitr::include_graphics("images/06-analyzing-your-data/fig_aggregate_byRace_plots.png")
 
 ```
 
-Meanwhile, Black/white inequities as depicted in Figure \@ref(fig:agg-race-by-absm) confirm the pattern of Black/white crossover suggested in Figure \@ref(fig:age-std-intersectional), with non-Hispanic white premature mortality rates significantly elevated in the most disadvantaged census tracts by CT Index of Concentration at the Extremes and CT Social Vulnerability Index. 
+Meanwhile, Black/White inequities as depicted in Figure \@ref(fig:agg-race-by-absm) confirm the pattern of Black/White crossover suggested in Figure \@ref(fig:age-std-intersectional), with non-Hispanic White premature mortality rates significantly elevated in the most disadvantaged census tracts by CT Index of Concentration at the Extremes and CT Social Vulnerability Index. 
 
-```{r agg-race-by-absm, echo=FALSE, fig.cap="Black/white inequities in premature mortality by category of CT ABSM: age-standardized rate differences per 100,000 person-years (top row) and rate ratios (bottom row) computed using the aggregation method, Greater Boston, 2013-2017."}
+```{r agg-race-by-absm, echo=FALSE, fig.cap="Black/White inequities in premature mortality by category of CT ABSM: age-standardized rate differences per 100,000 person-years (top row) and rate ratios (bottom row) computed using the aggregation method, Greater Boston, 2013-2017."}
 
 knitr::include_graphics("images/06-analyzing-your-data/fig_aggregate_byABSM_plots.png")
 
@@ -784,7 +784,7 @@ knitr::include_graphics("images/06-analyzing-your-data/fig_aggregate_byABSM_plot
 
 We visualize the joint pattern of inequities on the additive (incidence rate difference) and multiplicative (incidence rate ratio) scales relative to a common reference group in Figure \@ref(fig:agg-twoway-irdirr). In general, it gives insights similar to visualization of age-standardized incidence rates by racialized group and CT ABSM in Figure \@ref(fig:age-std-intersectional) above.
 
-```{r agg-twoway-irdirr, echo=FALSE, fig.cap="Intersectional age-standardized incidence rate differences per 100,000 person-years (top row) and age-standardized rate ratios (bottom row) by racialized group and category of CT ABSM computed using the aggregation method, Greater Boston, 2013-2017. Presented with a common reference group (non-Hispanic whites in the most advantaged categories of CT ABSMs"}
+```{r agg-twoway-irdirr, echo=FALSE, fig.cap="Intersectional age-standardized incidence rate differences per 100,000 person-years (top row) and age-standardized rate ratios (bottom row) by racialized group and category of CT ABSM computed using the aggregation method, Greater Boston, 2013-2017. Presented with a common reference group (non-Hispanic Whites in the most advantaged categories of CT ABSMs"}
 
 knitr::include_graphics("images/06-analyzing-your-data/fig_aggregate_twoway_irdirr.png")
 
@@ -796,7 +796,7 @@ ABSM gradients among the Black population are attenuated towards the null and ha
 
 Intersectional inequities by racialized group and CT ABSM can also be estimated using regression models. 
 
-```{r, echo=FALSE, fig.cap="Comparison of inequities in premature mortality by racialized group and CT ABSM as estimated by the aggregated method, Poisson regression with robust variance estimator, multilevel Poisson regression (census tracts in city/town/neighborhoods), and spatial Poisson regression with BYM prior, Greater Boston, 2013-2017. Here, we focus on estimated incidence rate ratios with a common reference group (non-Hispanic whites in the most advantaged census tracts)"}
+```{r, echo=FALSE, fig.cap="Comparison of inequities in premature mortality by racialized group and CT ABSM as estimated by the aggregated method, Poisson regression with robust variance estimator, multilevel Poisson regression (census tracts in city/town/neighborhoods), and spatial Poisson regression with BYM prior, Greater Boston, 2013-2017. Here, we focus on estimated incidence rate ratios with a common reference group (non-Hispanic Whites in the most advantaged census tracts)"}
 
 knitr::include_graphics("images/06-analyzing-your-data/fig_interaction_twoway_plot.png")
 
@@ -819,7 +819,7 @@ knitr::kable(interaction_twoway_irr,
                       2, 2, 2),
              html=TRUE,
 caption = "Comparison of intersectional inequities in premature mortality by 
-racialized group and category of CT ABSMs from aggregated analysis, Poisson with robust variance estimator, multilevel, and BYM models. Note the common reference group (non-Hispanic whites in the most advantaged CTs)") %>%
+racialized group and category of CT ABSMs from aggregated analysis, Poisson with robust variance estimator, multilevel, and BYM models. Note the common reference group (non-Hispanic Whites in the most advantaged CTs)") %>%
   add_header_above(c(" "=2, "Aggregated" = 3, "Poisson robust" = 3, "Multilevel" = 3, 
                      "BYM" = 3))%>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
@@ -837,16 +837,16 @@ knitr::include_graphics("images/06-analyzing-your-data/fig_absm_inequities_withi
 
 ```
 
-As seen in Figure \@ref(fig:absm-byRace), inequities in premature mortality across CT ABSM categories are much more pronounced for the non-Hispanic white population, whereas the gradient in age-adjusted incidence rate ratios for CT ABSM categories within the Black population is much shallower.
+As seen in Figure \@ref(fig:absm-byRace), inequities in premature mortality across CT ABSM categories are much more pronounced for the non-Hispanic White population, whereas the gradient in age-adjusted incidence rate ratios for CT ABSM categories within the Black population is much shallower.
 
 
-```{r bw-byabsm, echo=FALSE, fig.cap="Comparison of Black vs. non-Hispanic white inequities in premature mortality within category of CT ABSM as estimated by the aggregated method, Poisson regression with robust variance estimator, multilevel Poisson regression (census tracts in city/town/neighborhoods), and spatial Poisson regression with BYM prior, Greater Boston, 2013-2017"}
+```{r bw-byabsm, echo=FALSE, fig.cap="Comparison of Black vs. non-Hispanic White inequities in premature mortality within category of CT ABSM as estimated by the aggregated method, Poisson regression with robust variance estimator, multilevel Poisson regression (census tracts in city/town/neighborhoods), and spatial Poisson regression with BYM prior, Greater Boston, 2013-2017"}
 
 knitr::include_graphics("images/06-analyzing-your-data/fig_bw_inequities_within_absm.png")
 
 ```
 
-As seen in Figure \@ref(fig:bw-byabsm), Black-white inequities as measured by incidence rate ratios are largest in the most advantaged census tracts, whereas inequities by racialized group are smaller or even reversed in the most disadvantaged census tracts. That is, Non-Hispanic Whites living in the most disadvantaged census tracts have higher observed age-adjusted premature mortality rates than Black populations living in the same areas. Why do you think this might be the case?
+As seen in Figure \@ref(fig:bw-byabsm), Black-White inequities as measured by incidence rate ratios are largest in the most advantaged census tracts, whereas inequities by racialized group are smaller or even reversed in the most disadvantaged census tracts. That is, Non-Hispanic Whites living in the most disadvantaged census tracts have higher observed age-adjusted premature mortality rates than Black populations living in the same areas. Why do you think this might be the case?
 
 Across methods, we note that the confidence limits on age-standardized rates, incidence rate differences, and incidence rate ratios are much wider for the aggregated method compared with model-based estimates. This reflects the impact of age-standardization, whereby age strata with relatively less information may nevertheless contribute strongly to the age-standardized estimates if those age strata are highly weighted in the standard population. The result is that standard errors and confidence limits from the aggregated method will usually be larger than their corresponding model-based estimates. Thus, the aggregated method, the most commonly used, has less power to detect statistically significant inequities.
 
