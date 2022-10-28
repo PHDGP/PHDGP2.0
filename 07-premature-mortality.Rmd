@@ -65,14 +65,14 @@ Your data have been aggregated from individual observations into death counts by
 ```{r wrangling_outcome, eval = FALSE}
 #| eval=FALSE
 # the raw mortality data, with the geocoded coordinates converted into spatial feature (sf) data
-ma_mort <- read_rds("data/07-premature-mortality/ma_mort_geo.RDS") %>% 
+ma_mort <- read_rds("ma_mort_geo.RDS") %>% 
   st_as_sf(coords=c("lon","lat"), crs = 4269)
 
 # Importing tract shapefile using tigris package
 tracts_sf <- tracts(state = "25", year = "2010")
 
 # Linking Census Tracts and Tiny Towns File
-supertowns <- read_excel("data/07-premature-mortality/ma ct to supertinytowns.xlsx", col_names = FALSE, col_types = "text") %>%
+supertowns <- read_excel("ma ct to supertinytowns.xlsx", col_names = FALSE, col_types = "text") %>%
   transmute(GEOID10 = ...1,
             super_town = str_to_lower(...2))
 
@@ -1094,7 +1094,7 @@ include_graphics("images/07-premature-mortality/smooth_smr_map.png")
 include_graphics("images/07-premature-mortality/map.irr.png")
 ```
 
-We can describe inequities by racialized groups much the same way we describe inequities in ABSM - by aggregating death and population data. We already have these aggregated - we can stratify our analysis to compare the White Non-Hispanic and Black Non-Hispanic populations. Throughout the example we may refer to these groups as White and Black as a shorthand.
+We can describe inequities by racialized groups much the same way we describe inequities in ABSM - by aggregating death and population data. We already have these aggregated - we can stratify our analysis to compare the White Non-Hispanic and Black Non-Hispanic populations. Throughout the example we may refer to these groups as White and Black as a shorthand (see footnote in preface regarding capitalization conventions used throughout the manual).
 
 We will need to age-adjust our data here, as differences in premature mortality may be due to differential distribution of ages by racialized group:
 
