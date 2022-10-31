@@ -667,7 +667,7 @@ Let’s first visualize the overall socioeconomic gradient in premature mortalit
 
 ```{r}
 #| echo=FALSE
-knitr::include_graphics("images/07-premature-mortality/adj_smr_map.png")
+# knitr::include_graphics("images/07-premature-mortality/adj_smr_map.png")
 ```
 
 How exactly do we get from our data to this map visualizing how the standard mortality ratio for premature mortality varies across space?
@@ -775,7 +775,7 @@ ggsave("raw_smr_dotplot.png")
 ```
 
 ```{r, echo = FALSE}
-knitr::include_graphics("images/07-premature-mortality/raw_smr_dotplot.png")
+# knitr::include_graphics("images/07-premature-mortality/raw_smr_dotplot.png")
 ```
 
 We can also produce a map of these relationships. To do so, we will import a map file produced by the State of Massachusetts [https://www.mass.gov/info-details/massgis-data-municipalities].
@@ -840,7 +840,7 @@ raw_smr_map <- ggdraw() +
 ggsave("raw_smr_map.png")
 ```
 ```{r raw_smr_map.png, echo = FALSE}
-include_graphics("images/07-premature-mortality/raw_smr_map.png")
+# include_graphics("images/07-premature-mortality/raw_smr_map.png")
 ```
 
 We can fit a spatial model using the INLA package which will “smooth” our results by fitting our data to a BYM model that will adjust estimates based on the surrounding areas. We first need to be able to create an adjacency matrix, so that the package knows which census tracts are neighbors
@@ -931,7 +931,7 @@ ggsave("smooth_smr_dotplot.png")
 ```
 
 ```{r, echo = FALSE}
-include_graphics("images/07-premature-mortality/smooth_smr_dotplot.png")
+# include_graphics("images/07-premature-mortality/smooth_smr_dotplot.png")
 ```
 
 And now we can visualize the smooth map
@@ -985,7 +985,7 @@ ggsave("smooth_smr_map.png")
 ```
 
 ```{r, echo = FALSE}
-include_graphics("images/07-premature-mortality/smooth_smr_map.png")
+# include_graphics("images/07-premature-mortality/smooth_smr_map.png")
 ```
 
 We can see from the plot and the map that while there is still variation in the SMR - it is much less extreme than the raw SMR.
@@ -1079,13 +1079,13 @@ ggsave("adj_smr_map.png")
 ```
 
 ```{r, echo=FALSE}
-include_graphics("images/07-premature-mortality/adj_smr_map.png")
+# include_graphics("images/07-premature-mortality/adj_smr_map.png")
 ```
 
 In comparing the smoothed effect from our null model and the effects of our model adjusting for poverty, we can visualize the extent of the impact poverty has on the distribution of premature mortality
 
 ```{r, echo=FALSE}
-include_graphics("images/07-premature-mortality/smooth_smr_map.png")
+# include_graphics("images/07-premature-mortality/smooth_smr_map.png")
 ```
 
 ### What is the racialized disparity in premature mortality overall?
@@ -1380,7 +1380,7 @@ include_graphics("images/07-premature-mortality/map.irr.png")
 ### What are the associations with ABSM by racialized group? 
 
 ```{r, echo = FALSE}
-include_graphics("images/07-premature-mortality/adj_map.p.irr.png")
+# include_graphics("images/07-premature-mortality/adj_map.p.irr.png")
 ```
 
 In order to visualize differences in how an ABSM - we will use poverty - interacts with racialized group, we can use a poisson model for the mortality rates, and include an interaction term between racialized group and poverty.
@@ -1456,7 +1456,7 @@ ggsave("poisson_irr_plot.png")
 ```
 
 ```{r, echo = FALSE}
-include_graphics("images/07-premature-mortality/poisson_irr_plot.png")
+# include_graphics("images/07-premature-mortality/poisson_irr_plot.png")
 ```
 
 And of course, now we can map that value as well.
@@ -1516,7 +1516,7 @@ ggsave("map.p.irr.png")
 
 
 ```{r, echo = FALSE}
-include_graphics("images/07-premature-mortality/map.p.irr.png")
+# include_graphics("images/07-premature-mortality/map.p.irr.png")
 ```
 
 An adjusted model would allow for us to see how poverty rates are impacting the IRR.
@@ -1562,7 +1562,7 @@ ggsave("adj_poisson_irr_plot.png")
 ```
 
 ```{r, echo = FALSE}
-include_graphics("images/07-premature-mortality/adj_poisson_irr_plot.png")
+# include_graphics("images/07-premature-mortality/adj_poisson_irr_plot.png")
 ```
 
 And now the map:
@@ -1620,7 +1620,7 @@ ggsave("adj_map.p.irr.png")
 ```
 
 ```{r, echo = FALSE}
-include_graphics("images/07-premature-mortality/adj_map.p.irr.png")
+# include_graphics("images/07-premature-mortality/adj_map.p.irr.png")
 ```
 
 To understand statistically how poverty is impacting the relationship between racialized groups and premature mortality, we can compare the models with and without poverty. We can see the impact of membership in racialized groups is reduced with the presence of the census tract level poverty.
