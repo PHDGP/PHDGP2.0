@@ -61,7 +61,7 @@ library(broom)          # A package that allows for extraction and wrangling of 
 
 This data have been aggregated from individual observations into death counts by year, age, sex, racialized group, census tract, and town. When you receive unrestricted mortality files from government agencies for research, you will likely encounter files with one observation per death. After you have geocoded these individual-level observations, you will need to aggregate them up to the geographic level of interest for your analysis. The data we use is also aggregated into groups that correspond to common variables on the ACS, so that they can be aligned to population counts that will be used as denominators as rates are calculated. Aggregation to specific age groups and racial categorizations allows us to perform key aspects of our analysis, such as age-standardization of the data, and stratification of analysis by racialized group.
 
-:::: {.infobox}
+:::: {.infobox .dataWrangling}
 NOTE: the variable for town refers to a constructed variable. Ideally when performing an analysis that might include two or more levels, the smaller level (here, census tracts) would be nested entirely within the larger level (towns). In Massachusetts though, there are several towns that have such small populations that they are smaller than census tracts. For these towns, we have created a crosswalk wherein neighboring small towns have been combined to create larger "super towns". These super towns each make up one census tract, so that each super town in the analysis will now have at least one census tract "nested within it" in a multilevel analysis. If you are interested in attempting a multilevel analysis, this data may make good practice!
 ::::
 
@@ -692,7 +692,7 @@ Comparing the map adjusted for the ICE measure to the smoothed map reveals that 
 
 We can describe inequities by racialized groups much the same way we describe inequities in ABSM - by aggregating death and population data. We already have these aggregated - now we can stratify our analysis to compare the White Non-Hispanic and Black populations. Throughout the example we may refer to these groups as White and Black as a shorthand. 
 
-:::: {.infobox}
+:::: {.infobox .dataWrangling}
 
 NOTE: You may have noticed that the description of the White population includes a "Non-Hispanic" designation, while the description of the Black population does not. This is a quirk of the ACS data - population counts are not readily available for the Black Non-Hispanic population. There is thus a slight mismatch in in the numerator from the mortality data (Non-Hispanic Black deaths) and denominator (Black population).
 

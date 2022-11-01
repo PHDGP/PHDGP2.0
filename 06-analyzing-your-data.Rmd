@@ -44,11 +44,11 @@ As the choice of methods for any data analysis depends fundamentally on the goal
 
 - note that the smallest level of Census geography with intercensal population estimates is the county. The US Census Population Estimates Program (PEP) estimates rely on demographic modeling. 
 - CT level population estimates are in the US Census American Community Survey (ACS), but ACS specifically cautions against using these as population denominator estimates in small area estimation. However, we generally do not have any other sources of population denominators on which to rely. Five year average estimates may help, but there is still year to year variability. Margin of error estimates are available, but how to incorporate denominator uncertainty into analyses is still an area of active research.
-- For a review of issues connected to numerator/ denominator mismatch, please visit the section on "Getting your Data."
+- For a review of issues connected to numerator/ denominator mismatch, please visit Section \@ref(numerators-and-denominators) in the "Getting your Data" chapter.
 
 ### Example: Age-specific all-cause mortality by racialized group in Massachusetts, 2013-2017
 
-We compared the use of the aggregation method to a non-spatial Poisson model for analyzing deaths from all causes by age and racialized group. Using the aggregation method, deaths and population person-time at risk are aggregated into strata by age (0-4, 5-9, 10-14, 15-19, 20-24, 25-29, 30-34, 35-44, 45-54, 55-64, 65-74, 75-84, 85+) and racialized group (White non-Hispanic and Black), and mortality rates per 100,000 person-years are computed using the formulas listed in Section xxx. For the non-spatial Poisson model, the inputs are age- and racialized-group specific deaths for each census tract in the study area, the log(population person-time at risk) as an offset, and a set of indicators for each stratum of age category by racialized group. 
+We compared the use of the aggregation method to a non-spatial Poisson model for analyzing deaths from all causes by age and racialized group. Using the aggregation method, deaths and population person-time at risk are aggregated into strata by age (0-4, 5-9, 10-14, 15-19, 20-24, 25-29, 30-34, 35-44, 45-54, 55-64, 65-74, 75-84, 85+) and racialized group (White non-Hispanic and Black), and mortality rates per 100,000 person-years are computed using the formulas listed in Section \@ref(poisson-regression). For the non-spatial Poisson model, the inputs are age- and racialized-group specific deaths for each census tract in the study area, the log(population person-time at risk) as an offset, and a set of indicators for each stratum of age category by racialized group. 
 
 When the log(population person-time at risk) variable is zero, however, this presents a problem for the Poisson model-fitting algorithm as the rate is undefined. Census tracts where there are zero deaths and zero person-time at risk in a particular strata can be deleted from the dataset as these observations contribute no information. But situations where the count of deaths in a stratum is greater than zero but the population person-time at risk is zero continue to be an issue (numerator/denominator mismatch). It may be tempting to delete these observations from the dataset as well, reasoning that as these usually involve just one death occurring in a stratum where the population estimate is zero, deleting these observations will not unduly affect the analysis. 
 
@@ -94,7 +94,7 @@ knitr::kable(table_adjustdenom,
 
 ```
 
-An even better solution, and the one we ultimately recommend, is to add a small number (e.g. 0.001) to all of the population person-time denominators to allow the Poisson model fitting algorithm to incorporate these observations into the analysis. The resulting effect on the overall population denominators is negligible, but this allows for estimation of rates and rate ratios of interest. Note that this is only needed when fitting non-spatial regression models to the data. The aggregation method does not incur this problem as small discrepancies are averaged out over areas, and the spatial models we discuss in Section xx address the problem of zero or infinite rates by smoothing.
+An even better solution, and the one we ultimately recommend, is to add a small number (e.g. 0.001) to all of the population person-time denominators to allow the Poisson model fitting algorithm to incorporate these observations into the analysis. The resulting effect on the overall population denominators is negligible, but this allows for estimation of rates and rate ratios of interest. Note that this is only needed when fitting non-spatial regression models to the data. The aggregation method does not incur this problem as small discrepancies are averaged out over areas, and the spatial models we discuss in Section \@ref(sae) address the problem of zero or infinite rates by smoothing.
 
 To visualize the effect of these adjustments on estimates of the age-specific disparity by racialized group, we plot estimates from aggregated analyses and Poisson models with deletion and denominator adjustment in Figure 1.1. The plot confirms that either (a) adjusting denominators to match the number of observed deaths in problematic strata in census tracts or (b) adding a small number to all population person time estimates (preferred) yields comparable estimates to the aggregation method, whereas removing problematic observations results in bias.
 
@@ -188,7 +188,7 @@ knitr::kable(table_direct_std_rates,
 
 ## Non-Spatial Regression Methods
 
-### Poisson regression
+### Poisson regression {#poisson-regression}
 
 While the aggregation method is attractive for its conceptual simplicity and ease of implementation, some may prefer to take a regression approach to analysis of health inequities by ABSM. As we will describe below, this makes it possible to relax the strong assumption of a homogenous Poisson process within category of ABSM. We might therefore choose to model the data (deaths and population at risk by age stratum within census tracts) using a Poisson loglinear model -- that is, a generalized linear model with a Poisson error distribution and a log link.
 
@@ -268,7 +268,7 @@ knitr::include_graphics("images/06-analyzing-your-data/non_spatial_coefficient_p
 ```
 
 
-## Small Area Estimation
+## Small Area Estimation {#sae}
 
 
 ### Indirect Age Standardization
@@ -440,7 +440,7 @@ where $\alpha$ is an intercept term representing the overall log relative risk o
 \log(\theta_{i}) = \alpha + \beta_{1} x_{1} + \ldots + \beta_{p} x_{p} + v_{i} . \]
 In this case the $\{v_{i}\}$ are interpretable as ***residual** area-specific effects conditional on the fixed covariates. Similarly, the $\beta$s are interpretable as covariate effects **conditional** on the area random effects.
 
-:::: {.infobox}
+:::: {.infobox .dataWrangling}
 **Fixed vs Random Effects:** in standard regression models, fixed and random effects refer to the type of statistical model being used. When using fixed effects analysis of variance (ANOVA), the assumptions being made are about the independent variable and the error distributions for the variable. Fixed effects are estimated with maximum likelihood (the traditional beta estimates we see in regression models). They are most appropriate when trying to generalize results to values for the fixed variables used in the study (fixed variables are "assumed to be measured without error ... and assumed that the values of a fixed variable in one study are the same as values of the fixed variable in another study") (Newsom, 2019). If however, the researcher is seeking to make inferences beyond particular values of the independent variable, a random effects model is used. Random effects are estimated with shrinkage (partial pooling or linear unbiased predictions). Random effects models are accounting for "additional expected random variation on the independent variable" and instead of the value of the variable itself being of interest, the random variables "are assumed to be values that are drawn from a larger population of values and thus will represent them" (Newsom, 2019; Gelman, 2005)
 
 <!-- possible alternate text: 

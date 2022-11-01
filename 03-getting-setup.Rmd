@@ -15,7 +15,7 @@ of people from more diverse backgrounds in science. Second, data analysis and
 science should be open and transparent wherever and whenever possible, so as to
 promote the external reproduction, verification, and validation of findings.
 
-:::: {.infobox .dataWrangling}}
+:::: {.infobox .dataWrangling}
 The code examples in this book assume familiarity with the R programming
 language. You can still benefit from this book by reading the exposition without
 focusing on the code examples if you are not very familiar with R programming.
