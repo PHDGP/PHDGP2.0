@@ -404,7 +404,7 @@ plot.raw_smr <-  ma_mort_istd %>%
 
 ```{r plot.raw_smr.png}
 #| echo=FALSE
-include_graphics("images/07-premature-mortality/plot.raw_smr.png")
+knitr::include_graphics("images/07-premature-mortality/plot.raw_smr.png")
 ```
 
 :::: {.infobox .interpretation}
@@ -464,7 +464,7 @@ map.raw_smr <- ggdraw() +
 
 ```{r map.raw_smr.png}
 #| echo=FALSE
-include_graphics("images/07-premature-mortality/map.raw_smr.png")
+knitr::include_graphics("images/07-premature-mortality/map.raw_smr.png")
 ```
 
 We can fit a spatial model using the `INLA` package which will “smooth” our results by fitting our data to a Besag York Mollié (BYM) model. As mentioned in previous chapters, a BYM model will adjust estimates based on the surrounding areas - instead of assuming neighboring geographies are independent, the model will assume they are similar. In order to implement this model in R, we first need to create an adjacency matrix, so that the package knows which census tracts are neighbors
@@ -548,7 +548,7 @@ plot.comp_smr <- plot_grid(plot.raw_smr, plot.smr_smooth,
 
 ```{r plot.comp_smr.png}
 #| echo=FALSE
-include_graphics("images/07-premature-mortality/plot.comp_smr.png")
+knitr::include_graphics("images/07-premature-mortality/plot.comp_smr.png")
 ```
 
 And in the map, we can see some of the color of extreme values lighten.
@@ -603,7 +603,7 @@ map.comp_smr <- plot_grid(map.raw_smr, map.smooth_smr,
 
 ```{r map.comp_smr.png}
 #| echo=FALSE
-include_graphics("images/07-premature-mortality/map.comp_smr.png")
+knitr::include_graphics("images/07-premature-mortality/map.comp_smr.png")
 ```
 
 We can see from the plot and the map that while there is still variation in the spatially smoothed SMR - it is a bit less extreme in some areas than the raw SMR. To get a sense of how premature mortality varies with respect to ICE, we should look at a model that adjusts for our ICE data and see if there are any changes in variation. 
@@ -679,7 +679,7 @@ map.comp_smr2 <- plot_grid(map.smooth_smr, map.adj_smr,
 
 ```{r map.comp_smr2.png}
 #| echo=FALSE
-include_graphics("images/07-premature-mortality/map.comp_smr2.png")
+knitr::include_graphics("images/07-premature-mortality/map.comp_smr2.png")
 ```
 
 :::: {.infobox .interpretation}
@@ -731,7 +731,7 @@ tab_age_race <- ma_denominator %>%
 
 ```{r tab_age_race.png}
 #| echo=FALSE
-include_graphics("images/07-premature-mortality/tab_age_race.png")
+knitr::include_graphics("images/07-premature-mortality/tab_age_race.png")
 ```
 
 We will, in this case, do a direct age adjustment to get standardized mortality ratios. This will require a reference population, which we have downloaded (and wrangled) from the National Cancer Institute (https://seer.cancer.gov/stdpopulations/). This is preferential to indirect age standardization, as the Non-Hispanic White population would drive the expected rates using that method.
@@ -792,7 +792,7 @@ ma_mort_dstd <- ma_mort_ct %>%
 
 ```{r plot.agg_rates.png}
 #| echo=FALSE
-include_graphics("images/07-premature-mortality/plot.agg_rates.png")
+knitr::include_graphics("images/07-premature-mortality/plot.agg_rates.png")
 ```
 
 As mortality rates increase, there also seems to be an increase in the variance of the estimates. This is because the more extreme rates we are seeing are really a product of having very small sample sizes in some districts. We can see that demonstrated by ordering the results by the population size of the census tract.
@@ -816,7 +816,7 @@ ordered.agg_rates <- ma_mort_dstd %>%
 
 ```{r ordered.agg_rates.png}
 #| echo=FALSE
-include_graphics("images/07-premature-mortality/ordered.agg_rates.png")
+knitr::include_graphics("images/07-premature-mortality/ordered.agg_rates.png")
 ```
 
 As we might expect, these extremely variable mortality rates are occurring in smaller populations. What do these maps look like?
@@ -880,7 +880,7 @@ byrace_std_rates <- plot_grid(plotlist = plotlist,
 
 ```{r byrace_std_rates.png}
 #| echo=FALSE
-include_graphics("images/07-premature-mortality/byrace_std_rates.png")
+knitr::include_graphics("images/07-premature-mortality/byrace_std_rates.png")
 ```
 
 We are seeing some really high rates in more census tracts in the Black population, where we have smaller overall sample sizes. We are also seeing many census tracts with no black population. We can also display these two maps as one, by calculating the Rate Difference, or the Rate Ratio. Here we will show the crude Rate Ratio of the Age Standardized rates. Key to interpreting this map is understanding that these rates are influenced by the small sample sizes and large potential errors we have previously visualized. It's for researchers and communities to interpret how "real" the effects we see here are.
@@ -972,7 +972,7 @@ So we can see from this crude map that, in areas where there were Black deaths, 
 
 ```{r map.irr.png}
 #| echo=FALSE
-include_graphics("images/07-premature-mortality/map.irr.png")
+knitr::include_graphics("images/07-premature-mortality/map.irr.png")
 ```
 
 ### What are the associations with ABSM by racialized group? 
@@ -1150,7 +1150,7 @@ interaction_plots <- plot_grid(race_effect_within_ICEqt, ICEqt_effect_within_rac
 ```
 
 ```{r interaction_plots.png, echo = FALSE}
-include_graphics("images/07-premature-mortality/interaction_plots.png")
+knitr::include_graphics("images/07-premature-mortality/interaction_plots.png")
 ```
 
 :::: {.infobox .interpretation}
