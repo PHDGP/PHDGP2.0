@@ -1,9 +1,12 @@
 # Author Bios {#bios}
 
-```{r, echo=FALSE, message=FALSE, out.width="300px"}
-knitr::include_graphics("images/biophotos/nk.jpg")
+```{css, echo=FALSE}
+.inline-figure {
+  border-style: none;
+}
 ```
 
+<img src="images/biophotos/nk.jpg" width=300px style="padding-top:.25in; padding-bottom: .25in;">
 
 Nancy Krieger, PhD (she/her) (Principle Investigator for The Public Health
 Disparities Training Project 2.0) is Professor of Social Epidemiology and American Cancer
@@ -22,9 +25,8 @@ the initial Public Health Disparities Geocoding Project in the late 1990s to imp
 monitoring, analysis and action on the entangled impacts of social class and racism on
 population health and health inequities.
 
-```{r, echo=FALSE, message=FALSE, out.width="300px"}
-knitr::include_graphics("images/biophotos/jc.jpg")
-```
+
+<img src="images/biophotos/jc.jpg" width=300px style="padding-top:.25in; padding-bottom: .25in;">
 
 Jarvis Chen (he/him) is a social epidemiologist and Lecturer in Social and Behavioral
 Sciences at the Harvard T.H. Chan School of Public Health. His research focuses on
@@ -36,18 +38,16 @@ Associate Director of the PhD in Population Health Sciences Program in Harvard
 University's Graduate School of Arts and Sciences and teaches several quantitative
 research methods courses at the school.
 
-```{r, echo=FALSE, message=FALSE, out.width="300px"}
-knitr::include_graphics("images/biophotos/eh.jpg")
-```
+
+<img src="images/biophotos/eh.jpg" width=300px style="padding-top:.25in; padding-bottom: .25in;">
 
 Enjoli Hall (she/her/hers) is a PhD student in the Department of Urban Studies and
 Planning at the Massachusetts Institute of Technology (MIT). Her work focuses on
 building infrastructures of collective care and action to understand and intervene in
 political and economic determinants of health.
 
-```{r, echo=FALSE, message=FALSE, out.width="300px"}
-knitr::include_graphics("images/biophotos/dj.jpg")
-```
+
+<img src="images/biophotos/dj.jpg" width=300px style="padding-top:.25in; padding-bottom: .25in;">
 
 Dena Javadi (she/her) is a PhD student in Population Health Sciences in the
 Department of Social and Behavioral Sciences at the Harvard T.H. Chan School of Public
@@ -55,18 +55,16 @@ Health. Her prior work has been in Health Policy and Systems Research, with a fo
 intersectoral action for health. Currently, her research explores the structural
 determinants of work-related health and wellbeing.
 
-```{r, echo=FALSE, message=FALSE, out.width="300px"}
-knitr::include_graphics("images/biophotos/jm.jpg")
-```
+
+<img src="images/biophotos/jm.jpg" width=300px style="padding-top:.25in; padding-bottom: .25in;">
 
 Justin Morgan (he/him) is currently pursuing a Ph.D. in Population Health Sciences
 in the Social and Behavioral Sciences department. His research interests center on
 power and the political determinants of health, with a focus on the practition of
 community engaged research to assess and address health equity.
 
-```{r, echo=FALSE, message=FALSE, out.width="300px"}
-knitr::include_graphics("images/biophotos/tr.jpg")
-```
+
+<img src="images/biophotos/tr.jpg" width=300px style="padding-top:.25in; padding-bottom: .25in;">
 
 Tamara Rushovich (she/her) is s a current PhD candidate in Population Health Sciences. 
 Her research focuses on the ways that social factors and societal structures shape health. 
@@ -74,9 +72,7 @@ Prior to starting her PhD, Tamara worked in social services in Washington, DC an
 epidemiologist at the Chicago Department of Public Health. She has a BA in Sociology 
 and an MPH in Epidemiology from the University of Michigan.
 
-```{r, echo=FALSE, message=FALSE, out.width="300px"}
-knitr::include_graphics("images/biophotos/ss.jpg")
-```
+<img src="images/biophotos/ss.jpg" width=300px style="padding-top:.25in; padding-bottom: .25in;">
 
 Sudipta Saha (he/him) is a Population Health Sciences PhD student in the
 Department of Social and Behavioral Sciences at Harvard University. His current
@@ -87,9 +83,8 @@ political-economic forces shape such inequities. He has a BSc in Microbiology fr
 University of Toronto, and a Master of Science in Global Health and Population at
 Harvard T.H. Chan School of Public Health.
 
-```{r, echo=FALSE, message=FALSE, out.width="300px"}
-knitr::include_graphics("images/biophotos/ct.jpg")
-```
+
+<img src="images/biophotos/ct.jpg" width=300px style="padding-top:.25in; padding-bottom: .25in;">
 
 Christian Testa (he/him) is a statistical analyst and programmer focused on
 modeling health outcomes and characterizing health inequities. His ongoing work is
