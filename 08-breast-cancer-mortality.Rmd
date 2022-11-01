@@ -1085,7 +1085,7 @@ ggsave("adj_poisson_irr_plot_bc.png")
 ```
 
 ```{r, echo = FALSE}
-include_graphics("images/08-breast-cancer-mortality/adj_poisson_irr_plot_bc.png")
+# include_graphics("images/08-breast-cancer-mortality/adj_poisson_irr_plot_bc.png")
 ```
 
 And now the map.

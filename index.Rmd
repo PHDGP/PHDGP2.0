@@ -25,17 +25,16 @@ From the Harvard T.H. Chan School of Public Health, Boston MA <br>
 
 November 2022
 
-```{r, echo=FALSE, message=FALSE}
-knitr::include_graphics("images/coverart.png")
-```
-
 ```{css, echo=FALSE}
 .inline-figure {
   border-style: none;
 }
 ```
 
-<img src="images/icons/HarvardChan_logo.png" style="width: 360px; margin-top: .33in; margin-bottom: .33in;">
+
+<img alt="Cover for the PHDGP2.0 Training Manual" src="images/coverart.png" style="width: 400px; margin-top: .33in; margin-bottom: .33in;">
+
+<img alt="Harvard School of Public Health Logo" src="images/icons/HarvardChan_logo.png" style="width: 360px; margin-top: .33in; margin-bottom: .33in;">
 
 Visit the [Public Health Disparities Geocoding Project](https://www.hsph.harvard.edu/thegeocodingproject/save-the-date-the-public-health-disparities-geocoding-project-2-0/) website!
 
