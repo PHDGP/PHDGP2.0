@@ -1,0 +1,13 @@
+h1:premature-mortality Case Study 1: Premature Mortality in Massachusetts (2013 - 2017)
+h2:introduction Introduction
+h2:motivation-research-questions-and-learning-objectives Motivation, Research Questions, and Learning Objectives
+h2:downloading-and-wrangling-your-data Downloading and Wrangling Your Data
+h3:dependencies Dependencies
+h3:your-health-outcome-data---premature-mortality Your Health Outcome Data - Premature Mortality
+h3:your-denominator-data-and-absm Your Denominator Data and ABSM
+h2:approach Approach
+h3:what-is-the-overall-socioeconomic-gradient-in-premature-mortality What is the overall socioeconomic gradient in premature mortality?
+h3:what-is-the-racialized-disparity-in-premature-mortality-overall What is the racialized disparity in premature mortality overall?
+h3:what-are-the-associations-with-absm-by-racialized-group What are the associations with ABSM by racialized group?
+h2:appendix-wrangling-your-mortality-data Appendix: Wrangling Your Mortality Data
+
