@@ -1,0 +1,48 @@
+---
+title: "Public Health Disparities Geocoding Project 2.0 Training Manual"
+author: "Christian Testa, Jarvis T Chen, Enjoli Hall, Dena Javadi, Justin Morgan, Tamara Rushovich,  Sudipta Saha, Pamela D Waterman, Nancy Krieger"
+date: ""
+description: |
+  The online training materials for the Population Health Disparities 
+  Geocoding Project (PHDGP) 2.0 workshop on analyzing geo-referenced health 
+  outcomes data.
+documentclass: book
+cover-image: "images/coverart.png"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  out.width = '100%')
+
+library(here)
+```
+
+# Public Health Disparities Geocoding Project 2.0 Training Manual {-}
+
+From the Harvard T.H. Chan School of Public Health, Boston MA <br>
+
+*Authors: Christian Testa, Jarvis T. Chen, Enjoli Hall, Dena Javadi, Justin Morgan, Tamara Rushovich,  Sudipta Saha, Pamela D. Waterman, Nancy Krieger*
+
+November 2022
+
+```{css, echo=FALSE}
+.inline-figure {
+  border-style: none;
+}
+```
+
+
+<img alt="Cover for the PHDGP2.0 Training Manual" src="images/coverart.png" style="width: 400px; margin-top: .33in; margin-bottom: .33in;">
+
+<img alt="Harvard School of Public Health Logo" src="images/icons/HarvardChan_logo.png" style="width: 360px; margin-top: .33in; margin-bottom: .33in;">
+
+Visit the [Public Health Disparities Geocoding Project](https://www.hsph.harvard.edu/thegeocodingproject/save-the-date-the-public-health-disparities-geocoding-project-2-0/) website!
+
+
+Source of funding: American Cancer Society Clinical Research Professor Award to 
+N. Krieger
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>. Credit for use is required. 
+
+Please cite this work as: Testa C, Chen JT, Hall E, Javadi D, Morgan J, Rushovich T,  Saha S, Waterman PD, Krieger N. The Public Health Disparities Geocoding Project 2.0. Training Manual. Available as of October 30, 2022
