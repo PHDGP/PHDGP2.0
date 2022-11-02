@@ -4,7 +4,7 @@
 
 ## Introduction
 
-In this case study, the outcome of interest is premature mortality (here defined as death occuring before age 65). This data, which was requested from the [Massachusetts Registry of Vital Records and Statistics](https://www.mass.gov/lists/death-data) is for the years 2013-2017 and is merged with area-based social metrics (ABSMs) created from American Community Survey (ACS) 5-Year Estimates. For more information on how the ACA estimates these metrics from their survey, please visit [thier website]((https://www.census.gov/programs-surveys/acs/methodology/design-and-methodology.html). Vital Statistics registries require data on residential address at time of death, so they can be useful tools for monitoring health and health equity. These data were geocoded using the [Google Maps API](https://developers.google.com/maps).
+In this case study, the outcome of interest is premature mortality (here defined as death occuring before age 65). This data, which was requested from the [Massachusetts Registry of Vital Records and Statistics](https://www.mass.gov/lists/death-data) is for the years 2013-2017 and is merged with area-based social metrics (ABSMs) created from American Community Survey (ACS) 5-Year Estimates. For more information on how the ACA estimates these metrics from their survey, please visit [their website](https://www.census.gov/programs-surveys/acs/methodology/design-and-methodology.html). Vital Statistics registries require data on residential address at time of death, so they can be useful tools for monitoring health and health equity. These data were geocoded using the [Google Maps API](https://developers.google.com/maps).
 
 ## Motivation, Research Questions, and Learning Objectives
 
@@ -23,7 +23,7 @@ The research questions we will seek to answer throughout this case study include
 
 ## Downloading and Wrangling Your Data
  
- :::: {.infobox .dataWrangling}
+:::: {.infobox .dataWrangling}
 In this section, we will show you how to download ACS data by querying the census API and how to manipulate the data into the format we need for the rest of the analysis. This case study investigates a constructed variable: the Index of Concentration at the Extremes (for high-income Non-Hispanic White people vs low-income people of Color). See if you can replicate the analysis with a different ACS variable!
 
 Note: Our outcome data cannot be shared due to privacy restrictions - for this case study, you will receive a pre-wrangled mortality dataset. Example code for how the wrangling could be done is included in this chapter's appendix.
