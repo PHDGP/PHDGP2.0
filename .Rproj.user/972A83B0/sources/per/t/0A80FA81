@@ -1,0 +1,27 @@
+{
+    "id": "0A80FA81",
+    "path": "~/Documents/2022/PHDGP2.0/07-premature-mortality.Rmd",
+    "project_path": "07-premature-mortality.Rmd",
+    "type": "r_markdown",
+    "hash": "1065008785",
+    "contents": "",
+    "dirty": false,
+    "created": 1667402615261.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "24,1",
+        "scrollLine": "10",
+        "marks": "<:25,1\n>:25,5"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1667402661,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1667402661802,
+    "read_only": false,
+    "read_only_alternatives": []
+}
