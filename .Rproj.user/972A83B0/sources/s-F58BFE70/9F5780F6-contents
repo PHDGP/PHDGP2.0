@@ -1,0 +1,85 @@
+# Preface {#preface .unnumbered}
+
+*By: Nancy Krieger PhD, Dena Javadi*
+
+In June 2004, a team based at the Harvard School of Public Health
+published a [monograph](https://www.hsph.harvard.edu/thegeocodingproject/public-health-disparities-geocoding-project-monograph-june-2004/) (Krieger et al, 2004) based on the research and trainings we
+created for our *Public Health Disparities Geocoding Project* (Krieger et al, 2004).
+This project built on and systematized approaches the team members had
+been developing, since the early 1990s, for using geocoding and
+area-based socioeconomic measures to overcome the absence of
+socioeconomic data in most US health records (Krieger, 1992; Krieger, 1998, Krieger et al, 2004).
+
+The objective was to boost efforts to document and inform efforts to
+address socioeconomic inequities in health, overall and in relation to
+US racialized health inequities.
+
+```{css, echo=FALSE}
+.racial-group-footnote {
+  font-size: 14px;
+  padding: 1em;
+  line-height: 18px;
+}
+```
+
+:::: {.infobox .racial-group-footnote}
+A note on capitalization convention used for racial groups:  "Mindful and respectful of different views among anti-racist scholars and activists regarding conventions for designating US racialized groups,<sup>1-3</sup> and specifically over whether to use a “w” or “W” for the group “white” / “White” (in contrast to no disagreement about capitalizing the “b” for “Black”), in this manual we have opted to employ the terminology and conventions of the primary source of the data for our case studies: the US Census Bureau, which capitalizes the names of each group. One set of arguments in favor of an upper-case “w” for “White”<sup>1, 2</sup> are that "[t]o not name ‘White’ as a race is, in fact, an anti-Black act which frames Whiteness as both neutral and the standard.[...] and removes accountability from White people’s and White institutions’ involvement in racism".<sup>2</sup> Conversely, arguments in favor of the lower-case “w” for “white” and against white supremacy note that: (1) White-supremacists capitalize the “w” in “White”,<sup>1</sup> and (2) "leaving white in lowercase represents a righting of a long-standing wrong and a demand for dignity and racial equity.”<sup>1,3</sup><br /> <br /> <sup>1</sup> Appiah KA. The Case for Capitalizing the B in Black. The Atlantic. June 18, 2020. Accessed on 10/25/2022 at https://www.theatlantic.com/ideas/archive/2020/06/time-to-capitalize-blackand-white/613159/<br /> <br /><sup>2</sup> Thúy Nguyễn A. and Pendleton M. Recognizing Race in Language: Why We Capitalize “Black” and “White”. Center for the Study of Social Policy. March 23, 2020. Accessed on 10/25/2022 at https://cssp.org/2020/03/recognizing-race-in-language-why-we-capitalize-black-and-white/ <br /> <br /><sup>3</sup> Price A. Spell It with a Capital “B”. Insight Center for Community Economic Development. Oct 1, 2019. Accessed on 10/25/2022 at https://insightcced.medium.com/spell-it-with-a-capital-b-9eab112d759a.
+
+::::
+
+Oriented to academic researchers, health department staff, cancer
+registries, and public health students, this training offered a solution
+to the problem of lack of socioeconomic data in US public health
+surveillance systems: the geocoding of public health surveillance data
+and using census-derived area-based socioeconomic measures (ABSMs) to
+characterize both the cases and populations in the catchment area,
+thereby enabling computation of rates stratified by the area-based
+measure of socioeconomic position. In addition to informing the analyses
+of numerous scientific investigations, the work of the Public Health
+Disparities Geocoding Project was adopted by numerous US state and local
+health departments and cancer registries, and also informed the
+decisions of the US National Cancer Institute's cancer registry system
+to geocode their data to the census tract level and enable researchers
+to access not only county-level ABSMs (public access data) but also
+census tract level ABSMs (restricted data).
+
+Since 2004, there has been a huge increase in conceptual and methodological work regarding use of ABSMs to document and analyze health inequities, and the computing tools and statistical methods to measure them have evolved. In particular, the availability of software
+that facilitates data access, mapping, visualization, and fitting of multilevel and spatial models has greatly enhanced the accessibility of these analytic methods for public health scientists, advocates, activists, and policy makers interested in advancing health equity. The
+updated [*Public Health Disparities Geocoding Project  2.0*](https://www.hsph.harvard.edu/thegeocodingproject/save-the-date-the-public-health-disparities-geocoding-project-2-0/) training (PHDGP2.0, 2022), held in June and July 2022 and now available through this manual, builds on our prior 2004 training, and expands on why & how to analyze population health and health inequities in relation to census tract, county, and other georeferenced societal
+and environmental data.
+
+This online manual serves as a guide to help users explore the following topics:
+
+- the history and context of, and rationale for, conducting this type of work
+- getting data from the Census and other sources
+- visualizing geocoded data and social metrics
+- conducting analyses with data aggregated to a specified level of geography vs. multi-level analyses with 2 or more levels of geography
+- interpreting data through a health equity lens
+
+The PHDGP 2.0 manual also offers three case examples that go through analysis of mortality data (including aggregation and spatial analysis), and two case examples to illustrate the use of aggregated data from the American Community Survey (ACS) and the CDC\'s PLACES dataset.
+
+The theory informing the work of this project is the ecosocial theory of disease distribution, first proposed in 1994 and elaborated since (Krieger, 1994; Krieger 2011, Krieger 2021). This theory not only provides conceptual tools for analyzing multilevel spatiotemporal processes of embodying (in)justice, but also calls attention to who and what is responsible for health inequities, and who holds or blocks agency and accountability to achieve health
+justice (Krieger, 1994; Krieger 2011, Krieger 2021). These course materials are written with as much emphasis on monitoring health for accountability and action as they are for etiological studies.
+
+
+    
+
+
+
+REFERENCES
+
+Krieger N. Ecosocial Theory, Embodied Truths, and The People's Health. New York: Oxford University Press, 2021.
+
+Krieger N. Epidemiology and The People’s Health: Theory and Context. New York: Oxford University Press, 2011.
+
+Krieger N, Waterman PD, Chen JT, Rehkopf DH, Subramanian SV. The Public Health Disparities Geocoding Project Monograph. Available as of June 30, 2004 at: http://www.hsph.harvard.edu/thegeocodingproject
+
+Krieger N, Waterman PD, Chen JT, Rehkopf DH, Subramanian SV. The Public Health Disparities Geocoding Project Monograph: Publications. Available as of June 30, 2004 at: https://www.hsph.harvard.edu/thegeocodingproject/publications/
+
+Krieger N. Epidemiology and the web of causation: has anyone seen the spider? Soc Sci Med. 1994 Oct;39(7):887-903. doi: 10.1016/0277-9536(94)90202-x.
+
+Krieger N. Overcoming the absence of socioeconomic data in medical records: validation and application of a census-based methodology. Am J Public Health. 1992 May;82(5):703-10. doi: 10.2105/ajph.82.5.703.
+
+Krieger N (PI). Area-based socioeconomic measures for health data. NIH (NICHD) R01 HD3865-01 (1998-2003).
+
+PHDGP.The Public Health Disparities Geocoding Project 2.0. Available as of March 15, 2022 at: https://www.hsph.harvard.edu/thegeocodingproject/save-the-date-the-public-health-disparities-geocoding-project-2-0/

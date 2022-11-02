@@ -116,7 +116,7 @@
 <li><p>For small area level analyses, do the number of events support small area-level analyses?</p></li>
 <li><p>census tract (CT) vs. city/town, e.g. breast cancer mortality analysis</p></li>
 <li><p>ZIP Codes and US Census defined ZIP Code Tabulation Areas (ZCTAs)</p></li>
-<li><p>Modifiable Areal Unit Problem<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;Buzzelli M. (2020) ‘Modifiable Areal Unit Problem’, International Encyclopedia of Human Geography, pp. 169–173. &lt;a href="doi:10.1016/B978-0-08-102295-5.10406-8" class="uri"&gt;doi:10.1016/B978-0-08-102295-5.10406-8&lt;/a&gt;.&lt;br&gt;&lt;br&gt; Wong D. (2004) ‘The modifiable areal unit problem (MAUP)’, in WorldMinds: Geographical Perspectives on 100 Problems. Springer Netherlands. Available at: &lt;a href="https://link.springer.com/chapter/10.1007/978-1-4020-2352-1_93" class="uri"&gt;https://link.springer.com/chapter/10.1007/978-1-4020-2352-1_93&lt;/a&gt;.&lt;/p&gt;'><sup>2</sup></a></p></li>
+<li><p>Modifiable Areal Unit Problem<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;Buzzelli M. (2020) ‘Modifiable Areal Unit Problem’, International Encyclopedia of Human Geography, pp. 169–173. &lt;a href="doi:10.1016/B978-0-08-102295-5.10406-8" class="uri"&gt;doi:10.1016/B978-0-08-102295-5.10406-8&lt;/a&gt;.&lt;br&gt;&lt;br&gt; Wong D. (2004) ‘The modifiable areal unit problem (MAUP)’, in WorldMinds: Geographical Perspectives on 100 Problems. Springer Netherlands. Available at: &lt;a href="https://link.springer.com/chapter/10.1007/978-1-4020-2352-1_93" class="uri"&gt;https://link.springer.com/chapter/10.1007/978-1-4020-2352-1_93&lt;/a&gt;.&lt;/p&gt;'><sup>1</sup></a></p></li>
 <li><p>note that the smallest level of Census geography with intercensal population estimates is the county. The US Census Population Estimates Program (PEP) estimates rely on demographic modeling.</p></li>
 <li><p>CT level population estimates are in the US Census American Community Survey (ACS), but ACS specifically cautions against using these as population denominator estimates in small area estimation. However, we generally do not have any other sources of population denominators on which to rely. Five year average estimates may help, but there is still year to year variability. Margin of error estimates are available, but how to incorporate denominator uncertainty into analyses is still an area of active research.</p></li>
 <li><p>For a review of issues connected to numerator/ denominator mismatch, please visit Section <a href="getting-your-data.html#numerators-and-denominators">4.7</a> in the “Getting your Data” chapter.</p></li>
@@ -2087,7 +2087,7 @@ IRR
 <p>An even better solution, and the one we ultimately recommend, is to add a small number (e.g. 0.001) to all of the population person-time denominators to allow the Poisson model fitting algorithm to incorporate these observations into the analysis. The resulting effect on the overall population denominators is negligible, but this allows for estimation of rates and rate ratios of interest. Note that this is only needed when fitting non-spatial regression models to the data. The aggregation method does not incur this problem as small discrepancies are averaged out over areas, and the spatial models we discuss in Section <a href="analyzing-your-data.html#sae">6.6</a> address the problem of zero or infinite rates by smoothing.</p>
 <p>To visualize the effect of these adjustments on estimates of the age-specific disparity by racialized group, we plot estimates from aggregated analyses and Poisson models with deletion and denominator adjustment in Figure 1.1. The plot confirms that either (a) adjusting denominators to match the number of observed deaths in problematic strata in census tracts or (b) adding a small number to all population person time estimates (preferred) yields comparable estimates to the aggregation method, whereas removing problematic observations results in bias.</p>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-16"></span>
+<span style="display:block;" id="fig:unnamed-chunk-17"></span>
 <img src="images/06-analyzing-your-data/age_specific_comparison_plot.png" alt="Comparison of estimated age-specific Black/White mortality rate ratios using different methods to address numerator/denominator mismatch" width="100%"><p class="caption">
 Figure 6.1: Comparison of estimated age-specific Black/White mortality rate ratios using different methods to address numerator/denominator mismatch
 </p>
@@ -2689,26 +2689,26 @@ If the Poisson model is true, then the <span class="math inline">\(\{z_{i}\}\)</
 <p>We can test for overdispersion by computing the sum of squares of the standardized
 residuals and comparing this to the
 <span class="math inline">\(\chi^{2}_{n-k}\)</span> distribution where <span class="math inline">\(n\)</span> is the sample size and <span class="math inline">\(k\)</span> is the number of parameters in the Poisson log linear model.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb16-1"><a href="analyzing-your-data.html#cb16-1" aria-hidden="true" tabindex="-1"></a>&gt; df_overdispersion &lt;- df_forModel </span>
-<span id="cb16-2"><a href="analyzing-your-data.html#cb16-2" aria-hidden="true" tabindex="-1"></a>&gt; df_overdispersion$yhat &lt;-  predict(poisson_apINDPOV,</span>
-<span id="cb16-3"><a href="analyzing-your-data.html#cb16-3" aria-hidden="true" tabindex="-1"></a>+                                          newdata=df_forModel %&gt;%</span>
-<span id="cb16-4"><a href="analyzing-your-data.html#cb16-4" aria-hidden="true" tabindex="-1"></a>+                                          dplyr::select(denominator, </span>
-<span id="cb16-5"><a href="analyzing-your-data.html#cb16-5" aria-hidden="true" tabindex="-1"></a>+                                                        apINDPOV_2, </span>
-<span id="cb16-6"><a href="analyzing-your-data.html#cb16-6" aria-hidden="true" tabindex="-1"></a>+                                                        apINDPOV_3, </span>
-<span id="cb16-7"><a href="analyzing-your-data.html#cb16-7" aria-hidden="true" tabindex="-1"></a>+                                                        apINDPOV_4,</span>
-<span id="cb16-8"><a href="analyzing-your-data.html#cb16-8" aria-hidden="true" tabindex="-1"></a>+                                                        apINDPOV_NA,</span>
-<span id="cb16-9"><a href="analyzing-your-data.html#cb16-9" aria-hidden="true" tabindex="-1"></a>+                                                        agecat), type="response")</span>
-<span id="cb16-10"><a href="analyzing-your-data.html#cb16-10" aria-hidden="true" tabindex="-1"></a>&gt; </span>
-<span id="cb16-11"><a href="analyzing-your-data.html#cb16-11" aria-hidden="true" tabindex="-1"></a>&gt; df_overdispersion$z &lt;- (df_overdispersion$numerator - df_overdispersion$yhat)/sqrt(df_overdispersion$yhat)</span>
-<span id="cb16-12"><a href="analyzing-your-data.html#cb16-12" aria-hidden="true" tabindex="-1"></a>&gt; n.obs &lt;- length(df_overdispersion$numerator)</span>
-<span id="cb16-13"><a href="analyzing-your-data.html#cb16-13" aria-hidden="true" tabindex="-1"></a>&gt; k &lt;- 4</span>
-<span id="cb16-14"><a href="analyzing-your-data.html#cb16-14" aria-hidden="true" tabindex="-1"></a>&gt; cat("overdispersion ratio is ",sum(df_overdispersion$z^2, na.rm=T)/(n.obs-k),"\n")</span>
-<span id="cb16-15"><a href="analyzing-your-data.html#cb16-15" aria-hidden="true" tabindex="-1"></a>overdispersion ratio is  2.144269 </span>
-<span id="cb16-16"><a href="analyzing-your-data.html#cb16-16" aria-hidden="true" tabindex="-1"></a>&gt; cat("p-value of overdispersion test is ", pchisq(sum(df_overdispersion$z^2, na.rm=T), n.obs-k, lower.tail=FALSE), "\n")</span>
-<span id="cb16-17"><a href="analyzing-your-data.html#cb16-17" aria-hidden="true" tabindex="-1"></a>p-value of overdispersion test is  0 </span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb12-1"><a href="analyzing-your-data.html#cb12-1" aria-hidden="true" tabindex="-1"></a>&gt; df_overdispersion &lt;- df_forModel </span>
+<span id="cb12-2"><a href="analyzing-your-data.html#cb12-2" aria-hidden="true" tabindex="-1"></a>&gt; df_overdispersion$yhat &lt;-  predict(poisson_apINDPOV,</span>
+<span id="cb12-3"><a href="analyzing-your-data.html#cb12-3" aria-hidden="true" tabindex="-1"></a>+                                          newdata=df_forModel %&gt;%</span>
+<span id="cb12-4"><a href="analyzing-your-data.html#cb12-4" aria-hidden="true" tabindex="-1"></a>+                                          dplyr::select(denominator, </span>
+<span id="cb12-5"><a href="analyzing-your-data.html#cb12-5" aria-hidden="true" tabindex="-1"></a>+                                                        apINDPOV_2, </span>
+<span id="cb12-6"><a href="analyzing-your-data.html#cb12-6" aria-hidden="true" tabindex="-1"></a>+                                                        apINDPOV_3, </span>
+<span id="cb12-7"><a href="analyzing-your-data.html#cb12-7" aria-hidden="true" tabindex="-1"></a>+                                                        apINDPOV_4,</span>
+<span id="cb12-8"><a href="analyzing-your-data.html#cb12-8" aria-hidden="true" tabindex="-1"></a>+                                                        apINDPOV_NA,</span>
+<span id="cb12-9"><a href="analyzing-your-data.html#cb12-9" aria-hidden="true" tabindex="-1"></a>+                                                        agecat), type="response")</span>
+<span id="cb12-10"><a href="analyzing-your-data.html#cb12-10" aria-hidden="true" tabindex="-1"></a>&gt; </span>
+<span id="cb12-11"><a href="analyzing-your-data.html#cb12-11" aria-hidden="true" tabindex="-1"></a>&gt; df_overdispersion$z &lt;- (df_overdispersion$numerator - df_overdispersion$yhat)/sqrt(df_overdispersion$yhat)</span>
+<span id="cb12-12"><a href="analyzing-your-data.html#cb12-12" aria-hidden="true" tabindex="-1"></a>&gt; n.obs &lt;- length(df_overdispersion$numerator)</span>
+<span id="cb12-13"><a href="analyzing-your-data.html#cb12-13" aria-hidden="true" tabindex="-1"></a>&gt; k &lt;- 4</span>
+<span id="cb12-14"><a href="analyzing-your-data.html#cb12-14" aria-hidden="true" tabindex="-1"></a>&gt; cat("overdispersion ratio is ",sum(df_overdispersion$z^2, na.rm=T)/(n.obs-k),"\n")</span>
+<span id="cb12-15"><a href="analyzing-your-data.html#cb12-15" aria-hidden="true" tabindex="-1"></a>overdispersion ratio is  2.144269 </span>
+<span id="cb12-16"><a href="analyzing-your-data.html#cb12-16" aria-hidden="true" tabindex="-1"></a>&gt; cat("p-value of overdispersion test is ", pchisq(sum(df_overdispersion$z^2, na.rm=T), n.obs-k, lower.tail=FALSE), "\n")</span>
+<span id="cb12-17"><a href="analyzing-your-data.html#cb12-17" aria-hidden="true" tabindex="-1"></a>p-value of overdispersion test is  0 </span></code></pre></div>
 <p>We can also visualize the predicted counts vs. the standardized residuals.</p>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-21"></span>
+<span style="display:block;" id="fig:unnamed-chunk-22"></span>
 <img src="images/06-analyzing-your-data/fig_standardized_residual_plot.png" alt="Predicted counts vs. standardized residuals. The standardized residuals should have mean 0 and standard deviation 1 (hence the dashed lines at $\pm2$ indicating approximate 95% error bounds). The variance of the standardized residuals is larger than 1, indicating in this case a moderate amount of overdispersion." width="100%"><p class="caption">
 Figure 6.2: Predicted counts vs. standardized residuals. The standardized residuals should have mean 0 and standard deviation 1 (hence the dashed lines at <span class="math inline">\(\pm2\)</span> indicating approximate 95% error bounds). The variance of the standardized residuals is larger than 1, indicating in this case a moderate amount of overdispersion.
 </p>
@@ -2732,7 +2732,7 @@ Figure 6.2: Predicted counts vs. standardized residuals. The standardized resid
 <span class="header-section-number">6.5.4</span> Comparison of non-spatial regression estimates<a class="anchor" aria-label="anchor" href="#comparison-of-non-spatial-regression-estimates"><i class="fas fa-link"></i></a>
 </h3>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-22"></span>
+<span style="display:block;" id="fig:unnamed-chunk-23"></span>
 <img src="images/06-analyzing-your-data/non_spatial_coefficient_plot.png" alt="Comparison of estimates of social inequities by ABSM from the aggregated method and from non-spatial regression models" width="100%"><p class="caption">
 Figure 6.3: Comparison of estimates of social inequities by ABSM from the aggregated method and from non-spatial regression models
 </p>
@@ -2813,72 +2813,72 @@ The expression for <span class="math inline">\(\mathbb{E}(\theta_{i}|O_{i},\nu,\
 where <span class="math inline">\(\{\hat{\theta}_i\}\)</span> are the empirical Bayes estimates. Together, these two equations can be used recursively to compute <span class="math inline">\(\hat{\nu}\)</span> and <span class="math inline">\(\hat{\alpha}\)</span>. At each stage of the iteration, the <span class="math inline">\(\{\hat{\theta}_i\}\)</span> are calculated from the current estimates of <span class="math inline">\(\nu\)</span> and <span class="math inline">\(\alpha\)</span>, and then the right hand sides of the two equations are used to provide new estimates of <span class="math inline">\(\nu\)</span> and <span class="math inline">\(\alpha\)</span> (Clayton and Kaldor, 1987).</p>
 <p>There is an interesting connection here to negative binomial regression in that the marginal posterior distribution of <span class="math inline">\(O_i\)</span> (unconditional on <span class="math inline">\(\theta_i\)</span>) is negative binomial with size <span class="math inline">\(\nu\)</span> and probability <span class="math inline">\(\alpha/(E_i + \alpha)\)</span>.</p>
 <p>We can apply this algorithm to the observed and expected death counts in the census tracts of our study area to obtain empirical Bayes estimates of the census tract level SMRs, which we compare to the raw <span class="math inline">\(SMR_i = O_i/E_i\)</span>:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb17-1"><a href="analyzing-your-data.html#cb17-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-2"><a href="analyzing-your-data.html#cb17-2" aria-hidden="true" tabindex="-1"></a># Use DCluster::empbaysmooth to fit the Poisson Gamma model as proposed by Clayton and Kaldor (1987)</span>
-<span id="cb17-3"><a href="analyzing-your-data.html#cb17-3" aria-hidden="true" tabindex="-1"></a>poisson_gamma &lt;- DCluster::empbaysmooth(df_indirect_ordered$O, df_indirect_ordered$E)</span>
-<span id="cb17-4"><a href="analyzing-your-data.html#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-5"><a href="analyzing-your-data.html#cb17-5" aria-hidden="true" tabindex="-1"></a># Append these estimates to the dataset and also calculate naive empirical Bayes credible intervals</span>
-<span id="cb17-6"><a href="analyzing-your-data.html#cb17-6" aria-hidden="true" tabindex="-1"></a># using the gamma distribution.</span>
-<span id="cb17-7"><a href="analyzing-your-data.html#cb17-7" aria-hidden="true" tabindex="-1"></a>df_eb &lt;- df_indirect_ordered %&gt;%</span>
-<span id="cb17-8"><a href="analyzing-your-data.html#cb17-8" aria-hidden="true" tabindex="-1"></a>         mutate(nu1 = O + poisson_gamma$nu,</span>
-<span id="cb17-9"><a href="analyzing-your-data.html#cb17-9" aria-hidden="true" tabindex="-1"></a>                alpha1 = E + poisson_gamma$alpha,</span>
-<span id="cb17-10"><a href="analyzing-your-data.html#cb17-10" aria-hidden="true" tabindex="-1"></a>                empbayes_SMR = poisson_gamma$smthrr,</span>
-<span id="cb17-11"><a href="analyzing-your-data.html#cb17-11" aria-hidden="true" tabindex="-1"></a>                empbayes_CI95low = qgamma(0.025, nu1, alpha1),</span>
-<span id="cb17-12"><a href="analyzing-your-data.html#cb17-12" aria-hidden="true" tabindex="-1"></a>                empbayes_CI95up = qgamma(0.975, nu1, alpha1),</span>
-<span id="cb17-13"><a href="analyzing-your-data.html#cb17-13" aria-hidden="true" tabindex="-1"></a>                eb_sig = factor(case_when(</span>
-<span id="cb17-14"><a href="analyzing-your-data.html#cb17-14" aria-hidden="true" tabindex="-1"></a>                  empbayes_CI95low&gt;1 &amp; empbayes_CI95up&gt;1 ~ 1,</span>
-<span id="cb17-15"><a href="analyzing-your-data.html#cb17-15" aria-hidden="true" tabindex="-1"></a>                  empbayes_CI95low&lt;1 &amp; empbayes_CI95up&lt;1 ~ -1,</span>
-<span id="cb17-16"><a href="analyzing-your-data.html#cb17-16" aria-hidden="true" tabindex="-1"></a>                  TRUE ~ 0)),</span>
-<span id="cb17-17"><a href="analyzing-your-data.html#cb17-17" aria-hidden="true" tabindex="-1"></a>                raw_SMR = O/E, # recenter rawSMRs by adding intercept from intercept only model</span>
-<span id="cb17-18"><a href="analyzing-your-data.html#cb17-18" aria-hidden="true" tabindex="-1"></a>                raw_SMR_CI95low = pois.exact(x=O, pt=E, conf.level=0.95)[,4],</span>
-<span id="cb17-19"><a href="analyzing-your-data.html#cb17-19" aria-hidden="true" tabindex="-1"></a>                raw_SMR_CI95up = pois.exact(x=O, pt=E, conf.level=0.94)[,5],</span>
-<span id="cb17-20"><a href="analyzing-your-data.html#cb17-20" aria-hidden="true" tabindex="-1"></a>                raw_sig = factor(case_when(</span>
-<span id="cb17-21"><a href="analyzing-your-data.html#cb17-21" aria-hidden="true" tabindex="-1"></a>                  raw_SMR_CI95low&gt;1 &amp; raw_SMR_CI95up&gt;1 ~ 1,</span>
-<span id="cb17-22"><a href="analyzing-your-data.html#cb17-22" aria-hidden="true" tabindex="-1"></a>                  raw_SMR_CI95low&lt;1 &amp; raw_SMR_CI95up&lt;1 ~ -1,</span>
-<span id="cb17-23"><a href="analyzing-your-data.html#cb17-23" aria-hidden="true" tabindex="-1"></a>                  TRUE ~ 0))) %&gt;%</span>
-<span id="cb17-24"><a href="analyzing-your-data.html#cb17-24" aria-hidden="true" tabindex="-1"></a>          mutate(empbayes_SMR = ifelse(empbayes_SMR==0, nu1/alpha1, empbayes_SMR))</span>
-<span id="cb17-25"><a href="analyzing-your-data.html#cb17-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-26"><a href="analyzing-your-data.html#cb17-26" aria-hidden="true" tabindex="-1"></a># caterpillar plot of the raw SMRs</span>
-<span id="cb17-27"><a href="analyzing-your-data.html#cb17-27" aria-hidden="true" tabindex="-1"></a>rawSMR_caterpillar_eb &lt;- ggplot(df_eb %&gt;% arrange(raw_SMR) %&gt;% mutate(id_order = row_number()),</span>
-<span id="cb17-28"><a href="analyzing-your-data.html#cb17-28" aria-hidden="true" tabindex="-1"></a>       aes(x=id_order, y=raw_SMR, ymin=raw_SMR_CI95low, ymax=raw_SMR_CI95up, col=raw_sig)) +</span>
-<span id="cb17-29"><a href="analyzing-your-data.html#cb17-29" aria-hidden="true" tabindex="-1"></a>  geom_point() +</span>
-<span id="cb17-30"><a href="analyzing-your-data.html#cb17-30" aria-hidden="true" tabindex="-1"></a>  geom_errorbar() +</span>
-<span id="cb17-31"><a href="analyzing-your-data.html#cb17-31" aria-hidden="true" tabindex="-1"></a>  geom_hline(yintercept = 1, col="red", linetype="dotted") +</span>
-<span id="cb17-32"><a href="analyzing-your-data.html#cb17-32" aria-hidden="true" tabindex="-1"></a>  ylim(c(0,6)) +</span>
-<span id="cb17-33"><a href="analyzing-your-data.html#cb17-33" aria-hidden="true" tabindex="-1"></a>  labs(x="", y="raw SMR") +</span>
-<span id="cb17-34"><a href="analyzing-your-data.html#cb17-34" aria-hidden="true" tabindex="-1"></a>  scale_color_manual(name="",</span>
-<span id="cb17-35"><a href="analyzing-your-data.html#cb17-35" aria-hidden="true" tabindex="-1"></a>                       values=c("#018571", "grey50", "#A6611A"),</span>
-<span id="cb17-36"><a href="analyzing-your-data.html#cb17-36" aria-hidden="true" tabindex="-1"></a>                       labels=c("CI below 1",</span>
-<span id="cb17-37"><a href="analyzing-your-data.html#cb17-37" aria-hidden="true" tabindex="-1"></a>                                "CI crosses 1",</span>
-<span id="cb17-38"><a href="analyzing-your-data.html#cb17-38" aria-hidden="true" tabindex="-1"></a>                                "CI above 1")) +</span>
-<span id="cb17-39"><a href="analyzing-your-data.html#cb17-39" aria-hidden="true" tabindex="-1"></a>  theme(legend.position="bottom")</span>
-<span id="cb17-40"><a href="analyzing-your-data.html#cb17-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-41"><a href="analyzing-your-data.html#cb17-41" aria-hidden="true" tabindex="-1"></a># caterpillar plot of the empirical Bayes SMRs</span>
-<span id="cb17-42"><a href="analyzing-your-data.html#cb17-42" aria-hidden="true" tabindex="-1"></a>ebSMR_caterpillar_eb &lt;- ggplot(df_eb %&gt;% arrange(empbayes_SMR) %&gt;% mutate(id_order = row_number()),</span>
-<span id="cb17-43"><a href="analyzing-your-data.html#cb17-43" aria-hidden="true" tabindex="-1"></a>       aes(x=id_order, y=empbayes_SMR, ymin=empbayes_CI95low, ymax=empbayes_CI95up, col=eb_sig)) +</span>
-<span id="cb17-44"><a href="analyzing-your-data.html#cb17-44" aria-hidden="true" tabindex="-1"></a>  geom_point() +</span>
-<span id="cb17-45"><a href="analyzing-your-data.html#cb17-45" aria-hidden="true" tabindex="-1"></a>  geom_errorbar() +</span>
-<span id="cb17-46"><a href="analyzing-your-data.html#cb17-46" aria-hidden="true" tabindex="-1"></a>  geom_hline(yintercept = 1, col="red", linetype="dotted") +</span>
-<span id="cb17-47"><a href="analyzing-your-data.html#cb17-47" aria-hidden="true" tabindex="-1"></a>  ylim(c(0,6)) +</span>
-<span id="cb17-48"><a href="analyzing-your-data.html#cb17-48" aria-hidden="true" tabindex="-1"></a>  labs(x="", y="empirical Bayes SMR") +</span>
-<span id="cb17-49"><a href="analyzing-your-data.html#cb17-49" aria-hidden="true" tabindex="-1"></a>  scale_color_manual(name="",</span>
-<span id="cb17-50"><a href="analyzing-your-data.html#cb17-50" aria-hidden="true" tabindex="-1"></a>                       values=c("#018571", "grey50", "#A6611A"),</span>
-<span id="cb17-51"><a href="analyzing-your-data.html#cb17-51" aria-hidden="true" tabindex="-1"></a>                       labels=c("CI below 1",</span>
-<span id="cb17-52"><a href="analyzing-your-data.html#cb17-52" aria-hidden="true" tabindex="-1"></a>                                "CI crosses 1",</span>
-<span id="cb17-53"><a href="analyzing-your-data.html#cb17-53" aria-hidden="true" tabindex="-1"></a>                                "CI above 1")) +</span>
-<span id="cb17-54"><a href="analyzing-your-data.html#cb17-54" aria-hidden="true" tabindex="-1"></a>  theme(legend.position="bottom")</span>
-<span id="cb17-55"><a href="analyzing-your-data.html#cb17-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-56"><a href="analyzing-your-data.html#cb17-56" aria-hidden="true" tabindex="-1"></a>rawSMR_caterpillar_eb + ebSMR_caterpillar_eb</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb13-1"><a href="analyzing-your-data.html#cb13-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-2"><a href="analyzing-your-data.html#cb13-2" aria-hidden="true" tabindex="-1"></a># Use DCluster::empbaysmooth to fit the Poisson Gamma model as proposed by Clayton and Kaldor (1987)</span>
+<span id="cb13-3"><a href="analyzing-your-data.html#cb13-3" aria-hidden="true" tabindex="-1"></a>poisson_gamma &lt;- DCluster::empbaysmooth(df_indirect_ordered$O, df_indirect_ordered$E)</span>
+<span id="cb13-4"><a href="analyzing-your-data.html#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="analyzing-your-data.html#cb13-5" aria-hidden="true" tabindex="-1"></a># Append these estimates to the dataset and also calculate naive empirical Bayes credible intervals</span>
+<span id="cb13-6"><a href="analyzing-your-data.html#cb13-6" aria-hidden="true" tabindex="-1"></a># using the gamma distribution.</span>
+<span id="cb13-7"><a href="analyzing-your-data.html#cb13-7" aria-hidden="true" tabindex="-1"></a>df_eb &lt;- df_indirect_ordered %&gt;%</span>
+<span id="cb13-8"><a href="analyzing-your-data.html#cb13-8" aria-hidden="true" tabindex="-1"></a>         mutate(nu1 = O + poisson_gamma$nu,</span>
+<span id="cb13-9"><a href="analyzing-your-data.html#cb13-9" aria-hidden="true" tabindex="-1"></a>                alpha1 = E + poisson_gamma$alpha,</span>
+<span id="cb13-10"><a href="analyzing-your-data.html#cb13-10" aria-hidden="true" tabindex="-1"></a>                empbayes_SMR = poisson_gamma$smthrr,</span>
+<span id="cb13-11"><a href="analyzing-your-data.html#cb13-11" aria-hidden="true" tabindex="-1"></a>                empbayes_CI95low = qgamma(0.025, nu1, alpha1),</span>
+<span id="cb13-12"><a href="analyzing-your-data.html#cb13-12" aria-hidden="true" tabindex="-1"></a>                empbayes_CI95up = qgamma(0.975, nu1, alpha1),</span>
+<span id="cb13-13"><a href="analyzing-your-data.html#cb13-13" aria-hidden="true" tabindex="-1"></a>                eb_sig = factor(case_when(</span>
+<span id="cb13-14"><a href="analyzing-your-data.html#cb13-14" aria-hidden="true" tabindex="-1"></a>                  empbayes_CI95low&gt;1 &amp; empbayes_CI95up&gt;1 ~ 1,</span>
+<span id="cb13-15"><a href="analyzing-your-data.html#cb13-15" aria-hidden="true" tabindex="-1"></a>                  empbayes_CI95low&lt;1 &amp; empbayes_CI95up&lt;1 ~ -1,</span>
+<span id="cb13-16"><a href="analyzing-your-data.html#cb13-16" aria-hidden="true" tabindex="-1"></a>                  TRUE ~ 0)),</span>
+<span id="cb13-17"><a href="analyzing-your-data.html#cb13-17" aria-hidden="true" tabindex="-1"></a>                raw_SMR = O/E, # recenter rawSMRs by adding intercept from intercept only model</span>
+<span id="cb13-18"><a href="analyzing-your-data.html#cb13-18" aria-hidden="true" tabindex="-1"></a>                raw_SMR_CI95low = pois.exact(x=O, pt=E, conf.level=0.95)[,4],</span>
+<span id="cb13-19"><a href="analyzing-your-data.html#cb13-19" aria-hidden="true" tabindex="-1"></a>                raw_SMR_CI95up = pois.exact(x=O, pt=E, conf.level=0.94)[,5],</span>
+<span id="cb13-20"><a href="analyzing-your-data.html#cb13-20" aria-hidden="true" tabindex="-1"></a>                raw_sig = factor(case_when(</span>
+<span id="cb13-21"><a href="analyzing-your-data.html#cb13-21" aria-hidden="true" tabindex="-1"></a>                  raw_SMR_CI95low&gt;1 &amp; raw_SMR_CI95up&gt;1 ~ 1,</span>
+<span id="cb13-22"><a href="analyzing-your-data.html#cb13-22" aria-hidden="true" tabindex="-1"></a>                  raw_SMR_CI95low&lt;1 &amp; raw_SMR_CI95up&lt;1 ~ -1,</span>
+<span id="cb13-23"><a href="analyzing-your-data.html#cb13-23" aria-hidden="true" tabindex="-1"></a>                  TRUE ~ 0))) %&gt;%</span>
+<span id="cb13-24"><a href="analyzing-your-data.html#cb13-24" aria-hidden="true" tabindex="-1"></a>          mutate(empbayes_SMR = ifelse(empbayes_SMR==0, nu1/alpha1, empbayes_SMR))</span>
+<span id="cb13-25"><a href="analyzing-your-data.html#cb13-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-26"><a href="analyzing-your-data.html#cb13-26" aria-hidden="true" tabindex="-1"></a># caterpillar plot of the raw SMRs</span>
+<span id="cb13-27"><a href="analyzing-your-data.html#cb13-27" aria-hidden="true" tabindex="-1"></a>rawSMR_caterpillar_eb &lt;- ggplot(df_eb %&gt;% arrange(raw_SMR) %&gt;% mutate(id_order = row_number()),</span>
+<span id="cb13-28"><a href="analyzing-your-data.html#cb13-28" aria-hidden="true" tabindex="-1"></a>       aes(x=id_order, y=raw_SMR, ymin=raw_SMR_CI95low, ymax=raw_SMR_CI95up, col=raw_sig)) +</span>
+<span id="cb13-29"><a href="analyzing-your-data.html#cb13-29" aria-hidden="true" tabindex="-1"></a>  geom_point() +</span>
+<span id="cb13-30"><a href="analyzing-your-data.html#cb13-30" aria-hidden="true" tabindex="-1"></a>  geom_errorbar() +</span>
+<span id="cb13-31"><a href="analyzing-your-data.html#cb13-31" aria-hidden="true" tabindex="-1"></a>  geom_hline(yintercept = 1, col="red", linetype="dotted") +</span>
+<span id="cb13-32"><a href="analyzing-your-data.html#cb13-32" aria-hidden="true" tabindex="-1"></a>  ylim(c(0,6)) +</span>
+<span id="cb13-33"><a href="analyzing-your-data.html#cb13-33" aria-hidden="true" tabindex="-1"></a>  labs(x="", y="raw SMR") +</span>
+<span id="cb13-34"><a href="analyzing-your-data.html#cb13-34" aria-hidden="true" tabindex="-1"></a>  scale_color_manual(name="",</span>
+<span id="cb13-35"><a href="analyzing-your-data.html#cb13-35" aria-hidden="true" tabindex="-1"></a>                       values=c("#018571", "grey50", "#A6611A"),</span>
+<span id="cb13-36"><a href="analyzing-your-data.html#cb13-36" aria-hidden="true" tabindex="-1"></a>                       labels=c("CI below 1",</span>
+<span id="cb13-37"><a href="analyzing-your-data.html#cb13-37" aria-hidden="true" tabindex="-1"></a>                                "CI crosses 1",</span>
+<span id="cb13-38"><a href="analyzing-your-data.html#cb13-38" aria-hidden="true" tabindex="-1"></a>                                "CI above 1")) +</span>
+<span id="cb13-39"><a href="analyzing-your-data.html#cb13-39" aria-hidden="true" tabindex="-1"></a>  theme(legend.position="bottom")</span>
+<span id="cb13-40"><a href="analyzing-your-data.html#cb13-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-41"><a href="analyzing-your-data.html#cb13-41" aria-hidden="true" tabindex="-1"></a># caterpillar plot of the empirical Bayes SMRs</span>
+<span id="cb13-42"><a href="analyzing-your-data.html#cb13-42" aria-hidden="true" tabindex="-1"></a>ebSMR_caterpillar_eb &lt;- ggplot(df_eb %&gt;% arrange(empbayes_SMR) %&gt;% mutate(id_order = row_number()),</span>
+<span id="cb13-43"><a href="analyzing-your-data.html#cb13-43" aria-hidden="true" tabindex="-1"></a>       aes(x=id_order, y=empbayes_SMR, ymin=empbayes_CI95low, ymax=empbayes_CI95up, col=eb_sig)) +</span>
+<span id="cb13-44"><a href="analyzing-your-data.html#cb13-44" aria-hidden="true" tabindex="-1"></a>  geom_point() +</span>
+<span id="cb13-45"><a href="analyzing-your-data.html#cb13-45" aria-hidden="true" tabindex="-1"></a>  geom_errorbar() +</span>
+<span id="cb13-46"><a href="analyzing-your-data.html#cb13-46" aria-hidden="true" tabindex="-1"></a>  geom_hline(yintercept = 1, col="red", linetype="dotted") +</span>
+<span id="cb13-47"><a href="analyzing-your-data.html#cb13-47" aria-hidden="true" tabindex="-1"></a>  ylim(c(0,6)) +</span>
+<span id="cb13-48"><a href="analyzing-your-data.html#cb13-48" aria-hidden="true" tabindex="-1"></a>  labs(x="", y="empirical Bayes SMR") +</span>
+<span id="cb13-49"><a href="analyzing-your-data.html#cb13-49" aria-hidden="true" tabindex="-1"></a>  scale_color_manual(name="",</span>
+<span id="cb13-50"><a href="analyzing-your-data.html#cb13-50" aria-hidden="true" tabindex="-1"></a>                       values=c("#018571", "grey50", "#A6611A"),</span>
+<span id="cb13-51"><a href="analyzing-your-data.html#cb13-51" aria-hidden="true" tabindex="-1"></a>                       labels=c("CI below 1",</span>
+<span id="cb13-52"><a href="analyzing-your-data.html#cb13-52" aria-hidden="true" tabindex="-1"></a>                                "CI crosses 1",</span>
+<span id="cb13-53"><a href="analyzing-your-data.html#cb13-53" aria-hidden="true" tabindex="-1"></a>                                "CI above 1")) +</span>
+<span id="cb13-54"><a href="analyzing-your-data.html#cb13-54" aria-hidden="true" tabindex="-1"></a>  theme(legend.position="bottom")</span>
+<span id="cb13-55"><a href="analyzing-your-data.html#cb13-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-56"><a href="analyzing-your-data.html#cb13-56" aria-hidden="true" tabindex="-1"></a>rawSMR_caterpillar_eb + ebSMR_caterpillar_eb</span></code></pre></div>
 <p>From the caterpillar plots, we observe that the empirial Bayes estimates are substantially smoothed relative to the raw SMRs. The observations at the extremes of the distribution with huge confidence intervals are smoothed towards the mean, and the spread of smoothed SMRs is generally narrower than the raw SMRs.</p>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-24"></span>
+<span style="display:block;" id="fig:unnamed-chunk-25"></span>
 <img src="images/06-analyzing-your-data/rawVsEB_SMR_caterpillar.png" alt="Caterpillar plots of raw SMRs with 95% CIs and smoothed SMRs from a Poisson gamma model with 95% credible intervals" width="100%"><p class="caption">
 Figure 6.4: Caterpillar plots of raw SMRs with 95% CIs and smoothed SMRs from a Poisson gamma model with 95% credible intervals
 </p>
 </div>
 <p>This is also evident if we compare maps of the raw SMRs to the empirical Bayes SMRs, where the more extreme low or high SMRs are smoothed towards the middle values.</p>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-25"></span>
+<span style="display:block;" id="fig:unnamed-chunk-26"></span>
 <img src="images/06-analyzing-your-data/premature_raw_SMR_v_empbayes.png" alt="Maps of raw SMRs (left) and smoothed SMRs from a Poisson gamma model" width="100%"><p class="caption">
 Figure 6.5: Maps of raw SMRs (left) and smoothed SMRs from a Poisson gamma model
 </p>
@@ -2920,22 +2920,22 @@ Fixed effects are estimated using least squares (or, more generally, maximum lik
 </div>
 <p>It should be noted here that, as pointed out by Wolpert and Ickstadt (1998), the Poisson log normal model does not aggregate consistently. That is, if one specifies a log normal distribution for each of the relative risks and then combines two areas and specifies a log normal distribution for the relative risk of the combined area, then these distributions are inconsistent (because the sum of log normal distributions is not log normal). This can be understood as a form of aggregation bias whereby risk relationships do not remain constant across levels of aggregation (Wakefield et al., 2000). Nevertheless, a normal second-stage distribution has been observed empirically to provide a good model for log relative risks over a range of aggregations, and does present advantages with respect to model flexibility and ease of computation.</p>
 <p>Unlike the Poisson gamma model, there is no analytically tractable closed-form solution for the posterior distributions. Instead, we will use INLA to fit this model.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb18-1"><a href="analyzing-your-data.html#cb18-1" aria-hidden="true" tabindex="-1"></a># Use INLA to fit Poisson gamma model</span>
-<span id="cb18-2"><a href="analyzing-your-data.html#cb18-2" aria-hidden="true" tabindex="-1"></a>model_form &lt;- O ~ 1 + f(id_order, model="iid")</span>
-<span id="cb18-3"><a href="analyzing-your-data.html#cb18-3" aria-hidden="true" tabindex="-1"></a>model_iid &lt;- inla(model_form, family="poisson", </span>
-<span id="cb18-4"><a href="analyzing-your-data.html#cb18-4" aria-hidden="true" tabindex="-1"></a>                data=df_indirect_ordered, E=E, # E points to the expected count field</span>
-<span id="cb18-5"><a href="analyzing-your-data.html#cb18-5" aria-hidden="true" tabindex="-1"></a>                control.predictor=list(compute=TRUE), # computes transformed posterior marginals</span>
-<span id="cb18-6"><a href="analyzing-your-data.html#cb18-6" aria-hidden="true" tabindex="-1"></a>                control.compute=list(dic=TRUE, waic=TRUE)) # computes DIC for model fit</span>
-<span id="cb18-7"><a href="analyzing-your-data.html#cb18-7" aria-hidden="true" tabindex="-1"></a>summary(model_iid)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb14-1"><a href="analyzing-your-data.html#cb14-1" aria-hidden="true" tabindex="-1"></a># Use INLA to fit Poisson gamma model</span>
+<span id="cb14-2"><a href="analyzing-your-data.html#cb14-2" aria-hidden="true" tabindex="-1"></a>model_form &lt;- O ~ 1 + f(id_order, model="iid")</span>
+<span id="cb14-3"><a href="analyzing-your-data.html#cb14-3" aria-hidden="true" tabindex="-1"></a>model_iid &lt;- inla(model_form, family="poisson", </span>
+<span id="cb14-4"><a href="analyzing-your-data.html#cb14-4" aria-hidden="true" tabindex="-1"></a>                data=df_indirect_ordered, E=E, # E points to the expected count field</span>
+<span id="cb14-5"><a href="analyzing-your-data.html#cb14-5" aria-hidden="true" tabindex="-1"></a>                control.predictor=list(compute=TRUE), # computes transformed posterior marginals</span>
+<span id="cb14-6"><a href="analyzing-your-data.html#cb14-6" aria-hidden="true" tabindex="-1"></a>                control.compute=list(dic=TRUE, waic=TRUE)) # computes DIC for model fit</span>
+<span id="cb14-7"><a href="analyzing-your-data.html#cb14-7" aria-hidden="true" tabindex="-1"></a>summary(model_iid)</span></code></pre></div>
 <p>We can see from the caterpillar plots of the raw SMRs vs. the smoothed SMRs from the Poisson lognormal model that, similar to the Poisson gamma model, the Poisson lognormal model smooths extreme SMRs towards the overall mean.</p>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-27"></span>
+<span style="display:block;" id="fig:unnamed-chunk-28"></span>
 <img src="images/06-analyzing-your-data/raw_vs_poissoniid.png" alt="Caterpillar plots of raw SMRs with 95% CIs and smoothed SMRs from a Poisson lognormal model with 95% credible intervals" width="100%"><p class="caption">
 Figure 6.6: Caterpillar plots of raw SMRs with 95% CIs and smoothed SMRs from a Poisson lognormal model with 95% credible intervals
 </p>
 </div>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-28"></span>
+<span style="display:block;" id="fig:unnamed-chunk-29"></span>
 <img src="images/06-analyzing-your-data/premature_boston_raw_poissonmod0.png" alt="Maps of raw SMRs (left) and smoothed SMRs from a Poisson lognormal model" width="100%"><p class="caption">
 Figure 6.7: Maps of raw SMRs (left) and smoothed SMRs from a Poisson lognormal model
 </p>
@@ -2957,21 +2957,21 @@ v_{ij} &amp; \sim \mathrm{Normal}(0, \sigma^{2}_{v})\\
 \end{align*}
 \]</span></p>
 <p>This can be in INLA using the following code:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb19-1"><a href="analyzing-your-data.html#cb19-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-2"><a href="analyzing-your-data.html#cb19-2" aria-hidden="true" tabindex="-1"></a>model_form &lt;- O ~ 1 + f(id_order, model="iid") + f(cityid, model="iid")</span>
-<span id="cb19-3"><a href="analyzing-your-data.html#cb19-3" aria-hidden="true" tabindex="-1"></a>model_multi &lt;- inla(model_form, family="poisson", </span>
-<span id="cb19-4"><a href="analyzing-your-data.html#cb19-4" aria-hidden="true" tabindex="-1"></a>                data=df_indirect_ordered, E=E, # E points to the expected count field</span>
-<span id="cb19-5"><a href="analyzing-your-data.html#cb19-5" aria-hidden="true" tabindex="-1"></a>                control.predictor=list(compute=TRUE), # computes transformed posterior marginals</span>
-<span id="cb19-6"><a href="analyzing-your-data.html#cb19-6" aria-hidden="true" tabindex="-1"></a>                control.compute=list(dic=TRUE, waic=TRUE)) # computes DIC for model fit</span>
-<span id="cb19-7"><a href="analyzing-your-data.html#cb19-7" aria-hidden="true" tabindex="-1"></a>summary(model_multi)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb15-1"><a href="analyzing-your-data.html#cb15-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-2"><a href="analyzing-your-data.html#cb15-2" aria-hidden="true" tabindex="-1"></a>model_form &lt;- O ~ 1 + f(id_order, model="iid") + f(cityid, model="iid")</span>
+<span id="cb15-3"><a href="analyzing-your-data.html#cb15-3" aria-hidden="true" tabindex="-1"></a>model_multi &lt;- inla(model_form, family="poisson", </span>
+<span id="cb15-4"><a href="analyzing-your-data.html#cb15-4" aria-hidden="true" tabindex="-1"></a>                data=df_indirect_ordered, E=E, # E points to the expected count field</span>
+<span id="cb15-5"><a href="analyzing-your-data.html#cb15-5" aria-hidden="true" tabindex="-1"></a>                control.predictor=list(compute=TRUE), # computes transformed posterior marginals</span>
+<span id="cb15-6"><a href="analyzing-your-data.html#cb15-6" aria-hidden="true" tabindex="-1"></a>                control.compute=list(dic=TRUE, waic=TRUE)) # computes DIC for model fit</span>
+<span id="cb15-7"><a href="analyzing-your-data.html#cb15-7" aria-hidden="true" tabindex="-1"></a>summary(model_multi)</span></code></pre></div>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-30"></span>
+<span style="display:block;" id="fig:unnamed-chunk-31"></span>
 <img src="images/06-analyzing-your-data/premature_raw_SMR_v_multimod.png" alt="Maps of CT raw SMRs (left) and smoothed SMRs from a Poisson multilevel model" width="100%"><p class="caption">
 Figure 6.8: Maps of CT raw SMRs (left) and smoothed SMRs from a Poisson multilevel model
 </p>
 </div>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-31"></span>
+<span style="display:block;" id="fig:unnamed-chunk-32"></span>
 <img src="images/06-analyzing-your-data/premature_boston_neigh_rr.png" alt="Map of the neighborhood level variation in relative risk (Level 2 of the Poisson multilevel model)" width="100%"><p class="caption">
 Figure 6.9: Map of the neighborhood level variation in relative risk (Level 2 of the Poisson multilevel model)
 </p>
@@ -3051,13 +3051,13 @@ Figure 6.11: Depiction of QR90: the relative risk comparing the 95th and 5th qua
 </div>
 <p></p>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-32"></span>
+<span style="display:block;" id="fig:unnamed-chunk-33"></span>
 <img src="images/06-analyzing-your-data/raw_vs_bymmod0.png" alt="Caterpillar plots of raw SMRs with 95% CIs and smoothed SMRs from a Poisson BYM model with 95% credible intervals" width="100%"><p class="caption">
 Figure 6.12: Caterpillar plots of raw SMRs with 95% CIs and smoothed SMRs from a Poisson BYM model with 95% credible intervals
 </p>
 </div>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-33"></span>
+<span style="display:block;" id="fig:unnamed-chunk-34"></span>
 <img src="images/06-analyzing-your-data/premature_boston_raw_smooth.png" alt="Comparison of premature mortality raw SMRs and smoothed (BYM) SMRs" width="100%"><p class="caption">
 Figure 6.13: Comparison of premature mortality raw SMRs and smoothed (BYM) SMRs
 </p>
@@ -3073,20 +3073,20 @@ Figure 6.13: Comparison of premature mortality raw SMRs and smoothed (BYM) SMRs
 <span class="header-section-number">6.7.1</span> Premature mortality<a class="anchor" aria-label="anchor" href="#premature-mortality"><i class="fas fa-link"></i></a>
 </h3>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-34"></span>
+<span style="display:block;" id="fig:unnamed-chunk-35"></span>
 <img src="images/06-analyzing-your-data/premature_smoothSMR_vs_absms.png" alt="ABSMs vs. smoothed SMRs (BYM)" width="100%"><p class="caption">
 Figure 6.14: ABSMs vs. smoothed SMRs (BYM)
 </p>
 </div>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-35"></span>
+<span style="display:block;" id="fig:unnamed-chunk-36"></span>
 <img src="images/06-analyzing-your-data/premature_all_coefficients_plot.png" alt="Comparison of premature mortality inequities by ABSM categories across all analytic methods and models" width="100%"><p class="caption">
 Figure 6.15: Comparison of premature mortality inequities by ABSM categories across all analytic methods and models
 </p>
 </div>
 <div class="inline-table"><table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:unnamed-chunk-36">Table 6.1: </span>Comparison of estimated inequities in premature mortality by category of CT ABSMs from aggregated analysis and Quasipoisson, Negative Binomial, and BYM models
+<span id="tab:unnamed-chunk-37">Table 6.1: </span>Comparison of estimated inequities in premature mortality by category of CT ABSMs from aggregated analysis and Quasipoisson, Negative Binomial, and BYM models
 </caption>
 <thead>
 <tr>
@@ -3661,19 +3661,19 @@ qsvi
 </tbody>
 </table></div>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-37"></span>
+<span style="display:block;" id="fig:unnamed-chunk-38"></span>
 <img src="images/06-analyzing-your-data/premature_boston_apINDPOV_before_after.png" alt="Premature mortality: comparison of smoothed SMRs (BYM) before and after adjustment for CT % below poverty" width="100%"><p class="caption">
 Figure 6.16: Premature mortality: comparison of smoothed SMRs (BYM) before and after adjustment for CT % below poverty
 </p>
 </div>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-38"></span>
+<span style="display:block;" id="fig:unnamed-chunk-39"></span>
 <img src="images/06-analyzing-your-data/premature_boston_qICEwnhinc_before_after.png" alt="Premature mortality: comparison of smoothed SMRs (BYM) before and after adjustment for CT Index of Concentration at the Extremes (racialized economic segregation)" width="100%"><p class="caption">
 Figure 6.17: Premature mortality: comparison of smoothed SMRs (BYM) before and after adjustment for CT Index of Concentration at the Extremes (racialized economic segregation)
 </p>
 </div>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-39"></span>
+<span style="display:block;" id="fig:unnamed-chunk-40"></span>
 <img src="images/06-analyzing-your-data/premature_boston_qsvi_before_after.png" alt="Premature mortality: comparison of smoothed SMRs (BYM) before and after adjustment for CT Social Vulnerability Index" width="100%"><p class="caption">
 Figure 6.18: Premature mortality: comparison of smoothed SMRs (BYM) before and after adjustment for CT Social Vulnerability Index
 </p>
@@ -3684,20 +3684,20 @@ Figure 6.18: Premature mortality: comparison of smoothed SMRs (BYM) before and a
 <span class="header-section-number">6.7.2</span> Lung cancer mortality<a class="anchor" aria-label="anchor" href="#lung-cancer-mortality"><i class="fas fa-link"></i></a>
 </h3>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-40"></span>
+<span style="display:block;" id="fig:unnamed-chunk-41"></span>
 <img src="images/06-analyzing-your-data/lung_smoothSMR_vs_absms.png" alt="Lung cancer mortality: CT ABSMs vs. smoothed SMRs (BYM)" width="100%"><p class="caption">
 Figure 6.19: Lung cancer mortality: CT ABSMs vs. smoothed SMRs (BYM)
 </p>
 </div>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-41"></span>
+<span style="display:block;" id="fig:unnamed-chunk-42"></span>
 <img src="images/06-analyzing-your-data/lung_all_coefficients_plot.png" alt="Comparison of lung cancer mortality inequities by CT ABSM categories across all analytic methods and models" width="100%"><p class="caption">
 Figure 6.20: Comparison of lung cancer mortality inequities by CT ABSM categories across all analytic methods and models
 </p>
 </div>
 <div class="inline-table"><table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:unnamed-chunk-42">Table 6.2: </span>Comparison of estimated inequities in lung cancer mortality by category of CT ABSMs from aggregated analysis and Quasipoisson, Negative Binomial, and BYM models
+<span id="tab:unnamed-chunk-43">Table 6.2: </span>Comparison of estimated inequities in lung cancer mortality by category of CT ABSMs from aggregated analysis and Quasipoisson, Negative Binomial, and BYM models
 </caption>
 <thead>
 <tr>
@@ -4272,19 +4272,19 @@ qsvi
 </tbody>
 </table></div>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-43"></span>
+<span style="display:block;" id="fig:unnamed-chunk-44"></span>
 <img src="images/06-analyzing-your-data/lung_boston_apINDPOV_before_after.png" alt="Lung cancer: comparison of smoothed SMRs (BYM) before and after adjustment for CT % below poverty" width="100%"><p class="caption">
 Figure 6.21: Lung cancer: comparison of smoothed SMRs (BYM) before and after adjustment for CT % below poverty
 </p>
 </div>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-44"></span>
+<span style="display:block;" id="fig:unnamed-chunk-45"></span>
 <img src="images/06-analyzing-your-data/lung_boston_qICEwnhinc_before_after.png" alt="Lung cancer: comparison of smoothed SMRs (BYM) before and after adjustment for CT Index of Concentration at the Extremes (racialized economic segregation)" width="100%"><p class="caption">
 Figure 6.22: Lung cancer: comparison of smoothed SMRs (BYM) before and after adjustment for CT Index of Concentration at the Extremes (racialized economic segregation)
 </p>
 </div>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-45"></span>
+<span style="display:block;" id="fig:unnamed-chunk-46"></span>
 <img src="images/06-analyzing-your-data/lung_boston_qsvi_before_after.png" alt="Lung cancer: comparison of smoothed SMRs (BYM) before and after adjustment for CT Social Vulnerability Index" width="100%"><p class="caption">
 Figure 6.23: Lung cancer: comparison of smoothed SMRs (BYM) before and after adjustment for CT Social Vulnerability Index
 </p>
@@ -4345,7 +4345,7 @@ Figure 6.27: Intersectional age-standardized incidence rate differences per 100,
 </h3>
 <p>Intersectional inequities by racialized group and CT ABSM can also be estimated using regression models.</p>
 <div class="figure">
-<span style="display:block;" id="fig:unnamed-chunk-46"></span>
+<span style="display:block;" id="fig:unnamed-chunk-47"></span>
 <img src="images/06-analyzing-your-data/fig_interaction_twoway_plot.png" alt="Comparison of inequities in premature mortality by racialized group and CT ABSM as estimated by the aggregated method, Poisson regression with robust variance estimator, multilevel Poisson regression (census tracts in city/town/neighborhoods), and spatial Poisson regression with BYM prior, Greater Boston, 2013-2017. Here, we focus on estimated incidence rate ratios with a common reference group (non-Hispanic Whites in the most advantaged census tracts)" width="100%"><p class="caption">
 Figure 6.28: Comparison of inequities in premature mortality by racialized group and CT ABSM as estimated by the aggregated method, Poisson regression with robust variance estimator, multilevel Poisson regression (census tracts in city/town/neighborhoods), and spatial Poisson regression with BYM prior, Greater Boston, 2013-2017. Here, we focus on estimated incidence rate ratios with a common reference group (non-Hispanic Whites in the most advantaged census tracts)
 </p>
